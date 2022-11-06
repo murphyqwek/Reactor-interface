@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32328.378
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reactor interface", "WindowsFormsApp1\Reactor interface.csproj", "{6C852703-B186-4CD7-8796-9E5E9E05FBEE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6C852703-B186-4CD7-8796-9E5E9E05FBEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C852703-B186-4CD7-8796-9E5E9E05FBEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C852703-B186-4CD7-8796-9E5E9E05FBEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C852703-B186-4CD7-8796-9E5E9E05FBEE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {746360A1-634A-48BE-9E22-089764E94CB2}
+	EndGlobalSection
+EndGlobal
