@@ -1,1 +1,1 @@
-Reactor_interface
+# Интрефейс для реактора
