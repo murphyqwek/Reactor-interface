@@ -64,14 +64,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Debug_from.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debug_from.Designer.cs">
+      <DependentUpon>Debug_from.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main_menu.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Main_menu.Designer.cs">
       <DependentUpon>Main_menu.cs</DependentUpon>
     </Compile>
+    <Compile Include="Port.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Debug_from.resx">
+      <DependentUpon>Debug_from.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Main_menu.resx">
       <DependentUpon>Main_menu.cs</DependentUpon>
       <SubType>Designer</SubType>

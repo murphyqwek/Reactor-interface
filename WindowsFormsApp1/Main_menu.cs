@@ -14,10 +14,19 @@ namespace WindowsFormsApp1
 {
     public partial class Main_menu : Form
     {
-
+        Size time_bar_max_size;
         public Main_menu()
         {
             InitializeComponent();
+            string[] ports = Port.get_ports();
+            if (ports.Length != 0) {
+                port_menu_btn.Text = "Порт: " + ports[0];
+                foreach (string port in Port.get_ports()){
+                    
+                }
+            }
+
+            this.time_bar_max_size = time_bar.Size;
         }
 
         private void time_syntes_bar_Scroll(object sender, EventArgs e)
@@ -28,7 +37,7 @@ namespace WindowsFormsApp1
         private void duga_rdbtn_CheckedChanged(object sender, EventArgs e)
         {
             if (duga_rdbtn.Checked){
-                time_bar.Size = new Size(461, 45);
+                time_bar.Size = this.time_bar_max_size;
                 time_syntes_lable.Text = "Время синтеза: 5 с.";
                 time_bar.Value = 5;
                 time_bar.Maximum = 60;

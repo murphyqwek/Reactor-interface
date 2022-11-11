@@ -46,8 +46,8 @@
             this.tigel_rdbtn = new System.Windows.Forms.RadioButton();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.settings_menu_btn = new System.Windows.Forms.ToolStripMenuItem();
-            this.портToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.скоростьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.port_menu_btn = new System.Windows.Forms.ToolStripMenuItem();
+            this.speed_menu_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.дебагToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.button3 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
@@ -264,24 +264,24 @@
             // settings_menu_btn
             // 
             this.settings_menu_btn.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.портToolStripMenuItem,
-            this.скоростьToolStripMenuItem});
+            this.port_menu_btn,
+            this.speed_menu_btn});
             this.settings_menu_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.settings_menu_btn.Name = "settings_menu_btn";
             this.settings_menu_btn.Size = new System.Drawing.Size(148, 36);
             this.settings_menu_btn.Text = "Настройки";
             // 
-            // портToolStripMenuItem
+            // port_menu_btn
             // 
-            this.портToolStripMenuItem.Name = "портToolStripMenuItem";
-            this.портToolStripMenuItem.Size = new System.Drawing.Size(232, 40);
-            this.портToolStripMenuItem.Text = "Порт:";
+            this.port_menu_btn.Name = "port_menu_btn";
+            this.port_menu_btn.Size = new System.Drawing.Size(270, 40);
+            this.port_menu_btn.Text = "Порт:";
             // 
-            // скоростьToolStripMenuItem
+            // speed_menu_btn
             // 
-            this.скоростьToolStripMenuItem.Name = "скоростьToolStripMenuItem";
-            this.скоростьToolStripMenuItem.Size = new System.Drawing.Size(232, 40);
-            this.скоростьToolStripMenuItem.Text = "Скорость: ";
+            this.speed_menu_btn.Name = "speed_menu_btn";
+            this.speed_menu_btn.Size = new System.Drawing.Size(270, 40);
+            this.speed_menu_btn.Text = "Скорость: ";
             // 
             // дебагToolStripMenuItem
             // 
@@ -401,8 +401,8 @@
         private System.Windows.Forms.NumericUpDown iteration_counter;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem settings_menu_btn;
-        private System.Windows.Forms.ToolStripMenuItem портToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem скоростьToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem port_menu_btn;
+        private System.Windows.Forms.ToolStripMenuItem speed_menu_btn;
         private System.Windows.Forms.ToolStripMenuItem дебагToolStripMenuItem;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button7;
