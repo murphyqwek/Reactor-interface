@@ -68,9 +68,11 @@
             this.groupBox1.Controls.Add(this.time_syntes_lable);
             this.groupBox1.Controls.Add(this.time_bar);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.groupBox1.Location = new System.Drawing.Point(535, 32);
+            this.groupBox1.Location = new System.Drawing.Point(802, 49);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(474, 117);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.groupBox1.Size = new System.Drawing.Size(711, 180);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Настройки режима";
@@ -79,16 +81,18 @@
             // 
             this.iteration_label.AutoSize = true;
             this.iteration_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.iteration_label.Location = new System.Drawing.Point(259, 35);
+            this.iteration_label.Location = new System.Drawing.Point(388, 54);
+            this.iteration_label.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.iteration_label.Name = "iteration_label";
-            this.iteration_label.Size = new System.Drawing.Size(213, 24);
+            this.iteration_label.Size = new System.Drawing.Size(315, 33);
             this.iteration_label.TabIndex = 3;
             this.iteration_label.Text = "Количество итераций:";
             this.iteration_label.Visible = false;
             // 
             // iteration_counter
             // 
-            this.iteration_counter.Location = new System.Drawing.Point(417, 62);
+            this.iteration_counter.Location = new System.Drawing.Point(626, 95);
+            this.iteration_counter.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.iteration_counter.Maximum = new decimal(new int[] {
             20,
             0,
@@ -100,7 +104,7 @@
             0,
             0});
             this.iteration_counter.Name = "iteration_counter";
-            this.iteration_counter.Size = new System.Drawing.Size(50, 35);
+            this.iteration_counter.Size = new System.Drawing.Size(75, 48);
             this.iteration_counter.TabIndex = 2;
             this.iteration_counter.Value = new decimal(new int[] {
             2,
@@ -114,9 +118,10 @@
             this.time_syntes_lable.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.time_syntes_lable.AutoSize = true;
             this.time_syntes_lable.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.time_syntes_lable.Location = new System.Drawing.Point(6, 44);
+            this.time_syntes_lable.Location = new System.Drawing.Point(9, 68);
+            this.time_syntes_lable.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.time_syntes_lable.Name = "time_syntes_lable";
-            this.time_syntes_lable.Size = new System.Drawing.Size(185, 24);
+            this.time_syntes_lable.Size = new System.Drawing.Size(281, 33);
             this.time_syntes_lable.TabIndex = 1;
             this.time_syntes_lable.Text = "Время синтеза: 5 с.";
             // 
@@ -124,11 +129,12 @@
             // 
             this.time_bar.AllowDrop = true;
             this.time_bar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.time_bar.Location = new System.Drawing.Point(6, 66);
+            this.time_bar.Location = new System.Drawing.Point(9, 102);
+            this.time_bar.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.time_bar.Maximum = 60;
             this.time_bar.Minimum = 5;
             this.time_bar.Name = "time_bar";
-            this.time_bar.Size = new System.Drawing.Size(461, 45);
+            this.time_bar.Size = new System.Drawing.Size(692, 69);
             this.time_bar.SmallChange = 5;
             this.time_bar.TabIndex = 0;
             this.time_bar.Value = 5;
@@ -139,9 +145,10 @@
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button1.Location = new System.Drawing.Point(217, 203);
+            this.button1.Location = new System.Drawing.Point(326, 312);
+            this.button1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(203, 104);
+            this.button1.Size = new System.Drawing.Size(304, 160);
             this.button1.TabIndex = 3;
             this.button1.Text = "Стоп";
             this.button1.UseVisualStyleBackColor = false;
@@ -152,9 +159,10 @@
             this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button2.Location = new System.Drawing.Point(8, 203);
+            this.button2.Location = new System.Drawing.Point(12, 312);
+            this.button2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(203, 104);
+            this.button2.Size = new System.Drawing.Size(304, 160);
             this.button2.TabIndex = 4;
             this.button2.Text = "Старт";
             this.button2.UseVisualStyleBackColor = false;
@@ -164,9 +172,11 @@
             this.groupBox2.Controls.Add(this.impulse_rdbtn);
             this.groupBox2.Controls.Add(this.duga_rdbtn);
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.groupBox2.Location = new System.Drawing.Point(14, 32);
+            this.groupBox2.Location = new System.Drawing.Point(21, 49);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(167, 117);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.groupBox2.Size = new System.Drawing.Size(250, 180);
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Режим";
@@ -174,9 +184,10 @@
             // impulse_rdbtn
             // 
             this.impulse_rdbtn.AutoSize = true;
-            this.impulse_rdbtn.Location = new System.Drawing.Point(6, 78);
+            this.impulse_rdbtn.Location = new System.Drawing.Point(9, 120);
+            this.impulse_rdbtn.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.impulse_rdbtn.Name = "impulse_rdbtn";
-            this.impulse_rdbtn.Size = new System.Drawing.Size(117, 29);
+            this.impulse_rdbtn.Size = new System.Drawing.Size(165, 41);
             this.impulse_rdbtn.TabIndex = 1;
             this.impulse_rdbtn.Text = "Импульс";
             this.impulse_rdbtn.UseVisualStyleBackColor = true;
@@ -186,9 +197,10 @@
             // 
             this.duga_rdbtn.AutoSize = true;
             this.duga_rdbtn.Checked = true;
-            this.duga_rdbtn.Location = new System.Drawing.Point(6, 34);
+            this.duga_rdbtn.Location = new System.Drawing.Point(9, 52);
+            this.duga_rdbtn.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.duga_rdbtn.Name = "duga_rdbtn";
-            this.duga_rdbtn.Size = new System.Drawing.Size(77, 29);
+            this.duga_rdbtn.Size = new System.Drawing.Size(108, 41);
             this.duga_rdbtn.TabIndex = 0;
             this.duga_rdbtn.TabStop = true;
             this.duga_rdbtn.Text = "Дуга";
@@ -200,9 +212,11 @@
             this.groupBox3.Controls.Add(this.voilok_rdbtn);
             this.groupBox3.Controls.Add(this.tigel_rdbtn);
             this.groupBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.groupBox3.Location = new System.Drawing.Point(187, 32);
+            this.groupBox3.Location = new System.Drawing.Point(280, 49);
+            this.groupBox3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(171, 117);
+            this.groupBox3.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.groupBox3.Size = new System.Drawing.Size(256, 180);
             this.groupBox3.TabIndex = 6;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Конфигурация";
@@ -211,9 +225,10 @@
             // 
             this.voilok_rdbtn.AutoSize = true;
             this.voilok_rdbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.voilok_rdbtn.Location = new System.Drawing.Point(6, 78);
+            this.voilok_rdbtn.Location = new System.Drawing.Point(9, 120);
+            this.voilok_rdbtn.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.voilok_rdbtn.Name = "voilok_rdbtn";
-            this.voilok_rdbtn.Size = new System.Drawing.Size(117, 33);
+            this.voilok_rdbtn.Size = new System.Drawing.Size(165, 44);
             this.voilok_rdbtn.TabIndex = 2;
             this.voilok_rdbtn.Text = "Войлок";
             this.voilok_rdbtn.UseVisualStyleBackColor = true;
@@ -223,9 +238,10 @@
             this.tigel_rdbtn.AutoSize = true;
             this.tigel_rdbtn.Checked = true;
             this.tigel_rdbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tigel_rdbtn.Location = new System.Drawing.Point(6, 30);
+            this.tigel_rdbtn.Location = new System.Drawing.Point(9, 46);
+            this.tigel_rdbtn.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tigel_rdbtn.Name = "tigel_rdbtn";
-            this.tigel_rdbtn.Size = new System.Drawing.Size(115, 33);
+            this.tigel_rdbtn.Size = new System.Drawing.Size(158, 44);
             this.tigel_rdbtn.TabIndex = 1;
             this.tigel_rdbtn.TabStop = true;
             this.tigel_rdbtn.Text = "Тигель";
@@ -234,12 +250,14 @@
             // 
             // menuStrip1
             // 
+            this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.settings_menu_btn,
             this.дебагToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1021, 29);
+            this.menuStrip1.Size = new System.Drawing.Size(1532, 42);
             this.menuStrip1.TabIndex = 7;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -250,26 +268,26 @@
             this.скоростьToolStripMenuItem});
             this.settings_menu_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.settings_menu_btn.Name = "settings_menu_btn";
-            this.settings_menu_btn.Size = new System.Drawing.Size(99, 25);
+            this.settings_menu_btn.Size = new System.Drawing.Size(148, 36);
             this.settings_menu_btn.Text = "Настройки";
             // 
             // портToolStripMenuItem
             // 
             this.портToolStripMenuItem.Name = "портToolStripMenuItem";
-            this.портToolStripMenuItem.Size = new System.Drawing.Size(180, 26);
+            this.портToolStripMenuItem.Size = new System.Drawing.Size(232, 40);
             this.портToolStripMenuItem.Text = "Порт:";
             // 
             // скоростьToolStripMenuItem
             // 
             this.скоростьToolStripMenuItem.Name = "скоростьToolStripMenuItem";
-            this.скоростьToolStripMenuItem.Size = new System.Drawing.Size(180, 26);
+            this.скоростьToolStripMenuItem.Size = new System.Drawing.Size(232, 40);
             this.скоростьToolStripMenuItem.Text = "Скорость: ";
             // 
             // дебагToolStripMenuItem
             // 
             this.дебагToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.дебагToolStripMenuItem.Name = "дебагToolStripMenuItem";
-            this.дебагToolStripMenuItem.Size = new System.Drawing.Size(64, 25);
+            this.дебагToolStripMenuItem.Size = new System.Drawing.Size(95, 36);
             this.дебагToolStripMenuItem.Text = "Дебаг";
             // 
             // button3
@@ -278,9 +296,10 @@
             this.button3.BackColor = System.Drawing.Color.Silver;
             this.button3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button3.Location = new System.Drawing.Point(634, 234);
+            this.button3.Location = new System.Drawing.Point(951, 360);
+            this.button3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(121, 73);
+            this.button3.Size = new System.Drawing.Size(182, 112);
             this.button3.TabIndex = 8;
             this.button3.Text = "<";
             this.button3.UseVisualStyleBackColor = false;
@@ -292,9 +311,10 @@
             this.button7.BackColor = System.Drawing.Color.Silver;
             this.button7.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.button7.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button7.Location = new System.Drawing.Point(761, 234);
+            this.button7.Location = new System.Drawing.Point(1142, 360);
+            this.button7.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(121, 73);
+            this.button7.Size = new System.Drawing.Size(182, 112);
             this.button7.TabIndex = 12;
             this.button7.Text = "˅";
             this.button7.UseVisualStyleBackColor = false;
@@ -305,9 +325,10 @@
             this.button4.BackColor = System.Drawing.Color.Silver;
             this.button4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button4.Location = new System.Drawing.Point(888, 234);
+            this.button4.Location = new System.Drawing.Point(1332, 360);
+            this.button4.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(121, 73);
+            this.button4.Size = new System.Drawing.Size(182, 112);
             this.button4.TabIndex = 13;
             this.button4.Text = ">";
             this.button4.UseVisualStyleBackColor = false;
@@ -318,18 +339,19 @@
             this.button5.BackColor = System.Drawing.Color.Silver;
             this.button5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button5.Location = new System.Drawing.Point(761, 155);
+            this.button5.Location = new System.Drawing.Point(1142, 238);
+            this.button5.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(121, 73);
+            this.button5.Size = new System.Drawing.Size(182, 112);
             this.button5.TabIndex = 14;
             this.button5.Text = "˄";
             this.button5.UseVisualStyleBackColor = false;
             // 
             // Main_menu
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1021, 319);
+            this.ClientSize = new System.Drawing.Size(1532, 491);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button7);
@@ -342,6 +364,7 @@
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Main_menu";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Интерфейс реактора";
