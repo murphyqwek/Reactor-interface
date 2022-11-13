@@ -73,6 +73,8 @@ namespace WindowsFormsApp1
 
         private void settings_menu_btn_DropDownOpened(object sender, EventArgs e)
         {
+            port_menu_btn.DropDown.Items.Clear();
+
             port_menu_btn.Text = "Порт: ";
             if (Port.get_ports().Contains(port))
             {
@@ -90,6 +92,21 @@ namespace WindowsFormsApp1
             {
                 speed_menu_btn.DropDownItems.Add(speed);
             }
+        }
+
+        private void port_menu_btn_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if (e.ClickedItem.Text != "Портов не найдено")
+            {
+                port = e.ClickedItem.Text;
+                Interface_settings.save(port);
+            }
+        }
+
+        private void speed_menu_btn_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            speed = Convert.ToInt32(e.ClickedItem.Text);
+            Interface_settings.save(speed);
         }
     }
 }

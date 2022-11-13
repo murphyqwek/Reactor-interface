@@ -288,12 +288,14 @@
             this.port_menu_btn.Name = "port_menu_btn";
             this.port_menu_btn.Size = new System.Drawing.Size(270, 40);
             this.port_menu_btn.Text = "Порт:";
+            this.port_menu_btn.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.port_menu_btn_DropDownItemClicked);
             // 
             // speed_menu_btn
             // 
             this.speed_menu_btn.Name = "speed_menu_btn";
             this.speed_menu_btn.Size = new System.Drawing.Size(270, 40);
             this.speed_menu_btn.Text = "Скорость: ";
+            this.speed_menu_btn.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.speed_menu_btn_DropDownItemClicked);
             // 
             // дебагToolStripMenuItem
             // 
