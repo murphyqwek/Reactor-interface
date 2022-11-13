@@ -54,6 +54,7 @@
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iteration_counter)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.time_bar)).BeginInit();
@@ -91,7 +92,8 @@
             // 
             // iteration_counter
             // 
-            this.iteration_counter.Location = new System.Drawing.Point(417, 62);
+            this.iteration_counter.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.iteration_counter.Location = new System.Drawing.Point(417, 66);
             this.iteration_counter.Maximum = new decimal(new int[] {
             20,
             0,
@@ -103,7 +105,7 @@
             0,
             0});
             this.iteration_counter.Name = "iteration_counter";
-            this.iteration_counter.Size = new System.Drawing.Size(50, 35);
+            this.iteration_counter.Size = new System.Drawing.Size(50, 29);
             this.iteration_counter.TabIndex = 2;
             this.iteration_counter.Value = new decimal(new int[] {
             2,
@@ -177,9 +179,10 @@
             // impulse_rdbtn
             // 
             this.impulse_rdbtn.AutoSize = true;
+            this.impulse_rdbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.impulse_rdbtn.Location = new System.Drawing.Point(6, 78);
             this.impulse_rdbtn.Name = "impulse_rdbtn";
-            this.impulse_rdbtn.Size = new System.Drawing.Size(117, 29);
+            this.impulse_rdbtn.Size = new System.Drawing.Size(105, 28);
             this.impulse_rdbtn.TabIndex = 1;
             this.impulse_rdbtn.Text = "Импульс";
             this.impulse_rdbtn.UseVisualStyleBackColor = true;
@@ -189,9 +192,10 @@
             // 
             this.duga_rdbtn.AutoSize = true;
             this.duga_rdbtn.Checked = true;
+            this.duga_rdbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.duga_rdbtn.Location = new System.Drawing.Point(6, 34);
             this.duga_rdbtn.Name = "duga_rdbtn";
-            this.duga_rdbtn.Size = new System.Drawing.Size(77, 29);
+            this.duga_rdbtn.Size = new System.Drawing.Size(70, 28);
             this.duga_rdbtn.TabIndex = 0;
             this.duga_rdbtn.TabStop = true;
             this.duga_rdbtn.Text = "Дуга";
@@ -214,10 +218,11 @@
             // voilok_rdbtn
             // 
             this.voilok_rdbtn.AutoSize = true;
-            this.voilok_rdbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.voilok_rdbtn.Location = new System.Drawing.Point(6, 78);
+            this.voilok_rdbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.voilok_rdbtn.Location = new System.Drawing.Point(71, 73);
             this.voilok_rdbtn.Name = "voilok_rdbtn";
-            this.voilok_rdbtn.Size = new System.Drawing.Size(117, 33);
+            this.voilok_rdbtn.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.voilok_rdbtn.Size = new System.Drawing.Size(92, 28);
             this.voilok_rdbtn.TabIndex = 2;
             this.voilok_rdbtn.Text = "Войлок";
             this.voilok_rdbtn.UseVisualStyleBackColor = true;
@@ -226,10 +231,11 @@
             // 
             this.tigel_rdbtn.AutoSize = true;
             this.tigel_rdbtn.Checked = true;
-            this.tigel_rdbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tigel_rdbtn.Location = new System.Drawing.Point(6, 30);
+            this.tigel_rdbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tigel_rdbtn.Location = new System.Drawing.Point(73, 34);
             this.tigel_rdbtn.Name = "tigel_rdbtn";
-            this.tigel_rdbtn.Size = new System.Drawing.Size(115, 33);
+            this.tigel_rdbtn.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.tigel_rdbtn.Size = new System.Drawing.Size(92, 28);
             this.tigel_rdbtn.TabIndex = 1;
             this.tigel_rdbtn.TabStop = true;
             this.tigel_rdbtn.Text = "Тигель";
@@ -262,13 +268,13 @@
             // port_menu_btn
             // 
             this.port_menu_btn.Name = "port_menu_btn";
-            this.port_menu_btn.Size = new System.Drawing.Size(154, 26);
+            this.port_menu_btn.Size = new System.Drawing.Size(180, 26);
             this.port_menu_btn.Text = "Порт:";
             // 
             // speed_menu_btn
             // 
             this.speed_menu_btn.Name = "speed_menu_btn";
-            this.speed_menu_btn.Size = new System.Drawing.Size(154, 26);
+            this.speed_menu_btn.Size = new System.Drawing.Size(180, 26);
             this.speed_menu_btn.Text = "Скорость: ";
             // 
             // дебагToolStripMenuItem
@@ -344,11 +350,23 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Запуск реактора";
             // 
+            // groupBox5
+            // 
+            this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.groupBox5.Location = new System.Drawing.Point(679, 42);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(430, 209);
+            this.groupBox5.TabIndex = 16;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Информация о реакторе";
+            // 
             // Main_menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1109, 468);
+            this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
@@ -404,6 +422,7 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.GroupBox groupBox5;
     }
 }
 
