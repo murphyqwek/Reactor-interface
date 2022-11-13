@@ -55,6 +55,7 @@
             this.up_btn = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iteration_counter)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.time_bar)).BeginInit();
@@ -62,7 +63,12 @@
             this.groupBox3.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // SerialPort
+            // 
+            this.SerialPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.SerialPort_DataReceived);
             // 
             // groupBox1
             // 
@@ -381,6 +387,7 @@
             // groupBox5
             // 
             this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox5.Controls.Add(this.label1);
             this.groupBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.groupBox5.Location = new System.Drawing.Point(1018, 65);
             this.groupBox5.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -390,6 +397,15 @@
             this.groupBox5.TabIndex = 16;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Информация о реакторе";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(22, 141);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(113, 40);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "label1";
             // 
             // Main_menu
             // 
@@ -422,6 +438,8 @@
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.groupBox4.ResumeLayout(false);
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -454,6 +472,7 @@
         private System.Windows.Forms.Button up_btn;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.Label label1;
     }
 }
 

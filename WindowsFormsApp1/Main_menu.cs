@@ -139,6 +139,41 @@ namespace WindowsFormsApp1
             if (!is_working)
             {
                 is_working = true;
+
+                string working_mode = "M:";
+                string configuration = "C:";
+                string time = "T:";
+                string iteration = "I:";
+
+                if (duga_rdbtn.Checked)
+                {
+                    working_mode += "duga";
+                    iteration = "";
+                }
+                else
+                {
+                    working_mode += "impulse";
+                    iteration += iteration_counter.Value.ToString();
+                }
+
+                if (tigel_rdbtn.Checked) configuration += "tigel";
+                else configuration += "voilok";
+
+                time += time_bar.Value.ToString();
+
+                try
+                {
+                    SerialPort.WriteLine(working_mode + "_" + configuration + "_" + time + "_" + iteration);
+                }
+                catch (InvalidOperationException)
+                {
+                    MessageBox.Show(
+                            "Порт занят",
+                            "Ошибка отправки данных",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                    is_working = false;
+                }
             }
         }
 
@@ -148,6 +183,11 @@ namespace WindowsFormsApp1
             {
                 is_working = false;
             }
+        }
+
+        private void SerialPort_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
+        {
+            label1.Text = e.ToString();
         }
     }
 }
