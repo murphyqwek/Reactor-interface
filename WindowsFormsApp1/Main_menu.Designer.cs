@@ -36,8 +36,8 @@
             this.iteration_counter = new System.Windows.Forms.NumericUpDown();
             this.time_syntes_lable = new System.Windows.Forms.Label();
             this.time_bar = new System.Windows.Forms.TrackBar();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.stop_btn = new System.Windows.Forms.Button();
+            this.start_btn = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.impulse_rdbtn = new System.Windows.Forms.RadioButton();
             this.duga_rdbtn = new System.Windows.Forms.RadioButton();
@@ -145,32 +145,34 @@
             this.time_bar.Value = 5;
             this.time_bar.Scroll += new System.EventHandler(this.time_syntes_bar_Scroll);
             // 
-            // button1
+            // stop_btn
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button1.Location = new System.Drawing.Point(326, 542);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(304, 160);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "Стоп";
-            this.button1.UseVisualStyleBackColor = false;
+            this.stop_btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.stop_btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.stop_btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.stop_btn.Location = new System.Drawing.Point(326, 542);
+            this.stop_btn.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.stop_btn.Name = "stop_btn";
+            this.stop_btn.Size = new System.Drawing.Size(304, 160);
+            this.stop_btn.TabIndex = 3;
+            this.stop_btn.Text = "Стоп";
+            this.stop_btn.UseVisualStyleBackColor = false;
+            this.stop_btn.Click += new System.EventHandler(this.stop_btn_Click);
             // 
-            // button2
+            // start_btn
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button2.Location = new System.Drawing.Point(12, 542);
-            this.button2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(304, 160);
-            this.button2.TabIndex = 4;
-            this.button2.Text = "Старт";
-            this.button2.UseVisualStyleBackColor = false;
+            this.start_btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.start_btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.start_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.start_btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.start_btn.Location = new System.Drawing.Point(12, 542);
+            this.start_btn.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.start_btn.Name = "start_btn";
+            this.start_btn.Size = new System.Drawing.Size(304, 160);
+            this.start_btn.TabIndex = 4;
+            this.start_btn.Text = "Старт";
+            this.start_btn.UseVisualStyleBackColor = false;
+            this.start_btn.Click += new System.EventHandler(this.start_btn_Click);
             // 
             // groupBox2
             // 
@@ -400,8 +402,8 @@
             this.Controls.Add(this.right_btn);
             this.Controls.Add(this.down_btn);
             this.Controls.Add(this.left_btn);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.start_btn);
+            this.Controls.Add(this.stop_btn);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
@@ -431,8 +433,8 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TrackBar time_bar;
         private System.Windows.Forms.Label time_syntes_lable;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button stop_btn;
+        private System.Windows.Forms.Button start_btn;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.RadioButton impulse_rdbtn;
         private System.Windows.Forms.RadioButton duga_rdbtn;

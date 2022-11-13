@@ -77,6 +77,7 @@ namespace WindowsFormsApp1
         private void settings_menu_btn_DropDownOpened(object sender, EventArgs e)
         {
             port_menu_btn.DropDown.Items.Clear();
+            speed_menu_btn.DropDownItems.Clear();
 
             port_menu_btn.Text = "Порт: ";
             if (Port.get_ports().Contains(port))
@@ -108,8 +109,8 @@ namespace WindowsFormsApp1
             else if (is_working)
             {
                 MessageBox.Show(
+                        "Нельзя менять порт во время работы реактора",
                         "Ошибка",
-                        "Нельзя менять значение скорости во время работы реактора",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
             }
@@ -126,10 +127,26 @@ namespace WindowsFormsApp1
             else
             {
                 MessageBox.Show(
-                        "Ошибка",
                         "Нельзя менять значение скорости во время работы реактора",
+                        "Ошибка",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
+            }
+        }
+
+        private void start_btn_Click(object sender, EventArgs e)
+        {
+            if (!is_working)
+            {
+                is_working = true;
+            }
+        }
+
+        private void stop_btn_Click(object sender, EventArgs e)
+        {
+            if (is_working)
+            {
+                is_working = false;
             }
         }
     }
