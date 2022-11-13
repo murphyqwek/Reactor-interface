@@ -281,17 +281,18 @@
             this.settings_menu_btn.Name = "settings_menu_btn";
             this.settings_menu_btn.Size = new System.Drawing.Size(148, 36);
             this.settings_menu_btn.Text = "Настройки";
+            this.settings_menu_btn.DropDownOpened += new System.EventHandler(this.settings_menu_btn_DropDownOpened);
             // 
             // port_menu_btn
             // 
             this.port_menu_btn.Name = "port_menu_btn";
-            this.port_menu_btn.Size = new System.Drawing.Size(232, 40);
+            this.port_menu_btn.Size = new System.Drawing.Size(270, 40);
             this.port_menu_btn.Text = "Порт:";
             // 
             // speed_menu_btn
             // 
             this.speed_menu_btn.Name = "speed_menu_btn";
-            this.speed_menu_btn.Size = new System.Drawing.Size(232, 40);
+            this.speed_menu_btn.Size = new System.Drawing.Size(270, 40);
             this.speed_menu_btn.Text = "Скорость: ";
             // 
             // дебагToolStripMenuItem

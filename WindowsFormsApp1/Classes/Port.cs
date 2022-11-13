@@ -24,5 +24,10 @@ namespace WindowsFormsApp1
             string[] ports = SerialPort.GetPortNames();
             return ports;
         }
+
+        static public string[] get_speeds() 
+        {
+            return speeds;
+        }
     }
 }

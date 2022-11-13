@@ -70,5 +70,26 @@ namespace WindowsFormsApp1
         {
 
         }
+
+        private void settings_menu_btn_DropDownOpened(object sender, EventArgs e)
+        {
+            port_menu_btn.Text = "Порт: ";
+            if (Port.get_ports().Contains(port))
+            {
+                port_menu_btn.Text += port;
+            }
+            speed_menu_btn.Text = "Скорость: " + speed;
+
+            foreach(string port in Port.get_ports())
+            {
+                port_menu_btn.DropDownItems.Add(port);
+            }
+            if (Port.get_ports().Length == 0) port_menu_btn.DropDownItems.Add("Портов не найдено");
+
+            foreach (string speed in Port.get_speeds())
+            {
+                speed_menu_btn.DropDownItems.Add(speed);
+            }
+        }
     }
 }
