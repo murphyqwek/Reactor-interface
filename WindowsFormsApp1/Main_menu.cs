@@ -16,8 +16,11 @@ namespace WindowsFormsApp1
     public partial class Main_menu : Form
     {
         Size time_bar_max_size;
+
         string port;
         int speed;
+
+        bool is_working = false;
         public Main_menu()
         {
             InitializeComponent();
@@ -96,17 +99,38 @@ namespace WindowsFormsApp1
 
         private void port_menu_btn_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (e.ClickedItem.Text != "Портов не найдено")
+            if (e.ClickedItem.Text != "Портов не найдено" && !is_working)
             {
                 port = e.ClickedItem.Text;
                 Interface_settings.save(port);
+                SerialPort.PortName = port;
+            }
+            else if (is_working)
+            {
+                MessageBox.Show(
+                        "Ошибка",
+                        "Нельзя менять значение скорости во время работы реактора",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
             }
         }
 
         private void speed_menu_btn_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            speed = Convert.ToInt32(e.ClickedItem.Text);
-            Interface_settings.save(speed);
+            if (!is_working)
+            {
+                speed = Convert.ToInt32(e.ClickedItem.Text);
+                SerialPort.BaudRate = speed;
+                Interface_settings.save(speed);
+            }
+            else
+            {
+                MessageBox.Show(
+                        "Ошибка",
+                        "Нельзя менять значение скорости во время работы реактора",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+            }
         }
     }
 }

@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main_menu));
-            this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
+            this.SerialPort = new System.IO.Ports.SerialPort(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.iteration_label = new System.Windows.Forms.Label();
             this.iteration_counter = new System.Windows.Forms.NumericUpDown();
@@ -427,7 +427,7 @@
 
         #endregion
 
-        private System.IO.Ports.SerialPort serialPort1;
+        private System.IO.Ports.SerialPort SerialPort;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TrackBar time_bar;
         private System.Windows.Forms.Label time_syntes_lable;

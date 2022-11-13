@@ -9,15 +9,21 @@ namespace WindowsFormsApp1
 {
     static class Port
     {
-        static private string[] speeds = { 
-            "115200", 
-            "1200", 
-            "2400", 
-            "4800", 
-            "9600", 
-            "19200", 
-            "38400", 
-            "57600" };
+        static private string[] speeds = {
+            "300",
+            "600",
+            "1200",
+            "2400",
+            "4800",
+            "9600",
+            "14400",
+            "19200",
+            "28800",
+            "31250",
+            "38400",
+            "57600",
+            "115200",
+        };
         static public string[] get_ports()
         {
             //List<string> ports = new List<string>();
