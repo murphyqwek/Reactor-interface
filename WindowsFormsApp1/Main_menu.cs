@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WindowsFormsApp1.Classes;
 
 //size 365; 117
 //size 1188; 570
@@ -15,16 +16,13 @@ namespace WindowsFormsApp1
     public partial class Main_menu : Form
     {
         Size time_bar_max_size;
+        string port;
+        int speed;
         public Main_menu()
         {
             InitializeComponent();
-            string[] ports = Port.get_ports();
-            if (ports.Length != 0) {
-                port_menu_btn.Text = "Порт: " + ports[0];
-                foreach (string port in Port.get_ports()){
-                    
-                }
-            }
+            port = Interface_settings.get_port();
+            speed = Interface_settings.get_speed();
 
             this.time_bar_max_size = time_bar.Size;
         }
