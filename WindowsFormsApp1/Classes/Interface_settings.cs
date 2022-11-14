@@ -24,7 +24,7 @@ namespace WindowsFormsApp1.Classes
             int speed;
             using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Reactor Interface TPU"))
             {
-                speed = Convert.ToInt32(key.GetValue("Speed"));
+                speed = Convert.ToInt32(key?.GetValue("Speed"));
             }
             return speed;
         }
