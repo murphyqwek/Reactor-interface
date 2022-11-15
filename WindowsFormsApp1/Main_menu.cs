@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,7 +27,11 @@ namespace WindowsFormsApp1
             InitializeComponent();
             port = Interface_settings.get_port();
             speed = Interface_settings.get_speed();
-
+            if (!Convert.ToBoolean(speed))
+            {
+                speed = 9600;
+                Interface_settings.save(speed);
+            }
             this.time_bar_max_size = time_bar.Size;
         }
 
@@ -104,7 +109,6 @@ namespace WindowsFormsApp1
             {
                 port = e.ClickedItem.Text;
                 Interface_settings.save(port);
-                SerialPort.PortName = port;
             }
             else if (is_working)
             {
@@ -121,7 +125,6 @@ namespace WindowsFormsApp1
             if (!is_working)
             {
                 speed = Convert.ToInt32(e.ClickedItem.Text);
-                SerialPort.BaudRate = speed;
                 Interface_settings.save(speed);
             }
             else
@@ -136,7 +139,7 @@ namespace WindowsFormsApp1
 
         private void start_btn_Click(object sender, EventArgs e)
         {
-            if (!is_working)
+            if (!is_working && port != null)
             {
                 is_working = true;
 
@@ -161,19 +164,31 @@ namespace WindowsFormsApp1
 
                 time += time_bar.Value.ToString();
 
+                SerialPort.PortName = port;
+                SerialPort.BaudRate = speed;
+
                 try
                 {
+                    SerialPort.Open();
                     SerialPort.WriteLine(working_mode + "_" + configuration + "_" + time + "_" + iteration);
                 }
-                catch (InvalidOperationException)
+                catch (UnauthorizedAccessException)
                 {
                     MessageBox.Show(
-                            "Порт занят",
+                            "Порт уже занят",
                             "Ошибка отправки данных",
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Error);
                     is_working = false;
                 }
+            }
+            else if (port == null)
+            {
+                MessageBox.Show(
+                            "Порт невыбран",
+                            "Ошибка апуска",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
             }
         }
 
@@ -182,12 +197,40 @@ namespace WindowsFormsApp1
             if (is_working)
             {
                 is_working = false;
+                SerialPort.Close();
             }
         }
 
         private void SerialPort_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
-            label1.Text = e.ToString();
+            SerialPort recived = (SerialPort)sender;
+            try
+            {
+                string indata = recived.ReadTo("!");
+                if (indata != "\r") label1.BeginInvoke((MethodInvoker)(() => this.label1.Text = indata));
+            }
+            catch
+            {
+                //TODO: испрвить это безобразие
+            }
+        }
+
+        private void Main_menu_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if(is_working)
+            {
+                MessageBox.Show(
+                    "Реактор ещё рабоает. Прежде чем закрыть программу, остановите реактор",
+                    "Ошибка",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                e.Cancel = true;
+            }
+            else
+            {
+                SerialPort.Close();
+                e.Cancel = false;
+            }
         }
     }
 }

@@ -275,7 +275,6 @@
             this.дебагToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(6, 2, 0, 2);
             this.menuStrip1.Size = new System.Drawing.Size(1664, 40);
             this.menuStrip1.TabIndex = 7;
             this.menuStrip1.Text = "menuStrip1";
@@ -294,14 +293,14 @@
             // port_menu_btn
             // 
             this.port_menu_btn.Name = "port_menu_btn";
-            this.port_menu_btn.Size = new System.Drawing.Size(270, 40);
+            this.port_menu_btn.Size = new System.Drawing.Size(232, 40);
             this.port_menu_btn.Text = "Порт:";
             this.port_menu_btn.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.port_menu_btn_DropDownItemClicked);
             // 
             // speed_menu_btn
             // 
             this.speed_menu_btn.Name = "speed_menu_btn";
-            this.speed_menu_btn.Size = new System.Drawing.Size(270, 40);
+            this.speed_menu_btn.Size = new System.Drawing.Size(232, 40);
             this.speed_menu_btn.Text = "Скорость: ";
             this.speed_menu_btn.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.speed_menu_btn_DropDownItemClicked);
             // 
@@ -427,6 +426,7 @@
             this.Name = "Main_menu";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Интерфейс реактора";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_menu_FormClosing);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iteration_counter)).EndInit();
