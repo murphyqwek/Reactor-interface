@@ -6,6 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.IO.Ports;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -19,6 +20,8 @@ namespace WindowsFormsApp1
 
         string port;
         int speed;
+
+        int count = 0;
 
         bool is_working = false;
         public Main_menu()
@@ -165,7 +168,7 @@ namespace WindowsFormsApp1
 
                 time += time_bar.Value.ToString();
 
-                SerialPort.PortName = port;
+                SerialPort.PortName = port.Split(' ')[0];
                 SerialPort.BaudRate = speed;
 
                 try
@@ -207,8 +210,15 @@ namespace WindowsFormsApp1
             SerialPort recived = (SerialPort)sender;
             try
             {
-                string indata = recived.ReadTo("!");
-                if (indata != "\r") label1.BeginInvoke((MethodInvoker)(() => this.label1.Text = indata));
+                string indata = recived.ReadLine();
+                indata = indata.Trim();
+
+                if (indata[0] == '#' && indata[indata.Length - 1] == '#') 
+                {
+                    Graph.BeginInvoke((MethodInvoker)(() => this.Graph.Series["Series2"].Points.AddXY(count, indata.Split(' ')[2])));
+                    count++;
+                }
+
             }
             catch
             {

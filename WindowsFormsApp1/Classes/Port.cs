@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO.Ports;
+using System.Management;
 
 namespace WindowsFormsApp1
 {
@@ -28,7 +29,36 @@ namespace WindowsFormsApp1
         {
             //List<string> ports = new List<string>();
             string[] ports = SerialPort.GetPortNames();
+            
             return ports;
+        }
+
+        static public string get_speeds1()
+        {
+            ManagementScope connectionScope = new ManagementScope();
+            SelectQuery serialQuery = new SelectQuery("SELECT * FROM Win32_PnPEntity");
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher(connectionScope, serialQuery);
+
+            try
+            {
+                ManagementObjectCollection items = searcher.Get();
+                foreach (ManagementObject item in items)
+                {
+                    string desc = item["Description"].ToString();
+                    string deviceId = item["DeviceID"].ToString();
+
+                    if (desc.Contains("Arduino"))
+                    {
+                        return deviceId;
+                    }
+                }
+            }
+            catch (ManagementException e)
+            {
+                /* Do Nothing */
+            }
+
+            return null;
         }
 
         static public string[] get_speeds() 

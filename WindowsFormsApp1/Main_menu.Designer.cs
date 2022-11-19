@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main_menu));
             this.SerialPort = new System.IO.Ports.SerialPort(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -56,8 +59,8 @@
             this.up_btn = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.Graph = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.графикToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iteration_counter)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.time_bar)).BeginInit();
@@ -66,6 +69,7 @@
             this.menuStrip1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Graph)).BeginInit();
             this.SuspendLayout();
             // 
             // SerialPort
@@ -274,7 +278,8 @@
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.settings_menu_btn,
-            this.debug_menu_btn});
+            this.debug_menu_btn,
+            this.графикToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1664, 40);
@@ -399,35 +404,43 @@
             // 
             this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox5.BackColor = System.Drawing.SystemColors.Control;
-            this.groupBox5.Controls.Add(this.label2);
-            this.groupBox5.Controls.Add(this.label1);
+            this.groupBox5.Controls.Add(this.Graph);
             this.groupBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.groupBox5.Location = new System.Drawing.Point(1018, 65);
+            this.groupBox5.Location = new System.Drawing.Point(1028, 66);
             this.groupBox5.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.groupBox5.Size = new System.Drawing.Size(645, 322);
+            this.groupBox5.Size = new System.Drawing.Size(635, 321);
             this.groupBox5.TabIndex = 16;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Информация о реакторе";
             // 
-            // label2
+            // Graph
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 230);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(262, 40);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Чё-то там ещё";
+            this.Graph.BackColor = System.Drawing.Color.Transparent;
+            chartArea1.Name = "ChartArea1";
+            this.Graph.ChartAreas.Add(chartArea1);
+            this.Graph.Dock = System.Windows.Forms.DockStyle.Fill;
+            legend1.Name = "Legend1";
+            this.Graph.Legends.Add(legend1);
+            this.Graph.Location = new System.Drawing.Point(4, 46);
+            this.Graph.Name = "Graph";
+            this.Graph.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Berry;
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Legend = "Legend1";
+            series1.Name = "Series2";
+            this.Graph.Series.Add(series1);
+            this.Graph.Size = new System.Drawing.Size(627, 270);
+            this.Graph.TabIndex = 0;
+            this.Graph.Text = "chart1";
             // 
-            // label1
+            // графикToolStripMenuItem
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(7, 124);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(137, 40);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Время:";
+            this.графикToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.графикToolStripMenuItem.Name = "графикToolStripMenuItem";
+            this.графикToolStripMenuItem.Size = new System.Drawing.Size(109, 36);
+            this.графикToolStripMenuItem.Text = "График";
             // 
             // Main_menu
             // 
@@ -462,7 +475,7 @@
             this.menuStrip1.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Graph)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -495,9 +508,9 @@
         private System.Windows.Forms.Button up_btn;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolStripMenuItem commands_menu_btn;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.DataVisualization.Charting.Chart Graph;
+        private System.Windows.Forms.ToolStripMenuItem графикToolStripMenuItem;
     }
 }
 
