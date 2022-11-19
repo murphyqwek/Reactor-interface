@@ -4,13 +4,19 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
+using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
+using System.Windows.Threading;
 using WindowsFormsApp1.Classes;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TreeView;
 
 namespace WindowsFormsApp1
 {
@@ -24,9 +30,12 @@ namespace WindowsFormsApp1
         int count = 0;
 
         bool is_working = false;
+
+        Graphic_menu graphic_menu;
         public Main_menu()
         {
             InitializeComponent();
+
             port = Interface_settings.get_port();
             if (!Port.get_ports().Contains(port)) port = null; 
 
@@ -36,6 +45,8 @@ namespace WindowsFormsApp1
                 speed = 9600;
                 Interface_settings.save(speed);
             }
+
+            port_checking.Start();
             this.time_bar_max_size = time_bar.Size;
         }
 
@@ -55,7 +66,6 @@ namespace WindowsFormsApp1
                 iteration_label.Visible = false;
                 iteration_counter.Visible = false; 
             }
-            //if(!duga_rdbtn.Checked && !impulse_rdbtn.Checked) duga_rdbtn.Checked = true;
         }
 
         private void impulse_rdbtn_CheckedChanged(object sender, EventArgs e)
@@ -70,7 +80,6 @@ namespace WindowsFormsApp1
                 iteration_label.Visible = true;
                 iteration_counter.Visible = true;
             }
-            //if (!duga_rdbtn.Checked && !impulse_rdbtn.Checked) impulse_rdbtn.Checked = true;
         }
 
         private void tigel_rdbtn_CheckedChanged(object sender, EventArgs e)
@@ -116,11 +125,7 @@ namespace WindowsFormsApp1
             }
             else if (is_working)
             {
-                MessageBox.Show(
-                        "Нельзя менять порт во время работы реактора",
-                        "Ошибка",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
+                MessageBox.Show("Нельзя менять порт во время работы реактора");
             }
         }
 
@@ -133,11 +138,7 @@ namespace WindowsFormsApp1
             }
             else
             {
-                MessageBox.Show(
-                        "Нельзя менять значение скорости во время работы реактора",
-                        "Ошибка",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
+                ShowError("Нельзя менять значение скорости во время работы реактора");
             }
         }
 
@@ -173,26 +174,32 @@ namespace WindowsFormsApp1
 
                 try
                 {
+                    graphic_menu = new Graphic_menu();
                     SerialPort.Open();
                     SerialPort.WriteLine(working_mode + "_" + configuration + "_" + time + "_" + iteration);
+
+                    state_lbl.ForeColor = Color.Green;
+                    state_lbl.Text = "Работает";
                 }
                 catch (UnauthorizedAccessException)
                 {
-                    MessageBox.Show(
-                            "Порт уже занят",
-                            "Ошибка отправки данных",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Error);
+                    ShowError("Порт уже занят");
                     is_working = false;
+                }
+                catch (IOException)
+                {
+                    ShowError("Не существует такого порта. Проверьте подключение к реактору");
+                    port = null;
                 }
             }
             else if (port == null)
             {
-                MessageBox.Show(
-                            "Порт не выбран",
-                            "Ошибка запуска",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Error);
+                ShowError("Порт не выбран");
+            }
+            else if (is_working && !Port.get_ports().Contains(port))
+            {
+                ShowError("Порт не выбран");
+                port = null;
             }
         }
 
@@ -201,8 +208,40 @@ namespace WindowsFormsApp1
             if (is_working)
             {
                 is_working = false;
-                SerialPort.Close();
+                ClosePort();
+
+                state_lbl.ForeColor = Color.Red;
+                state_lbl.Text = "Не работает";
+
+                anod_move_lbl.Text = "Направление движение анода: ";
             }
+        }
+
+        private string[] ParseInData(string indata)
+        {
+            indata = indata.Trim();
+            int len = indata.Length;
+            if (indata[0] == '#' && indata[len - 1] == '!')
+            {
+                indata = indata.Substring(1, len-2);
+                string[] splitted_data = indata.Split(' ');
+                if (splitted_data.Length == 4)
+                {
+                    string[] data = new string[4];
+
+                    for(int i = 0; i < 4; i++)
+                    {
+                        data[i] = splitted_data[i].Split(':')[1].Replace('.', ',');
+                    }
+                    return data;
+                }
+            }
+            return null;
+        }
+
+        private void setNewPonit(string indata)
+        {
+
         }
 
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
@@ -211,16 +250,25 @@ namespace WindowsFormsApp1
             try
             {
                 string indata = recived.ReadLine();
-                indata = indata.Trim();
+                string[] data = ParseInData(indata);
 
-                if (indata[0] == '#' && indata[indata.Length - 1] == '#') 
+                if (data != null && graphic_menu != null && !graphic_menu.IsDisposed)
                 {
-                    Graph.BeginInvoke((MethodInvoker)(() => this.Graph.Series["Series2"].Points.AddXY(count, indata.Split(' ')[2])));
-                    count++;
+                    int time = Convert.ToInt32(data[2]);
+                    double at = Convert.ToDouble(data[1]);
+                    double t = Convert.ToDouble(data[3]);
+
+                    string move = data[0];
+
+                    if (move == "up") anod_move_lbl.BeginInvoke((MethodInvoker)(() => this.anod_move_lbl.Text = "Направление движение анода:" + "вверх"));
+                    if (move == "down") anod_move_lbl.BeginInvoke((MethodInvoker)(() => this.anod_move_lbl.Text = "Направление движение анода:" + "вниз"));
+
+                    graphic_menu.update_graph("AT", time, at);
+                    graphic_menu.update_graph("T", time, t);
                 }
 
             }
-            catch
+            catch (Exception ex)
             {
                 //TODO: испрвить это безобразие
             }
@@ -230,16 +278,12 @@ namespace WindowsFormsApp1
         {
             if(is_working)
             {
-                MessageBox.Show(
-                    "Реактор ещё работает. Прежде чем закрыть программу, остановите реактор",
-                    "Ошибка",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                ShowError("Реактор ещё работает. Прежде чем закрыть программу, остановите реактор");
                 e.Cancel = true;
             }
             else
             {
-                SerialPort.Close();
+                ClosePort();
                 e.Cancel = false;
             }
         }
@@ -259,6 +303,51 @@ namespace WindowsFormsApp1
             {
                 Commands_menu commands = new Commands_menu();
                 commands.Show();
+            }
+        }
+
+        private void ClosePort()
+        {
+            while (SerialPort.IsOpen)
+            {
+                try
+                {
+                    SerialPort.Close();
+                }
+                catch { };
+            }
+        }
+
+        private void graphic_menu_btn_Click(object sender, EventArgs e)
+        {
+            graphic_menu = new Graphic_menu();
+            graphic_menu.Show();
+        }
+
+        private void ShowError(string text)
+        {
+            graphic_menu.setChartVisible(false);
+            MessageBox.Show(
+                    text,
+                    "Ошибка запуска",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            graphic_menu.setChartVisible(true);
+        }
+
+        private void port_checking_Tick(object sender, EventArgs e)
+        {
+            if (port != null && !Port.get_ports().Contains(port) && !is_working) port = null;
+
+            if (is_working && !SerialPort.IsOpen )
+            {
+                is_working = false;
+                port = null;
+
+                state_lbl.ForeColor = Color.Red;
+                state_lbl.Text = "Не работает";
+
+                anod_move_lbl.Text = "Направление движение анода: ";
             }
         }
     }

@@ -29,9 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main_menu));
             this.SerialPort = new System.IO.Ports.SerialPort(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -47,7 +44,7 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.voilok_rdbtn = new System.Windows.Forms.RadioButton();
             this.tigel_rdbtn = new System.Windows.Forms.RadioButton();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.menu = new System.Windows.Forms.MenuStrip();
             this.settings_menu_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.port_menu_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.speed_menu_btn = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,21 +56,24 @@
             this.up_btn = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.Graph = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.графикToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.graphic_menu_btn = new System.Windows.Forms.ToolStripMenuItem();
+            this.label1 = new System.Windows.Forms.Label();
+            this.state_lbl = new System.Windows.Forms.Label();
+            this.port_checking = new System.Windows.Forms.Timer(this.components);
+            this.anod_move_lbl = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iteration_counter)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.time_bar)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            this.menuStrip1.SuspendLayout();
+            this.menu.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Graph)).BeginInit();
             this.SuspendLayout();
             // 
             // SerialPort
             // 
+            this.SerialPort.DiscardNull = true;
             this.SerialPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.SerialPort_DataReceived);
             // 
             // groupBox1
@@ -272,19 +272,19 @@
             this.tigel_rdbtn.UseVisualStyleBackColor = true;
             this.tigel_rdbtn.CheckedChanged += new System.EventHandler(this.tigel_rdbtn_CheckedChanged);
             // 
-            // menuStrip1
+            // menu
             // 
-            this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
-            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menu.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
+            this.menu.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.settings_menu_btn,
             this.debug_menu_btn,
-            this.графикToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1664, 40);
-            this.menuStrip1.TabIndex = 7;
-            this.menuStrip1.Text = "menuStrip1";
+            this.graphic_menu_btn});
+            this.menu.Location = new System.Drawing.Point(0, 0);
+            this.menu.Name = "menu";
+            this.menu.Size = new System.Drawing.Size(1664, 40);
+            this.menu.TabIndex = 7;
+            this.menu.Text = "menu";
             // 
             // settings_menu_btn
             // 
@@ -404,7 +404,9 @@
             // 
             this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox5.BackColor = System.Drawing.SystemColors.Control;
-            this.groupBox5.Controls.Add(this.Graph);
+            this.groupBox5.Controls.Add(this.anod_move_lbl);
+            this.groupBox5.Controls.Add(this.state_lbl);
+            this.groupBox5.Controls.Add(this.label1);
             this.groupBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.groupBox5.Location = new System.Drawing.Point(1028, 66);
             this.groupBox5.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -415,32 +417,48 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Информация о реакторе";
             // 
-            // Graph
+            // graphic_menu_btn
             // 
-            this.Graph.BackColor = System.Drawing.Color.Transparent;
-            chartArea1.Name = "ChartArea1";
-            this.Graph.ChartAreas.Add(chartArea1);
-            this.Graph.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend1.Name = "Legend1";
-            this.Graph.Legends.Add(legend1);
-            this.Graph.Location = new System.Drawing.Point(4, 46);
-            this.Graph.Name = "Graph";
-            this.Graph.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Berry;
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series1.Legend = "Legend1";
-            series1.Name = "Series2";
-            this.Graph.Series.Add(series1);
-            this.Graph.Size = new System.Drawing.Size(627, 270);
-            this.Graph.TabIndex = 0;
-            this.Graph.Text = "chart1";
+            this.graphic_menu_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.graphic_menu_btn.Name = "graphic_menu_btn";
+            this.graphic_menu_btn.Size = new System.Drawing.Size(109, 36);
+            this.graphic_menu_btn.Text = "График";
+            this.graphic_menu_btn.Click += new System.EventHandler(this.graphic_menu_btn_Click);
             // 
-            // графикToolStripMenuItem
+            // label1
             // 
-            this.графикToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.графикToolStripMenuItem.Name = "графикToolStripMenuItem";
-            this.графикToolStripMenuItem.Size = new System.Drawing.Size(109, 36);
-            this.графикToolStripMenuItem.Text = "График";
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.Location = new System.Drawing.Point(15, 84);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(178, 37);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Состояние:";
+            // 
+            // state_lbl
+            // 
+            this.state_lbl.AutoSize = true;
+            this.state_lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.state_lbl.ForeColor = System.Drawing.Color.Red;
+            this.state_lbl.Location = new System.Drawing.Point(199, 84);
+            this.state_lbl.Name = "state_lbl";
+            this.state_lbl.Size = new System.Drawing.Size(198, 37);
+            this.state_lbl.TabIndex = 1;
+            this.state_lbl.Text = "Не работает";
+            // 
+            // port_checking
+            // 
+            this.port_checking.Tick += new System.EventHandler(this.port_checking_Tick);
+            // 
+            // anod_move_lbl
+            // 
+            this.anod_move_lbl.AutoSize = true;
+            this.anod_move_lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.anod_move_lbl.Location = new System.Drawing.Point(15, 229);
+            this.anod_move_lbl.Name = "anod_move_lbl";
+            this.anod_move_lbl.Size = new System.Drawing.Size(453, 37);
+            this.anod_move_lbl.TabIndex = 2;
+            this.anod_move_lbl.Text = "Направление движение анода:";
             // 
             // Main_menu
             // 
@@ -455,9 +473,9 @@
             this.Controls.Add(this.left_btn);
             this.Controls.Add(this.start_btn);
             this.Controls.Add(this.stop_btn);
-            this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.menu);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MainMenuStrip = this.menuStrip1;
+            this.MainMenuStrip = this.menu;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Main_menu";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -471,11 +489,11 @@
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
+            this.menu.ResumeLayout(false);
+            this.menu.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Graph)).EndInit();
+            this.groupBox5.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -497,7 +515,7 @@
         private System.Windows.Forms.RadioButton tigel_rdbtn;
         private System.Windows.Forms.Label iteration_label;
         private System.Windows.Forms.NumericUpDown iteration_counter;
-        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.MenuStrip menu;
         private System.Windows.Forms.ToolStripMenuItem settings_menu_btn;
         private System.Windows.Forms.ToolStripMenuItem port_menu_btn;
         private System.Windows.Forms.ToolStripMenuItem speed_menu_btn;
@@ -509,8 +527,11 @@
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.ToolStripMenuItem commands_menu_btn;
-        private System.Windows.Forms.DataVisualization.Charting.Chart Graph;
-        private System.Windows.Forms.ToolStripMenuItem графикToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem graphic_menu_btn;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label state_lbl;
+        private System.Windows.Forms.Timer port_checking;
+        private System.Windows.Forms.Label anod_move_lbl;
     }
 }
 
