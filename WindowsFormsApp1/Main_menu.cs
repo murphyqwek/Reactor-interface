@@ -26,6 +26,8 @@ namespace WindowsFormsApp1
         {
             InitializeComponent();
             port = Interface_settings.get_port();
+            if (!Port.get_ports().Contains(port)) port = null; 
+
             speed = Interface_settings.get_speed();
             if (!Convert.ToBoolean(speed))
             {
@@ -185,8 +187,8 @@ namespace WindowsFormsApp1
             else if (port == null)
             {
                 MessageBox.Show(
-                            "Порт невыбран",
-                            "Ошибка апуска",
+                            "Порт не выбран",
+                            "Ошибка запуска",
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Error);
             }
@@ -220,7 +222,7 @@ namespace WindowsFormsApp1
             if(is_working)
             {
                 MessageBox.Show(
-                    "Реактор ещё рабоает. Прежде чем закрыть программу, остановите реактор",
+                    "Реактор ещё работает. Прежде чем закрыть программу, остановите реактор",
                     "Ошибка",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
