@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Reactor_Interface;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,8 +11,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using WindowsFormsApp1.Classes;
 
-//size 365; 117
-//size 1188; 570
 namespace WindowsFormsApp1
 {
     public partial class Main_menu : Form
@@ -203,7 +202,7 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void SerialPort_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
+        private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             SerialPort recived = (SerialPort)sender;
             try
@@ -232,6 +231,24 @@ namespace WindowsFormsApp1
             {
                 SerialPort.Close();
                 e.Cancel = false;
+            }
+        }
+
+        private void debug_menu_btn_Click(object sender, EventArgs e)
+        {
+            if (!is_working)
+            {
+                Debug_menu debug = new Debug_menu();
+                debug.Show();
+            }
+        }
+
+        private void commands_menu_btn_Click(object sender, EventArgs e)
+        {
+            if (!is_working)
+            {
+                Commands_menu commands = new Commands_menu();
+                commands.Show();
             }
         }
     }

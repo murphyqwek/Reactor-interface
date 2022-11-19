@@ -53,6 +53,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -66,11 +67,17 @@
   <ItemGroup>
     <Compile Include="Classes\Interface_settings.cs" />
     <Compile Include="Classes\Port.cs" />
-    <Compile Include="Debug_from.cs">
+    <Compile Include="Commands_menu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Debug_from.Designer.cs">
-      <DependentUpon>Debug_from.cs</DependentUpon>
+    <Compile Include="Commands_menu.Designer.cs">
+      <DependentUpon>Commands_menu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debug_menu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debug_menu.Designer.cs">
+      <DependentUpon>Debug_menu.cs</DependentUpon>
     </Compile>
     <Compile Include="Main_menu.cs">
       <SubType>Form</SubType>
@@ -80,8 +87,11 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Debug_from.resx">
-      <DependentUpon>Debug_from.cs</DependentUpon>
+    <EmbeddedResource Include="Commands_menu.resx">
+      <DependentUpon>Commands_menu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debug_menu.resx">
+      <DependentUpon>Debug_menu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main_menu.resx">
       <DependentUpon>Main_menu.cs</DependentUpon>
@@ -111,9 +121,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Logo\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
       <Visible>False</Visible>
@@ -125,6 +133,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Logo\Ш.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

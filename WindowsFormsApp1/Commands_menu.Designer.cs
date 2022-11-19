@@ -1,6 +1,6 @@
-﻿namespace WindowsFormsApp1
+﻿namespace Reactor_Interface
 {
-    partial class Debug_from
+    partial class Commands_menu
     {
         /// <summary>
         /// Required designer variable.
@@ -28,36 +28,21 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Debug_from));
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Commands_menu));
             this.SuspendLayout();
             // 
-            // richTextBox1
-            // 
-            this.richTextBox1.Location = new System.Drawing.Point(12, 12);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(563, 535);
-            this.richTextBox1.TabIndex = 0;
-            this.richTextBox1.Text = "";
-            // 
-            // Debug_from
+            // Commands_menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 559);
-            this.Controls.Add(this.richTextBox1);
+            this.ClientSize = new System.Drawing.Size(800, 450);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Debug_from";
-            this.Text = "Дебаг";
+            this.Name = "Commands_menu";
+            this.Text = "Отравка и приём команд";
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.RichTextBox richTextBox1;
-        private System.IO.Ports.SerialPort serialPort1;
     }
 }

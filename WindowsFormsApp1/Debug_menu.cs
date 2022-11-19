@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace WindowsFormsApp1
 {
-    public partial class Debug_from : Form
+    public partial class Debug_menu : Form
     {
-        public Debug_from()
+        public Debug_menu()
         {
             InitializeComponent();
         }

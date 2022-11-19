@@ -48,13 +48,15 @@
             this.settings_menu_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.port_menu_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.speed_menu_btn = new System.Windows.Forms.ToolStripMenuItem();
-            this.дебагToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.commands_menu_btn = new System.Windows.Forms.ToolStripMenuItem();
+            this.debug_menu_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.left_btn = new System.Windows.Forms.Button();
             this.down_btn = new System.Windows.Forms.Button();
             this.right_btn = new System.Windows.Forms.Button();
             this.up_btn = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iteration_counter)).BeginInit();
@@ -272,7 +274,7 @@
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.settings_menu_btn,
-            this.дебагToolStripMenuItem});
+            this.debug_menu_btn});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1664, 40);
@@ -283,7 +285,8 @@
             // 
             this.settings_menu_btn.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.port_menu_btn,
-            this.speed_menu_btn});
+            this.speed_menu_btn,
+            this.commands_menu_btn});
             this.settings_menu_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.settings_menu_btn.Name = "settings_menu_btn";
             this.settings_menu_btn.Size = new System.Drawing.Size(148, 36);
@@ -293,23 +296,31 @@
             // port_menu_btn
             // 
             this.port_menu_btn.Name = "port_menu_btn";
-            this.port_menu_btn.Size = new System.Drawing.Size(232, 40);
+            this.port_menu_btn.Size = new System.Drawing.Size(412, 40);
             this.port_menu_btn.Text = "Порт:";
             this.port_menu_btn.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.port_menu_btn_DropDownItemClicked);
             // 
             // speed_menu_btn
             // 
             this.speed_menu_btn.Name = "speed_menu_btn";
-            this.speed_menu_btn.Size = new System.Drawing.Size(232, 40);
+            this.speed_menu_btn.Size = new System.Drawing.Size(412, 40);
             this.speed_menu_btn.Text = "Скорость: ";
             this.speed_menu_btn.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.speed_menu_btn_DropDownItemClicked);
             // 
-            // дебагToolStripMenuItem
+            // commands_menu_btn
             // 
-            this.дебагToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.дебагToolStripMenuItem.Name = "дебагToolStripMenuItem";
-            this.дебагToolStripMenuItem.Size = new System.Drawing.Size(95, 36);
-            this.дебагToolStripMenuItem.Text = "Дебаг";
+            this.commands_menu_btn.Name = "commands_menu_btn";
+            this.commands_menu_btn.Size = new System.Drawing.Size(412, 40);
+            this.commands_menu_btn.Text = "Отправка и приём команд";
+            this.commands_menu_btn.Click += new System.EventHandler(this.commands_menu_btn_Click);
+            // 
+            // debug_menu_btn
+            // 
+            this.debug_menu_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.debug_menu_btn.Name = "debug_menu_btn";
+            this.debug_menu_btn.Size = new System.Drawing.Size(95, 36);
+            this.debug_menu_btn.Text = "Дебаг";
+            this.debug_menu_btn.Click += new System.EventHandler(this.debug_menu_btn_Click);
             // 
             // left_btn
             // 
@@ -370,6 +381,7 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.BackColor = System.Drawing.SystemColors.Control;
             this.groupBox4.Controls.Add(this.groupBox2);
             this.groupBox4.Controls.Add(this.groupBox3);
             this.groupBox4.Controls.Add(this.groupBox1);
@@ -386,6 +398,8 @@
             // groupBox5
             // 
             this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox5.BackColor = System.Drawing.SystemColors.Control;
+            this.groupBox5.Controls.Add(this.label2);
             this.groupBox5.Controls.Add(this.label1);
             this.groupBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.groupBox5.Location = new System.Drawing.Point(1018, 65);
@@ -397,14 +411,23 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Информация о реакторе";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(7, 230);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(262, 40);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Чё-то там ещё";
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(22, 141);
+            this.label1.Location = new System.Drawing.Point(7, 124);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(113, 40);
+            this.label1.Size = new System.Drawing.Size(137, 40);
             this.label1.TabIndex = 0;
-            this.label1.Text = "label1";
+            this.label1.Text = "Время:";
             // 
             // Main_menu
             // 
@@ -465,7 +488,7 @@
         private System.Windows.Forms.ToolStripMenuItem settings_menu_btn;
         private System.Windows.Forms.ToolStripMenuItem port_menu_btn;
         private System.Windows.Forms.ToolStripMenuItem speed_menu_btn;
-        private System.Windows.Forms.ToolStripMenuItem дебагToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem debug_menu_btn;
         private System.Windows.Forms.Button left_btn;
         private System.Windows.Forms.Button down_btn;
         private System.Windows.Forms.Button right_btn;
@@ -473,6 +496,8 @@
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ToolStripMenuItem commands_menu_btn;
+        private System.Windows.Forms.Label label2;
     }
 }
 
