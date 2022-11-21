@@ -34,5 +34,20 @@ namespace Reactor_Interface
         {
             if (Graph != null) Graph.Visible = isVisible;
         }
+
+        private void save_graphic_btn_Click(object sender, EventArgs e)
+        {
+            using(SaveFileDialog sf = new SaveFileDialog())
+            {
+                sf.Title = "Сохранить файл как...";
+                sf.Filter = "*.png|*.png;";
+                sf.DefaultExt = ".png";
+
+                if (sf.ShowDialog() == DialogResult.OK)
+                {
+                    Graph.SaveImage(sf.FileName, ChartImageFormat.Png);
+                }
+            }
+        }
     }
 }

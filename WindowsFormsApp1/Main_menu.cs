@@ -18,6 +18,8 @@ using System.Windows.Threading;
 using WindowsFormsApp1.Classes;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TreeView;
 
+
+
 namespace WindowsFormsApp1
 {
     public partial class Main_menu : Form
@@ -31,10 +33,13 @@ namespace WindowsFormsApp1
 
         bool is_working = false;
 
-        Graphic_menu graphic_menu;
+        Graphic_menu graphic_menu = new Graphic_menu();
         public Main_menu()
         {
             InitializeComponent();
+
+            mode_groupbox.Size = new Size(730, 438);
+            setting_groupbox.Size = new Size(711, 153);
 
             port = Interface_settings.get_port();
             if (!Port.get_ports().Contains(port)) port = null; 
@@ -57,11 +62,15 @@ namespace WindowsFormsApp1
 
         private void duga_rdbtn_CheckedChanged(object sender, EventArgs e)
         {
+            //730; 438
             if (duga_rdbtn.Checked){
                 time_bar.Size = this.time_bar_max_size;
                 time_syntes_lable.Text = "Время синтеза: 5 с.";
-                time_bar.Value = 5;
+                time_bar.Value = time_bar.Minimum;
                 time_bar.Maximum = 60;
+
+                mode_groupbox.Size = new Size(730, 438);
+                setting_groupbox.Size = new Size(711, 153);
 
                 iteration_label.Visible = false;
                 iteration_counter.Visible = false; 
@@ -72,9 +81,16 @@ namespace WindowsFormsApp1
         {
             if (impulse_rdbtn.Checked){
                 time_bar.Size = new Size(259, 45);
-                time_syntes_lable.Text = "Время импульса: 5 с.";
-                time_bar.Value = 5;
+                time_syntes_lable.Text = "Время выдержки: 5 с.";
+                time_bar.Value = time_bar.Minimum; 
                 time_bar.Maximum = 20;
+
+                mode_groupbox.Size = new Size(730, 537);
+
+                cold_bar.Value = cold_bar.Minimum;
+                fire_bar.Value = fire_bar.Minimum;
+
+                setting_groupbox.Size = new Size(711, 252);
 
                 iteration_counter.Value = 2;
                 iteration_label.Visible = true;
@@ -254,17 +270,20 @@ namespace WindowsFormsApp1
 
                 if (data != null && graphic_menu != null && !graphic_menu.IsDisposed)
                 {
-                    int time = Convert.ToInt32(data[2]);
-                    double at = Convert.ToDouble(data[1]);
-                    double t = Convert.ToDouble(data[3]);
-
+                    Random rnd = new Random();
+                    //int time = Convert.ToInt32(data[2]);
+                    double at = rnd.NextDouble();//Convert.ToDouble(data[1]);
+                    double t = at * 2.0;//Convert.ToDouble(data[3]);
+                    
                     string move = data[0];
 
                     if (move == "up") anod_move_lbl.BeginInvoke((MethodInvoker)(() => this.anod_move_lbl.Text = "Направление движение анода:" + "вверх"));
                     if (move == "down") anod_move_lbl.BeginInvoke((MethodInvoker)(() => this.anod_move_lbl.Text = "Направление движение анода:" + "вниз"));
 
-                    graphic_menu.update_graph("AT", time, at);
-                    graphic_menu.update_graph("T", time, t);
+                    graphic_menu.update_graph("AT", count, at);
+                    graphic_menu.update_graph("T", count, t);
+
+                    count++;
                 }
 
             }
@@ -299,7 +318,7 @@ namespace WindowsFormsApp1
 
         private void commands_menu_btn_Click(object sender, EventArgs e)
         {
-            if (!is_working)
+            if (!is_working && !isFormOpen("Commands_menu"))
             {
                 Commands_menu commands = new Commands_menu();
                 commands.Show();
@@ -320,19 +339,31 @@ namespace WindowsFormsApp1
 
         private void graphic_menu_btn_Click(object sender, EventArgs e)
         {
-            graphic_menu = new Graphic_menu();
-            graphic_menu.Show();
+            if (!isFormOpen("Graphic_menu"))
+            {
+                graphic_menu = new Graphic_menu();
+                graphic_menu.Show();
+            }
         }
 
         private void ShowError(string text)
-        {
-            graphic_menu.setChartVisible(false);
+        { 
+            if (!graphic_menu.IsDisposed) graphic_menu.setChartVisible(false);
             MessageBox.Show(
                     text,
                     "Ошибка запуска",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
-            graphic_menu.setChartVisible(true);
+            if (!graphic_menu.IsDisposed) graphic_menu.setChartVisible(true);
+        }
+
+        private bool isFormOpen(string name)
+        {
+            foreach(Form form in Application.OpenForms)
+            {
+                if (form.Name == name) return true;
+            }
+            return false;
         }
 
         private void port_checking_Tick(object sender, EventArgs e)
@@ -349,6 +380,16 @@ namespace WindowsFormsApp1
 
                 anod_move_lbl.Text = "Направление движение анода: ";
             }
+        }
+
+        private void fire_bar_Scroll(object sender, EventArgs e)
+        {
+            fire_lbl.Text = "Время горения: " + fire_bar.Value.ToString() + " с.";
+        }
+
+        private void cold_bar_Scroll(object sender, EventArgs e)
+        {
+            cold_lbl.Text = "Время остывания: " + cold_bar.Value.ToString() + " с.";
         }
     }
 }
