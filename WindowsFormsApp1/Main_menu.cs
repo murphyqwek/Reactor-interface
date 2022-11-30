@@ -17,9 +17,6 @@ using System.Windows.Forms.DataVisualization.Charting;
 using System.Windows.Forms.VisualStyles;
 using System.Windows.Threading;
 using WindowsFormsApp1.Classes;
-
-
-
 namespace WindowsFormsApp1
 {
     public partial class Main_menu : Form
@@ -33,6 +30,8 @@ namespace WindowsFormsApp1
         bool is_working = false;
 
         Graphic_menu graphic_menu = new Graphic_menu();
+
+        Queue<string> dataQueue = new Queue<string>();
 
         double at;
         public Main_menu()
@@ -235,57 +234,22 @@ namespace WindowsFormsApp1
             }
         }
 
-        private string[] ParseInData(string indata)
+        private void ParseInData(string indata)
         {
-            indata = indata.Trim();
-            int len = indata.Length;
-            if (indata[0] == '#' && indata[len - 1] == '!')
+            while (true) 
             {
-                indata = indata.Substring(1, len-2);
-                string[] splitted_data = indata.Split(' ');
-                if (splitted_data.Length == 4)
+                if(dataQueue.Count > 0)
                 {
-                    string[] data = new string[4];
-
-                    for(int i = 0; i < 4; i++)
-                    {
-                        data[i] = splitted_data[i].Split(':')[1].Replace('.', ',');
-                    }
-                    return data;
+                    string data = dataQueue.Dequeue();
+                    graphic_menu.BeginInvoke((MethodInvoker)(() => graphic_menu.update_graph("Data", 1, 1.0)));
                 }
             }
-            return null;
-        }
-
-        private void setNewPonit(string indata)
-        {
-
         }
 
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             SerialPort recived = (SerialPort)sender;
-            try
-            {
-                string indata = recived.ReadLine();
-                string[] data = ParseInData(indata);
-
-                if (data != null && graphic_menu != null && !graphic_menu.IsDisposed)
-                {
-                    string move = data[0];
-
-                    if (move == "up") anod_move_lbl.BeginInvoke((MethodInvoker)(() => this.anod_move_lbl.Text = "Направление движение анода:" + "вверх"));
-                    if (move == "down") anod_move_lbl.BeginInvoke((MethodInvoker)(() => this.anod_move_lbl.Text = "Направление движение анода:" + "вниз"));
-
-                    graphic_menu.update_graph("AT", Convert.ToInt32(data[1]), Convert.ToInt32(data[2]));
-                    graphic_menu.update_graph("T", Convert.ToInt32(data[1]), Convert.ToInt32(data[3]));
-                }
-
-            }
-            catch (Exception ex)
-            {
-                //TODO: испрвить это безобразие
-            }
+            dataQueue.Enqueue(recived.ReadLine());
         }
 
         private void Main_menu_FormClosing(object sender, FormClosingEventArgs e)
@@ -385,6 +349,16 @@ namespace WindowsFormsApp1
         private void cold_bar_Scroll(object sender, EventArgs e)
         {
             cold_lbl.Text = "Время остывания: " + cold_bar.Value.ToString() + " с.";
+        }
+
+        private void портIRToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void сОхранитьДанныеToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            File.WriteAllLines("log.txt", dataQueue.ToArray());
         }
     }
 }

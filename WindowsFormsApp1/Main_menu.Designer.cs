@@ -65,6 +65,9 @@
             this.state_lbl = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.port_checking = new System.Windows.Forms.Timer(this.components);
+            this.IRPort = new System.IO.Ports.SerialPort(this.components);
+            this.портIRToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.сОхранитьДанныеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setting_groupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cold_bar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fire_bar)).BeginInit();
@@ -334,7 +337,8 @@
             this.menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.settings_menu_btn,
             this.debug_menu_btn,
-            this.graphic_menu_btn});
+            this.graphic_menu_btn,
+            this.сОхранитьДанныеToolStripMenuItem});
             this.menu.Location = new System.Drawing.Point(0, 0);
             this.menu.Name = "menu";
             this.menu.Size = new System.Drawing.Size(1664, 40);
@@ -346,7 +350,8 @@
             this.settings_menu_btn.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.port_menu_btn,
             this.speed_menu_btn,
-            this.commands_menu_btn});
+            this.commands_menu_btn,
+            this.портIRToolStripMenuItem});
             this.settings_menu_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.settings_menu_btn.Name = "settings_menu_btn";
             this.settings_menu_btn.Size = new System.Drawing.Size(148, 36);
@@ -516,6 +521,20 @@
             // 
             this.port_checking.Tick += new System.EventHandler(this.port_checking_Tick);
             // 
+            // портIRToolStripMenuItem
+            // 
+            this.портIRToolStripMenuItem.Name = "портIRToolStripMenuItem";
+            this.портIRToolStripMenuItem.Size = new System.Drawing.Size(291, 40);
+            this.портIRToolStripMenuItem.Text = "Порт IR:";
+            this.портIRToolStripMenuItem.Click += new System.EventHandler(this.портIRToolStripMenuItem_Click);
+            // 
+            // сОхранитьДанныеToolStripMenuItem
+            // 
+            this.сОхранитьДанныеToolStripMenuItem.Name = "сОхранитьДанныеToolStripMenuItem";
+            this.сОхранитьДанныеToolStripMenuItem.Size = new System.Drawing.Size(180, 36);
+            this.сОхранитьДанныеToolStripMenuItem.Text = "Сохранить данные";
+            this.сОхранитьДанныеToolStripMenuItem.Click += new System.EventHandler(this.сОхранитьДанныеToolStripMenuItem_Click);
+            // 
             // Main_menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -594,6 +613,9 @@
         private System.Windows.Forms.Label fire_lbl;
         private System.Windows.Forms.Label cold_lbl;
         private System.Windows.Forms.TrackBar cold_bar;
+        private System.IO.Ports.SerialPort IRPort;
+        private System.Windows.Forms.ToolStripMenuItem портIRToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem сОхранитьДанныеToolStripMenuItem;
     }
 }
 

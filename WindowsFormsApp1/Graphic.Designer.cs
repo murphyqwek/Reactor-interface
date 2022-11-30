@@ -121,7 +121,6 @@
             this.save_graphic_btn.Name = "save_graphic_btn";
             this.save_graphic_btn.Size = new System.Drawing.Size(230, 36);
             this.save_graphic_btn.Text = "Сохранить график";
-            this.save_graphic_btn.Click += new System.EventHandler(this.save_graphic_btn_Click);
             // 
             // какКартинкуToolStripMenuItem
             // 
@@ -129,6 +128,7 @@
             this.какКартинкуToolStripMenuItem.Name = "какКартинкуToolStripMenuItem";
             this.какКартинкуToolStripMenuItem.Size = new System.Drawing.Size(276, 36);
             this.какКартинкуToolStripMenuItem.Text = "Как картинку";
+            this.какКартинкуToolStripMenuItem.Click += new System.EventHandler(this.какКартинкуToolStripMenuItem_Click);
             // 
             // какExcelТаблицуToolStripMenuItem
             // 
