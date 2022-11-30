@@ -17,7 +17,6 @@ using System.Windows.Forms.DataVisualization.Charting;
 using System.Windows.Forms.VisualStyles;
 using System.Windows.Threading;
 using WindowsFormsApp1.Classes;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TreeView;
 
 
 
@@ -30,7 +29,6 @@ namespace WindowsFormsApp1
         string port;
         int speed;
 
-        int count = 1;
 
         bool is_working = false;
 
@@ -274,31 +272,13 @@ namespace WindowsFormsApp1
 
                 if (data != null && graphic_menu != null && !graphic_menu.IsDisposed)
                 {
-                    Random rnd = new Random();
-                    double t = 0;
-                    //int time = Convert.ToInt32(data[2]);
-                    if (count >= 50 && count <= 1000) {
-                        t = 40;
-                        double k = (rnd.NextDouble() + rnd.NextDouble()) * 3;
-                        if (Convert.ToBoolean(rnd.Next(0, 1))) k = -k;
-                        this.at = 30 + k;
-                    }
-                    if (count > 1000) this.at = 0;
-                    t += this.at;
-                    at /= 100;
-                    t /= 100;
-                    //Convert.ToDouble(data[1
-                    //Convert.ToDouble(data[3]);
-
                     string move = data[0];
 
                     if (move == "up") anod_move_lbl.BeginInvoke((MethodInvoker)(() => this.anod_move_lbl.Text = "Направление движение анода:" + "вверх"));
                     if (move == "down") anod_move_lbl.BeginInvoke((MethodInvoker)(() => this.anod_move_lbl.Text = "Направление движение анода:" + "вниз"));
 
-                    graphic_menu.update_graph("AT", count, this.at);
-                    graphic_menu.update_graph("T", count, t);
-
-                    count++;
+                    graphic_menu.update_graph("AT", Convert.ToInt32(data[1]), Convert.ToInt32(data[2]));
+                    graphic_menu.update_graph("T", Convert.ToInt32(data[1]), Convert.ToInt32(data[3]));
                 }
 
             }

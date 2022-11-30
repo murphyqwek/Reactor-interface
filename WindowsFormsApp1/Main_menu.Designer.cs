@@ -337,7 +337,7 @@
             this.graphic_menu_btn});
             this.menu.Location = new System.Drawing.Point(0, 0);
             this.menu.Name = "menu";
-            this.menu.Size = new System.Drawing.Size(1664, 42);
+            this.menu.Size = new System.Drawing.Size(1664, 40);
             this.menu.TabIndex = 7;
             this.menu.Text = "menu";
             // 
