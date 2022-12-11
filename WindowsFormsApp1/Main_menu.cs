@@ -9,6 +9,7 @@ using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Reflection.Emit;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,14 +27,14 @@ namespace WindowsFormsApp1
         string port;
         int speed;
 
+        string IR_port;
 
-        bool is_working = false;
+        bool is_reactor_working = false;
+        bool is_IR_working = false;
 
         Graphic_menu graphic_menu = new Graphic_menu();
 
-        Queue<string> dataQueue = new Queue<string>();
-
-        double at;
+        public Queue<string> dataQueue = new Queue<string>();
         public Main_menu()
         {
             InitializeComponent();
@@ -48,8 +49,10 @@ namespace WindowsFormsApp1
             if (!Convert.ToBoolean(speed))
             {
                 speed = 9600;
-                Interface_settings.save(speed);
+                Interface_settings.save_speed(speed);
             }
+
+            IR_port = Interface_settings.get_IR_port();
 
             port_checking.Start();
             this.time_bar_max_size = time_bar.Size;
@@ -98,33 +101,33 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void tigel_rdbtn_CheckedChanged(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void settings_menu_btn_DropDownOpened(object sender, EventArgs e)
         {
             port_menu_btn.DropDown.Items.Clear();
             speed_menu_btn.DropDownItems.Clear();
+            IR_port_menu_btn.DropDownItems.Clear();
 
             port_menu_btn.Text = "Порт: ";
             if (Port.get_ports().Contains(port))
             {
                 port_menu_btn.Text += port;
             }
+
+            IR_port_menu_btn.Text = "IR порт: ";
+            if (Port.get_ports().Contains(IR_port))
+            {
+                IR_port_menu_btn.Text += IR_port;
+            }
+
             speed_menu_btn.Text = "Скорость: " + speed;
 
             foreach(string port in Port.get_ports())
             {
                 port_menu_btn.DropDownItems.Add(port);
+                IR_port_menu_btn.DropDownItems.Add(port);
             }
             if (Port.get_ports().Length == 0) port_menu_btn.DropDownItems.Add("Портов не найдено");
+            if (Port.get_ports().Length == 0) IR_port_menu_btn.DropDownItems.Add("Портов не найдено");
 
             foreach (string speed in Port.get_speeds())
             {
@@ -134,23 +137,50 @@ namespace WindowsFormsApp1
 
         private void port_menu_btn_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (e.ClickedItem.Text != "Портов не найдено" && !is_working)
+            if (e.ClickedItem.Text != "Портов не найдено" && e.ClickedItem.Text != IR_port && !is_reactor_working )
             {
                 port = e.ClickedItem.Text;
-                Interface_settings.save(port);
+                Interface_settings.save_port(port);
             }
-            else if (is_working)
+            else if (is_reactor_working)
             {
                 MessageBox.Show("Нельзя менять порт во время работы реактора");
+            }
+            else if (e.ClickedItem.Text == IR_port)
+            {
+                port = e.ClickedItem.Text;
+                IR_port = "";
+                Interface_settings.save_IR_port(IR_port);
+                Interface_settings.save_port(port);
+            }
+        }
+
+        private void IR_port_menu_btn_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if (e.ClickedItem.Text != "Портов не найдено" && e.ClickedItem.Text != port && !is_IR_working)
+            {
+                IR_port = e.ClickedItem.Text;
+                Interface_settings.save_IR_port(IR_port);
+            }
+            else if (is_IR_working)
+            {
+                MessageBox.Show("Нельзя менять порт во время работы термометра");
+            }
+            else if(e.ClickedItem.Text == port)
+            {
+                IR_port = e.ClickedItem.Text;
+                port = "";
+                Interface_settings.save_IR_port(IR_port);
+                Interface_settings.save_port(port);
             }
         }
 
         private void speed_menu_btn_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (!is_working)
+            if (!is_reactor_working)
             {
                 speed = Convert.ToInt32(e.ClickedItem.Text);
-                Interface_settings.save(speed);
+                Interface_settings.save_speed(speed);
             }
             else
             {
@@ -158,42 +188,50 @@ namespace WindowsFormsApp1
             }
         }
 
+        private string get_param()
+        {
+            string param;
+
+            string working_mode = "M:";
+            string configuration = "C:";
+            string time = "T:";
+            string iteration = "I:";
+
+            if (duga_rdbtn.Checked)
+            {
+                working_mode += "duga";
+                iteration = "";
+            }
+            else
+            {
+                working_mode += "impulse";
+                iteration += iteration_counter.Value.ToString();
+            }
+
+            if (tigel_rdbtn.Checked) configuration += "tigel";
+            else configuration += "voilok";
+
+            time += time_bar.Value.ToString();
+
+            param = working_mode + "_" + configuration + "_" + time + "_" + iteration;
+
+            return param;
+        }
+
         private void start_btn_Click(object sender, EventArgs e)
         {
-            if (!is_working && port != null)
+            if (!is_reactor_working && port != null)
             {
-                is_working = true;
+                is_reactor_working = true;
 
-                string working_mode = "M:";
-                string configuration = "C:";
-                string time = "T:";
-                string iteration = "I:";
-
-                if (duga_rdbtn.Checked)
-                {
-                    working_mode += "duga";
-                    iteration = "";
-                }
-                else
-                {
-                    working_mode += "impulse";
-                    iteration += iteration_counter.Value.ToString();
-                }
-
-                if (tigel_rdbtn.Checked) configuration += "tigel";
-                else configuration += "voilok";
-
-                time += time_bar.Value.ToString();
+                string param = get_param();
 
                 SerialPort.PortName = port.Split(' ')[0];
                 SerialPort.BaudRate = speed;
 
                 try
                 {
-                    graphic_menu = new Graphic_menu();
-                    graphic_menu.Show();
                     SerialPort.Open();
-                    SerialPort.WriteLine(working_mode + "_" + configuration + "_" + time + "_" + iteration);
 
                     state_lbl.ForeColor = Color.Green;
                     state_lbl.Text = "Работает";
@@ -201,7 +239,7 @@ namespace WindowsFormsApp1
                 catch (UnauthorizedAccessException)
                 {
                     ShowError("Порт уже занят");
-                    is_working = false;
+                    is_reactor_working = false;
                 }
                 catch (IOException)
                 {
@@ -213,7 +251,7 @@ namespace WindowsFormsApp1
             {
                 ShowError("Порт не выбран");
             }
-            else if (is_working && !Port.get_ports().Contains(port))
+            else if (is_reactor_working && !Port.get_ports().Contains(port))
             {
                 ShowError("Порт не выбран");
                 port = null;
@@ -222,9 +260,9 @@ namespace WindowsFormsApp1
 
         private void stop_btn_Click(object sender, EventArgs e)
         {
-            if (is_working)
+            if (is_reactor_working)
             {
-                is_working = false;
+                is_reactor_working = false;
                 ClosePort();
 
                 state_lbl.ForeColor = Color.Red;
@@ -234,7 +272,7 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void ParseInData(string indata)
+        private void GetData()
         {
             while (true) 
             {
@@ -248,27 +286,17 @@ namespace WindowsFormsApp1
 
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            SerialPort recived = (SerialPort)sender;
-            dataQueue.Enqueue(recived.ReadLine());
-        }
-
-        private void Main_menu_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if(is_working)
+            try
             {
-                ShowError("Реактор ещё работает. Прежде чем закрыть программу, остановите реактор");
-                e.Cancel = true;
+                SerialPort recived = (SerialPort)sender;
+                dataQueue.Enqueue(recived.ReadLine());
             }
-            else
-            {
-                ClosePort();
-                e.Cancel = false;
-            }
+            catch { }
         }
 
         private void debug_menu_btn_Click(object sender, EventArgs e)
         {
-            if (!is_working)
+            if (!is_reactor_working)
             {
                 Debug_menu debug = new Debug_menu();
                 debug.Show();
@@ -277,7 +305,7 @@ namespace WindowsFormsApp1
 
         private void commands_menu_btn_Click(object sender, EventArgs e)
         {
-            if (!is_working && !isFormOpen("Commands_menu"))
+            if (!is_reactor_working && !isFormOpen("Commands_menu"))
             {
                 Commands_menu commands = new Commands_menu();
                 commands.Show();
@@ -327,11 +355,11 @@ namespace WindowsFormsApp1
 
         private void port_checking_Tick(object sender, EventArgs e)
         {
-            if (port != null && !Port.get_ports().Contains(port) && !is_working) port = null;
+            if (port != null && !Port.get_ports().Contains(port) && !is_reactor_working) port = null;
 
-            if (is_working && !SerialPort.IsOpen )
+            if (is_reactor_working && !SerialPort.IsOpen )
             {
-                is_working = false;
+                is_reactor_working = false;
                 port = null;
 
                 state_lbl.ForeColor = Color.Red;
@@ -351,14 +379,58 @@ namespace WindowsFormsApp1
             cold_lbl.Text = "Время остывания: " + cold_bar.Value.ToString() + " с.";
         }
 
-        private void портIRToolStripMenuItem_Click(object sender, EventArgs e)
+        private void IR_timer_Tick(object sender, EventArgs e)
         {
-
+            if (SerialPort.IsOpen)
+            {
+                SerialPort.Write(Data.read_command(), 0, 3);
+            }
         }
 
-        private void сОхранитьДанныеToolStripMenuItem_Click(object sender, EventArgs e)
+        private void Main_menu_FormClosing(object sender, FormClosingEventArgs e)
         {
-            File.WriteAllLines("log.txt", dataQueue.ToArray());
+            if (is_reactor_working)
+            {
+                ShowError("Реактор ещё работает. Прежде чем закрыть программу, остановите реактор");
+                e.Cancel = true;
+            }
+            else
+            {
+                ClosePort();
+                e.Cancel = false;
+            }
+        }
+
+        private void IR_button_Click(object sender, EventArgs e)
+        { 
+            if (is_IR_working && IR_port != "")
+            {
+                is_IR_working = !is_IR_working;
+                IR_Serial_Port.PortName = IR_port;
+                IR_Serial_Port.Open();
+                IR_Serial_Port.Write(Data.init_command(), 0, 3);
+
+                IR_button.Text = "Остановить измерения";
+
+                IR_timer.Interval = Convert.ToInt32(Interval_IR_counter.Value) * 1000;
+                Interval_IR_counter.ReadOnly = true;
+                IR_timer.Start();
+            }
+            else if (!is_IR_working && IR_port != "") 
+            {
+                is_IR_working = !is_IR_working;
+                IR_Serial_Port.Write(Data.stop_command(), 0, 3);
+                IR_Serial_Port.Close();
+
+                IR_button.Text = "Начать измерения";
+                Interval_IR_counter.ReadOnly = false;
+
+                IR_timer.Stop();
+            }
+            else if (IR_port == "")
+            {
+                ShowError("Порт термометра не выбран");
+            }
         }
     }
 }

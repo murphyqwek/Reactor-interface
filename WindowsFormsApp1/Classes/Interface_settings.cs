@@ -29,7 +29,17 @@ namespace WindowsFormsApp1.Classes
             return speed;
         }
 
-        static public void save(string port)
+        static public string get_IR_port()
+        {
+            string IR_port;
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Reactor Interface TPU"))
+            {
+                IR_port = key?.GetValue("IR port")?.ToString();
+            }
+            return IR_port;
+        }
+
+        static public void save_port(string port)
         {
             using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Reactor Interface TPU"))
             {
@@ -37,20 +47,18 @@ namespace WindowsFormsApp1.Classes
             }
         }
 
-        static public void save(int speed)
+        static public void save_speed(int speed)
         {
             using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Reactor Interface TPU"))
             {
                 key.SetValue("Speed", speed);
             }
         }
-
-        static public void save(string port, int speed)
+        static public void save_IR_port(string IR_port)
         {
             using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Reactor Interface TPU"))
             {
-                key.SetValue("port", port);
-                key.SetValue("Speed", speed);
+                key.SetValue("IR port", IR_port);
             }
         }
     }

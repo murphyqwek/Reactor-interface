@@ -71,6 +71,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Data.cs" />
     <Compile Include="Classes\Interface_settings.cs" />
     <Compile Include="Classes\Port.cs" />
     <Compile Include="Commands_menu.cs">
@@ -152,7 +153,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Logo\Ш.png" />
+    <Folder Include="Logo\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
