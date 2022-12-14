@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 using System.Xml.Linq;
 
 namespace Reactor_Interface
@@ -26,6 +25,15 @@ namespace Reactor_Interface
             if (Graph != null && isdrawing)
             {
                 Graph.BeginInvoke((MethodInvoker)(() => this.Graph.Series[serie].Points.AddXY(time, y)));
+                //Graph.Series[serie].Points.AddXY(x, y);
+            }
+        }
+
+        public void update_temperature(int time, double temp)
+        {
+            if (Graph != null && isdrawing)
+            {
+                Graph.Series["temperature_points"].Points.AddY(temp);
                 //Graph.Series[serie].Points.AddXY(x, y);
             }
         }
@@ -49,6 +57,12 @@ namespace Reactor_Interface
                     Graph.SaveImage(sf.FileName, ChartImageFormat.Png);
                 }
             }
+        }
+
+        private void Graphic_menu_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Hide();
+            e.Cancel = true;
         }
     }
 }

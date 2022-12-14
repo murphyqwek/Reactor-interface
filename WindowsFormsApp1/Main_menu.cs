@@ -32,13 +32,15 @@ namespace WindowsFormsApp1
         bool is_reactor_working = false;
         bool is_IR_working = false;
 
+        int time = 0;
+
         Graphic_menu graphic_menu = new Graphic_menu();
 
         public Queue<string> dataQueue = new Queue<string>();
         public Main_menu()
         {
             InitializeComponent();
-
+            graphic_menu = new Graphic_menu();
             mode_groupbox.Size = new Size(730, 438);
             setting_groupbox.Size = new Size(711, 153);
 
@@ -326,11 +328,7 @@ namespace WindowsFormsApp1
 
         private void graphic_menu_btn_Click(object sender, EventArgs e)
         {
-            if (!isFormOpen("Graphic_menu"))
-            {
-                graphic_menu = new Graphic_menu();
-                graphic_menu.Show();
-            }
+            graphic_menu.Show();
         }
 
         private void ShowError(string text)
@@ -388,8 +386,11 @@ namespace WindowsFormsApp1
                 if (inf.Length >= 9)
                 {
                     inf = inf.Remove(inf.Length - 2);
-                    inf = inf.Remove(0, 3);
+                    inf = inf.Remove(0, 4);
                     tem_lbl.Text = "Температура: " + inf;
+                    double temperature = Convert.ToDouble(inf);
+                    graphic_menu.update_temperature(time, temperature);
+                    time += 1;
                 }
             }
         }
