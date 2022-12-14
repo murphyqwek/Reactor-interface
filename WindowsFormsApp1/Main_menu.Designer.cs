@@ -70,6 +70,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.Interval_IR_counter = new System.Windows.Forms.NumericUpDown();
             this.IR_button = new System.Windows.Forms.Button();
+            this.tem_lbl = new System.Windows.Forms.Label();
             this.setting_groupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cold_bar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fire_bar)).BeginInit();
@@ -343,7 +344,7 @@
             this.graphic_menu_btn});
             this.menu.Location = new System.Drawing.Point(0, 0);
             this.menu.Name = "menu";
-            this.menu.Size = new System.Drawing.Size(1664, 40);
+            this.menu.Size = new System.Drawing.Size(1664, 42);
             this.menu.TabIndex = 7;
             this.menu.Text = "menu";
             // 
@@ -355,28 +356,28 @@
             this.IR_port_menu_btn});
             this.settings_menu_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.settings_menu_btn.Name = "settings_menu_btn";
-            this.settings_menu_btn.Size = new System.Drawing.Size(148, 36);
+            this.settings_menu_btn.Size = new System.Drawing.Size(148, 38);
             this.settings_menu_btn.Text = "Настройки";
             this.settings_menu_btn.DropDownOpened += new System.EventHandler(this.settings_menu_btn_DropDownOpened);
             // 
             // port_menu_btn
             // 
             this.port_menu_btn.Name = "port_menu_btn";
-            this.port_menu_btn.Size = new System.Drawing.Size(270, 40);
+            this.port_menu_btn.Size = new System.Drawing.Size(232, 40);
             this.port_menu_btn.Text = "Порт:";
             this.port_menu_btn.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.port_menu_btn_DropDownItemClicked);
             // 
             // speed_menu_btn
             // 
             this.speed_menu_btn.Name = "speed_menu_btn";
-            this.speed_menu_btn.Size = new System.Drawing.Size(270, 40);
+            this.speed_menu_btn.Size = new System.Drawing.Size(232, 40);
             this.speed_menu_btn.Text = "Скорость: ";
             this.speed_menu_btn.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.speed_menu_btn_DropDownItemClicked);
             // 
             // IR_port_menu_btn
             // 
             this.IR_port_menu_btn.Name = "IR_port_menu_btn";
-            this.IR_port_menu_btn.Size = new System.Drawing.Size(270, 40);
+            this.IR_port_menu_btn.Size = new System.Drawing.Size(232, 40);
             this.IR_port_menu_btn.Text = "Порт IR:";
             this.IR_port_menu_btn.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.IR_port_menu_btn_DropDownItemClicked);
             // 
@@ -393,7 +394,7 @@
             // 
             this.graphic_menu_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.graphic_menu_btn.Name = "graphic_menu_btn";
-            this.graphic_menu_btn.Size = new System.Drawing.Size(109, 36);
+            this.graphic_menu_btn.Size = new System.Drawing.Size(109, 38);
             this.graphic_menu_btn.Text = "График";
             this.graphic_menu_btn.Click += new System.EventHandler(this.graphic_menu_btn_Click);
             // 
@@ -473,6 +474,7 @@
             // 
             this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox5.BackColor = System.Drawing.SystemColors.Control;
+            this.groupBox5.Controls.Add(this.tem_lbl);
             this.groupBox5.Controls.Add(this.anod_move_lbl);
             this.groupBox5.Controls.Add(this.state_lbl);
             this.groupBox5.Controls.Add(this.label1);
@@ -481,7 +483,7 @@
             this.groupBox5.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.groupBox5.Size = new System.Drawing.Size(580, 189);
+            this.groupBox5.Size = new System.Drawing.Size(580, 235);
             this.groupBox5.TabIndex = 16;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Информация о реакторе";
@@ -546,9 +548,24 @@
             // 
             this.Interval_IR_counter.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Interval_IR_counter.Location = new System.Drawing.Point(369, 48);
+            this.Interval_IR_counter.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.Interval_IR_counter.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.Interval_IR_counter.Name = "Interval_IR_counter";
             this.Interval_IR_counter.Size = new System.Drawing.Size(60, 39);
             this.Interval_IR_counter.TabIndex = 1;
+            this.Interval_IR_counter.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
             // 
             // IR_button
             // 
@@ -560,6 +577,16 @@
             this.IR_button.Text = "Начать измерять";
             this.IR_button.UseVisualStyleBackColor = true;
             this.IR_button.Click += new System.EventHandler(this.IR_button_Click);
+            // 
+            // tem_lbl
+            // 
+            this.tem_lbl.AutoSize = true;
+            this.tem_lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F);
+            this.tem_lbl.Location = new System.Drawing.Point(15, 190);
+            this.tem_lbl.Name = "tem_lbl";
+            this.tem_lbl.Size = new System.Drawing.Size(227, 37);
+            this.tem_lbl.TabIndex = 3;
+            this.tem_lbl.Text = "Температура: ";
             // 
             // Main_menu
             // 
@@ -647,6 +674,7 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.NumericUpDown Interval_IR_counter;
         private System.Windows.Forms.Button IR_button;
+        private System.Windows.Forms.Label tem_lbl;
     }
 }
 

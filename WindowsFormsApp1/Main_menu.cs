@@ -381,9 +381,16 @@ namespace WindowsFormsApp1
 
         private void IR_timer_Tick(object sender, EventArgs e)
         {
-            if (SerialPort.IsOpen)
+            if (IR_Serial_Port.IsOpen)
             {
-                SerialPort.Write(Data.read_command(), 0, 3);
+                IR_Serial_Port.Write(Data.read_command(), 0, 3);
+                string inf = IR_Serial_Port.ReadExisting();
+                if (inf.Length >= 9)
+                {
+                    inf = inf.Remove(inf.Length - 2);
+                    inf = inf.Remove(0, 3);
+                    tem_lbl.Text = "Температура: " + inf;
+                }
             }
         }
 
@@ -403,7 +410,7 @@ namespace WindowsFormsApp1
 
         private void IR_button_Click(object sender, EventArgs e)
         { 
-            if (is_IR_working && IR_port != "")
+            if (!is_IR_working && IR_port != "")
             {
                 is_IR_working = !is_IR_working;
                 IR_Serial_Port.PortName = IR_port;
@@ -416,7 +423,7 @@ namespace WindowsFormsApp1
                 Interval_IR_counter.ReadOnly = true;
                 IR_timer.Start();
             }
-            else if (!is_IR_working && IR_port != "") 
+            else if (is_IR_working && IR_port != "") 
             {
                 is_IR_working = !is_IR_working;
                 IR_Serial_Port.Write(Data.stop_command(), 0, 3);
