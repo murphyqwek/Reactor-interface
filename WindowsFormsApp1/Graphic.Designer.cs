@@ -31,6 +31,7 @@
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Graphic_menu));
             this.Graph = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -74,7 +75,14 @@
             series1.Legend = "temperature_legend";
             series1.LegendText = "Температура";
             series1.Name = "temperature_points";
+            series2.ChartArea = "temperature_area";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series2.LabelBorderWidth = 3;
+            series2.Legend = "temperature_legend";
+            series2.LegendText = "Средний ток";
+            series2.Name = "st_aver";
             this.Graph.Series.Add(series1);
+            this.Graph.Series.Add(series2);
             this.Graph.Size = new System.Drawing.Size(1187, 550);
             this.Graph.TabIndex = 1;
             this.Graph.Text = "Графики";

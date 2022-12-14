@@ -9,6 +9,7 @@ using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading;
@@ -32,11 +33,13 @@ namespace WindowsFormsApp1
         bool is_reactor_working = false;
         bool is_IR_working = false;
 
-        int time = 0;
+        static double time = 0;
 
-        Graphic_menu graphic_menu = new Graphic_menu();
+        static Graphic_menu graphic_menu = new Graphic_menu();
 
-        public Queue<string> dataQueue = new Queue<string>();
+        Thread data_parsing_thread = new Thread(new ParameterizedThreadStart);
+
+        static public Queue<string> dataQueue = new Queue<string>();
         public Main_menu()
         {
             InitializeComponent();
@@ -57,6 +60,8 @@ namespace WindowsFormsApp1
             IR_port = Interface_settings.get_IR_port();
 
             port_checking.Start();
+
+            data_parsing_thread.Start();
             this.time_bar_max_size = time_bar.Size;
         }
 
@@ -235,6 +240,8 @@ namespace WindowsFormsApp1
                 {
                     SerialPort.Open();
 
+                    SerialPort.Write("p");
+
                     state_lbl.ForeColor = Color.Green;
                     state_lbl.Text = "Работает";
                 }
@@ -274,14 +281,17 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void GetData()
+        private static void data_parsing()
         {
             while (true) 
             {
                 if(dataQueue.Count > 0)
                 {
                     string data = dataQueue.Dequeue();
-                    graphic_menu.BeginInvoke((MethodInvoker)(() => graphic_menu.update_graph("Data", 1, 1.0)));
+                    string[] datas = data.Split(' ');
+                    time = Convert.ToDouble(datas[0]) / 1000;
+                    if (datas.Length == 2)
+                        graphic_menu.update_graph(time, Convert.ToDouble(datas[1]));
                 }
             }
         }
@@ -291,6 +301,7 @@ namespace WindowsFormsApp1
             try
             {
                 SerialPort recived = (SerialPort)sender;
+                //dataQueue.Enqueue(recived.ReadLine());
                 dataQueue.Enqueue(recived.ReadLine());
             }
             catch { }
@@ -390,7 +401,6 @@ namespace WindowsFormsApp1
                     tem_lbl.Text = "Температура: " + inf;
                     double temperature = Convert.ToDouble(inf);
                     graphic_menu.update_temperature(time, temperature);
-                    time += 1;
                 }
             }
         }
@@ -405,6 +415,7 @@ namespace WindowsFormsApp1
             else
             {
                 ClosePort();
+                data_parsing_thread.Abort();
                 e.Cancel = false;
             }
         }

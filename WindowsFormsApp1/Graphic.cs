@@ -20,20 +20,22 @@ namespace Reactor_Interface
             InitializeComponent();
         }
 
-        public void update_graph(string serie, int time, double y)
+        public void update_graph(double time, double y)
         {
             if (Graph != null && isdrawing)
             {
-                Graph.BeginInvoke((MethodInvoker)(() => this.Graph.Series[serie].Points.AddXY(time, y)));
+                Graph.BeginInvoke((MethodInvoker)(() => this.Graph.Series["st_aver"].Points.AddXY(time, y)));
                 //Graph.Series[serie].Points.AddXY(x, y);
+                //Graph.Series["st_aver"].Points.AddXY(time, y);
             }
         }
 
-        public void update_temperature(int time, double temp)
+
+        public void update_temperature(double time, double temp)
         {
             if (Graph != null && isdrawing)
             {
-                Graph.Series["temperature_points"].Points.AddY(temp);
+                Graph.Series["temperature_points"].Points.AddXY(time, temp);
                 //Graph.Series[serie].Points.AddXY(x, y);
             }
         }
