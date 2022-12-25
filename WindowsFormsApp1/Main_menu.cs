@@ -37,7 +37,7 @@ namespace WindowsFormsApp1
 
         static Graphic_menu graphic_menu = new Graphic_menu();
 
-        Thread data_parsing_thread = new Thread(new ParameterizedThreadStart);
+        //Thread data_parsing_thread = new Thread(new ParameterizedThreadStart(data_parsing));
 
         static public Queue<string> dataQueue = new Queue<string>();
         public Main_menu()
@@ -61,7 +61,7 @@ namespace WindowsFormsApp1
 
             port_checking.Start();
 
-            data_parsing_thread.Start();
+            //data_parsing_thread.Start();
             this.time_bar_max_size = time_bar.Size;
         }
 
@@ -281,20 +281,13 @@ namespace WindowsFormsApp1
             }
         }
 
-        private static void data_parsing()
+        /*private static void data_parsing(Gra)
         {
             while (true) 
             {
-                if(dataQueue.Count > 0)
-                {
-                    string data = dataQueue.Dequeue();
-                    string[] datas = data.Split(' ');
-                    time = Convert.ToDouble(datas[0]) / 1000;
-                    if (datas.Length == 2)
-                        graphic_menu.update_graph(time, Convert.ToDouble(datas[1]));
-                }
+                
             }
-        }
+        }*/
 
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
@@ -415,7 +408,7 @@ namespace WindowsFormsApp1
             else
             {
                 ClosePort();
-                data_parsing_thread.Abort();
+                //data_parsing_thread.Abort();
                 e.Cancel = false;
             }
         }

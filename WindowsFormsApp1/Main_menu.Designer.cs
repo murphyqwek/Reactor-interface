@@ -61,6 +61,7 @@
             this.up_btn = new System.Windows.Forms.Button();
             this.mode_groupbox = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.tem_lbl = new System.Windows.Forms.Label();
             this.anod_move_lbl = new System.Windows.Forms.Label();
             this.state_lbl = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -70,7 +71,6 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.Interval_IR_counter = new System.Windows.Forms.NumericUpDown();
             this.IR_button = new System.Windows.Forms.Button();
-            this.tem_lbl = new System.Windows.Forms.Label();
             this.setting_groupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cold_bar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fire_bar)).BeginInit();
@@ -488,6 +488,16 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Информация о реакторе";
             // 
+            // tem_lbl
+            // 
+            this.tem_lbl.AutoSize = true;
+            this.tem_lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F);
+            this.tem_lbl.Location = new System.Drawing.Point(15, 190);
+            this.tem_lbl.Name = "tem_lbl";
+            this.tem_lbl.Size = new System.Drawing.Size(227, 37);
+            this.tem_lbl.TabIndex = 3;
+            this.tem_lbl.Text = "Температура: ";
+            // 
             // anod_move_lbl
             // 
             this.anod_move_lbl.AutoSize = true;
@@ -577,16 +587,6 @@
             this.IR_button.Text = "Начать";
             this.IR_button.UseVisualStyleBackColor = true;
             this.IR_button.Click += new System.EventHandler(this.IR_button_Click);
-            // 
-            // tem_lbl
-            // 
-            this.tem_lbl.AutoSize = true;
-            this.tem_lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F);
-            this.tem_lbl.Location = new System.Drawing.Point(15, 190);
-            this.tem_lbl.Name = "tem_lbl";
-            this.tem_lbl.Size = new System.Drawing.Size(227, 37);
-            this.tem_lbl.TabIndex = 3;
-            this.tem_lbl.Text = "Температура: ";
             // 
             // Main_menu
             // 
