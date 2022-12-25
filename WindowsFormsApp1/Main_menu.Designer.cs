@@ -62,7 +62,6 @@
             this.mode_groupbox = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.tem_lbl = new System.Windows.Forms.Label();
-            this.anod_move_lbl = new System.Windows.Forms.Label();
             this.state_lbl = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.port_checking = new System.Windows.Forms.Timer(this.components);
@@ -475,7 +474,6 @@
             this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox5.BackColor = System.Drawing.SystemColors.Control;
             this.groupBox5.Controls.Add(this.tem_lbl);
-            this.groupBox5.Controls.Add(this.anod_move_lbl);
             this.groupBox5.Controls.Add(this.state_lbl);
             this.groupBox5.Controls.Add(this.label1);
             this.groupBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -492,21 +490,11 @@
             // 
             this.tem_lbl.AutoSize = true;
             this.tem_lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F);
-            this.tem_lbl.Location = new System.Drawing.Point(15, 190);
+            this.tem_lbl.Location = new System.Drawing.Point(15, 152);
             this.tem_lbl.Name = "tem_lbl";
             this.tem_lbl.Size = new System.Drawing.Size(227, 37);
             this.tem_lbl.TabIndex = 3;
             this.tem_lbl.Text = "Температура: ";
-            // 
-            // anod_move_lbl
-            // 
-            this.anod_move_lbl.AutoSize = true;
-            this.anod_move_lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.anod_move_lbl.Location = new System.Drawing.Point(15, 144);
-            this.anod_move_lbl.Name = "anod_move_lbl";
-            this.anod_move_lbl.Size = new System.Drawing.Size(453, 37);
-            this.anod_move_lbl.TabIndex = 2;
-            this.anod_move_lbl.Text = "Направление движение анода:";
             // 
             // state_lbl
             // 
@@ -663,7 +651,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label state_lbl;
         private System.Windows.Forms.Timer port_checking;
-        private System.Windows.Forms.Label anod_move_lbl;
         private System.Windows.Forms.TrackBar fire_bar;
         private System.Windows.Forms.Label fire_lbl;
         private System.Windows.Forms.Label cold_lbl;

@@ -10,6 +10,7 @@ using System.IO.Ports;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading;
@@ -37,7 +38,7 @@ namespace WindowsFormsApp1
 
         static Graphic_menu graphic_menu = new Graphic_menu();
 
-        //Thread data_parsing_thread = new Thread(new ParameterizedThreadStart(data_parsing));
+        Thread Reactor_reading_thread;
 
         static public Queue<string> dataQueue = new Queue<string>();
         public Main_menu()
@@ -58,7 +59,7 @@ namespace WindowsFormsApp1
             }
 
             IR_port = Interface_settings.get_IR_port();
-
+            if (!Port.get_ports().Contains(IR_port)) IR_port = null;
             port_checking.Start();
 
             //data_parsing_thread.Start();
@@ -239,8 +240,10 @@ namespace WindowsFormsApp1
                 try
                 {
                     SerialPort.Open();
-
                     SerialPort.Write("p");
+
+                    Reactor_reading_thread = new Thread(() => Reading_Reactor_Port(SerialPort, dataQueue, graphic_menu));
+                    Reactor_reading_thread.Start();
 
                     state_lbl.ForeColor = Color.Green;
                     state_lbl.Text = "Работает";
@@ -271,30 +274,31 @@ namespace WindowsFormsApp1
         {
             if (is_reactor_working)
             {
+                Reactor_reading_thread.Abort();
                 is_reactor_working = false;
                 ClosePort();
 
                 state_lbl.ForeColor = Color.Red;
                 state_lbl.Text = "Не работает";
 
-                anod_move_lbl.Text = "Направление движение анода: ";
+                //anod_move_lbl.Text = "Направление движение анода: ";
             }
         }
 
-        /*private static void data_parsing(Gra)
+        private static void Reading_Reactor_Port(SerialPort serialPort, Queue<string> dataQ, Graphic_menu graphic_menu)
         {
             while (true) 
             {
-                
+                string data = serialPort.ReadLine();
+                graphic_menu.update_graph(time, Convert.ToDouble(data));
             }
-        }*/
+        }
 
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             try
             {
                 SerialPort recived = (SerialPort)sender;
-                //dataQueue.Enqueue(recived.ReadLine());
                 dataQueue.Enqueue(recived.ReadLine());
             }
             catch { }
@@ -367,7 +371,7 @@ namespace WindowsFormsApp1
                 state_lbl.ForeColor = Color.Red;
                 state_lbl.Text = "Не работает";
 
-                anod_move_lbl.Text = "Направление движение анода: ";
+                //anod_move_lbl.Text = "Направление движение анода: ";
             }
         }
 
@@ -415,7 +419,7 @@ namespace WindowsFormsApp1
 
         private void IR_button_Click(object sender, EventArgs e)
         { 
-            if (!is_IR_working && IR_port != "")
+            if (!is_IR_working && IR_port != null)
             {
                 is_IR_working = !is_IR_working;
                 IR_Serial_Port.PortName = IR_port;
@@ -428,7 +432,7 @@ namespace WindowsFormsApp1
                 Interval_IR_counter.ReadOnly = true;
                 IR_timer.Start();
             }
-            else if (is_IR_working && IR_port != "") 
+            else if (is_IR_working && IR_port != null) 
             {
                 is_IR_working = !is_IR_working;
                 IR_Serial_Port.Write(Data.stop_command(), 0, 3);
@@ -439,7 +443,7 @@ namespace WindowsFormsApp1
 
                 IR_timer.Stop();
             }
-            else if (IR_port == "")
+            else if (IR_port == null)
             {
                 ShowError("Порт термометра не выбран");
             }
