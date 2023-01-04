@@ -21,6 +21,8 @@ using System.Windows.Forms.DataVisualization.Charting;
 using System.Windows.Forms.VisualStyles;
 using System.Windows.Threading;
 using WindowsFormsApp1.Classes;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
+
 namespace WindowsFormsApp1
 {
     public partial class Main_menu : Form
@@ -40,6 +42,7 @@ namespace WindowsFormsApp1
         static Graphic_menu graphic_menu = new Graphic_menu();
 
         Thread Reactor_reading_thread;
+        Thread Parsing_data_thread;
 
         static public Queue<string> dataQueue = new Queue<string>();
         public Main_menu()
@@ -66,8 +69,10 @@ namespace WindowsFormsApp1
             if (!Port.get_ports().Contains(IR_port)) IR_port = null;
             port_checking.Start();
 
-            //data_parsing_thread.Start();
             this.time_bar_max_size = time_bar.Size;
+
+            Parsing_data_thread = new Thread(() => Parsing_data(dataQueue));
+            Parsing_data_thread.Start();
         }
 
         private void time_syntes_bar_Scroll(object sender, EventArgs e)
@@ -307,11 +312,26 @@ namespace WindowsFormsApp1
                 try
                 {
                     string data = serialPort.ReadLine();
+                    data += " " + stopwatch.ElapsedMilliseconds.ToString(); 
                     dataQueue.Enqueue(data);
-                    long time = stopwatch.ElapsedMilliseconds;
-                    graphic_menu.update_graph(time, Convert.ToDouble(data.Split(' ')[1]));
                 }
                 catch { }
+            }
+        }
+
+        private static void Parsing_data(Queue<string> dataQ)
+        {
+            while (true)
+            {
+                if (dataQ.Count >= 1)
+                {
+                    string[] data = dataQ.Dequeue().Split(' ');
+                    long time = Convert.ToInt64(data[data.Length - 1]);
+
+                    double st_aver = Convert.ToDouble(data[1]);
+
+                    graphic_menu.update_graph(time, st_aver);
+                }
             }
         }
 
@@ -441,7 +461,8 @@ namespace WindowsFormsApp1
             else
             {
                 Close_Reactor_Port();
-                //data_parsing_thread.Abort();
+
+                Parsing_data_thread.Abort();
                 e.Cancel = false;
             }
         }
