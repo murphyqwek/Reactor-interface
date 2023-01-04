@@ -38,6 +38,7 @@
             this.save_graphic_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.какКартинкуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.какExcelТаблицуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.очиститьГрафикToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.Graph)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -65,7 +66,7 @@
             legend1.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
             legend1.Name = "temperature_legend";
             this.Graph.Legends.Add(legend1);
-            this.Graph.Location = new System.Drawing.Point(0, 42);
+            this.Graph.Location = new System.Drawing.Point(0, 40);
             this.Graph.Name = "Graph";
             this.Graph.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.None;
             series1.BorderWidth = 3;
@@ -75,15 +76,16 @@
             series1.Legend = "temperature_legend";
             series1.LegendText = "Температура";
             series1.Name = "temperature_points";
+            series2.BorderWidth = 3;
             series2.ChartArea = "temperature_area";
             series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series2.LabelBorderWidth = 3;
             series2.Legend = "temperature_legend";
             series2.LegendText = "Средний ток";
+            series2.MarkerBorderWidth = 3;
             series2.Name = "st_aver";
             this.Graph.Series.Add(series1);
             this.Graph.Series.Add(series2);
-            this.Graph.Size = new System.Drawing.Size(1187, 548);
+            this.Graph.Size = new System.Drawing.Size(1187, 550);
             this.Graph.TabIndex = 1;
             this.Graph.Text = "Графики";
             // 
@@ -92,10 +94,11 @@
             this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.save_graphic_btn});
+            this.save_graphic_btn,
+            this.очиститьГрафикToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1187, 42);
+            this.menuStrip1.Size = new System.Drawing.Size(1187, 40);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -106,7 +109,7 @@
             this.какExcelТаблицуToolStripMenuItem});
             this.save_graphic_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.save_graphic_btn.Name = "save_graphic_btn";
-            this.save_graphic_btn.Size = new System.Drawing.Size(230, 38);
+            this.save_graphic_btn.Size = new System.Drawing.Size(230, 36);
             this.save_graphic_btn.Text = "Сохранить график";
             // 
             // какКартинкуToolStripMenuItem
@@ -123,6 +126,14 @@
             this.какExcelТаблицуToolStripMenuItem.Name = "какExcelТаблицуToolStripMenuItem";
             this.какExcelТаблицуToolStripMenuItem.Size = new System.Drawing.Size(276, 36);
             this.какExcelТаблицуToolStripMenuItem.Text = "Как Excel таблицу";
+            // 
+            // очиститьГрафикToolStripMenuItem
+            // 
+            this.очиститьГрафикToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.очиститьГрафикToolStripMenuItem.Name = "очиститьГрафикToolStripMenuItem";
+            this.очиститьГрафикToolStripMenuItem.Size = new System.Drawing.Size(217, 36);
+            this.очиститьГрафикToolStripMenuItem.Text = "Очистить график";
+            this.очиститьГрафикToolStripMenuItem.Click += new System.EventHandler(this.очиститьГрафикToolStripMenuItem_Click);
             // 
             // Graphic_menu
             // 
@@ -151,5 +162,6 @@
         private System.Windows.Forms.ToolStripMenuItem save_graphic_btn;
         private System.Windows.Forms.ToolStripMenuItem какКартинкуToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem какExcelТаблицуToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem очиститьГрафикToolStripMenuItem;
     }
 }

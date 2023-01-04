@@ -87,7 +87,6 @@
             // SerialPort
             // 
             this.SerialPort.BaudRate = 19200;
-            this.SerialPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.SerialPort_DataReceived);
             // 
             // setting_groupbox
             // 
@@ -343,7 +342,7 @@
             this.graphic_menu_btn});
             this.menu.Location = new System.Drawing.Point(0, 0);
             this.menu.Name = "menu";
-            this.menu.Size = new System.Drawing.Size(1664, 40);
+            this.menu.Size = new System.Drawing.Size(1664, 42);
             this.menu.TabIndex = 7;
             this.menu.Text = "menu";
             // 
@@ -532,6 +531,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.Interval_IR_counter);
             this.groupBox1.Controls.Add(this.IR_button);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F);

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -34,7 +35,7 @@ namespace WindowsFormsApp1
         bool is_reactor_working = false;
         bool is_IR_working = false;
 
-        static double time = 0;
+        static Stopwatch stopwatch = new Stopwatch();
 
         static Graphic_menu graphic_menu = new Graphic_menu();
 
@@ -44,7 +45,10 @@ namespace WindowsFormsApp1
         public Main_menu()
         {
             InitializeComponent();
+
             graphic_menu = new Graphic_menu();
+            IntPtr intPtr = graphic_menu.Handle; //Создаётся Handle, без этой строчки данные с реактора не смогут отображаться на графике, когда окно закрыто
+
             mode_groupbox.Size = new Size(730, 438);
             setting_groupbox.Size = new Size(711, 153);
 
@@ -150,9 +154,9 @@ namespace WindowsFormsApp1
                 port = e.ClickedItem.Text;
                 Interface_settings.save_port(port);
             }
-            else if (is_reactor_working)
+            else if (is_reactor_working || is_IR_working)
             {
-                MessageBox.Show("Нельзя менять порт во время работы реактора");
+                ShowError("Нельзя менять порт во время работы реактора");
             }
             else if (e.ClickedItem.Text == IR_port)
             {
@@ -170,7 +174,7 @@ namespace WindowsFormsApp1
                 IR_port = e.ClickedItem.Text;
                 Interface_settings.save_IR_port(IR_port);
             }
-            else if (is_IR_working)
+            else if (is_IR_working || is_reactor_working)
             {
                 MessageBox.Show("Нельзя менять порт во время работы термометра");
             }
@@ -239,14 +243,19 @@ namespace WindowsFormsApp1
 
                 try
                 {
-                    SerialPort.Open();
-                    SerialPort.Write("p");
+                    graphic_menu.is_drawing = true;
+                    stopwatch.Restart();
 
-                    Reactor_reading_thread = new Thread(() => Reading_Reactor_Port(SerialPort, dataQueue, graphic_menu));
-                    Reactor_reading_thread.Start();
+                    SerialPort.Open();
+                    SerialPort.WriteLine("start");
+
+                    stopwatch.Start();
 
                     state_lbl.ForeColor = Color.Green;
                     state_lbl.Text = "Работает";
+
+                    Reactor_reading_thread = new Thread(() => Reading_Reactor_Port(SerialPort, dataQueue));
+                    Reactor_reading_thread.Start();
                 }
                 catch (UnauthorizedAccessException)
                 {
@@ -274,9 +283,14 @@ namespace WindowsFormsApp1
         {
             if (is_reactor_working)
             {
+                if (!is_IR_working)
+                    graphic_menu.is_drawing = false;
+
+                stopwatch.Stop();
                 Reactor_reading_thread.Abort();
+
                 is_reactor_working = false;
-                ClosePort();
+                Close_Reactor_Port();
 
                 state_lbl.ForeColor = Color.Red;
                 state_lbl.Text = "Не работает";
@@ -285,23 +299,20 @@ namespace WindowsFormsApp1
             }
         }
 
-        private static void Reading_Reactor_Port(SerialPort serialPort, Queue<string> dataQ, Graphic_menu graphic_menu)
+        private static void Reading_Reactor_Port(SerialPort serialPort, Queue<string> dataQ)
         {
+            //TODO: доделать приём данных
             while (true) 
             {
-                string data = serialPort.ReadLine();
-                graphic_menu.update_graph(time, Convert.ToDouble(data));
+                try
+                {
+                    string data = serialPort.ReadLine();
+                    dataQueue.Enqueue(data);
+                    long time = stopwatch.ElapsedMilliseconds;
+                    graphic_menu.update_graph(time, Convert.ToDouble(data.Split(' ')[1]));
+                }
+                catch { }
             }
-        }
-
-        private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
-        {
-            try
-            {
-                SerialPort recived = (SerialPort)sender;
-                dataQueue.Enqueue(recived.ReadLine());
-            }
-            catch { }
         }
 
         private void debug_menu_btn_Click(object sender, EventArgs e)
@@ -322,13 +333,25 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void ClosePort()
+        private void Close_Reactor_Port()
         {
-            while (SerialPort.IsOpen)
+            while (SerialPort.IsOpen )
             {
                 try
                 {
                     SerialPort.Close();
+                }
+                catch { };
+            }
+        }
+
+        private void Close_IR_Port()
+        {
+            while (IR_Serial_Port.IsOpen)
+            {
+                try
+                {
+                    IR_Serial_Port.Close();
                 }
                 catch { };
             }
@@ -344,7 +367,7 @@ namespace WindowsFormsApp1
             if (!graphic_menu.IsDisposed) graphic_menu.setChartVisible(false);
             MessageBox.Show(
                     text,
-                    "Ошибка запуска",
+                    "Ошибка",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             if (!graphic_menu.IsDisposed) graphic_menu.setChartVisible(true);
@@ -393,10 +416,11 @@ namespace WindowsFormsApp1
                 string inf = IR_Serial_Port.ReadExisting();
                 if (inf.Length >= 9)
                 {
+                    long time = stopwatch.ElapsedMilliseconds;
                     inf = inf.Remove(inf.Length - 2);
                     inf = inf.Remove(0, 4);
                     tem_lbl.Text = "Температура: " + inf;
-                    double temperature = Convert.ToDouble(inf);
+                    double temperature = 4;//Convert.ToDouble(inf);
                     graphic_menu.update_temperature(time, temperature);
                 }
             }
@@ -409,9 +433,14 @@ namespace WindowsFormsApp1
                 ShowError("Реактор ещё работает. Прежде чем закрыть программу, остановите реактор");
                 e.Cancel = true;
             }
+            else if (is_IR_working)
+            {
+                ShowError("Термометр ещё работает. Прежде чем закрыть программу, остановите термометр");
+                e.Cancel = true;
+            }
             else
             {
-                ClosePort();
+                Close_Reactor_Port();
                 //data_parsing_thread.Abort();
                 e.Cancel = false;
             }
@@ -421,7 +450,9 @@ namespace WindowsFormsApp1
         { 
             if (!is_IR_working && IR_port != null)
             {
-                is_IR_working = !is_IR_working;
+                graphic_menu.is_drawing = true;
+
+                is_IR_working = true;
                 IR_Serial_Port.PortName = IR_port;
                 IR_Serial_Port.Open();
                 IR_Serial_Port.Write(Data.init_command(), 0, 3);
@@ -434,14 +465,17 @@ namespace WindowsFormsApp1
             }
             else if (is_IR_working && IR_port != null) 
             {
-                is_IR_working = !is_IR_working;
+                if (!is_reactor_working)
+                    graphic_menu.is_drawing = false;
+
+                is_IR_working = false;
                 IR_Serial_Port.Write(Data.stop_command(), 0, 3);
                 IR_Serial_Port.Close();
 
                 IR_button.Text = "Начать измерения";
                 Interval_IR_counter.ReadOnly = false;
 
-                IR_timer.Stop();
+                Close_IR_Port();
             }
             else if (IR_port == null)
             {
