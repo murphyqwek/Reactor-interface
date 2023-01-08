@@ -207,30 +207,18 @@ namespace WindowsFormsApp1
 
         private string get_param()
         {
-            string param;
+            string param = "1";
 
-            string working_mode = "M:";
-            string configuration = "C:";
-            string time = "T:";
-            string iteration = "I:";
+            param += time_bar.Value.ToString() + "n3";
 
             if (duga_rdbtn.Checked)
             {
-                working_mode += "duga";
-                iteration = "";
+                param += "0es";
             }
             else
             {
-                working_mode += "impulse";
-                iteration += iteration_counter.Value.ToString();
+                
             }
-
-            if (tigel_rdbtn.Checked) configuration += "tigel";
-            else configuration += "voilok";
-
-            time += time_bar.Value.ToString();
-
-            param = working_mode + "_" + configuration + "_" + time + "_" + iteration;
 
             return param;
         }
@@ -252,7 +240,7 @@ namespace WindowsFormsApp1
                     stopwatch.Restart();
 
                     SerialPort.Open();
-                    SerialPort.WriteLine("start");
+                    SerialPort.WriteLine(param);
 
                     stopwatch.Start();
 
@@ -294,6 +282,7 @@ namespace WindowsFormsApp1
                 stopwatch.Stop();
                 Reactor_reading_thread.Abort();
 
+                SerialPort.WriteLine("d");
                 is_reactor_working = false;
                 Close_Reactor_Port();
 
@@ -325,12 +314,16 @@ namespace WindowsFormsApp1
             {
                 if (dataQ.Count >= 1)
                 {
-                    string[] data = dataQ.Dequeue().Split(' ');
-                    long time = Convert.ToInt64(data[data.Length - 1]);
+                    try
+                    {
+                        string[] data = dataQ.Dequeue().Split(' ');
+                        long time = Convert.ToInt64(data[data.Length - 1]);
 
-                    double st_aver = Convert.ToDouble(data[1]);
+                        double st_aver = Convert.ToDouble(data[1]);
 
-                    graphic_menu.update_graph(time, st_aver);
+                        graphic_menu.update_graph(time, st_aver);
+                    }
+                    catch { }
                 }
             }
         }
