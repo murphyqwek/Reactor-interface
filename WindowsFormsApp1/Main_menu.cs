@@ -436,12 +436,16 @@ namespace WindowsFormsApp1
                 string inf = IR_Serial_Port.ReadExisting();
                 if (inf.Length >= 9)
                 {
-                    long time = stopwatch.ElapsedMilliseconds;
-                    inf = inf.Remove(inf.Length - 2);
-                    inf = inf.Remove(0, 4);
-                    tem_lbl.Text = "Температура: " + inf;
-                    double temperature = 4;//Convert.ToDouble(inf);
-                    graphic_menu.update_temperature(time, temperature);
+                    try
+                    {
+                        long time = stopwatch.ElapsedMilliseconds;
+                        inf = inf.Remove(inf.Length - 2);
+                        inf = inf.Remove(0, 4);
+                        tem_lbl.Text = "Температура: " + inf;
+                        double temperature = 4;//Convert.ToDouble(inf);
+                        graphic_menu.update_temperature(time, temperature);
+                    }
+                    catch { }
                 }
             }
         }
