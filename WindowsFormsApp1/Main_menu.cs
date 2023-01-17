@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.IO.Ports;
@@ -36,6 +37,8 @@ namespace WindowsFormsApp1
 
         bool is_reactor_working = false;
         bool is_IR_working = false;
+
+        static int step = 0;
 
         static Stopwatch stopwatch = new Stopwatch();
 
@@ -210,7 +213,7 @@ namespace WindowsFormsApp1
             string param = "1";
 
             param += time_bar.Value.ToString() + "n3";
-
+            char[] k = param.ToCharArray();
             if (duga_rdbtn.Checked)
             {
                 param += "0es";
@@ -227,22 +230,22 @@ namespace WindowsFormsApp1
         {
             if (!is_reactor_working && port != null)
             {
+                start_stopwatch();
+
+                step = 0;
+
                 is_reactor_working = true;
 
                 string param = get_param();
 
                 SerialPort.PortName = port.Split(' ')[0];
                 SerialPort.BaudRate = speed;
-
                 try
                 {
                     graphic_menu.is_drawing = true;
-                    stopwatch.Restart();
 
                     SerialPort.Open();
-                    SerialPort.WriteLine(param);
-
-                    stopwatch.Start();
+                    SerialPort.Write(param);
 
                     state_lbl.ForeColor = Color.Green;
                     state_lbl.Text = "Работает";
@@ -254,11 +257,13 @@ namespace WindowsFormsApp1
                 {
                     ShowError("Порт уже занят");
                     is_reactor_working = false;
+                    stop_stopwatch();
                 }
                 catch (IOException)
                 {
                     ShowError("Не существует такого порта. Проверьте подключение к реактору");
                     port = null;
+                    stop_stopwatch();
                 }
             }
             else if (port == null)
@@ -276,13 +281,18 @@ namespace WindowsFormsApp1
         {
             if (is_reactor_working)
             {
-                if (!is_IR_working)
+                if (!is_IR_working) { 
                     graphic_menu.is_drawing = false;
+                    stop_stopwatch();
+                }
 
-                stopwatch.Stop();
-                Reactor_reading_thread.Abort();
+                try
+                {
+                    Reactor_reading_thread.Abort();
+                }
+                catch { }
 
-                SerialPort.WriteLine("d");
+                SerialPort.Write("d");
                 is_reactor_working = false;
                 Close_Reactor_Port();
 
@@ -312,18 +322,54 @@ namespace WindowsFormsApp1
         {
             while (true)
             {
-                if (dataQ.Count >= 1)
+                using (StreamWriter writer = new StreamWriter("Log.txt")) 
                 {
-                    try
+                    if (dataQ.Count >= 1)
                     {
-                        string[] data = dataQ.Dequeue().Split(' ');
-                        long time = Convert.ToInt64(data[data.Length - 1]);
+                        try
+                        {
+                            string[] data = dataQ.Dequeue().Split(' ');
 
-                        double st_aver = Convert.ToDouble(data[1]);
+                            data[0] = data[0].Replace("\r", "");
 
-                        graphic_menu.update_graph(time, st_aver);
+                            string[] reactor_data = data[0].Split(';');
+
+                            long time = Convert.ToInt64(data[data.Length - 1]);
+
+                            foreach (string sub_data in reactor_data)
+                            {
+                                if (sub_data.Contains('='))
+                                {
+                                    string[] parametr = sub_data.Split('=');
+
+                                    double value;
+                                    
+                                    switch (parametr[0])
+                                    {
+                                        case "tok":
+                                            value = Convert.ToDouble(parametr[1]);
+                                            graphic_menu.update_tok(time, value);
+                                            break;
+                                        case "aver_tok":
+                                            value = Convert.ToDouble(parametr[1]);
+                                            graphic_menu.update_aver_tok(time, value);
+                                            break;
+                                        case "step":
+                                            if (parametr[1] == "low")
+                                                step -= 1;
+                                            else
+                                                step += 1;
+
+                                            graphic_menu.update_step(time, step);
+                                            break;
+                                    }
+                                }
+                                else if (data[0] == "end") { }
+                                    
+                            }
+                        }
+                        catch { }
                     }
-                    catch { }
                 }
             }
         }
@@ -435,7 +481,7 @@ namespace WindowsFormsApp1
                         inf = inf.Remove(inf.Length - 2);
                         inf = inf.Remove(0, 4);
                         tem_lbl.Text = "Температура: " + inf;
-                        double temperature = 4;//Convert.ToDouble(inf);
+                        double temperature = Convert.ToDouble(inf);
                         graphic_menu.update_temperature(time, temperature);
                     }
                     catch { }
@@ -470,7 +516,9 @@ namespace WindowsFormsApp1
             {
                 graphic_menu.is_drawing = true;
 
+                start_stopwatch();
                 is_IR_working = true;
+
                 IR_Serial_Port.PortName = IR_port;
                 IR_Serial_Port.Open();
                 IR_Serial_Port.Write(Data.init_command(), 0, 3);
@@ -481,12 +529,12 @@ namespace WindowsFormsApp1
                 Interval_IR_counter.ReadOnly = true;
                 IR_timer.Start();
             }
-            else if (is_IR_working && IR_port != null) 
+            else if (is_IR_working && IR_port != null)
             {
-                if (!is_reactor_working)
-                    graphic_menu.is_drawing = false;
-
+                graphic_menu.is_drawing = false;
                 is_IR_working = false;
+                stop_stopwatch();
+
                 IR_Serial_Port.Write(Data.stop_command(), 0, 3);
                 IR_Serial_Port.Close();
 
@@ -498,6 +546,23 @@ namespace WindowsFormsApp1
             else if (IR_port == null)
             {
                 ShowError("Порт термометра не выбран");
+            }
+        }
+
+        private void start_stopwatch()
+        {
+            if (!is_IR_working && !is_reactor_working)
+            {
+                stopwatch.Restart();
+                stopwatch.Start();
+            }
+        }
+
+        private void stop_stopwatch()
+        {
+            if (!is_IR_working && !is_reactor_working)
+            {
+                stopwatch.Stop();
             }
         }
     }

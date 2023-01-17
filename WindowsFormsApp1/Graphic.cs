@@ -21,24 +21,35 @@ namespace Reactor_Interface
             InitializeComponent();
         }
 
-        public void update_graph(long time, double y)
+        public void update_aver_tok(long time, double aver_tok)
         {
             if (Graph != null && is_drawing && IsHandleCreated)
             {
-                
-                Graph.BeginInvoke((MethodInvoker)(() => this.Graph.Series["st_aver"].Points.AddXY(time, y)));
-                //Graph.Series[serie].Points.AddXY(x, y);
-                //Graph.Series["st_aver"].Points.AddXY(time, y);
+                Graph.BeginInvoke((MethodInvoker)(() => this.Graph.Series["st_aver"].Points.AddXY(time, aver_tok)));
             }
         }
 
+        public void update_tok(long time, double tok)
+        {
+            if (Graph != null && is_drawing && IsHandleCreated)
+            {
+                Graph.BeginInvoke((MethodInvoker)(() => this.Graph.Series["tok"].Points.AddXY(time, tok)));
+            }
+        }
 
         public void update_temperature(long time, double temp)
         {
             if (Graph != null && is_drawing)
             {
                 Graph.Series["temperature_points"].Points.AddXY(time, temp);
-                //Graph.Series[serie].Points.AddXY(x, y);
+            }
+        }
+
+        public void update_step(long time, int step)
+        {
+            if (Graph != null && is_drawing)
+            {
+                Graph.BeginInvoke((MethodInvoker)(() => this.Graph.Series["step"].Points.AddXY(time, step)));
             }
         }
 
