@@ -16,6 +16,9 @@ namespace WindowsFormsApp1.Classes
             {
                 port = key?.GetValue("Port")?.ToString();
             }
+
+            if (!Port.get_ports().Contains(port)) port = null;
+
             return port;
         }
 
@@ -26,6 +29,12 @@ namespace WindowsFormsApp1.Classes
             {
                 speed = Convert.ToInt32(key?.GetValue("Speed"));
             }
+            if (speed == 0)
+            {
+                save_speed(115200);
+                speed = 115200;
+            } 
+
             return speed;
         }
 
@@ -36,6 +45,9 @@ namespace WindowsFormsApp1.Classes
             {
                 IR_port = key?.GetValue("IR port")?.ToString();
             }
+
+            if (!Port.get_ports().Contains(IR_port)) IR_port = null;
+
             return IR_port;
         }
 

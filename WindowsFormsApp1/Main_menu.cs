@@ -1,6 +1,6 @@
 ﻿using Reactor_Interface;
 using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
@@ -22,7 +22,7 @@ using System.Windows.Forms.DataVisualization.Charting;
 using System.Windows.Forms.VisualStyles;
 using System.Windows.Threading;
 using WindowsFormsApp1.Classes;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
+
 
 namespace WindowsFormsApp1
 {
@@ -35,8 +35,8 @@ namespace WindowsFormsApp1
 
         string IR_port;
 
-        bool is_reactor_working = false;
-        bool is_IR_working = false;
+        static bool is_reactor_working = false;
+        static bool is_IR_working = false;
 
         static int step = 0;
 
@@ -47,7 +47,8 @@ namespace WindowsFormsApp1
         Thread Reactor_reading_thread;
         Thread Parsing_data_thread;
 
-        static public Queue<string> dataQueue = new Queue<string>();
+        static public ConcurrentQueue<string> dataQueue = new ConcurrentQueue<string>();
+
         public Main_menu()
         {
             InitializeComponent();
@@ -59,23 +60,12 @@ namespace WindowsFormsApp1
             setting_groupbox.Size = new Size(711, 153);
 
             port = Interface_settings.get_port();
-            if (!Port.get_ports().Contains(port)) port = null; 
-
             speed = Interface_settings.get_speed();
-            if (!Convert.ToBoolean(speed))
-            {
-                speed = 9600;
-                Interface_settings.save_speed(speed);
-            }
-
             IR_port = Interface_settings.get_IR_port();
-            if (!Port.get_ports().Contains(IR_port)) IR_port = null;
+
             port_checking.Start();
 
             this.time_bar_max_size = time_bar.Size;
-
-            Parsing_data_thread = new Thread(() => Parsing_data(dataQueue));
-            Parsing_data_thread.Start();
         }
 
         private void time_syntes_bar_Scroll(object sender, EventArgs e)
@@ -230,6 +220,7 @@ namespace WindowsFormsApp1
         {
             if (!is_reactor_working && port != null)
             {
+                dataQueue = new ConcurrentQueue<string>(); //очищаем очередь
                 start_stopwatch();
 
                 step = 0;
@@ -244,13 +235,16 @@ namespace WindowsFormsApp1
                 {
                     graphic_menu.is_drawing = true;
 
+                    Parsing_data_thread = new Thread(() => Parsing_data());
+                    Parsing_data_thread.Start();
+
                     SerialPort.Open();
                     SerialPort.Write(param);
 
                     state_lbl.ForeColor = Color.Green;
                     state_lbl.Text = "Работает";
 
-                    Reactor_reading_thread = new Thread(() => Reading_Reactor_Port(SerialPort, dataQueue));
+                    Reactor_reading_thread = new Thread(() => Reading_Reactor_Port(SerialPort));
                     Reactor_reading_thread.Start();
                 }
                 catch (UnauthorizedAccessException)
@@ -286,14 +280,9 @@ namespace WindowsFormsApp1
                     stop_stopwatch();
                 }
 
-                try
-                {
-                    Reactor_reading_thread.Abort();
-                }
-                catch { }
+                is_reactor_working = false;
 
                 SerialPort.Write("d");
-                is_reactor_working = false;
                 Close_Reactor_Port();
 
                 state_lbl.ForeColor = Color.Red;
@@ -303,10 +292,10 @@ namespace WindowsFormsApp1
             }
         }
 
-        private static void Reading_Reactor_Port(SerialPort serialPort, Queue<string> dataQ)
+        private static void Reading_Reactor_Port(SerialPort serialPort)
         {
             //TODO: доделать приём данных
-            while (true) 
+            while (is_reactor_working) 
             {
                 try
                 {
@@ -318,58 +307,55 @@ namespace WindowsFormsApp1
             }
         }
 
-        private static void Parsing_data(Queue<string> dataQ)
+        private static void Parsing_data()
         {
-            while (true)
+            string temp; 
+            while (is_reactor_working)
             {
-                using (StreamWriter writer = new StreamWriter("Log.txt")) 
+                if (dataQueue.TryDequeue(out temp))
                 {
-                    if (dataQ.Count >= 1)
+                    try
                     {
-                        try
+                        string[] data = temp.Split(' ');
+                        data[0] = data[0].Replace("\r", "");
+
+                        string[] reactor_data = data[0].Split(';');
+
+                        long time = Convert.ToInt64(data[data.Length - 1]);
+
+                        foreach (string sub_data in reactor_data)
                         {
-                            string[] data = dataQ.Dequeue().Split(' ');
-
-                            data[0] = data[0].Replace("\r", "");
-
-                            string[] reactor_data = data[0].Split(';');
-
-                            long time = Convert.ToInt64(data[data.Length - 1]);
-
-                            foreach (string sub_data in reactor_data)
+                            if (sub_data.Contains('='))
                             {
-                                if (sub_data.Contains('='))
+                                string[] parametr = sub_data.Split('=');
+
+                                double value;
+                                    
+                                switch (parametr[0])
                                 {
-                                    string[] parametr = sub_data.Split('=');
+                                    case "tok":
+                                        value = Convert.ToDouble(parametr[1]);
+                                        graphic_menu.update_tok(time, value);
+                                        break;
+                                    case "aver_tok":
+                                        value = Convert.ToDouble(parametr[1]);
+                                        graphic_menu.update_aver_tok(time, value);
+                                        break;
+                                    case "step":
+                                        if (parametr[1] == "low")
+                                            step -= 1;
+                                        else
+                                            step += 1;
 
-                                    double value;
-                                    
-                                    switch (parametr[0])
-                                    {
-                                        case "tok":
-                                            value = Convert.ToDouble(parametr[1]);
-                                            graphic_menu.update_tok(time, value);
-                                            break;
-                                        case "aver_tok":
-                                            value = Convert.ToDouble(parametr[1]);
-                                            graphic_menu.update_aver_tok(time, value);
-                                            break;
-                                        case "step":
-                                            if (parametr[1] == "low")
-                                                step -= 1;
-                                            else
-                                                step += 1;
-
-                                            graphic_menu.update_step(time, step);
-                                            break;
-                                    }
+                                        //graphic_menu.update_step(time, step);
+                                        break;
                                 }
-                                else if (data[0] == "end") { }
-                                    
                             }
+                            else if (data[0] == "end") { }
+                                    
                         }
-                        catch { }
                     }
+                    catch { }
                 }
             }
         }
@@ -504,8 +490,6 @@ namespace WindowsFormsApp1
             else
             {
                 Close_Reactor_Port();
-
-                Parsing_data_thread.Abort();
                 e.Cancel = false;
             }
         }

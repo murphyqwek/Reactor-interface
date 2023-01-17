@@ -10,7 +10,7 @@ namespace WindowsFormsApp1
 {
     static class Port
     {
-        static private string[] speeds = {
+        static private readonly string[] speeds = {
             "300",
             "600",
             "1200",
