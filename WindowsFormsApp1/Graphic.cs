@@ -88,6 +88,7 @@ namespace Reactor_Interface
                     series.Points.Clear();
                 }
             }
+            Graph.Series["tok"].Points.Add(new DataPoint { IsEmpty = true });
         }
     }
 }
