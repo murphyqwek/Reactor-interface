@@ -30,6 +30,7 @@
         {
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
@@ -64,11 +65,22 @@
             this.Graph.ChartAreas.Add(chartArea1);
             this.Graph.Cursor = System.Windows.Forms.Cursors.Cross;
             this.Graph.Dock = System.Windows.Forms.DockStyle.Fill;
+            legend1.Alignment = System.Drawing.StringAlignment.Far;
             legend1.BackColor = System.Drawing.Color.Transparent;
             legend1.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
-            legend1.Name = "temperature_legend";
+            legend1.LegendStyle = System.Windows.Forms.DataVisualization.Charting.LegendStyle.Column;
+            legend1.Name = "tok_legend";
+            legend1.Position.Auto = false;
+            legend1.Position.Height = 14.07678F;
+            legend1.Position.Width = 14.08094F;
+            legend1.Position.X = 79.78564F;
+            legend1.Position.Y = 84F;
+            legend2.BackColor = System.Drawing.Color.Transparent;
+            legend2.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
+            legend2.Name = "temperature_legend";
             this.Graph.Legends.Add(legend1);
-            this.Graph.Location = new System.Drawing.Point(0, 40);
+            this.Graph.Legends.Add(legend2);
+            this.Graph.Location = new System.Drawing.Point(0, 42);
             this.Graph.Name = "Graph";
             this.Graph.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.None;
             series1.BorderWidth = 3;
@@ -77,31 +89,31 @@
             series1.Color = System.Drawing.Color.Red;
             series1.Legend = "temperature_legend";
             series1.LegendText = "Температура";
-            series1.Name = "temperature_points";
+            series1.Name = "temperature";
             series2.BorderWidth = 3;
             series2.ChartArea = "temperature_area";
             series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series2.Legend = "temperature_legend";
+            series2.Legend = "tok_legend";
             series2.LegendText = "Средний ток";
             series2.MarkerBorderWidth = 3;
             series2.Name = "st_aver";
             series3.BorderWidth = 3;
             series3.ChartArea = "temperature_area";
             series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series3.Legend = "temperature_legend";
+            series3.Legend = "tok_legend";
             series3.LegendText = "Ток";
             series3.Name = "tok";
             series4.BorderWidth = 5;
             series4.ChartArea = "temperature_area";
             series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.StepLine;
-            series4.Legend = "temperature_legend";
+            series4.Legend = "tok_legend";
             series4.LegendText = "Шаг";
             series4.Name = "step";
             this.Graph.Series.Add(series1);
             this.Graph.Series.Add(series2);
             this.Graph.Series.Add(series3);
             this.Graph.Series.Add(series4);
-            this.Graph.Size = new System.Drawing.Size(1187, 550);
+            this.Graph.Size = new System.Drawing.Size(1187, 548);
             this.Graph.TabIndex = 1;
             this.Graph.Text = "Графики";
             // 
@@ -114,7 +126,7 @@
             this.очиститьГрафикToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1187, 40);
+            this.menuStrip1.Size = new System.Drawing.Size(1187, 42);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 

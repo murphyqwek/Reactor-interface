@@ -41,7 +41,7 @@ namespace Reactor_Interface
         {
             if (Graph != null && is_drawing)
             {
-                Graph.Series["temperature_points"].Points.AddXY(time, temp);
+                Graph.Series["temperature"].Points.AddXY(time, temp);
             }
         }
 
