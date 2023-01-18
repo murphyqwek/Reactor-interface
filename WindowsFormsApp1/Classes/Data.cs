@@ -46,17 +46,17 @@ namespace WindowsFormsApp1.Classes
 
         static public string is_IR_value_valid(string data)
         {
-            if (data.Length >= 9)
+            //ATR03120Z
+            if (data.Length == 9)
             {
-                foreach(char frame in data)
-                {
-                    
-                }
+                string atr = data.Substring(0, 3);
+                string endline = data.Substring(7);
+                if (atr != "ATR" || endline != "0Z") return "-1";
 
-                return "";
+                return data.Substring(3, 4);
             }
-
-            else return "";
+            else if (data == "") return "";
+            else return "-1";
         }
     }
 }

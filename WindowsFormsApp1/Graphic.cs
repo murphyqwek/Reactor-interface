@@ -37,7 +37,7 @@ namespace Reactor_Interface
             }
         }
 
-        public void update_temperature(long time, double temp)
+        public void update_temperature(long time, int temp)
         {
             if (Graph != null && is_drawing)
             {

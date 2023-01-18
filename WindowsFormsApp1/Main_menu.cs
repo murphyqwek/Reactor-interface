@@ -458,13 +458,19 @@ namespace WindowsFormsApp1
             string inf;
             if (IR_Serial_Port.IsOpen)
             {
-                do
-                {
+                do {
                     IR_Serial_Port.Write(Data.read_command(), 0, 3);
                     inf = IR_Serial_Port.ReadExisting();
                     inf = Data.is_IR_value_valid(inf);
                 }
-                while (inf == "");
+                while (inf == "-1");
+                if (inf != "")
+                {
+                    int temp = Convert.ToInt32(inf);
+                    long time = stopwatch.ElapsedMilliseconds;
+
+                    graphic_menu.update_temperature(time, temp);
+                }
             }
         }
 

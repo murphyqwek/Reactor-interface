@@ -70,6 +70,8 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.Interval_IR_counter = new System.Windows.Forms.NumericUpDown();
             this.IR_button = new System.Windows.Forms.Button();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.mode_cmbox = new System.Windows.Forms.ComboBox();
             this.setting_groupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cold_bar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fire_bar)).BeginInit();
@@ -82,6 +84,7 @@
             this.groupBox5.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Interval_IR_counter)).BeginInit();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // SerialPort
@@ -104,7 +107,7 @@
             this.setting_groupbox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.setting_groupbox.Name = "setting_groupbox";
             this.setting_groupbox.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.setting_groupbox.Size = new System.Drawing.Size(711, 252);
+            this.setting_groupbox.Size = new System.Drawing.Size(731, 252);
             this.setting_groupbox.TabIndex = 1;
             this.setting_groupbox.TabStop = false;
             this.setting_groupbox.Text = "Настройки режима";
@@ -292,11 +295,10 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Controls.Add(this.voilok_rdbtn);
             this.groupBox3.Controls.Add(this.tigel_rdbtn);
             this.groupBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.groupBox3.Location = new System.Drawing.Point(453, 52);
+            this.groupBox3.Location = new System.Drawing.Point(267, 52);
             this.groupBox3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -456,6 +458,7 @@
             // mode_groupbox
             // 
             this.mode_groupbox.BackColor = System.Drawing.SystemColors.Control;
+            this.mode_groupbox.Controls.Add(this.groupBox4);
             this.mode_groupbox.Controls.Add(this.groupBox2);
             this.mode_groupbox.Controls.Add(this.groupBox3);
             this.mode_groupbox.Controls.Add(this.setting_groupbox);
@@ -464,7 +467,7 @@
             this.mode_groupbox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.mode_groupbox.Name = "mode_groupbox";
             this.mode_groupbox.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.mode_groupbox.Size = new System.Drawing.Size(730, 537);
+            this.mode_groupbox.Size = new System.Drawing.Size(768, 537);
             this.mode_groupbox.TabIndex = 15;
             this.mode_groupbox.TabStop = false;
             this.mode_groupbox.Text = "Запуск реактора";
@@ -577,6 +580,35 @@
             this.IR_button.UseVisualStyleBackColor = true;
             this.IR_button.Click += new System.EventHandler(this.IR_button_Click);
             // 
+            // groupBox4
+            // 
+            this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox4.Controls.Add(this.mode_cmbox);
+            this.groupBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.groupBox4.Location = new System.Drawing.Point(531, 52);
+            this.groupBox4.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.groupBox4.Size = new System.Drawing.Size(211, 100);
+            this.groupBox4.TabIndex = 7;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Режим тока";
+            // 
+            // mode_cmbox
+            // 
+            this.mode_cmbox.FormattingEnabled = true;
+            this.mode_cmbox.Items.AddRange(new object[] {
+            "50 А",
+            "100 А",
+            "150 А",
+            "200 А"});
+            this.mode_cmbox.Location = new System.Drawing.Point(7, 44);
+            this.mode_cmbox.MaxDropDownItems = 4;
+            this.mode_cmbox.Name = "mode_cmbox";
+            this.mode_cmbox.Size = new System.Drawing.Size(121, 45);
+            this.mode_cmbox.TabIndex = 0;
+            this.mode_cmbox.Text = "50 А";
+            // 
             // Main_menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -616,6 +648,7 @@
             this.groupBox5.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Interval_IR_counter)).EndInit();
+            this.groupBox4.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -663,6 +696,8 @@
         private System.Windows.Forms.NumericUpDown Interval_IR_counter;
         private System.Windows.Forms.Button IR_button;
         private System.Windows.Forms.Label tem_lbl;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.ComboBox mode_cmbox;
     }
 }
 
