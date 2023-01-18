@@ -1,27 +1,30 @@
-﻿using System;
+﻿using Reactor_Interface;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace WindowsFormsApp1.Classes
 {
     static class Data
     {
         //Инициализация обмен данных
-        static private byte[] atq =
+        static private readonly byte[] atq =
         {
             65, 84, 81
         };
 
         //Получить данные
-        static private byte[] atr =
+        static private readonly byte[] atr =
         {
             65, 84, 82
         };
 
         //Остановка обмена данных
-        static private byte[] atu =
+        static private readonly byte[] atu =
         {
             65, 84, 85
         };
@@ -39,6 +42,21 @@ namespace WindowsFormsApp1.Classes
         static public byte[] stop_command()
         {
             return atu;
+        }
+
+        static public string is_IR_value_valid(string data)
+        {
+            if (data.Length >= 9)
+            {
+                foreach(char frame in data)
+                {
+                    
+                }
+
+                return "";
+            }
+
+            else return "";
         }
     }
 }

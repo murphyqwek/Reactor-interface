@@ -35,10 +35,10 @@ namespace WindowsFormsApp1
 
         string IR_port;
 
+        static int step = 0;
+
         static bool is_reactor_working = false;
         static bool is_IR_working = false;
-
-        static int step = 0;
 
         static Stopwatch stopwatch = new Stopwatch();
 
@@ -455,23 +455,16 @@ namespace WindowsFormsApp1
 
         private void IR_timer_Tick(object sender, EventArgs e)
         {
+            string inf;
             if (IR_Serial_Port.IsOpen)
             {
-                IR_Serial_Port.Write(Data.read_command(), 0, 3);
-                string inf = IR_Serial_Port.ReadExisting();
-                if (inf.Length >= 9)
+                do
                 {
-                    try
-                    {
-                        long time = stopwatch.ElapsedMilliseconds;
-                        inf = inf.Remove(inf.Length - 2);
-                        inf = inf.Remove(0, 4);
-                        tem_lbl.Text = "Температура: " + inf;
-                        double temperature = Convert.ToDouble(inf);
-                        graphic_menu.update_temperature(time, temperature);
-                    }
-                    catch { }
+                    IR_Serial_Port.Write(Data.read_command(), 0, 3);
+                    inf = IR_Serial_Port.ReadExisting();
+                    inf = Data.is_IR_value_valid(inf);
                 }
+                while (inf == "");
             }
         }
 
@@ -520,12 +513,10 @@ namespace WindowsFormsApp1
                 stop_stopwatch();
 
                 IR_Serial_Port.Write(Data.stop_command(), 0, 3);
-                IR_Serial_Port.Close();
+                Close_IR_Port();
 
                 IR_button.Text = "Начать измерения";
                 Interval_IR_counter.ReadOnly = false;
-
-                Close_IR_Port();
             }
             else if (IR_port == null)
             {
