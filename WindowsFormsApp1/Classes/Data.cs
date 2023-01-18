@@ -58,5 +58,23 @@ namespace WindowsFormsApp1.Classes
             else if (data == "") return "";
             else return "-1";
         }
+
+        public static string get_tok_mode(string mode)
+        {
+            switch (mode)
+            {
+                case "50 А":
+                    return "0";
+                case "100 А":
+                    return "1";
+                case "150 А":;
+                    return "2";
+                case "200 А":
+                    return "3";
+
+                default: return "0";
+            }
+        }
+
     }
 }

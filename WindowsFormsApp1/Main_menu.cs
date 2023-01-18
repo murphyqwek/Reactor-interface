@@ -56,8 +56,8 @@ namespace WindowsFormsApp1
             graphic_menu = new Graphic_menu();
             IntPtr intPtr = graphic_menu.Handle; //Создаётся Handle, без этой строчки данные с реактора не смогут отображаться на графике, когда окно закрыто
 
-            mode_groupbox.Size = new Size(730, 438);
-            setting_groupbox.Size = new Size(711, 153);
+            reactor_box.Size = new Size(780, 438);
+            mode_settings_box.Size = new Size(711, 153);
 
             port = Interface_settings.get_port();
             speed = Interface_settings.get_speed();
@@ -82,11 +82,12 @@ namespace WindowsFormsApp1
                 time_bar.Value = time_bar.Minimum;
                 time_bar.Maximum = 60;
 
-                mode_groupbox.Size = new Size(730, 438);
-                setting_groupbox.Size = new Size(711, 153);
+                reactor_box.Size = new Size(780, 438);
+                mode_settings_box.Size = new Size(711, 153);
 
                 iteration_label.Visible = false;
-                iteration_counter.Visible = false; 
+                iteration_counter.Visible = false;
+                
             }
         }
 
@@ -98,12 +99,12 @@ namespace WindowsFormsApp1
                 time_bar.Value = time_bar.Minimum; 
                 time_bar.Maximum = 20;
 
-                mode_groupbox.Size = new Size(730, 537);
+                reactor_box.Size = new Size(780, 537);
 
                 cold_bar.Value = cold_bar.Minimum;
                 fire_bar.Value = fire_bar.Minimum;
 
-                setting_groupbox.Size = new Size(711, 252);
+                mode_settings_box.Size = new Size(751, 252);
 
                 iteration_counter.Value = 2;
                 iteration_label.Visible = true;
@@ -198,19 +199,21 @@ namespace WindowsFormsApp1
             }
         }
 
-        private string get_param()
+        private string get_params()
         {
             string param = "1";
 
-            param += time_bar.Value.ToString() + "n3";
-            char[] k = param.ToCharArray();
+            param += time_bar.Value.ToString() + "n";
+
+            param += Data.get_tok_mode(tok_mode_list.Text);
+
             if (duga_rdbtn.Checked)
             {
                 param += "0es";
             }
             else
             {
-                
+                //param += "1es";
             }
 
             return param;
@@ -227,7 +230,7 @@ namespace WindowsFormsApp1
 
                 is_reactor_working = true;
 
-                string param = get_param();
+                string param = get_params();
 
                 SerialPort.PortName = port.Split(' ')[0];
                 SerialPort.BaudRate = speed;
