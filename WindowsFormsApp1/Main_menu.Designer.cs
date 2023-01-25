@@ -60,6 +60,7 @@
             this.right_btn = new System.Windows.Forms.Button();
             this.up_btn = new System.Windows.Forms.Button();
             this.reactor_box = new System.Windows.Forms.GroupBox();
+            this.tok_mode_box = new System.Windows.Forms.GroupBox();
             this.tok_mode_list = new System.Windows.Forms.DomainUpDown();
             this.info_box = new System.Windows.Forms.GroupBox();
             this.tem_lbl = new System.Windows.Forms.Label();
@@ -67,11 +68,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.port_checking = new System.Windows.Forms.Timer(this.components);
             this.IR_Serial_Port = new System.IO.Ports.SerialPort(this.components);
-            this.IR_timer = new System.Windows.Forms.Timer(this.components);
             this.IR_box = new System.Windows.Forms.GroupBox();
             this.Interval_IR_counter = new System.Windows.Forms.NumericUpDown();
             this.IR_button = new System.Windows.Forms.Button();
-            this.tok_mode_box = new System.Windows.Forms.GroupBox();
             this.mode_settings_box.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cold_bar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fire_bar)).BeginInit();
@@ -81,10 +80,10 @@
             this.conf_box.SuspendLayout();
             this.menu.SuspendLayout();
             this.reactor_box.SuspendLayout();
+            this.tok_mode_box.SuspendLayout();
             this.info_box.SuspendLayout();
             this.IR_box.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Interval_IR_counter)).BeginInit();
-            this.tok_mode_box.SuspendLayout();
             this.SuspendLayout();
             // 
             // SerialPort
@@ -472,6 +471,17 @@
             this.reactor_box.TabStop = false;
             this.reactor_box.Text = "Запуск реактора";
             // 
+            // tok_mode_box
+            // 
+            this.tok_mode_box.Controls.Add(this.tok_mode_list);
+            this.tok_mode_box.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tok_mode_box.Location = new System.Drawing.Point(530, 52);
+            this.tok_mode_box.Name = "tok_mode_box";
+            this.tok_mode_box.Size = new System.Drawing.Size(232, 98);
+            this.tok_mode_box.TabIndex = 7;
+            this.tok_mode_box.TabStop = false;
+            this.tok_mode_box.Text = "Режим тока";
+            // 
             // tok_mode_list
             // 
             this.tok_mode_list.Items.Add("50 А");
@@ -541,11 +551,6 @@
             // 
             this.IR_Serial_Port.BaudRate = 19200;
             // 
-            // IR_timer
-            // 
-            this.IR_timer.Interval = 3000;
-            this.IR_timer.Tick += new System.EventHandler(this.IR_timer_Tick);
-            // 
             // IR_box
             // 
             this.IR_box.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -562,7 +567,7 @@
             // Interval_IR_counter
             // 
             this.Interval_IR_counter.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Interval_IR_counter.Location = new System.Drawing.Point(369, 48);
+            this.Interval_IR_counter.Location = new System.Drawing.Point(358, 48);
             this.Interval_IR_counter.Maximum = new decimal(new int[] {
             15,
             0,
@@ -574,7 +579,7 @@
             0,
             0});
             this.Interval_IR_counter.Name = "Interval_IR_counter";
-            this.Interval_IR_counter.Size = new System.Drawing.Size(60, 39);
+            this.Interval_IR_counter.Size = new System.Drawing.Size(71, 39);
             this.Interval_IR_counter.TabIndex = 1;
             this.Interval_IR_counter.Value = new decimal(new int[] {
             1,
@@ -592,17 +597,6 @@
             this.IR_button.Text = "Начать";
             this.IR_button.UseVisualStyleBackColor = true;
             this.IR_button.Click += new System.EventHandler(this.IR_button_Click);
-            // 
-            // tok_mode_box
-            // 
-            this.tok_mode_box.Controls.Add(this.tok_mode_list);
-            this.tok_mode_box.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tok_mode_box.Location = new System.Drawing.Point(530, 52);
-            this.tok_mode_box.Name = "tok_mode_box";
-            this.tok_mode_box.Size = new System.Drawing.Size(232, 98);
-            this.tok_mode_box.TabIndex = 7;
-            this.tok_mode_box.TabStop = false;
-            this.tok_mode_box.Text = "Режим тока";
             // 
             // Main_menu
             // 
@@ -639,11 +633,11 @@
             this.menu.ResumeLayout(false);
             this.menu.PerformLayout();
             this.reactor_box.ResumeLayout(false);
+            this.tok_mode_box.ResumeLayout(false);
             this.info_box.ResumeLayout(false);
             this.info_box.PerformLayout();
             this.IR_box.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Interval_IR_counter)).EndInit();
-            this.tok_mode_box.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -686,7 +680,6 @@
         private System.Windows.Forms.TrackBar cold_bar;
         private System.IO.Ports.SerialPort IR_Serial_Port;
         private System.Windows.Forms.ToolStripMenuItem IR_port_menu_btn;
-        private System.Windows.Forms.Timer IR_timer;
         private System.Windows.Forms.GroupBox IR_box;
         private System.Windows.Forms.NumericUpDown Interval_IR_counter;
         private System.Windows.Forms.Button IR_button;

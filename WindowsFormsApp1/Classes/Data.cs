@@ -58,7 +58,9 @@ namespace WindowsFormsApp1.Classes
             else if (data == "") return "";
             else return "-1";
         }
-
+        //time_left=2;tok=2.94\r 25790
+        //
+        //2.72
         public static string get_tok_mode(string mode)
         {
             switch (mode)

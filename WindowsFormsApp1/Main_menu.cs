@@ -17,6 +17,7 @@ using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Windows.Forms.VisualStyles;
@@ -40,12 +41,16 @@ namespace WindowsFormsApp1
         static bool is_reactor_working = false;
         static bool is_IR_working = false;
 
+        static readonly double koef = 0.0029;
+
         static Stopwatch stopwatch = new Stopwatch();
 
         static Graphic_menu graphic_menu = new Graphic_menu();
 
         Thread Reactor_reading_thread;
         Thread Parsing_data_thread;
+
+        System.Threading.Timer IR_timer;
 
         static public ConcurrentQueue<string> dataQueue = new ConcurrentQueue<string>();
 
@@ -65,6 +70,7 @@ namespace WindowsFormsApp1
 
             port_checking.Start();
 
+            IR_timer = new System.Threading.Timer(new TimerCallback(IR_timer_Tick), IR_Serial_Port, 1000, 1000);
             this.time_bar_max_size = time_bar.Size;
         }
 
@@ -295,6 +301,7 @@ namespace WindowsFormsApp1
             }
         }
 
+        
         private static void Reading_Reactor_Port(SerialPort serialPort)
         {
             //TODO: доделать приём данных
@@ -317,8 +324,8 @@ namespace WindowsFormsApp1
             {
                 if (dataQueue.TryDequeue(out temp))
                 {
-                    try
-                    {
+                    //try
+                    //{
                         string[] data = temp.Split(' ');
                         data[0] = data[0].Replace("\r", "");
 
@@ -326,39 +333,36 @@ namespace WindowsFormsApp1
 
                         long time = Convert.ToInt64(data[data.Length - 1]);
 
-                        foreach (string sub_data in reactor_data)
+                    foreach (string sub_data in reactor_data)
+                    {
+                        if (sub_data.Contains('='))
                         {
-                            if (sub_data.Contains('='))
+                            string[] parametr = sub_data.Split('=');
+
+                            double value;
+                            parametr[1] = parametr[1].Replace('.', ',');
+                            switch (parametr[0])
                             {
-                                string[] parametr = sub_data.Split('=');
-
-                                double value;
-                                    
-                                switch (parametr[0])
-                                {
-                                    case "tok":
-                                        value = Convert.ToDouble(parametr[1]);
-                                        graphic_menu.update_tok(time, value);
-                                        break;
-                                    case "aver_tok":
-                                        value = Convert.ToDouble(parametr[1]);
-                                        graphic_menu.update_aver_tok(time, value);
-                                        break;
-                                    case "step":
-                                        if (parametr[1] == "low")
-                                            step -= 1;
-                                        else
-                                            step += 1;
-
-                                        //graphic_menu.update_step(time, step);
-                                        break;
-                                }
+                                case "tok":
+                                    value = (Convert.ToDouble(parametr[1]) - 2.20) / koef;
+                                    graphic_menu.update_tok(time, value);
+                                    break;
+                                case "aver_tok":
+                                    value = (Convert.ToDouble(parametr[1]) - 2.20) / koef;
+                                    graphic_menu.update_aver_tok(time, value);
+                                    break;
+                                case "step":
+                                    if (parametr[1] == "1")
+                                        step += 1;
+                                    else if (parametr[1] == "-1")
+                                        step -= 1;
+                                    graphic_menu.update_step(time, step);
+                                    break;
                             }
-                            else if (data[0] == "end") { }
-                                    
                         }
+                        else if (data[0] == "end") { }
+
                     }
-                    catch { }
                 }
             }
         }
@@ -456,9 +460,12 @@ namespace WindowsFormsApp1
             cold_lbl.Text = "Время остывания: " + cold_bar.Value.ToString() + " с.";
         }
 
-        private void IR_timer_Tick(object sender, EventArgs e)
+        private static void IR_timer_Tick(object port)
         {
+            if (!is_IR_working)
+                return;
             string inf;
+            SerialPort IR_Serial_Port = (SerialPort)port;
             if (IR_Serial_Port.IsOpen)
             {
                 do {
@@ -498,22 +505,21 @@ namespace WindowsFormsApp1
 
         private void IR_button_Click(object sender, EventArgs e)
         { 
-            if (!is_IR_working && IR_port != null)
+            if (!is_IR_working && IR_port != null) //TODO: не забыть убрать
             {
                 graphic_menu.is_drawing = true;
 
                 start_stopwatch();
-                is_IR_working = true;
-
+                
                 IR_Serial_Port.PortName = IR_port;
                 IR_Serial_Port.Open();
                 IR_Serial_Port.Write(Data.init_command(), 0, 3);
 
                 IR_button.Text = "Остановить измерения";
 
-                IR_timer.Interval = Convert.ToInt32(Interval_IR_counter.Value) * 1000;
+                IR_timer.Change(0, Convert.ToInt32(Interval_IR_counter.Value) * 1000);
                 Interval_IR_counter.ReadOnly = true;
-                IR_timer.Start();
+                is_IR_working = true;
             }
             else if (is_IR_working && IR_port != null)
             {
@@ -521,8 +527,11 @@ namespace WindowsFormsApp1
                 is_IR_working = false;
                 stop_stopwatch();
 
-                IR_Serial_Port.Write(Data.stop_command(), 0, 3);
-                Close_IR_Port();
+                if (IR_Serial_Port.IsOpen)
+                {
+                    IR_Serial_Port.Write(Data.stop_command(), 0, 3);
+                    Close_IR_Port();
+                }
 
                 IR_button.Text = "Начать измерения";
                 Interval_IR_counter.ReadOnly = false;
