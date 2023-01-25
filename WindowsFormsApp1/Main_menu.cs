@@ -14,6 +14,7 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Remoting.Messaging;
+using System.Security.RightsManagement;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -49,11 +50,10 @@ namespace WindowsFormsApp1
 
         Thread Reactor_reading_thread;
         Thread Parsing_data_thread;
+        Thread IR_reading_thread;
 
-        System.Threading.Timer IR_timer;
-
-        static public ConcurrentQueue<string> dataQueue = new ConcurrentQueue<string>();
-
+        static ConcurrentQueue<string> dataQueue = new ConcurrentQueue<string>();
+        static bool Wait = false;
         public Main_menu()
         {
             InitializeComponent();
@@ -70,7 +70,7 @@ namespace WindowsFormsApp1
 
             port_checking.Start();
 
-            IR_timer = new System.Threading.Timer(new TimerCallback(IR_timer_Tick), IR_Serial_Port, 1000, 1000);
+            //IR_timer = new System.Threading.Timer(new TimerCallback(IR_timer_Tick), IR_Serial_Port, 500, 1000);
             this.time_bar_max_size = time_bar.Size;
         }
 
@@ -245,6 +245,7 @@ namespace WindowsFormsApp1
                     graphic_menu.is_drawing = true;
 
                     Parsing_data_thread = new Thread(() => Parsing_data());
+                    Parsing_data_thread.IsBackground = true;
                     Parsing_data_thread.Start();
 
                     SerialPort.Open();
@@ -254,6 +255,7 @@ namespace WindowsFormsApp1
                     state_lbl.Text = "Работает";
 
                     Reactor_reading_thread = new Thread(() => Reading_Reactor_Port(SerialPort));
+                    Reactor_reading_thread.IsBackground = true;
                     Reactor_reading_thread.Start();
                 }
                 catch (UnauthorizedAccessException)
@@ -326,12 +328,12 @@ namespace WindowsFormsApp1
                 {
                     //try
                     //{
-                        string[] data = temp.Split(' ');
-                        data[0] = data[0].Replace("\r", "");
+                    string[] data = temp.Split(' ');
+                    data[0] = data[0].Replace("\r", "");
 
-                        string[] reactor_data = data[0].Split(';');
+                    string[] reactor_data = data[0].Split(';');
 
-                        long time = Convert.ToInt64(data[data.Length - 1]);
+                    long time = Convert.ToInt64(data[data.Length - 1]);
 
                     foreach (string sub_data in reactor_data)
                     {
@@ -360,11 +362,21 @@ namespace WindowsFormsApp1
                                     break;
                             }
                         }
-                        else if (data[0] == "end") { }
+                        else if (data[0] == "end") {
+                            Stop_reactor();
+                            break;
+                        }
 
                     }
                 }
             }
+            int k = 0;
+            k++;
+        }
+
+        static void Stop_reactor()
+        {
+
         }
 
         private void debug_menu_btn_Click(object sender, EventArgs e)
@@ -446,6 +458,7 @@ namespace WindowsFormsApp1
                 state_lbl.ForeColor = Color.Red;
                 state_lbl.Text = "Не работает";
 
+                ShowError("Порт реактора отсоединился"); 
                 //anod_move_lbl.Text = "Направление движение анода: ";
             }
         }
@@ -460,28 +473,35 @@ namespace WindowsFormsApp1
             cold_lbl.Text = "Время остывания: " + cold_bar.Value.ToString() + " с.";
         }
 
-        private static void IR_timer_Tick(object port)
+        private static void IR_reading(SerialPort IR_Serial_Port, int interval)
         {
-            if (!is_IR_working)
-                return;
-            string inf;
-            SerialPort IR_Serial_Port = (SerialPort)port;
-            if (IR_Serial_Port.IsOpen)
+            while (is_IR_working)
             {
-                do {
-                    IR_Serial_Port.Write(Data.read_command(), 0, 3);
-                    inf = IR_Serial_Port.ReadExisting();
-                    inf = Data.is_IR_value_valid(inf);
-                }
-                while (inf == "-1");
-                if (inf != "")
+                Thread.Sleep(interval);
+                string inf;
+                //Wait = true;
+                //SerialPort IR_Serial_Port = (SerialPort)port;
+                if (IR_Serial_Port.IsOpen)
                 {
-                    int temp = Convert.ToInt32(inf);
-                    long time = stopwatch.ElapsedMilliseconds;
+                    do
+                    {
+                        IR_Serial_Port.Write(Data.read_command(), 0, 3);
+                        inf = IR_Serial_Port.ReadExisting();
+                        inf = Data.is_IR_value_valid(inf);
+                    }
+                    while (inf == "-1");
+                    if (inf != "")
+                    {
+                        int temp = Convert.ToInt32(inf);
+                        long time = stopwatch.ElapsedMilliseconds;
 
-                    graphic_menu.update_temperature(time, temp);
+                        graphic_menu.update_temperature(time, temp);
+                    }
                 }
+                //Wait = false;
             }
+            int k = 0;
+            k++;
         }
 
         private void Main_menu_FormClosing(object sender, FormClosingEventArgs e)
@@ -505,26 +525,32 @@ namespace WindowsFormsApp1
 
         private void IR_button_Click(object sender, EventArgs e)
         { 
-            if (!is_IR_working && IR_port != null) //TODO: не забыть убрать
+            if (!is_IR_working && IR_port != null)
             {
                 graphic_menu.is_drawing = true;
+                Interval_IR_counter.ReadOnly = true;
 
                 start_stopwatch();
-                
+
+                is_IR_working = true;
+
                 IR_Serial_Port.PortName = IR_port;
                 IR_Serial_Port.Open();
                 IR_Serial_Port.Write(Data.init_command(), 0, 3);
 
                 IR_button.Text = "Остановить измерения";
 
-                IR_timer.Change(0, Convert.ToInt32(Interval_IR_counter.Value) * 1000);
-                Interval_IR_counter.ReadOnly = true;
-                is_IR_working = true;
+                int time = Convert.ToInt32(Interval_IR_counter.Value) * 1000;
+                IR_reading_thread = new Thread(() => IR_reading(IR_Serial_Port, time));
+                IR_reading_thread.IsBackground = true;
+                IR_reading_thread.Start();
             }
             else if (is_IR_working && IR_port != null)
             {
                 graphic_menu.is_drawing = false;
                 is_IR_working = false;
+                Interval_IR_counter.ReadOnly = false;
+
                 stop_stopwatch();
 
                 if (IR_Serial_Port.IsOpen)
@@ -534,7 +560,6 @@ namespace WindowsFormsApp1
                 }
 
                 IR_button.Text = "Начать измерения";
-                Interval_IR_counter.ReadOnly = false;
             }
             else if (IR_port == null)
             {

@@ -344,7 +344,7 @@
             this.graphic_menu_btn});
             this.menu.Location = new System.Drawing.Point(0, 0);
             this.menu.Name = "menu";
-            this.menu.Size = new System.Drawing.Size(1664, 40);
+            this.menu.Size = new System.Drawing.Size(1664, 42);
             this.menu.TabIndex = 7;
             this.menu.Text = "menu";
             // 
@@ -356,7 +356,7 @@
             this.IR_port_menu_btn});
             this.settings_menu_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.settings_menu_btn.Name = "settings_menu_btn";
-            this.settings_menu_btn.Size = new System.Drawing.Size(148, 36);
+            this.settings_menu_btn.Size = new System.Drawing.Size(148, 38);
             this.settings_menu_btn.Text = "Настройки";
             this.settings_menu_btn.DropDownOpened += new System.EventHandler(this.settings_menu_btn_DropDownOpened);
             // 
@@ -394,7 +394,7 @@
             // 
             this.graphic_menu_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.graphic_menu_btn.Name = "graphic_menu_btn";
-            this.graphic_menu_btn.Size = new System.Drawing.Size(109, 36);
+            this.graphic_menu_btn.Size = new System.Drawing.Size(109, 38);
             this.graphic_menu_btn.Text = "График";
             this.graphic_menu_btn.Click += new System.EventHandler(this.graphic_menu_btn_Click);
             // 
@@ -562,7 +562,7 @@
             this.IR_box.Size = new System.Drawing.Size(435, 100);
             this.IR_box.TabIndex = 17;
             this.IR_box.TabStop = false;
-            this.IR_box.Text = "Тремометр";
+            this.IR_box.Text = "Термометр";
             // 
             // Interval_IR_counter
             // 
