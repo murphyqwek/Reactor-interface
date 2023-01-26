@@ -24,7 +24,7 @@ using System.Windows.Forms.DataVisualization.Charting;
 using System.Windows.Forms.VisualStyles;
 using System.Windows.Threading;
 using WindowsFormsApp1.Classes;
-
+using Label = System.Windows.Forms.Label;
 
 namespace WindowsFormsApp1
 {
@@ -244,7 +244,7 @@ namespace WindowsFormsApp1
                 {
                     graphic_menu.is_drawing = true;
 
-                    Parsing_data_thread = new Thread(() => Parsing_data());
+                    Parsing_data_thread = new Thread(() => Parsing_data(state_lbl, SerialPort));
                     Parsing_data_thread.IsBackground = true;
                     Parsing_data_thread.Start();
 
@@ -319,7 +319,7 @@ namespace WindowsFormsApp1
             }
         }
 
-        private static void Parsing_data()
+        private static void Parsing_data(Label state_lbl, SerialPort Reactor_port)
         {
             string temp; 
             while (is_reactor_working)
@@ -343,6 +343,7 @@ namespace WindowsFormsApp1
 
                             double value;
                             parametr[1] = parametr[1].Replace('.', ',');
+
                             switch (parametr[0])
                             {
                                 case "tok":
@@ -363,19 +364,35 @@ namespace WindowsFormsApp1
                             }
                         }
                         else if (data[0] == "end") {
-                            Stop_reactor();
+                            Stop_reactor(state_lbl, Reactor_port);
                             break;
                         }
 
                     }
                 }
             }
-            int k = 0;
-            k++;
         }
 
-        static void Stop_reactor()
+        static void Stop_reactor(Label state_lbl, SerialPort Reactor_port)
         {
+            if (!is_IR_working)
+            {
+                graphic_menu.is_drawing = false;
+                stop_stopwatch();
+            }
+            state_lbl.Invoke((MethodInvoker)delegate {
+                state_lbl.Text = "Не работает";
+                state_lbl.ForeColor = Color.Red;
+            });
+            while (Reactor_port.IsOpen)
+            {
+                try
+                {
+                    Reactor_port.Close();
+                }
+                catch { };
+            }
+            is_reactor_working = false;
 
         }
 
@@ -399,7 +416,7 @@ namespace WindowsFormsApp1
 
         private void Close_Reactor_Port()
         {
-            while (SerialPort.IsOpen )
+            while (SerialPort.IsOpen)
             {
                 try
                 {
@@ -500,8 +517,6 @@ namespace WindowsFormsApp1
                 }
                 //Wait = false;
             }
-            int k = 0;
-            k++;
         }
 
         private void Main_menu_FormClosing(object sender, FormClosingEventArgs e)
@@ -567,7 +582,7 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void start_stopwatch()
+        private static void start_stopwatch()
         {
             if (!is_IR_working && !is_reactor_working)
             {
@@ -576,7 +591,7 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void stop_stopwatch()
+        private static void stop_stopwatch()
         {
             if (!is_IR_working && !is_reactor_working)
             {

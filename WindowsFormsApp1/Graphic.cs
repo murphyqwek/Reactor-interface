@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Reactor_Interface.Classes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -99,60 +101,28 @@ namespace Reactor_Interface
 
         private void какExcelТаблицуToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string path;
+            string path = "";
             using (SaveFileDialog sf = new SaveFileDialog())
             {
                 sf.Title = "Сохранить файл как...";
                 sf.FileName = "График";
+                sf.Filter = "*.xls|*.xls;";
+                sf.DefaultExt = ".xls";
 
                 if (sf.ShowDialog() == DialogResult.OK)
                 {
                     path = sf.FileName;
                 }
-            }
-
-
-            Excel.Application xlApp;
-            Excel.Workbook xlWorkBook;
-            Excel.Worksheet xlWorkSheet;
-            object misValue = System.Reflection.Missing.Value;
-
-            xlApp = new Excel.Application();
-            xlWorkBook = xlApp.Workbooks.Add(misValue);
-            xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
-
-            for (int i = 0; i < Graph.Series.Count; i++)
-            {
-                xlWorkSheet.Cells[1, 1] = "";
-                xlWorkSheet.Cells[1, 2] = "DateTime";//put your column heading here
-                xlWorkSheet.Cells[1, 3] = "Data";// put your column heading here
-
-                for (int j = 0; j < Graph.Series[i].Points.Count; j++)
+                else
                 {
-                    xlWorkSheet.Cells[j + 2, 2] = Graph.Series[i].Points[j].XValue;
-                    xlWorkSheet.Cells[j + 2, 3] = Graph.Series[i].Points[j].YValues[0];
+                    return;
                 }
+
+                Exl.Save_Excel(path, Graph);
             }
-
-            Excel.Range chartRange;
-
-            Excel.ChartObjects xlCharts = (Excel.ChartObjects)xlWorkSheet.ChartObjects(Type.Missing);
-            Excel.ChartObject myChart = (Excel.ChartObject)xlCharts.Add(10, 80, 300, 250);
-            Excel.Chart chartPage = myChart.Chart;
-
-            chartRange = xlWorkSheet.get_Range("B2", "c5");//update the range here
-            chartPage.SetSourceData(chartRange, misValue);
-            chartPage.ChartType = Excel.XlChartType.xlColumnClustered;
-
-            xlWorkBook.SaveAs("csharp.net-informations.xls", Excel.XlFileFormat.xlWorkbookNormal, misValue, misValue, misValue, misValue, Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
-            xlWorkBook.Close(true, misValue, misValue);
-            xlApp.Quit();
-
-            //releaseObject(xlWorkSheet);
-            //releaseObject(xlWorkBook);
-            //releaseObject(xlApp);
 
         }
+
 
         private void menubtn_Click(object sender, EventArgs e)
         {
@@ -181,5 +151,41 @@ namespace Reactor_Interface
             Graph.Series[Convert.ToString(button.Tag)].IsVisibleInLegend = button.Checked;
         }
 
+        private void save_as_txt_file_stipbtn_Click(object sender, EventArgs e)
+        {
+            string path = "";
+            using (SaveFileDialog sf = new SaveFileDialog())
+            {
+                sf.Title = "Сохранить файл как...";
+                sf.Filter = "*.txt|*.txt;";
+                sf.FileName = "Текст";
+                sf.DefaultExt = ".txt";
+
+                if (sf.ShowDialog() == DialogResult.OK)
+                {
+                    path = sf.FileName;
+                }
+                else 
+                {
+                    return;
+                }
+            }
+
+            using (StreamWriter f = new StreamWriter(path))
+            {
+                for(int i = 0; i < Graph.Series.Count; i++)
+                {
+                    f.Write(Graph.Series[i].LegendText + "\n");      
+                    for(int j = 0; j < Graph.Series[i].Points.Count; j++)
+                    {
+                        string info = Graph.Series[i].Points[j].XValue.ToString() + " " + Graph.Series[i].Points[j].YValues[0].ToString();
+                        f.WriteLine(info);
+                    }
+                    f.WriteLine("");
+                }
+            }
+
+            MessageBox.Show("Данные были сохранены", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+        }
     }
 }
