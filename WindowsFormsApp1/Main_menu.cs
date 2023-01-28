@@ -242,10 +242,13 @@ namespace WindowsFormsApp1
                 SerialPort.BaudRate = speed;
                 try
                 {
+                    graphic_menu.Clear_Graphic();
                     graphic_menu.is_drawing = true;
 
                     Parsing_data_thread = new Thread(() => Parsing_data(state_lbl, SerialPort));
                     Parsing_data_thread.IsBackground = true;
+                    Parsing_data_thread.Priority = ThreadPriority.Highest;
+
                     Parsing_data_thread.Start();
 
                     SerialPort.Open();
@@ -256,7 +259,11 @@ namespace WindowsFormsApp1
 
                     Reactor_reading_thread = new Thread(() => Reading_Reactor_Port(SerialPort));
                     Reactor_reading_thread.IsBackground = true;
+                    Reactor_reading_thread.Priority = ThreadPriority.Highest;
                     Reactor_reading_thread.Start();
+
+
+                    tem_lbl.Text = System.Diagnostics.Process.GetCurrentProcess().Threads.Count.ToString();
                 }
                 catch (UnauthorizedAccessException)
                 {
@@ -283,7 +290,7 @@ namespace WindowsFormsApp1
         }
 
         private void stop_btn_Click(object sender, EventArgs e)
-        {
+        { /*
             if (is_reactor_working)
             {
                 if (!is_IR_working) { 
@@ -301,89 +308,110 @@ namespace WindowsFormsApp1
 
                 //anod_move_lbl.Text = "Направление движение анода: ";
             }
+            */
+            Stop_reactor(state_lbl, SerialPort, false);
         }
 
         
         private static void Reading_Reactor_Port(SerialPort serialPort)
         {
             //TODO: доделать приём данных
-            while (is_reactor_working) 
+            try
             {
-                try
+                while (is_reactor_working)
                 {
-                    string data = serialPort.ReadLine();
-                    data += " " + stopwatch.ElapsedMilliseconds.ToString(); 
-                    dataQueue.Enqueue(data);
+                    try
+                    {
+                        string data = serialPort.ReadLine();
+                        data += " " + stopwatch.ElapsedMilliseconds.ToString();
+                        dataQueue.Enqueue(data);
+                    }
+                    catch { }
                 }
-                catch { }
+            }
+            catch (ThreadInterruptedException e)
+            {
+                int k = 0;
             }
         }
 
         private static void Parsing_data(Label state_lbl, SerialPort Reactor_port)
         {
-            string temp; 
-            while (is_reactor_working)
+            string temp;
+            try
             {
-                if (dataQueue.TryDequeue(out temp))
+                while (is_reactor_working)
                 {
-                    //try
-                    //{
-                    string[] data = temp.Split(' ');
-                    data[0] = data[0].Replace("\r", "");
-
-                    string[] reactor_data = data[0].Split(';');
-
-                    long time = Convert.ToInt64(data[data.Length - 1]);
-
-                    foreach (string sub_data in reactor_data)
+                    if (dataQueue.TryDequeue(out temp))
                     {
-                        if (sub_data.Contains('='))
+                        //try
+                        //{
+                        string[] data = temp.Split(' ');
+                        data[0] = data[0].Replace("\r", "");
+
+                        string[] reactor_data = data[0].Split(';');
+
+                        long time = Convert.ToInt64(data[data.Length - 1]);
+
+                        foreach (string sub_data in reactor_data)
                         {
-                            string[] parametr = sub_data.Split('=');
-
-                            double value;
-                            parametr[1] = parametr[1].Replace('.', ',');
-
-                            switch (parametr[0])
+                            if (sub_data.Contains('='))
                             {
-                                case "tok":
-                                    value = (Convert.ToDouble(parametr[1]) - 2.20) / koef;
-                                    graphic_menu.update_tok(time, value);
-                                    break;
-                                case "aver_tok":
-                                    value = (Convert.ToDouble(parametr[1]) - 2.20) / koef;
-                                    graphic_menu.update_aver_tok(time, value);
-                                    break;
-                                case "step":
-                                    if (parametr[1] == "1")
-                                        step += 1;
-                                    else if (parametr[1] == "-1")
-                                        step -= 1;
-                                    graphic_menu.update_step(time, step);
-                                    break;
-                            }
-                        }
-                        else if (data[0] == "end") {
-                            Stop_reactor(state_lbl, Reactor_port);
-                            break;
-                        }
+                                string[] parametr = sub_data.Split('=');
 
+                                double value;
+                                parametr[1] = parametr[1].Replace('.', ',');
+
+                                switch (parametr[0])
+                                {
+                                    case "tok":
+                                        value = (Convert.ToDouble(parametr[1]) - 2.20) / koef;
+                                        graphic_menu.update_tok(time, value);
+                                        break;
+                                    case "aver_tok":
+                                        value = (Convert.ToDouble(parametr[1]) - 2.20) / koef;
+                                        graphic_menu.update_aver_tok(time, value);
+                                        break;
+                                    case "step":
+                                        if (parametr[1] == "1")
+                                            step += 1;
+                                        else if (parametr[1] == "-1")
+                                            step -= 1;
+                                        graphic_menu.update_step(time, step);
+                                        break;
+                                }
+                            }
+                            else if (data[0] == "end")
+                            {
+                                Stop_reactor(state_lbl, Reactor_port, true);
+                                break;
+                            }
+
+                        }
                     }
                 }
             }
+            catch (ThreadInterruptedException e)
+            {
+                int k = 0;
+
+            }
+            catch { }
         }
 
-        static void Stop_reactor(Label state_lbl, SerialPort Reactor_port)
+        static void Stop_reactor(Label state_lbl, SerialPort Reactor_port, bool ShowMessageStop)
         {
             if (!is_IR_working)
             {
                 graphic_menu.is_drawing = false;
                 stop_stopwatch();
             }
+
             state_lbl.Invoke((MethodInvoker)delegate {
                 state_lbl.Text = "Не работает";
                 state_lbl.ForeColor = Color.Red;
             });
+
             while (Reactor_port.IsOpen)
             {
                 try
@@ -394,6 +422,10 @@ namespace WindowsFormsApp1
             }
             is_reactor_working = false;
 
+            if (ShowMessageStop)
+            {
+                MessageBox.Show("Синтез закончен", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         private void debug_menu_btn_Click(object sender, EventArgs e)
@@ -492,30 +524,36 @@ namespace WindowsFormsApp1
 
         private static void IR_reading(SerialPort IR_Serial_Port, int interval)
         {
-            while (is_IR_working)
-            {
-                Thread.Sleep(interval);
-                string inf;
-                //Wait = true;
-                //SerialPort IR_Serial_Port = (SerialPort)port;
-                if (IR_Serial_Port.IsOpen)
+            try {
+                while (is_IR_working)
                 {
-                    do
+                    Thread.Sleep(interval);
+                    string inf;
+                    //Wait = true;
+                    //SerialPort IR_Serial_Port = (SerialPort)port;
+                    if (IR_Serial_Port.IsOpen)
                     {
-                        IR_Serial_Port.Write(Data.read_command(), 0, 3);
-                        inf = IR_Serial_Port.ReadExisting();
-                        inf = Data.is_IR_value_valid(inf);
-                    }
-                    while (inf == "-1");
-                    if (inf != "")
-                    {
-                        int temp = Convert.ToInt32(inf);
-                        long time = stopwatch.ElapsedMilliseconds;
+                        do
+                        {
+                            IR_Serial_Port.Write(Data.read_command(), 0, 3);
+                            inf = IR_Serial_Port.ReadExisting();
+                            inf = Data.is_IR_value_valid(inf);
+                        }
+                        while (inf == "-1");
+                        if (inf != "")
+                        {
+                            int temp = Convert.ToInt32(inf);
+                            long time = stopwatch.ElapsedMilliseconds;
 
-                        graphic_menu.update_temperature(time, temp);
+                            graphic_menu.update_temperature(time, temp);
+                        }
                     }
+                    //Wait = false;
                 }
-                //Wait = false;
+            }
+            catch (ThreadInterruptedException e)
+            {
+                int k = 0;
             }
         }
 
@@ -555,9 +593,10 @@ namespace WindowsFormsApp1
 
                 IR_button.Text = "Остановить измерения";
 
-                int time = Convert.ToInt32(Interval_IR_counter.Value) * 1000;
+                int time = Convert.ToInt32(Interval_IR_counter.Value) * 200;
                 IR_reading_thread = new Thread(() => IR_reading(IR_Serial_Port, time));
                 IR_reading_thread.IsBackground = true;
+                IR_reading_thread.Priority = ThreadPriority.Highest;
                 IR_reading_thread.Start();
             }
             else if (is_IR_working && IR_port != null)

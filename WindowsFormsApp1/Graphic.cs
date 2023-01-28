@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Xml.Linq;
+using System.Xml.Serialization;
 using WindowsFormsApp1;
 
 using Excel = Microsoft.Office.Interop.Excel;
@@ -30,6 +31,7 @@ namespace Reactor_Interface
         {
             if (Graph != null && is_drawing && IsHandleCreated)
             {
+                Graph.BeginInvoke((MethodInvoker)(() => this.Graph.ChartAreas["tok_area"].AxisX.Minimum = this.Graph.ChartAreas["tok_area"].AxisX.Minimum <= 0 ? time : 0));
                 Graph.BeginInvoke((MethodInvoker)(() => this.Graph.Series["aver_tok"].Points.AddXY(time, aver_tok)));
             }
         }
@@ -38,6 +40,7 @@ namespace Reactor_Interface
         {
             if (Graph != null && is_drawing && IsHandleCreated)
             {
+                Graph.BeginInvoke((MethodInvoker)(() => this.Graph.ChartAreas["tok_area"].AxisX.Minimum = this.Graph.ChartAreas["tok_area"].AxisX.Minimum <= 0 ? time : 0));
                 Graph.BeginInvoke((MethodInvoker)(() => this.Graph.Series["tok"].Points.AddXY(time, tok)));
             }
         }
@@ -46,6 +49,7 @@ namespace Reactor_Interface
         {
             if (Graph != null && is_drawing)
             {
+                Graph.BeginInvoke((MethodInvoker)(() => this.Graph.ChartAreas["temperature_area"].AxisX.Minimum = this.Graph.ChartAreas["temperature_area"].AxisX.Minimum <= 0 ? time : 0));
                 Graph.BeginInvoke((MethodInvoker)(() => Graph.Series["temperature"].Points.AddXY(time, temp)));
             }
         }
@@ -87,17 +91,21 @@ namespace Reactor_Interface
 
         private void очиститьГрафикToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!is_drawing) {
+            Clear_Graphic();
+        }
+
+        public void Clear_Graphic()
+        {
+            if (!is_drawing)
+            {
                 foreach (var series in Graph.Series)
                 {
                     series.Points.Clear();
                 }
+                Graph.Series["step"].Points.Add(new DataPoint { IsEmpty = true });
+                Graph.Series["tok"].Points.Add(new DataPoint { IsEmpty = true });
             }
-            Graph.Series["step"].Points.Add(new DataPoint { IsEmpty = true });
-            Graph.Series["tok"].Points.Add(new DataPoint { IsEmpty = true });
         }
-
-        
 
         private void какExcelТаблицуToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -118,11 +126,32 @@ namespace Reactor_Interface
                     return;
                 }
 
-                Exl.Save_Excel(path, Graph);
-            }
+                if (check_if_file_is_open(path))
+                {
+                    MessageBox.Show("Данный файл уже открыт", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
+                Exl.Save_Excel(path, Graph);
+                MessageBox.Show("Excel файл сохранен", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
+        private bool check_if_file_is_open(string file)
+        {
+            try
+            {
+                using (FileStream fileStream = File.Open(file, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+                {
+                    if (fileStream != null) fileStream.Close(); 
+                }
+                return false;
+            }
+            catch (IOException ex) 
+            { 
+                return true; 
+            }
+        }
 
         private void menubtn_Click(object sender, EventArgs e)
         {
