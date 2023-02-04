@@ -30,13 +30,6 @@ namespace WindowsFormsApp1
 {
     public partial class Main_menu : Form
     {
-        Size time_bar_max_size;
-
-        string port;
-        int speed;
-
-        string IR_port;
-
         static int step = 0;
 
         static bool is_reactor_working = false;
@@ -48,12 +41,19 @@ namespace WindowsFormsApp1
 
         static Graphic_menu graphic_menu = new Graphic_menu();
 
+        static ConcurrentQueue<string> dataQueue = new ConcurrentQueue<string>();
+        static bool Wait = false;
+
         Thread Reactor_reading_thread;
         Thread Parsing_data_thread;
         Thread IR_reading_thread;
 
-        static ConcurrentQueue<string> dataQueue = new ConcurrentQueue<string>();
-        static bool Wait = false;
+        Size time_bar_max_size;
+
+        string port;
+        int speed;
+
+        string IR_port;
         public Main_menu()
         {
             InitializeComponent();
@@ -210,15 +210,20 @@ namespace WindowsFormsApp1
             string param = "1";
 
             param += time_bar.Value.ToString() + "n";
+            Data.enter_time_synth(Convert.ToString(time_bar.Value * 1000));
 
             param += Data.get_tok_mode(tok_mode_list.Text);
+            Data.enter_tok(tok_mode_list.Text.Substring(0, tok_mode_list.Text.Length - 2));
 
             if (duga_rdbtn.Checked)
             {
                 param += "0es";
+                Data.enter_mode("Дуга");
+                Data.enter_configuration("Тигель в тигле");
             }
             else
             {
+                Data.enter_mode("Импульс");
                 //param += "1es";
             }
 
@@ -229,6 +234,9 @@ namespace WindowsFormsApp1
         {
             if (!is_reactor_working && port != null)
             {
+                Data.clear_datas();
+
+                Data.enter_break("False");
                 dataQueue = new ConcurrentQueue<string>(); //очищаем очередь
                 start_stopwatch();
 
@@ -309,6 +317,9 @@ namespace WindowsFormsApp1
                 //anod_move_lbl.Text = "Направление движение анода: ";
             }
             */
+            SerialPort.Write("d");
+            SerialPort.ReadLine();
+            Data.enter_break("True");
             Stop_reactor(state_lbl, SerialPort, false);
         }
 
@@ -327,6 +338,10 @@ namespace WindowsFormsApp1
                         dataQueue.Enqueue(data);
                     }
                     catch { }
+                    if (!serialPort.IsOpen)
+                    {
+                        int lo = 0;
+                    }
                 }
             }
             catch (ThreadInterruptedException e)
@@ -385,6 +400,10 @@ namespace WindowsFormsApp1
                             {
                                 Stop_reactor(state_lbl, Reactor_port, true);
                                 break;
+                            }
+                            else if (data[0] == "break")
+                            {
+                                Data.enter_break("True");
                             }
 
                         }
@@ -548,6 +567,10 @@ namespace WindowsFormsApp1
                             graphic_menu.update_temperature(time, temp);
                         }
                     }
+                    else
+                    {
+                        int j1 = 0;
+                    }
                     //Wait = false;
                 }
             }
@@ -593,7 +616,7 @@ namespace WindowsFormsApp1
 
                 IR_button.Text = "Остановить измерения";
 
-                int time = Convert.ToInt32(Interval_IR_counter.Value) * 200;
+                int time = Convert.ToInt32(Interval_IR_counter.Value) * 1000;
                 IR_reading_thread = new Thread(() => IR_reading(IR_Serial_Port, time));
                 IR_reading_thread.IsBackground = true;
                 IR_reading_thread.Priority = ThreadPriority.Highest;
@@ -636,6 +659,11 @@ namespace WindowsFormsApp1
             {
                 stopwatch.Stop();
             }
+        }
+
+        private void Main_menu_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

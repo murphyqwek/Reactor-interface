@@ -484,10 +484,10 @@
             // 
             // tok_mode_list
             // 
-            this.tok_mode_list.Items.Add("50 А");
-            this.tok_mode_list.Items.Add("100 А");
-            this.tok_mode_list.Items.Add("150 А");
             this.tok_mode_list.Items.Add("200 А");
+            this.tok_mode_list.Items.Add("150 А");
+            this.tok_mode_list.Items.Add("100 А");
+            this.tok_mode_list.Items.Add("50 А");
             this.tok_mode_list.Location = new System.Drawing.Point(107, 45);
             this.tok_mode_list.Name = "tok_mode_list";
             this.tok_mode_list.ReadOnly = true;
@@ -507,7 +507,7 @@
             this.info_box.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.info_box.Name = "info_box";
             this.info_box.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.info_box.Size = new System.Drawing.Size(580, 235);
+            this.info_box.Size = new System.Drawing.Size(580, 144);
             this.info_box.TabIndex = 16;
             this.info_box.TabStop = false;
             this.info_box.Text = "Информация о реакторе";
@@ -521,6 +521,7 @@
             this.tem_lbl.Size = new System.Drawing.Size(227, 37);
             this.tem_lbl.TabIndex = 3;
             this.tem_lbl.Text = "Температура: ";
+            this.tem_lbl.Visible = false;
             // 
             // state_lbl
             // 
@@ -557,7 +558,7 @@
             this.IR_box.Controls.Add(this.Interval_IR_counter);
             this.IR_box.Controls.Add(this.IR_button);
             this.IR_box.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F);
-            this.IR_box.Location = new System.Drawing.Point(1217, 309);
+            this.IR_box.Location = new System.Drawing.Point(1201, 218);
             this.IR_box.Name = "IR_box";
             this.IR_box.Size = new System.Drawing.Size(435, 100);
             this.IR_box.TabIndex = 17;
@@ -620,6 +621,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Интерфейс реактора";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_menu_FormClosing);
+            this.Load += new System.EventHandler(this.Main_menu_Load);
             this.mode_settings_box.ResumeLayout(false);
             this.mode_settings_box.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cold_bar)).EndInit();

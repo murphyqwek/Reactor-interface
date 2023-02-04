@@ -13,7 +13,7 @@ using System.Windows.Forms.DataVisualization.Charting;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using WindowsFormsApp1;
-
+using WindowsFormsApp1.Classes;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Reactor_Interface
@@ -31,7 +31,7 @@ namespace Reactor_Interface
         {
             if (Graph != null && is_drawing && IsHandleCreated)
             {
-                Graph.BeginInvoke((MethodInvoker)(() => this.Graph.ChartAreas["tok_area"].AxisX.Minimum = this.Graph.ChartAreas["tok_area"].AxisX.Minimum <= 0 ? time : 0));
+                //Graph.BeginInvoke((MethodInvoker)(() => this.Graph.ChartAreas["tok_area"].AxisX.Minimum = this.Graph.ChartAreas["tok_area"].AxisX.Minimum <= 0 ? time : 0));
                 Graph.BeginInvoke((MethodInvoker)(() => this.Graph.Series["aver_tok"].Points.AddXY(time, aver_tok)));
             }
         }
@@ -40,7 +40,7 @@ namespace Reactor_Interface
         {
             if (Graph != null && is_drawing && IsHandleCreated)
             {
-                Graph.BeginInvoke((MethodInvoker)(() => this.Graph.ChartAreas["tok_area"].AxisX.Minimum = this.Graph.ChartAreas["tok_area"].AxisX.Minimum <= 0 ? time : 0));
+                //Graph.BeginInvoke((MethodInvoker)(() => this.Graph.ChartAreas["tok_area"].AxisX.Minimum = this.Graph.ChartAreas["tok_area"].AxisX.Minimum <= 0 ? time : 0));
                 Graph.BeginInvoke((MethodInvoker)(() => this.Graph.Series["tok"].Points.AddXY(time, tok)));
             }
         }
@@ -49,7 +49,7 @@ namespace Reactor_Interface
         {
             if (Graph != null && is_drawing)
             {
-                Graph.BeginInvoke((MethodInvoker)(() => this.Graph.ChartAreas["temperature_area"].AxisX.Minimum = this.Graph.ChartAreas["temperature_area"].AxisX.Minimum <= 0 ? time : 0));
+                //Graph.BeginInvoke((MethodInvoker)(() => this.Graph.ChartAreas["temperature_area"].AxisX.Minimum = this.Graph.ChartAreas["temperature_area"].AxisX.Minimum <= 0 ? time : 0));
                 Graph.BeginInvoke((MethodInvoker)(() => Graph.Series["temperature"].Points.AddXY(time, temp)));
             }
         }
@@ -79,6 +79,7 @@ namespace Reactor_Interface
                 if (sf.ShowDialog() == DialogResult.OK)
                 {
                     Graph.SaveImage(sf.FileName, ChartImageFormat.Png);
+                    MessageBox.Show("Картинка сохранена", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }
@@ -92,6 +93,7 @@ namespace Reactor_Interface
         private void очиститьГрафикToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Clear_Graphic();
+            Data.clear_datas();
         }
 
         public void Clear_Graphic()
@@ -141,7 +143,7 @@ namespace Reactor_Interface
         {
             try
             {
-                using (FileStream fileStream = File.Open(file, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+                using (FileStream fileStream = File.Open(file, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
                 {
                     if (fileStream != null) fileStream.Close(); 
                 }

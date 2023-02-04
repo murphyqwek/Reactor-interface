@@ -6,11 +6,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace WindowsFormsApp1.Classes
 {
     static class Data
     {
+        static string[] presset_data = new string[4];
+        /*
+         * 0 - Режим работы
+         * 1 - Конфигурация
+         * 2 - Ток
+         * 3 - Прерывание
+         */
+
+        static string[] mode_data = new string[4];
+        /*
+         * 0 - Время синтеза
+         * 1 - Время горения
+         * 2 - Время остывания
+         * 3 - Количество итераций
+         */
+
         //Инициализация обмен данных
         static private readonly byte[] atq =
         {
@@ -78,5 +95,91 @@ namespace WindowsFormsApp1.Classes
             }
         }
 
+        public static void enter_mode(string mode)
+        {
+            presset_data[0] = mode;
+        }
+
+        public static void enter_configuration(string conf)
+        {
+            presset_data[1] = conf;
+        }
+
+        public static void enter_tok(string tok)
+        {
+            presset_data[2] = tok;
+        }
+
+        public static void enter_break(string brk)
+        {
+            presset_data[3] = brk;
+        }
+
+        public static void enter_time_synth(string time)
+        {
+            mode_data[0] = time;
+        }
+
+        public static void enter_time_fire(string time)
+        {
+            mode_data[1] = time;
+        }
+
+        public static void enter_time_cold(string time)
+        {
+            mode_data[2] = time;
+        }
+
+        public static void enter_iter(string iter)
+        {
+            mode_data[3] = iter;
+        }
+
+        public static string get_mode()
+        {
+            return presset_data[0];
+        }
+
+        public static string get_configuration()
+        {
+            return presset_data[1];
+        }
+
+        public static string get_tok()
+        {
+            return presset_data[2];
+        }
+
+        public static string get_break()
+        {
+            return presset_data[3];
+        }
+
+        public static string get_time_synth()
+        {
+            return mode_data[0];
+        }
+
+        public static string get_time_fire()
+        {
+            return mode_data[1];
+        }
+
+        public static string get_time_cold()
+        {
+            return mode_data[2];
+        }
+
+        public static string get_iter()
+        {
+            return mode_data[3];
+        }
+
+
+        public static void clear_datas()
+        {
+            presset_data = new string[4];
+            mode_data = new string[4];
+        }
     }
 }
