@@ -67,20 +67,6 @@ namespace Reactor_Interface.Classes
 
                 start_cell += 3;
             }
-            /*
-            put_with_values(xlWorkSheet, Graph.Series["temperature"].Points, 1);
-            Excel.Chart chartPage = create_chart(xlWorkSheet);
-            var data = xlWorkSheet.get_Range("A25", "B27");
-            chartPage.SetSourceData(data, XlRowCol.xlColumns);
-            set_data_to_chart(xlWorkSheet, chartPage, stolbec_dannih, 1, stolbec_dannih + 2, 2);
-            //chartPage.SeriesCollection(0).XValues = (Excel.Range)xlWorkSheet.Range[xlWorkSheet.Cells[stolbec_dannih+1, 1], xlWorkSheet.Cells[stolbec_dannih+2, 1]].Cells;
-            //chartPage.SeriesCollection(0).Values = (Excel.Range)xlWorkSheet.Range[xlWorkSheet.Cells[stolbec_dannih+1, 2], xlWorkSheet.Cells[stolbec_dannih+2, 2]].Cells;
-            */
-
-            //chartRange = xlWorkSheet.get_Range("A25", "B27");//update the range here
-            //chartRange = xlWorkSheet.get_Range();
-
-            //TODO: Рассмотреть случай, когда таблица уже открыта
             xlWorkBook.SaveAs(path, Excel.XlFileFormat.xlAddIn, misValue, misValue, misValue, misValue, Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
             xlWorkBook.Close(true, misValue, misValue);
             xlApp.Quit();
@@ -114,10 +100,7 @@ namespace Reactor_Interface.Classes
             {
                 values[j, 0] = Points[j].XValue;
                 values[j, 1] = Points[j].YValues[0];
-                //xlWorkSheet.Cells[stolbec_dannih + j + 1, start_cell] = Points[j].XValue;
-                //xlWorkSheet.Cells[stolbec_dannih + j + 1, start_cell + 1] = Points[j].YValues[0];
             }
-            //time_range.set_Value(XlRangeValueDataType.xlRangeValueDefault, time_values);
 
             range.set_Value(XlRangeValueDataType.xlRangeValueDefault, values);
             Marshal.ReleaseComObject(range);
@@ -127,7 +110,6 @@ namespace Reactor_Interface.Classes
         {
             y1 += 1; //Чтобы Excel не считывал название данных за данные 
             Excel.Series s1 = (Excel.Series)chart.SeriesCollection(1);
-            //Excel.Series s2 = (Excel.Series)chart.SeriesCollection(2);
 
             Excel.Range c1 = xlWorkSheet.Cells[y1, x1];
             Excel.Range c2 = xlWorkSheet.Cells[y2, x1];
@@ -137,16 +119,9 @@ namespace Reactor_Interface.Classes
             c2 = xlWorkSheet.Cells[y2, x2];
             s1.Values = xlWorkSheet.get_Range(c1, c2);
             Excel.Axis horizontal = chart.Axes(Excel.XlAxisType.xlValue, XlAxisGroup.xlPrimary);
-            //Excel.Axis vertical = chart.Axes(Excel.XlAxisType.xlCategory, XlAxisGroup.xlSecondary);
 
             horizontal.HasTitle = true;
             horizontal.AxisTitle.Text = name_of_axis;
-            /*
-            vertical.HasTitle = true;
-            vertical.AxisTitle.Text = "Время (мс)";*/
-            //s1.Name = s2.Name;
-
-            //s2.Delete();
         }
 
         static Excel.Chart create_chart(Excel.Worksheet xlWorkSheet, int x, int y)
@@ -156,7 +131,6 @@ namespace Reactor_Interface.Classes
             Excel.Chart chartPage = myChart.Chart;
 
             chartPage.ChartType = XlChartType.xlXYScatterLinesNoMarkers;
-            //chartPage.ChartArea.
             return chartPage;
         }
 

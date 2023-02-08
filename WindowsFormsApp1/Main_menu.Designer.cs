@@ -71,6 +71,8 @@
             this.IR_box = new System.Windows.Forms.GroupBox();
             this.Interval_IR_counter = new System.Windows.Forms.NumericUpDown();
             this.IR_button = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.mode_settings_box.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cold_bar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fire_bar)).BeginInit();
@@ -409,8 +411,10 @@
             this.left_btn.Name = "left_btn";
             this.left_btn.Size = new System.Drawing.Size(182, 112);
             this.left_btn.TabIndex = 8;
+            this.left_btn.Tag = "left";
             this.left_btn.Text = "<";
             this.left_btn.UseVisualStyleBackColor = false;
+            this.left_btn.Click += new System.EventHandler(this.arrow_btn_Click);
             // 
             // down_btn
             // 
@@ -423,8 +427,10 @@
             this.down_btn.Name = "down_btn";
             this.down_btn.Size = new System.Drawing.Size(182, 112);
             this.down_btn.TabIndex = 12;
+            this.down_btn.Tag = "back";
             this.down_btn.Text = "˅";
             this.down_btn.UseVisualStyleBackColor = false;
+            this.down_btn.Click += new System.EventHandler(this.arrow_btn_Click);
             // 
             // right_btn
             // 
@@ -437,8 +443,10 @@
             this.right_btn.Name = "right_btn";
             this.right_btn.Size = new System.Drawing.Size(182, 112);
             this.right_btn.TabIndex = 13;
+            this.right_btn.Tag = "right";
             this.right_btn.Text = ">";
             this.right_btn.UseVisualStyleBackColor = false;
+            this.right_btn.Click += new System.EventHandler(this.arrow_btn_Click);
             // 
             // up_btn
             // 
@@ -451,8 +459,10 @@
             this.up_btn.Name = "up_btn";
             this.up_btn.Size = new System.Drawing.Size(182, 112);
             this.up_btn.TabIndex = 14;
+            this.up_btn.Tag = "forward";
             this.up_btn.Text = "˄";
             this.up_btn.UseVisualStyleBackColor = false;
+            this.up_btn.Click += new System.EventHandler(this.arrow_btn_Click);
             // 
             // reactor_box
             // 
@@ -598,11 +608,45 @@
             this.IR_button.UseVisualStyleBackColor = true;
             this.IR_button.Click += new System.EventHandler(this.IR_button_Click);
             // 
+            // button1
+            // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.BackColor = System.Drawing.Color.Silver;
+            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button1.Location = new System.Drawing.Point(1485, 423);
+            this.button1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(82, 55);
+            this.button1.TabIndex = 18;
+            this.button1.Tag = "up";
+            this.button1.Text = "U";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.arrow_btn_Click);
+            // 
+            // button2
+            // 
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button2.BackColor = System.Drawing.Color.Silver;
+            this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button2.Location = new System.Drawing.Point(1575, 423);
+            this.button2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(83, 55);
+            this.button2.TabIndex = 19;
+            this.button2.Tag = "forward";
+            this.button2.Text = "D";
+            this.button2.UseVisualStyleBackColor = false;
+            this.button2.Click += new System.EventHandler(this.arrow_btn_Click);
+            // 
             // Main_menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1664, 771);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.IR_box);
             this.Controls.Add(this.info_box);
             this.Controls.Add(this.reactor_box);
@@ -614,12 +658,14 @@
             this.Controls.Add(this.stop_btn);
             this.Controls.Add(this.menu);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MainMenuStrip = this.menu;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Main_menu";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Интерфейс реактора";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_menu_FormClosing);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Main_menu_KeyDown);
             this.mode_settings_box.ResumeLayout(false);
             this.mode_settings_box.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cold_bar)).EndInit();
@@ -686,6 +732,8 @@
         private System.Windows.Forms.Label tem_lbl;
         private System.Windows.Forms.DomainUpDown tok_mode_list;
         private System.Windows.Forms.GroupBox tok_mode_box;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
     }
 }
 

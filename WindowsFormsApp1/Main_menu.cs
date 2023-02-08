@@ -82,7 +82,8 @@ namespace WindowsFormsApp1
         private void duga_rdbtn_CheckedChanged(object sender, EventArgs e)
         {
             //730; 438
-            if (duga_rdbtn.Checked){
+            if (duga_rdbtn.Checked)
+            {
                 time_bar.Size = this.time_bar_max_size;
                 time_syntes_lable.Text = "Время синтеза: 5 с.";
                 time_bar.Value = time_bar.Minimum;
@@ -93,16 +94,17 @@ namespace WindowsFormsApp1
 
                 iteration_label.Visible = false;
                 iteration_counter.Visible = false;
-                
+
             }
         }
 
         private void impulse_rdbtn_CheckedChanged(object sender, EventArgs e)
         {
-            if (impulse_rdbtn.Checked){
+            if (impulse_rdbtn.Checked)
+            {
                 time_bar.Size = new Size(259, 45);
                 time_syntes_lable.Text = "Время выдержки: 5 с.";
-                time_bar.Value = time_bar.Minimum; 
+                time_bar.Value = time_bar.Minimum;
                 time_bar.Maximum = 20;
 
                 reactor_box.Size = new Size(780, 537);
@@ -138,7 +140,7 @@ namespace WindowsFormsApp1
 
             speed_menu_btn.Text = "Скорость: " + speed;
 
-            foreach(string port in Port.get_ports())
+            foreach (string port in Port.get_ports())
             {
                 port_menu_btn.DropDownItems.Add(port);
                 IR_port_menu_btn.DropDownItems.Add(port);
@@ -154,7 +156,7 @@ namespace WindowsFormsApp1
 
         private void port_menu_btn_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (e.ClickedItem.Text != "Портов не найдено" && e.ClickedItem.Text != IR_port && !is_reactor_working )
+            if (e.ClickedItem.Text != "Портов не найдено" && e.ClickedItem.Text != IR_port && !is_reactor_working)
             {
                 port = e.ClickedItem.Text;
                 Interface_settings.save_port(port);
@@ -183,7 +185,7 @@ namespace WindowsFormsApp1
             {
                 MessageBox.Show("Нельзя менять порт во время работы термометра");
             }
-            else if(e.ClickedItem.Text == port)
+            else if (e.ClickedItem.Text == port)
             {
                 IR_port = e.ClickedItem.Text;
                 port = "";
@@ -312,7 +314,7 @@ namespace WindowsFormsApp1
             Stop_reactor(state_lbl, SerialPort, false);
         }
 
-        
+
         private static void Reading_Reactor_Port(SerialPort serialPort)
         {
             //TODO: доделать приём данных
@@ -407,7 +409,8 @@ namespace WindowsFormsApp1
                 stop_stopwatch();
             }
 
-            state_lbl.Invoke((MethodInvoker)delegate {
+            state_lbl.Invoke((MethodInvoker)delegate
+            {
                 state_lbl.Text = "Не работает";
                 state_lbl.ForeColor = Color.Red;
             });
@@ -476,7 +479,7 @@ namespace WindowsFormsApp1
         }
 
         private void ShowError(string text)
-        { 
+        {
             if (!graphic_menu.IsDisposed) graphic_menu.setChartVisible(false);
             MessageBox.Show(
                     text,
@@ -488,7 +491,7 @@ namespace WindowsFormsApp1
 
         private bool isFormOpen(string name)
         {
-            foreach(Form form in Application.OpenForms)
+            foreach (Form form in Application.OpenForms)
             {
                 if (form.Name == name) return true;
             }
@@ -499,7 +502,7 @@ namespace WindowsFormsApp1
         {
             if (port != null && !Port.get_ports().Contains(port) && !is_reactor_working) port = null;
 
-            if (is_reactor_working && !SerialPort.IsOpen )
+            if (is_reactor_working && !SerialPort.IsOpen)
             {
                 is_reactor_working = false;
                 port = null;
@@ -507,7 +510,7 @@ namespace WindowsFormsApp1
                 state_lbl.ForeColor = Color.Red;
                 state_lbl.Text = "Не работает";
 
-                ShowError("Порт реактора отсоединился"); 
+                ShowError("Порт реактора отсоединился");
                 //anod_move_lbl.Text = "Направление движение анода: ";
             }
         }
@@ -524,7 +527,8 @@ namespace WindowsFormsApp1
 
         private static void IR_reading(SerialPort IR_Serial_Port, int interval)
         {
-            try {
+            try
+            {
                 while (is_IR_working)
                 {
                     Thread.Sleep(interval);
@@ -577,7 +581,7 @@ namespace WindowsFormsApp1
         }
 
         private void IR_button_Click(object sender, EventArgs e)
-        { 
+        {
             if (!is_IR_working && IR_port != null)
             {
                 graphic_menu.is_drawing = true;
@@ -635,6 +639,51 @@ namespace WindowsFormsApp1
             if (!is_IR_working && !is_reactor_working)
             {
                 stopwatch.Stop();
+            }
+        }
+
+        private void arrow_btn_Click(object sender, EventArgs e)
+        {
+            if (!SerialPort.IsOpen) { return; }
+
+            Button btn = (Button)sender;
+            SerialPort.WriteLine(btn.Tag.ToString());
+        }
+
+        private void Main_menu_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (SerialPort.IsOpen) { return; }
+
+            switch (e.KeyCode)
+            {
+                case Keys.Up:
+                case Keys.W:
+                    SerialPort.Write("forward");
+                    break;
+
+                case Keys.Down:
+                case Keys.S:
+                    SerialPort.Write("back");
+                    break;
+
+                case Keys.Right:
+                case Keys.D:
+                    SerialPort.Write("right");
+                    break;
+
+                case Keys.Left:
+                case Keys.A:
+                    SerialPort.Write("left");
+                    break;
+                case Keys.LShiftKey:
+                case Keys.U:
+                    SerialPort.Write("up");
+                    break;
+
+                case Keys.LControlKey:
+                case Keys.J:
+                    SerialPort.Write("down");
+                    break;
             }
         }
     }
