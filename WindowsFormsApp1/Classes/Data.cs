@@ -29,6 +29,26 @@ namespace WindowsFormsApp1.Classes
             65, 84, 85
         };
 
+        static private Dictionary<string, string> anod_commands = new Dictionary<string, string>
+        {
+            { "W", "forward" },
+            { "A", "left" },
+            { "S", "back" },
+            { "D", "right" },
+            { "U", "up" },
+            { "J", "down" },
+        };
+
+        static private Dictionary<Keys, string> keys = new Dictionary<Keys, string>
+        {
+            { Keys.W, "W" },
+            { Keys.A, "A" },
+            { Keys.S, "S" },
+            { Keys.D, "D" },
+            { Keys.U, "U" },
+            { Keys.J, "J" },
+        };
+
         static public byte[] init_command()
         {
             return atq;
@@ -58,9 +78,7 @@ namespace WindowsFormsApp1.Classes
             else if (data == "") return "";
             else return "-1";
         }
-        //time_left=2;tok=2.94\r 25790
-        //
-        //2.72
+
         public static string get_tok_mode(string mode)
         {
             switch (mode)
@@ -78,5 +96,16 @@ namespace WindowsFormsApp1.Classes
             }
         }
 
+        static public string get_anod_command(string pressed_key)
+        {
+            string command;
+            return anod_commands.TryGetValue(pressed_key, out command) ? command : "not_exist";
+        }
+
+        static public string get_key(Keys key_code)
+        {
+            string key;
+            return keys.TryGetValue(key_code, out key) ? key : "-";
+        }
     }
 }

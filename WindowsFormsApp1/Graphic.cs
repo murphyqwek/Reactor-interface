@@ -147,7 +147,7 @@ namespace Reactor_Interface
                 }
                 return false;
             }
-            catch (IOException ex) 
+            catch (IOException) 
             { 
                 return true; 
             }

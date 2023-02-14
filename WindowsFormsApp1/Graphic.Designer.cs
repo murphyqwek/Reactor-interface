@@ -71,7 +71,7 @@
             this.temp_menu_btn});
             this.graphic_setting_toolbar.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.graphic_setting_toolbar.Name = "graphic_setting_toolbar";
-            this.graphic_setting_toolbar.Size = new System.Drawing.Size(244, 36);
+            this.graphic_setting_toolbar.Size = new System.Drawing.Size(244, 38);
             this.graphic_setting_toolbar.Text = "Настройки графика";
             // 
             // tok_menubtn
@@ -130,7 +130,7 @@
             this.save_as_txt_file_stipbtn});
             this.save_graphic_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.save_graphic_btn.Name = "save_graphic_btn";
-            this.save_graphic_btn.Size = new System.Drawing.Size(230, 36);
+            this.save_graphic_btn.Size = new System.Drawing.Size(230, 38);
             this.save_graphic_btn.Text = "Сохранить график";
             // 
             // какКартинкуToolStripMenuItem
@@ -161,7 +161,7 @@
             // 
             this.очиститьГрафикToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.очиститьГрафикToolStripMenuItem.Name = "очиститьГрафикToolStripMenuItem";
-            this.очиститьГрафикToolStripMenuItem.Size = new System.Drawing.Size(217, 36);
+            this.очиститьГрафикToolStripMenuItem.Size = new System.Drawing.Size(217, 38);
             this.очиститьГрафикToolStripMenuItem.Text = "Очистить график";
             this.очиститьГрафикToolStripMenuItem.Click += new System.EventHandler(this.очиститьГрафикToolStripMenuItem_Click);
             // 

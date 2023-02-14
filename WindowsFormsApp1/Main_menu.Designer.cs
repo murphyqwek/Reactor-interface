@@ -411,10 +411,11 @@
             this.left_btn.Name = "left_btn";
             this.left_btn.Size = new System.Drawing.Size(182, 112);
             this.left_btn.TabIndex = 8;
-            this.left_btn.Tag = "left";
+            this.left_btn.Tag = "A";
             this.left_btn.Text = "<";
             this.left_btn.UseVisualStyleBackColor = false;
-            this.left_btn.Click += new System.EventHandler(this.arrow_btn_Click);
+            this.left_btn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.arrow_btn_down);
+            this.left_btn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.arrow_btn_up);
             // 
             // down_btn
             // 
@@ -427,10 +428,11 @@
             this.down_btn.Name = "down_btn";
             this.down_btn.Size = new System.Drawing.Size(182, 112);
             this.down_btn.TabIndex = 12;
-            this.down_btn.Tag = "back";
+            this.down_btn.Tag = "S";
             this.down_btn.Text = "˅";
             this.down_btn.UseVisualStyleBackColor = false;
-            this.down_btn.Click += new System.EventHandler(this.arrow_btn_Click);
+            this.down_btn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.arrow_btn_down);
+            this.down_btn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.arrow_btn_up);
             // 
             // right_btn
             // 
@@ -443,10 +445,11 @@
             this.right_btn.Name = "right_btn";
             this.right_btn.Size = new System.Drawing.Size(182, 112);
             this.right_btn.TabIndex = 13;
-            this.right_btn.Tag = "right";
+            this.right_btn.Tag = "D";
             this.right_btn.Text = ">";
             this.right_btn.UseVisualStyleBackColor = false;
-            this.right_btn.Click += new System.EventHandler(this.arrow_btn_Click);
+            this.right_btn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.arrow_btn_down);
+            this.right_btn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.arrow_btn_up);
             // 
             // up_btn
             // 
@@ -459,10 +462,11 @@
             this.up_btn.Name = "up_btn";
             this.up_btn.Size = new System.Drawing.Size(182, 112);
             this.up_btn.TabIndex = 14;
-            this.up_btn.Tag = "forward";
+            this.up_btn.Tag = "W";
             this.up_btn.Text = "˄";
             this.up_btn.UseVisualStyleBackColor = false;
-            this.up_btn.Click += new System.EventHandler(this.arrow_btn_Click);
+            this.up_btn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.arrow_btn_down);
+            this.up_btn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.arrow_btn_up);
             // 
             // reactor_box
             // 
@@ -619,10 +623,11 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(82, 55);
             this.button1.TabIndex = 18;
-            this.button1.Tag = "up";
+            this.button1.Tag = "U";
             this.button1.Text = "U";
             this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.arrow_btn_Click);
+            this.button1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.arrow_btn_down);
+            this.button1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.arrow_btn_up);
             // 
             // button2
             // 
@@ -635,10 +640,11 @@
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(83, 55);
             this.button2.TabIndex = 19;
-            this.button2.Tag = "forward";
+            this.button2.Tag = "J";
             this.button2.Text = "D";
             this.button2.UseVisualStyleBackColor = false;
-            this.button2.Click += new System.EventHandler(this.arrow_btn_Click);
+            this.button2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.arrow_btn_down);
+            this.button2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.arrow_btn_up);
             // 
             // Main_menu
             // 
@@ -666,6 +672,7 @@
             this.Text = "Интерфейс реактора";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_menu_FormClosing);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Main_menu_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Main_menu_KeyUp);
             this.mode_settings_box.ResumeLayout(false);
             this.mode_settings_box.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cold_bar)).EndInit();

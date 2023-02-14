@@ -76,7 +76,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Data.cs" />
-    <Compile Include="Classes\Excel_EPP.cs" />
     <Compile Include="Classes\Exl.cs" />
     <Compile Include="Classes\Interface_settings.cs" />
     <Compile Include="Classes\Port.cs" />

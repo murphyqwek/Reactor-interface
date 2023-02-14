@@ -53,7 +53,9 @@ namespace WindowsFormsApp1
         Thread IR_reading_thread;
 
         static ConcurrentQueue<string> dataQueue = new ConcurrentQueue<string>();
-        static bool Wait = false;
+        //static bool Wait = false;
+
+        string pressed_button = " ";
         public Main_menu()
         {
             InitializeComponent();
@@ -263,9 +265,6 @@ namespace WindowsFormsApp1
                     Reactor_reading_thread.IsBackground = true;
                     Reactor_reading_thread.Priority = ThreadPriority.Highest;
                     Reactor_reading_thread.Start();
-
-
-                    tem_lbl.Text = System.Diagnostics.Process.GetCurrentProcess().Threads.Count.ToString();
                 }
                 catch (UnauthorizedAccessException)
                 {
@@ -331,9 +330,9 @@ namespace WindowsFormsApp1
                     catch { }
                 }
             }
-            catch (ThreadInterruptedException e)
+            catch (ThreadInterruptedException)
             {
-                int k = 0;
+                //int k = 0;
             }
         }
 
@@ -393,9 +392,9 @@ namespace WindowsFormsApp1
                     }
                 }
             }
-            catch (ThreadInterruptedException e)
+            catch (ThreadInterruptedException)
             {
-                int k = 0;
+                //int k = 0;
 
             }
             catch { }
@@ -555,9 +554,9 @@ namespace WindowsFormsApp1
                     //Wait = false;
                 }
             }
-            catch (ThreadInterruptedException e)
+            catch (ThreadInterruptedException)
             {
-                int k = 0;
+                //int k = 0;
             }
         }
 
@@ -642,49 +641,67 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void arrow_btn_Click(object sender, EventArgs e)
-        {
-            if (!SerialPort.IsOpen) { return; }
-
-            Button btn = (Button)sender;
-            SerialPort.WriteLine(btn.Tag.ToString());
-        }
-
         private void Main_menu_KeyDown(object sender, KeyEventArgs e)
         {
-            if (SerialPort.IsOpen) { return; }
+            string key = Data.get_key(e.KeyCode);
+            string command = Data.get_anod_command(key);
+            button_down_anod(command, key);
+        }
 
-            switch (e.KeyCode)
+        private void arrow_btn_down(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            Button btn = (Button)sender;
+
+            string key = btn.Tag.ToString();
+            string command = Data.get_anod_command(key);
+            pressed_button = key;
+            button_down_anod(command, key);
+        }
+
+        private void button_down_anod(string command, string key)
+        {
+            if (SerialPort.IsOpen) { return; } //TODO: Не забудь поставить !
+            if (command == "not_exist") { return; }
+
+            if (pressed_button == " ")
             {
-                case Keys.Up:
-                case Keys.W:
-                    SerialPort.Write("forward");
-                    break;
-
-                case Keys.Down:
-                case Keys.S:
-                    SerialPort.Write("back");
-                    break;
-
-                case Keys.Right:
-                case Keys.D:
-                    SerialPort.Write("right");
-                    break;
-
-                case Keys.Left:
-                case Keys.A:
-                    SerialPort.Write("left");
-                    break;
-                case Keys.LShiftKey:
-                case Keys.U:
-                    SerialPort.Write("up");
-                    break;
-
-                case Keys.LControlKey:
-                case Keys.J:
-                    SerialPort.Write("down");
-                    break;
+                pressed_button = key;
+                // SerialPort.WriteLine(command);
+                tem_lbl.Text = pressed_button + " was pressed";
             }
+            else if (pressed_button == key)
+            {
+                tem_lbl.Text = pressed_button + " is held down";
+                //SerialPort.WriteLine(command + "_hold");
+                pressed_button = pressed_button + "P";
+            }
+        }
+
+        private void Main_menu_KeyUp(object sender, KeyEventArgs e)
+        {
+            string key = Data.get_key(e.KeyCode);
+            button_up_anod(key);
+        }
+
+        private void arrow_btn_up(object sender, MouseEventArgs e)
+        {
+            Button btn = (Button)sender;
+
+            string key = btn.Tag.ToString();
+            button_up_anod(key);
+        }
+
+        private void button_up_anod(string key)
+        {
+            if (key != pressed_button[0].ToString()) { return; }
+
+            tem_lbl.Text = key + " was released";
+            if (!SerialPort.IsOpen && pressed_button.Length == 2) //TODO: не забудь удалить !
+            {
+                //SerialPort.WriteLine("stop_anod");
+                tem_lbl.Text = key + " was held and released";
+            }
+            pressed_button = " ";
         }
     }
 }

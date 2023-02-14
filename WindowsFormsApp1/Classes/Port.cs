@@ -53,7 +53,7 @@ namespace WindowsFormsApp1
                     }
                 }
             }
-            catch (ManagementException e)
+            catch (ManagementException)
             {
                 /* Do Nothing */
             }
