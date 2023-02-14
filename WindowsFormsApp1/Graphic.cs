@@ -141,14 +141,14 @@ namespace Reactor_Interface
         {
             try
             {
-                using (FileStream fileStream = File.Open(file, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+                using (FileStream fileStream = File.Open(file, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
                 {
                     if (fileStream != null) fileStream.Close(); 
                 }
                 return false;
             }
             catch (IOException) 
-            { 
+            {
                 return true; 
             }
         }
