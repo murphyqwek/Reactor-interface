@@ -169,7 +169,7 @@
             this.очиститьГрафикToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1187, 40);
+            this.menuStrip1.Size = new System.Drawing.Size(1187, 42);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -222,7 +222,7 @@
             legend2.TableStyle = System.Windows.Forms.DataVisualization.Charting.LegendTableStyle.Wide;
             this.Graph.Legends.Add(legend1);
             this.Graph.Legends.Add(legend2);
-            this.Graph.Location = new System.Drawing.Point(0, 40);
+            this.Graph.Location = new System.Drawing.Point(0, 42);
             this.Graph.Name = "Graph";
             this.Graph.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.None;
             series1.BorderWidth = 3;
@@ -265,7 +265,7 @@
             this.Graph.Series.Add(series2);
             this.Graph.Series.Add(series3);
             this.Graph.Series.Add(series4);
-            this.Graph.Size = new System.Drawing.Size(1187, 550);
+            this.Graph.Size = new System.Drawing.Size(1187, 548);
             this.Graph.TabIndex = 1;
             this.Graph.Text = "Графики";
             // 
