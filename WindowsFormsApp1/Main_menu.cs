@@ -61,6 +61,8 @@ namespace WindowsFormsApp1
             InitializeComponent();
 
             graphic_menu = new Graphic_menu();
+            graphic_menu.Clear_Graphic();
+
             IntPtr intPtr = graphic_menu.Handle; //Создаётся Handle, без этой строчки данные с реактора не смогут отображаться на графике, когда окно закрыто
 
             reactor_box.Size = new Size(780, 438);
@@ -454,6 +456,12 @@ namespace WindowsFormsApp1
             {
                 try
                 {
+                    if (pressed_button != " ")
+                    {
+                        SerialPort.WriteLine(Data.stop_anod_command);
+                        pressed_button = " ";
+                    }
+                        
                     SerialPort.Close();
                 }
                 catch { };
@@ -698,7 +706,7 @@ namespace WindowsFormsApp1
             tem_lbl.Text = key + " was released";
             if (!SerialPort.IsOpen && pressed_button.Length == 2) //TODO: не забудь удалить !
             {
-                //SerialPort.WriteLine("stop_anod");
+                //SerialPort.WriteLine(Data.stop_anod_command);
                 tem_lbl.Text = key + " was held and released";
             }
             pressed_button = " ";

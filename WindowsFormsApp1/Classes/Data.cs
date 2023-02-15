@@ -11,6 +11,7 @@ namespace WindowsFormsApp1.Classes
 {
     static class Data
     {
+        static public readonly string stop_anod_command = "stop";
         //Инициализация обмен данных
         static private readonly byte[] atq =
         {

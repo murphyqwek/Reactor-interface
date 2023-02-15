@@ -63,11 +63,11 @@
             this.graphic_setting_toolbar.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tok_menubtn,
             this.aver_tok_menubtn,
-            this.step_menubtn,
-            this.temp_menu_btn});
+            this.temp_menu_btn,
+            this.step_menubtn});
             this.graphic_setting_toolbar.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.graphic_setting_toolbar.Name = "graphic_setting_toolbar";
-            this.graphic_setting_toolbar.Size = new System.Drawing.Size(244, 38);
+            this.graphic_setting_toolbar.Size = new System.Drawing.Size(244, 36);
             this.graphic_setting_toolbar.Text = "Настройки графика";
             // 
             // tok_menubtn
@@ -77,7 +77,7 @@
             this.tok_menubtn.CheckState = System.Windows.Forms.CheckState.Checked;
             this.tok_menubtn.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.tok_menubtn.Name = "tok_menubtn";
-            this.tok_menubtn.Size = new System.Drawing.Size(234, 36);
+            this.tok_menubtn.Size = new System.Drawing.Size(270, 36);
             this.tok_menubtn.Tag = "tok";
             this.tok_menubtn.Text = "Ток";
             this.tok_menubtn.Click += new System.EventHandler(this.menubtn_Click);
@@ -89,19 +89,17 @@
             this.aver_tok_menubtn.CheckState = System.Windows.Forms.CheckState.Checked;
             this.aver_tok_menubtn.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.aver_tok_menubtn.Name = "aver_tok_menubtn";
-            this.aver_tok_menubtn.Size = new System.Drawing.Size(234, 36);
+            this.aver_tok_menubtn.Size = new System.Drawing.Size(270, 36);
             this.aver_tok_menubtn.Tag = "aver_tok";
             this.aver_tok_menubtn.Text = "Средний Ток";
             this.aver_tok_menubtn.Click += new System.EventHandler(this.menubtn_Click);
             // 
             // step_menubtn
             // 
-            this.step_menubtn.Checked = true;
             this.step_menubtn.CheckOnClick = true;
-            this.step_menubtn.CheckState = System.Windows.Forms.CheckState.Checked;
             this.step_menubtn.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.step_menubtn.Name = "step_menubtn";
-            this.step_menubtn.Size = new System.Drawing.Size(234, 36);
+            this.step_menubtn.Size = new System.Drawing.Size(270, 36);
             this.step_menubtn.Tag = "step";
             this.step_menubtn.Text = "Шаг";
             this.step_menubtn.Click += new System.EventHandler(this.menubtn_Click);
@@ -113,7 +111,7 @@
             this.temp_menu_btn.CheckState = System.Windows.Forms.CheckState.Checked;
             this.temp_menu_btn.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.temp_menu_btn.Name = "temp_menu_btn";
-            this.temp_menu_btn.Size = new System.Drawing.Size(234, 36);
+            this.temp_menu_btn.Size = new System.Drawing.Size(270, 36);
             this.temp_menu_btn.Tag = "temperature";
             this.temp_menu_btn.Text = "Температура";
             this.temp_menu_btn.Click += new System.EventHandler(this.menubtn_Click);
@@ -126,7 +124,7 @@
             this.save_as_txt_file_stipbtn});
             this.save_graphic_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.save_graphic_btn.Name = "save_graphic_btn";
-            this.save_graphic_btn.Size = new System.Drawing.Size(230, 38);
+            this.save_graphic_btn.Size = new System.Drawing.Size(230, 36);
             this.save_graphic_btn.Text = "Сохранить график";
             // 
             // какКартинкуToolStripMenuItem
@@ -157,7 +155,7 @@
             // 
             this.очиститьГрафикToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.очиститьГрафикToolStripMenuItem.Name = "очиститьГрафикToolStripMenuItem";
-            this.очиститьГрафикToolStripMenuItem.Size = new System.Drawing.Size(217, 38);
+            this.очиститьГрафикToolStripMenuItem.Size = new System.Drawing.Size(217, 36);
             this.очиститьГрафикToolStripMenuItem.Text = "Очистить график";
             this.очиститьГрафикToolStripMenuItem.Click += new System.EventHandler(this.очиститьГрафикToolStripMenuItem_Click);
             // 
@@ -171,7 +169,7 @@
             this.очиститьГрафикToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1187, 42);
+            this.menuStrip1.Size = new System.Drawing.Size(1187, 40);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -224,7 +222,7 @@
             legend2.TableStyle = System.Windows.Forms.DataVisualization.Charting.LegendTableStyle.Wide;
             this.Graph.Legends.Add(legend1);
             this.Graph.Legends.Add(legend2);
-            this.Graph.Location = new System.Drawing.Point(0, 42);
+            this.Graph.Location = new System.Drawing.Point(0, 40);
             this.Graph.Name = "Graph";
             this.Graph.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.None;
             series1.BorderWidth = 3;
@@ -256,7 +254,8 @@
             series4.BorderWidth = 5;
             series4.ChartArea = "temperature_area";
             series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.StepLine;
-            series4.Color = System.Drawing.Color.SaddleBrown;
+            series4.Color = System.Drawing.Color.Transparent;
+            series4.IsVisibleInLegend = false;
             series4.Legend = "tok_legend";
             series4.LegendText = "Шаг";
             series4.Name = "step";
@@ -266,7 +265,7 @@
             this.Graph.Series.Add(series2);
             this.Graph.Series.Add(series3);
             this.Graph.Series.Add(series4);
-            this.Graph.Size = new System.Drawing.Size(1187, 548);
+            this.Graph.Size = new System.Drawing.Size(1187, 550);
             this.Graph.TabIndex = 1;
             this.Graph.Text = "Графики";
             // 
