@@ -12,6 +12,19 @@ namespace WindowsFormsApp1.Classes
     static class Data
     {
         static public readonly string stop_anod_command = "stop";
+
+        static private Dictionary<string, string> anod_commands = new Dictionary<string, string>
+        {
+            { "W", "forward" },
+            { "A", "left" },
+            { "S", "back" },
+            { "D", "right" },
+            { "U", "up" },
+            { "J", "down" },
+        };
+
+        static public readonly string hold_anod_command = "_hold"; //Это строка припысыается к основной команде, если мы зажимаем кнопку
+
         //Инициализация обмен данных
         static private readonly byte[] atq =
         {
@@ -30,15 +43,6 @@ namespace WindowsFormsApp1.Classes
             65, 84, 85
         };
 
-        static private Dictionary<string, string> anod_commands = new Dictionary<string, string>
-        {
-            { "W", "forward" },
-            { "A", "left" },
-            { "S", "back" },
-            { "D", "right" },
-            { "U", "up" },
-            { "J", "down" },
-        };
 
         static private Dictionary<Keys, string> keys = new Dictionary<Keys, string>
         {

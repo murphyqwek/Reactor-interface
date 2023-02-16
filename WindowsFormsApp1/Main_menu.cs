@@ -668,19 +668,19 @@ namespace WindowsFormsApp1
 
         private void button_down_anod(string command, string key)
         {
-            if (SerialPort.IsOpen) { return; } //TODO: Не забудь поставить !
+            if (!SerialPort.IsOpen) { return; } //TODO: Не забудь поставить !
             if (command == "not_exist") { return; }
 
             if (pressed_button == " ")
             {
                 pressed_button = key;
-                // SerialPort.WriteLine(command);
-                tem_lbl.Text = pressed_button + " was pressed";
+                SerialPort.WriteLine(command);
+                //tem_lbl.Text = pressed_button + " was pressed";
             }
             else if (pressed_button == key)
             {
-                tem_lbl.Text = pressed_button + " is held down";
-                //SerialPort.WriteLine(command + "_hold");
+                //tem_lbl.Text = pressed_button + " is held down";
+                SerialPort.WriteLine(command + Data.hold_anod_command);
                 pressed_button = pressed_button + "P";
             }
         }
@@ -703,11 +703,11 @@ namespace WindowsFormsApp1
         {
             if (key != pressed_button[0].ToString()) { return; }
 
-            tem_lbl.Text = key + " was released";
-            if (!SerialPort.IsOpen && pressed_button.Length == 2) //TODO: не забудь удалить !
+            //tem_lbl.Text = key + " was released";
+            if (SerialPort.IsOpen) //TODO: не забудь удалить !
             {
-                //SerialPort.WriteLine(Data.stop_anod_command);
-                tem_lbl.Text = key + " was held and released";
+                SerialPort.WriteLine(Data.stop_anod_command);
+                //tem_lbl.Text = key + " was held and released";
             }
             pressed_button = " ";
         }
