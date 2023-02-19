@@ -44,8 +44,8 @@
             this.graphic_setting_toolbar = new System.Windows.Forms.ToolStripMenuItem();
             this.tok_menubtn = new System.Windows.Forms.ToolStripMenuItem();
             this.aver_tok_menubtn = new System.Windows.Forms.ToolStripMenuItem();
-            this.step_menubtn = new System.Windows.Forms.ToolStripMenuItem();
             this.temp_menu_btn = new System.Windows.Forms.ToolStripMenuItem();
+            this.step_menubtn = new System.Windows.Forms.ToolStripMenuItem();
             this.save_graphic_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.какКартинкуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.какExcelТаблицуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -77,7 +77,7 @@
             this.tok_menubtn.CheckState = System.Windows.Forms.CheckState.Checked;
             this.tok_menubtn.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.tok_menubtn.Name = "tok_menubtn";
-            this.tok_menubtn.Size = new System.Drawing.Size(270, 36);
+            this.tok_menubtn.Size = new System.Drawing.Size(234, 36);
             this.tok_menubtn.Tag = "tok";
             this.tok_menubtn.Text = "Ток";
             this.tok_menubtn.Click += new System.EventHandler(this.menubtn_Click);
@@ -89,20 +89,10 @@
             this.aver_tok_menubtn.CheckState = System.Windows.Forms.CheckState.Checked;
             this.aver_tok_menubtn.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.aver_tok_menubtn.Name = "aver_tok_menubtn";
-            this.aver_tok_menubtn.Size = new System.Drawing.Size(270, 36);
+            this.aver_tok_menubtn.Size = new System.Drawing.Size(234, 36);
             this.aver_tok_menubtn.Tag = "aver_tok";
             this.aver_tok_menubtn.Text = "Средний Ток";
             this.aver_tok_menubtn.Click += new System.EventHandler(this.menubtn_Click);
-            // 
-            // step_menubtn
-            // 
-            this.step_menubtn.CheckOnClick = true;
-            this.step_menubtn.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.step_menubtn.Name = "step_menubtn";
-            this.step_menubtn.Size = new System.Drawing.Size(270, 36);
-            this.step_menubtn.Tag = "step";
-            this.step_menubtn.Text = "Шаг";
-            this.step_menubtn.Click += new System.EventHandler(this.menubtn_Click);
             // 
             // temp_menu_btn
             // 
@@ -111,10 +101,20 @@
             this.temp_menu_btn.CheckState = System.Windows.Forms.CheckState.Checked;
             this.temp_menu_btn.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.temp_menu_btn.Name = "temp_menu_btn";
-            this.temp_menu_btn.Size = new System.Drawing.Size(270, 36);
+            this.temp_menu_btn.Size = new System.Drawing.Size(234, 36);
             this.temp_menu_btn.Tag = "temperature";
             this.temp_menu_btn.Text = "Температура";
             this.temp_menu_btn.Click += new System.EventHandler(this.menubtn_Click);
+            // 
+            // step_menubtn
+            // 
+            this.step_menubtn.CheckOnClick = true;
+            this.step_menubtn.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.step_menubtn.Name = "step_menubtn";
+            this.step_menubtn.Size = new System.Drawing.Size(234, 36);
+            this.step_menubtn.Tag = "step";
+            this.step_menubtn.Text = "Шаг";
+            this.step_menubtn.Click += new System.EventHandler(this.menubtn_Click);
             // 
             // save_graphic_btn
             // 
@@ -271,8 +271,8 @@
             // 
             // Graphic_menu
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(1187, 590);
             this.Controls.Add(this.Graph);
             this.Controls.Add(this.menuStrip1);

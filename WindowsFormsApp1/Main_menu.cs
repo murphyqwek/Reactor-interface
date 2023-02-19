@@ -1,4 +1,5 @@
 ﻿using Reactor_Interface;
+using Reactor_Interface.Classes;
 using System;
 using System.Collections.Concurrent;
 using System.ComponentModel;
@@ -65,8 +66,8 @@ namespace WindowsFormsApp1
 
             IntPtr intPtr = graphic_menu.Handle; //Создаётся Handle, без этой строчки данные с реактора не смогут отображаться на графике, когда окно закрыто
 
-            reactor_box.Size = new Size(780, 438);
-            mode_settings_box.Size = new Size(711, 153);
+            DPI.ResizeGroupbox(reactor_box, new Size(780, 438));
+            DPI.ResizeGroupbox(mode_settings_box, new Size(711, 153));
 
             port = Interface_settings.get_port();
             speed = Interface_settings.get_speed();
@@ -76,6 +77,12 @@ namespace WindowsFormsApp1
 
             //IR_timer = new System.Threading.Timer(new TimerCallback(IR_timer_Tick), IR_Serial_Port, 500, 1000);
             this.time_bar_max_size = time_bar.Size;
+        }
+
+        protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
+        {
+            base.ScaleControl(factor, specified);
+            DPI.SetFactor(factor);
         }
 
         private void time_syntes_bar_Scroll(object sender, EventArgs e)
@@ -93,8 +100,8 @@ namespace WindowsFormsApp1
                 time_bar.Value = time_bar.Minimum;
                 time_bar.Maximum = 60;
 
-                reactor_box.Size = new Size(780, 438);
-                mode_settings_box.Size = new Size(711, 153);
+                DPI.ResizeGroupbox(reactor_box, new Size(780, 438));
+                DPI.ResizeGroupbox(mode_settings_box, new Size(711, 153));
 
                 iteration_label.Visible = false;
                 iteration_counter.Visible = false;
@@ -111,12 +118,12 @@ namespace WindowsFormsApp1
                 time_bar.Value = time_bar.Minimum;
                 time_bar.Maximum = 20;
 
-                reactor_box.Size = new Size(780, 537);
+                DPI.ResizeGroupbox(reactor_box, new Size(780, 537));
 
                 cold_bar.Value = cold_bar.Minimum;
                 fire_bar.Value = fire_bar.Minimum;
 
-                mode_settings_box.Size = new Size(751, 252);
+                DPI.ResizeGroupbox(mode_settings_box, new Size(751, 252));
 
                 iteration_counter.Value = 2;
                 iteration_label.Visible = true;

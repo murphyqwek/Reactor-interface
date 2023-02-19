@@ -256,7 +256,7 @@
             // 
             this.mode_box.Controls.Add(this.impulse_rdbtn);
             this.mode_box.Controls.Add(this.duga_rdbtn);
-            this.mode_box.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.mode_box.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.mode_box.Location = new System.Drawing.Point(9, 52);
             this.mode_box.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.mode_box.Name = "mode_box";
@@ -298,7 +298,7 @@
             // 
             this.conf_box.Controls.Add(this.voilok_rdbtn);
             this.conf_box.Controls.Add(this.tigel_rdbtn);
-            this.conf_box.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.conf_box.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.conf_box.Location = new System.Drawing.Point(267, 52);
             this.conf_box.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.conf_box.Name = "conf_box";
@@ -346,7 +346,7 @@
             this.graphic_menu_btn});
             this.menu.Location = new System.Drawing.Point(0, 0);
             this.menu.Name = "menu";
-            this.menu.Size = new System.Drawing.Size(1664, 40);
+            this.menu.Size = new System.Drawing.Size(1664, 42);
             this.menu.TabIndex = 7;
             this.menu.Text = "menu";
             // 
@@ -480,7 +480,7 @@
             this.reactor_box.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.reactor_box.Name = "reactor_box";
             this.reactor_box.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.reactor_box.Size = new System.Drawing.Size(780, 537);
+            this.reactor_box.Size = new System.Drawing.Size(936, 644);
             this.reactor_box.TabIndex = 15;
             this.reactor_box.TabStop = false;
             this.reactor_box.Text = "Запуск реактора";
@@ -488,7 +488,7 @@
             // tok_mode_box
             // 
             this.tok_mode_box.Controls.Add(this.tok_mode_list);
-            this.tok_mode_box.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tok_mode_box.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.tok_mode_box.Location = new System.Drawing.Point(530, 52);
             this.tok_mode_box.Name = "tok_mode_box";
             this.tok_mode_box.Size = new System.Drawing.Size(232, 98);
@@ -502,10 +502,10 @@
             this.tok_mode_list.Items.Add("100 А");
             this.tok_mode_list.Items.Add("150 А");
             this.tok_mode_list.Items.Add("200 А");
-            this.tok_mode_list.Location = new System.Drawing.Point(107, 45);
+            this.tok_mode_list.Location = new System.Drawing.Point(101, 50);
             this.tok_mode_list.Name = "tok_mode_list";
             this.tok_mode_list.ReadOnly = true;
-            this.tok_mode_list.Size = new System.Drawing.Size(120, 44);
+            this.tok_mode_list.Size = new System.Drawing.Size(125, 39);
             this.tok_mode_list.TabIndex = 0;
             this.tok_mode_list.Text = "200 А";
             // 
@@ -521,7 +521,7 @@
             this.info_box.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.info_box.Name = "info_box";
             this.info_box.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.info_box.Size = new System.Drawing.Size(580, 235);
+            this.info_box.Size = new System.Drawing.Size(563, 235);
             this.info_box.TabIndex = 16;
             this.info_box.TabStop = false;
             this.info_box.Text = "Информация о реакторе";
@@ -581,7 +581,7 @@
             // Interval_IR_counter
             // 
             this.Interval_IR_counter.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Interval_IR_counter.Location = new System.Drawing.Point(358, 48);
+            this.Interval_IR_counter.Location = new System.Drawing.Point(352, 50);
             this.Interval_IR_counter.Maximum = new decimal(new int[] {
             15,
             0,
@@ -603,10 +603,10 @@
             // 
             // IR_button
             // 
-            this.IR_button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.IR_button.Location = new System.Drawing.Point(6, 50);
+            this.IR_button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.IR_button.Location = new System.Drawing.Point(6, 47);
             this.IR_button.Name = "IR_button";
-            this.IR_button.Size = new System.Drawing.Size(233, 35);
+            this.IR_button.Size = new System.Drawing.Size(215, 45);
             this.IR_button.TabIndex = 0;
             this.IR_button.Text = "Начать";
             this.IR_button.UseVisualStyleBackColor = true;
@@ -618,7 +618,7 @@
             this.button1.BackColor = System.Drawing.Color.Silver;
             this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button1.Location = new System.Drawing.Point(1485, 423);
+            this.button1.Location = new System.Drawing.Point(1479, 423);
             this.button1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(82, 55);
@@ -635,7 +635,7 @@
             this.button2.BackColor = System.Drawing.Color.Silver;
             this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button2.Location = new System.Drawing.Point(1575, 423);
+            this.button2.Location = new System.Drawing.Point(1569, 423);
             this.button2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(83, 55);
