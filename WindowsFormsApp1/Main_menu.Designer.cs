@@ -120,7 +120,7 @@
             this.cold_lbl.Location = new System.Drawing.Point(439, 153);
             this.cold_lbl.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.cold_lbl.Name = "cold_lbl";
-            this.cold_lbl.Size = new System.Drawing.Size(221, 25);
+            this.cold_lbl.Size = new System.Drawing.Size(156, 17);
             this.cold_lbl.TabIndex = 7;
             this.cold_lbl.Text = "Время остывания: 1 с.";
             // 
@@ -132,7 +132,7 @@
             this.cold_bar.Maximum = 20;
             this.cold_bar.Minimum = 1;
             this.cold_bar.Name = "cold_bar";
-            this.cold_bar.Size = new System.Drawing.Size(259, 69);
+            this.cold_bar.Size = new System.Drawing.Size(259, 45);
             this.cold_bar.TabIndex = 6;
             this.cold_bar.Value = 1;
             this.cold_bar.Scroll += new System.EventHandler(this.cold_bar_Scroll);
@@ -144,7 +144,7 @@
             this.fire_lbl.Location = new System.Drawing.Point(8, 153);
             this.fire_lbl.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.fire_lbl.Name = "fire_lbl";
-            this.fire_lbl.Size = new System.Drawing.Size(195, 25);
+            this.fire_lbl.Size = new System.Drawing.Size(138, 17);
             this.fire_lbl.TabIndex = 5;
             this.fire_lbl.Text = "Время горения: 1 с.";
             // 
@@ -156,7 +156,7 @@
             this.fire_bar.Maximum = 20;
             this.fire_bar.Minimum = 1;
             this.fire_bar.Name = "fire_bar";
-            this.fire_bar.Size = new System.Drawing.Size(259, 69);
+            this.fire_bar.Size = new System.Drawing.Size(259, 45);
             this.fire_bar.TabIndex = 4;
             this.fire_bar.Value = 1;
             this.fire_bar.Scroll += new System.EventHandler(this.fire_bar_Scroll);
@@ -168,7 +168,7 @@
             this.iteration_label.Location = new System.Drawing.Point(423, 59);
             this.iteration_label.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.iteration_label.Name = "iteration_label";
-            this.iteration_label.Size = new System.Drawing.Size(277, 29);
+            this.iteration_label.Size = new System.Drawing.Size(180, 20);
             this.iteration_label.TabIndex = 3;
             this.iteration_label.Text = "Количество итераций:";
             this.iteration_label.Visible = false;
@@ -189,7 +189,7 @@
             0,
             0});
             this.iteration_counter.Name = "iteration_counter";
-            this.iteration_counter.Size = new System.Drawing.Size(75, 35);
+            this.iteration_counter.Size = new System.Drawing.Size(75, 26);
             this.iteration_counter.TabIndex = 2;
             this.iteration_counter.Value = new decimal(new int[] {
             2,
@@ -205,7 +205,7 @@
             this.time_syntes_lable.Location = new System.Drawing.Point(8, 59);
             this.time_syntes_lable.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.time_syntes_lable.Name = "time_syntes_lable";
-            this.time_syntes_lable.Size = new System.Drawing.Size(238, 29);
+            this.time_syntes_lable.Size = new System.Drawing.Size(156, 20);
             this.time_syntes_lable.TabIndex = 1;
             this.time_syntes_lable.Text = "Время синтеза: 5 с.";
             // 
@@ -217,7 +217,7 @@
             this.time_bar.Maximum = 60;
             this.time_bar.Minimum = 5;
             this.time_bar.Name = "time_bar";
-            this.time_bar.Size = new System.Drawing.Size(692, 69);
+            this.time_bar.Size = new System.Drawing.Size(692, 45);
             this.time_bar.SmallChange = 5;
             this.time_bar.TabIndex = 0;
             this.time_bar.Value = 5;
@@ -273,7 +273,7 @@
             this.impulse_rdbtn.Location = new System.Drawing.Point(9, 120);
             this.impulse_rdbtn.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.impulse_rdbtn.Name = "impulse_rdbtn";
-            this.impulse_rdbtn.Size = new System.Drawing.Size(160, 37);
+            this.impulse_rdbtn.Size = new System.Drawing.Size(105, 28);
             this.impulse_rdbtn.TabIndex = 1;
             this.impulse_rdbtn.Text = "Импульс";
             this.impulse_rdbtn.UseVisualStyleBackColor = true;
@@ -287,7 +287,7 @@
             this.duga_rdbtn.Location = new System.Drawing.Point(9, 52);
             this.duga_rdbtn.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.duga_rdbtn.Name = "duga_rdbtn";
-            this.duga_rdbtn.Size = new System.Drawing.Size(104, 37);
+            this.duga_rdbtn.Size = new System.Drawing.Size(70, 28);
             this.duga_rdbtn.TabIndex = 0;
             this.duga_rdbtn.TabStop = true;
             this.duga_rdbtn.Text = "Дуга";
@@ -316,7 +316,7 @@
             this.voilok_rdbtn.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.voilok_rdbtn.Name = "voilok_rdbtn";
             this.voilok_rdbtn.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.voilok_rdbtn.Size = new System.Drawing.Size(139, 37);
+            this.voilok_rdbtn.Size = new System.Drawing.Size(92, 28);
             this.voilok_rdbtn.TabIndex = 2;
             this.voilok_rdbtn.Text = "Войлок";
             this.voilok_rdbtn.UseVisualStyleBackColor = true;
@@ -330,7 +330,7 @@
             this.tigel_rdbtn.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tigel_rdbtn.Name = "tigel_rdbtn";
             this.tigel_rdbtn.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.tigel_rdbtn.Size = new System.Drawing.Size(133, 37);
+            this.tigel_rdbtn.Size = new System.Drawing.Size(92, 28);
             this.tigel_rdbtn.TabIndex = 1;
             this.tigel_rdbtn.TabStop = true;
             this.tigel_rdbtn.Text = "Тигель";
@@ -338,7 +338,6 @@
             // 
             // menu
             // 
-            this.menu.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menu.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.settings_menu_btn,
@@ -346,7 +345,7 @@
             this.graphic_menu_btn});
             this.menu.Location = new System.Drawing.Point(0, 0);
             this.menu.Name = "menu";
-            this.menu.Size = new System.Drawing.Size(1664, 42);
+            this.menu.Size = new System.Drawing.Size(1664, 29);
             this.menu.TabIndex = 7;
             this.menu.Text = "menu";
             // 
@@ -358,28 +357,28 @@
             this.IR_port_menu_btn});
             this.settings_menu_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.settings_menu_btn.Name = "settings_menu_btn";
-            this.settings_menu_btn.Size = new System.Drawing.Size(148, 38);
+            this.settings_menu_btn.Size = new System.Drawing.Size(99, 25);
             this.settings_menu_btn.Text = "Настройки";
             this.settings_menu_btn.DropDownOpened += new System.EventHandler(this.settings_menu_btn_DropDownOpened);
             // 
             // port_menu_btn
             // 
             this.port_menu_btn.Name = "port_menu_btn";
-            this.port_menu_btn.Size = new System.Drawing.Size(232, 40);
+            this.port_menu_btn.Size = new System.Drawing.Size(154, 26);
             this.port_menu_btn.Text = "Порт:";
             this.port_menu_btn.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.port_menu_btn_DropDownItemClicked);
             // 
             // speed_menu_btn
             // 
             this.speed_menu_btn.Name = "speed_menu_btn";
-            this.speed_menu_btn.Size = new System.Drawing.Size(232, 40);
+            this.speed_menu_btn.Size = new System.Drawing.Size(154, 26);
             this.speed_menu_btn.Text = "Скорость: ";
             this.speed_menu_btn.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.speed_menu_btn_DropDownItemClicked);
             // 
             // IR_port_menu_btn
             // 
             this.IR_port_menu_btn.Name = "IR_port_menu_btn";
-            this.IR_port_menu_btn.Size = new System.Drawing.Size(232, 40);
+            this.IR_port_menu_btn.Size = new System.Drawing.Size(154, 26);
             this.IR_port_menu_btn.Text = "Порт IR:";
             this.IR_port_menu_btn.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.IR_port_menu_btn_DropDownItemClicked);
             // 
@@ -387,7 +386,7 @@
             // 
             this.debug_menu_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.debug_menu_btn.Name = "debug_menu_btn";
-            this.debug_menu_btn.Size = new System.Drawing.Size(95, 36);
+            this.debug_menu_btn.Size = new System.Drawing.Size(64, 25);
             this.debug_menu_btn.Text = "Дебаг";
             this.debug_menu_btn.Visible = false;
             this.debug_menu_btn.Click += new System.EventHandler(this.debug_menu_btn_Click);
@@ -396,7 +395,7 @@
             // 
             this.graphic_menu_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.graphic_menu_btn.Name = "graphic_menu_btn";
-            this.graphic_menu_btn.Size = new System.Drawing.Size(109, 38);
+            this.graphic_menu_btn.Size = new System.Drawing.Size(75, 25);
             this.graphic_menu_btn.Text = "График";
             this.graphic_menu_btn.Click += new System.EventHandler(this.graphic_menu_btn_Click);
             // 
@@ -505,7 +504,7 @@
             this.tok_mode_list.Location = new System.Drawing.Point(101, 50);
             this.tok_mode_list.Name = "tok_mode_list";
             this.tok_mode_list.ReadOnly = true;
-            this.tok_mode_list.Size = new System.Drawing.Size(125, 39);
+            this.tok_mode_list.Size = new System.Drawing.Size(125, 29);
             this.tok_mode_list.TabIndex = 0;
             this.tok_mode_list.Text = "200 А";
             // 
@@ -532,7 +531,7 @@
             this.tem_lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F);
             this.tem_lbl.Location = new System.Drawing.Point(15, 152);
             this.tem_lbl.Name = "tem_lbl";
-            this.tem_lbl.Size = new System.Drawing.Size(227, 37);
+            this.tem_lbl.Size = new System.Drawing.Size(157, 26);
             this.tem_lbl.TabIndex = 3;
             this.tem_lbl.Text = "Температура: ";
             // 
@@ -543,7 +542,7 @@
             this.state_lbl.ForeColor = System.Drawing.Color.Red;
             this.state_lbl.Location = new System.Drawing.Point(199, 84);
             this.state_lbl.Name = "state_lbl";
-            this.state_lbl.Size = new System.Drawing.Size(198, 37);
+            this.state_lbl.Size = new System.Drawing.Size(139, 26);
             this.state_lbl.TabIndex = 1;
             this.state_lbl.Text = "Не работает";
             // 
@@ -553,7 +552,7 @@
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label1.Location = new System.Drawing.Point(15, 84);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(178, 37);
+            this.label1.Size = new System.Drawing.Size(127, 26);
             this.label1.TabIndex = 0;
             this.label1.Text = "Состояние:";
             // 
@@ -593,7 +592,7 @@
             0,
             0});
             this.Interval_IR_counter.Name = "Interval_IR_counter";
-            this.Interval_IR_counter.Size = new System.Drawing.Size(71, 39);
+            this.Interval_IR_counter.Size = new System.Drawing.Size(71, 29);
             this.Interval_IR_counter.TabIndex = 1;
             this.Interval_IR_counter.Value = new decimal(new int[] {
             1,

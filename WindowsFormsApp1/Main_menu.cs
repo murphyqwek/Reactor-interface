@@ -83,6 +83,7 @@ namespace WindowsFormsApp1
         {
             base.ScaleControl(factor, specified);
             DPI.SetFactor(factor);
+            this.Size = new Size((int)((button2.Location.X + button2.Size.Width * 1.4) * factor.Width), this.Size.Height);
         }
 
         private void time_syntes_bar_Scroll(object sender, EventArgs e)
@@ -319,7 +320,11 @@ namespace WindowsFormsApp1
                 //anod_move_lbl.Text = "Направление движение анода: ";
             }
             */
-            Stop_reactor(state_lbl, SerialPort, false);
+            if (is_reactor_working)
+            {
+                SerialPort.Write("d");
+                Stop_reactor(state_lbl, SerialPort, false);
+            }
         }
 
 
@@ -611,7 +616,7 @@ namespace WindowsFormsApp1
 
                 IR_button.Text = "Остановить измерения";
 
-                int time = Convert.ToInt32(Interval_IR_counter.Value) * 200;
+                int time = Convert.ToInt32(Interval_IR_counter.Value) * 500;
                 IR_reading_thread = new Thread(() => IR_reading(IR_Serial_Port, time));
                 IR_reading_thread.IsBackground = true;
                 IR_reading_thread.Priority = ThreadPriority.Highest;
