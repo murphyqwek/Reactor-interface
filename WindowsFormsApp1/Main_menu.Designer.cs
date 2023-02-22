@@ -358,7 +358,7 @@
             this.IR_port_menu_btn});
             this.settings_menu_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.settings_menu_btn.Name = "settings_menu_btn";
-            this.settings_menu_btn.Size = new System.Drawing.Size(148, 36);
+            this.settings_menu_btn.Size = new System.Drawing.Size(148, 38);
             this.settings_menu_btn.Text = "Настройки";
             this.settings_menu_btn.DropDownOpened += new System.EventHandler(this.settings_menu_btn_DropDownOpened);
             // 
@@ -396,7 +396,7 @@
             // 
             this.graphic_menu_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.graphic_menu_btn.Name = "graphic_menu_btn";
-            this.graphic_menu_btn.Size = new System.Drawing.Size(109, 36);
+            this.graphic_menu_btn.Size = new System.Drawing.Size(109, 38);
             this.graphic_menu_btn.Text = "График";
             this.graphic_menu_btn.Click += new System.EventHandler(this.graphic_menu_btn_Click);
             // 
@@ -498,10 +498,10 @@
             // 
             // tok_mode_list
             // 
-            this.tok_mode_list.Items.Add("50 А");
-            this.tok_mode_list.Items.Add("100 А");
-            this.tok_mode_list.Items.Add("150 А");
             this.tok_mode_list.Items.Add("200 А");
+            this.tok_mode_list.Items.Add("150 А");
+            this.tok_mode_list.Items.Add("100 А");
+            this.tok_mode_list.Items.Add("50 А");
             this.tok_mode_list.Location = new System.Drawing.Point(101, 50);
             this.tok_mode_list.Name = "tok_mode_list";
             this.tok_mode_list.ReadOnly = true;

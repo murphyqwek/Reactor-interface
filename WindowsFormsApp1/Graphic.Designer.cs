@@ -169,7 +169,7 @@
             this.очиститьГрафикToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1187, 42);
+            this.menuStrip1.Size = new System.Drawing.Size(1187, 40);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -180,6 +180,7 @@
             this.Graph.BorderlineWidth = 0;
             chartArea1.AlignmentOrientation = ((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations)((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Vertical | System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Horizontal)));
             chartArea1.AxisX.MaximumAutoSize = 50F;
+            chartArea1.AxisX.Minimum = 0D;
             chartArea1.AxisX.Title = "Время, мс";
             chartArea1.AxisX2.Title = "Сила тока, А";
             chartArea1.AxisY.Title = "Температура (°C)";
@@ -188,6 +189,7 @@
             chartArea1.CursorY.IsUserEnabled = true;
             chartArea1.CursorY.IsUserSelectionEnabled = true;
             chartArea1.Name = "temperature_area";
+            chartArea2.AxisX.Minimum = 0D;
             chartArea2.AxisX.Title = "Время (мс)";
             chartArea2.AxisY.Title = "Сила тока (А)";
             chartArea2.CursorX.IsUserEnabled = true;
@@ -222,7 +224,7 @@
             legend2.TableStyle = System.Windows.Forms.DataVisualization.Charting.LegendTableStyle.Wide;
             this.Graph.Legends.Add(legend1);
             this.Graph.Legends.Add(legend2);
-            this.Graph.Location = new System.Drawing.Point(0, 42);
+            this.Graph.Location = new System.Drawing.Point(0, 40);
             this.Graph.Name = "Graph";
             this.Graph.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.None;
             series1.BorderWidth = 3;
@@ -265,7 +267,7 @@
             this.Graph.Series.Add(series2);
             this.Graph.Series.Add(series3);
             this.Graph.Series.Add(series4);
-            this.Graph.Size = new System.Drawing.Size(1187, 548);
+            this.Graph.Size = new System.Drawing.Size(1187, 550);
             this.Graph.TabIndex = 1;
             this.Graph.Text = "Графики";
             // 
