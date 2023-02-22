@@ -31,7 +31,7 @@ namespace Reactor_Interface
         {
             if (Graph != null && is_drawing && IsHandleCreated)
             {
-                Graph.BeginInvoke((MethodInvoker)(() => this.Graph.ChartAreas["tok_area"].AxisX.Minimum = this.Graph.ChartAreas["tok_area"].AxisX.Minimum <= 0 ? time : 0));
+                //Graph.BeginInvoke((MethodInvoker)(() => this.Graph.ChartAreas["tok_area"].AxisX.Minimum = this.Graph.ChartAreas["tok_area"].AxisX.Minimum <= 0 ? time : 0));
                 Graph.BeginInvoke((MethodInvoker)(() => this.Graph.Series["aver_tok"].Points.AddXY(time, aver_tok)));
             }
         }
@@ -40,7 +40,7 @@ namespace Reactor_Interface
         {
             if (Graph != null && is_drawing && IsHandleCreated)
             {
-                Graph.BeginInvoke((MethodInvoker)(() => this.Graph.ChartAreas["tok_area"].AxisX.Minimum = this.Graph.ChartAreas["tok_area"].AxisX.Minimum <= 0 ? time : 0));
+                //Graph.BeginInvoke((MethodInvoker)(() => this.Graph.ChartAreas["tok_area"].AxisX.Minimum = this.Graph.ChartAreas["tok_area"].AxisX.Minimum <= 0 ? time : 0));
                 Graph.BeginInvoke((MethodInvoker)(() => this.Graph.Series["tok"].Points.AddXY(time, tok)));
             }
         }
@@ -49,7 +49,7 @@ namespace Reactor_Interface
         {
             if (Graph != null && is_drawing)
             {
-                Graph.BeginInvoke((MethodInvoker)(() => this.Graph.ChartAreas["temperature_area"].AxisX.Minimum = this.Graph.ChartAreas["temperature_area"].AxisX.Minimum <= 0 ? time : 0));
+                //Graph.BeginInvoke((MethodInvoker)(() => this.Graph.ChartAreas["temperature_area"].AxisX.Minimum = this.Graph.ChartAreas["temperature_area"].AxisX.Minimum <= 0 ? time : 0));
                 Graph.BeginInvoke((MethodInvoker)(() => Graph.Series["temperature"].Points.AddXY(time, temp)));
             }
         }
