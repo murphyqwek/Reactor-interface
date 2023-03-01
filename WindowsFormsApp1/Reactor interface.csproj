@@ -99,6 +99,7 @@
     <Compile Include="Classes\Data.cs" />
     <Compile Include="Classes\DPI.cs" />
     <Compile Include="Classes\Exl.cs" />
+    <Compile Include="Classes\GoogleAPI\Auth.cs" />
     <Compile Include="Classes\Interface_settings.cs" />
     <Compile Include="Classes\Port.cs" />
     <Compile Include="Commands_menu.cs">
