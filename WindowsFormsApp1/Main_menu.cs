@@ -75,7 +75,6 @@ namespace WindowsFormsApp1
 
             port_checking.Start();
 
-            //IR_timer = new System.Threading.Timer(new TimerCallback(IR_timer_Tick), IR_Serial_Port, 500, 1000);
             this.time_bar_max_size = time_bar.Size;
         }
 
@@ -83,7 +82,8 @@ namespace WindowsFormsApp1
         {
             base.ScaleControl(factor, specified);
             DPI.SetFactor(factor);
-            this.Size = new Size((int)((button2.Location.X + button2.Size.Width * 1.4) * factor.Width), this.Size.Height);
+            this.Size = new Size((int)((button2.Location.X + button2.Size.Width * 1.4) * factor.Width), (int)(stop_btn.Location.Y + stop_btn.Size.Height * 1.4));//this.Size.Height);
+            this.MinimumSize = new Size(this.Width, this.Height);
         }
 
         private void time_syntes_bar_Scroll(object sender, EventArgs e)
@@ -138,7 +138,7 @@ namespace WindowsFormsApp1
             speed_menu_btn.DropDownItems.Clear();
             IR_port_menu_btn.DropDownItems.Clear();
 
-            port_menu_btn.Text = "Порт: ";
+            port_menu_btn.Text = "Порт реактора: ";
             if (Port.get_ports().Contains(port))
             {
                 port_menu_btn.Text += port;
@@ -278,7 +278,7 @@ namespace WindowsFormsApp1
                 }
                 catch (UnauthorizedAccessException)
                 {
-                    ShowError("Порт уже занят");
+                    ShowError("Порт реактора уже занят");
                     is_reactor_working = false;
                     stop_stopwatch();
                 }
@@ -291,35 +291,17 @@ namespace WindowsFormsApp1
             }
             else if (port == null)
             {
-                ShowError("Порт не выбран");
+                ShowError("Порт реактора не выбран");
             }
             else if (is_reactor_working && !Port.get_ports().Contains(port))
             {
-                ShowError("Порт не выбран");
+                ShowError("Порт реактора не выбран");
                 port = null;
             }
         }
 
         private void stop_btn_Click(object sender, EventArgs e)
-        { /*
-            if (is_reactor_working)
-            {
-                if (!is_IR_working) { 
-                    graphic_menu.is_drawing = false;
-                    stop_stopwatch();
-                }
-
-                is_reactor_working = false;
-
-                SerialPort.Write("d");
-                Close_Reactor_Port();
-
-                state_lbl.ForeColor = Color.Red;
-                state_lbl.Text = "Не работает";
-
-                //anod_move_lbl.Text = "Направление движение анода: ";
-            }
-            */
+        {
             if (is_reactor_working)
             {
                 SerialPort.Write("d");
@@ -521,6 +503,8 @@ namespace WindowsFormsApp1
         {
             if (port != null && !Port.get_ports().Contains(port) && !is_reactor_working) port = null;
 
+            if (IR_port != null && !Port.get_ports().Contains(IR_port) && !is_IR_working) IR_port = null;
+
             if (is_reactor_working && !SerialPort.IsOpen)
             {
                 is_reactor_working = false;
@@ -530,7 +514,15 @@ namespace WindowsFormsApp1
                 state_lbl.Text = "Не работает";
 
                 ShowError("Порт реактора отсоединился");
-                //anod_move_lbl.Text = "Направление движение анода: ";
+            }
+            if (is_IR_working && !IR_Serial_Port.IsOpen)
+            {
+                is_IR_working = false;
+                IR_port = null;
+
+                IR_button.Text = "Начать";
+                Interval_IR_counter.ReadOnly = false;
+                ShowError("Порт термометра отсоединился");
             }
         }
 
@@ -546,37 +538,27 @@ namespace WindowsFormsApp1
 
         private static void IR_reading(SerialPort IR_Serial_Port, int interval)
         {
-            try
+            while (is_IR_working)
             {
-                while (is_IR_working)
+                Thread.Sleep(interval);
+                string inf;
+                if (IR_Serial_Port.IsOpen)
                 {
-                    Thread.Sleep(interval);
-                    string inf;
-                    //Wait = true;
-                    //SerialPort IR_Serial_Port = (SerialPort)port;
-                    if (IR_Serial_Port.IsOpen)
+                    do
                     {
-                        do
-                        {
-                            IR_Serial_Port.Write(Data.read_command(), 0, 3);
-                            inf = IR_Serial_Port.ReadExisting();
-                            inf = Data.is_IR_value_valid(inf);
-                        }
-                        while (inf == "-1");
-                        if (inf != "")
-                        {
-                            int temp = Convert.ToInt32(inf);
-                            long time = stopwatch.ElapsedMilliseconds;
-
-                            graphic_menu.update_temperature(time, temp);
-                        }
+                        IR_Serial_Port.Write(Data.read_command(), 0, 3);
+                        inf = IR_Serial_Port.ReadExisting();
+                        inf = Data.is_IR_value_valid(inf);
                     }
-                    //Wait = false;
+                    while (inf == "-1");
+                    if (inf != "")
+                    {
+                        int temp = Convert.ToInt32(inf);
+                        long time = stopwatch.ElapsedMilliseconds;
+
+                        graphic_menu.update_temperature(time, temp);
+                    }
                 }
-            }
-            catch (ThreadInterruptedException)
-            {
-                //int k = 0;
             }
         }
 
@@ -714,12 +696,9 @@ namespace WindowsFormsApp1
         private void button_up_anod(string key)
         {
             if (key != pressed_button[0].ToString()) { return; }
-
-            //tem_lbl.Text = key + " was released";
-            if (SerialPort.IsOpen) //TODO: не забудь удалить !
+            if (SerialPort.IsOpen)
             {
                 SerialPort.WriteLine(Data.stop_anod_command);
-                //tem_lbl.Text = key + " was held and released";
             }
             pressed_button = " ";
         }
