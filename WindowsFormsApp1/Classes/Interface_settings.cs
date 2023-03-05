@@ -101,5 +101,49 @@ namespace WindowsFormsApp1.Classes
                 //TODO: сделать безопасность
             }
         }
+
+        static public string get_current_drive()
+        {
+            string drive;
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Reactor Interface TPU"))
+            {
+                drive = key?.GetValue("Current drive")?.ToString();
+            }
+
+            return drive;
+        }
+
+        static public void save_current_drive(string current_drive)
+        {
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Reactor Interface TPU"))
+            {
+                key.SetValue("Current drive", current_drive);
+            }
+        }
+
+        static public void update_drive(string old_name, string new_name, string client_id, string client_secret)
+        {
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Reactor Interface TPU\Drives"))
+            {
+                string data = client_id + " " + client_secret;
+                if (old_name == new_name)
+                {
+                    key.SetValue(old_name, data);
+                }
+                else
+                {
+                    key.DeleteValue(old_name);
+                    key.SetValue(new_name, data);
+                }
+            }
+        }
+
+        public static void delete_drive(string name)
+        {
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Reactor Interface TPU\Drives"))
+            {
+                key.DeleteValue(name);
+            }
+        }
     }
 }

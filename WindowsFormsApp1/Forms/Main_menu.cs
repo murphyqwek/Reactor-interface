@@ -1,6 +1,7 @@
 ﻿using Reactor_Interface;
 using Reactor_Interface.Classes;
 using Reactor_Interface.Classes.GoogleAPI;
+using Reactor_Interface.Forms;
 using System;
 using System.Collections.Concurrent;
 using System.ComponentModel;
@@ -135,8 +136,39 @@ namespace WindowsFormsApp1
 
         private void settings_menu_btn_DropDownOpened(object sender, EventArgs e)
         {
-            port_menu_btn.DropDown.Items.Clear();
+            upload_ports();
+            upload_speeds();
+            upload_drives();
+        }
+
+        private void upload_drives()
+        {
+            google_drive_menu_btn.DropDown.Items.Clear();
+
+            google_drive_menu_btn.Text = "Google drive: " + Google_data.current_drive;
+
+            foreach (string drive in Google_data.Get_drives())
+            {
+                google_drive_menu_btn.DropDownItems.Add(drive);
+            }
+
+            google_drive_menu_btn.DropDownItems.Add("Добавить новый диск").Tag = "add";
+        }
+
+        private void upload_speeds()
+        {
             speed_menu_btn.DropDownItems.Clear();
+            speed_menu_btn.Text = "Скорость: " + speed;
+
+            foreach (string speed in Port.get_speeds())
+            {
+                speed_menu_btn.DropDownItems.Add(speed);
+            }
+        }
+
+        private void upload_ports()
+        {
+            port_menu_btn.DropDown.Items.Clear();
             IR_port_menu_btn.DropDownItems.Clear();
 
             port_menu_btn.Text = "Порт реактора: ";
@@ -151,19 +183,10 @@ namespace WindowsFormsApp1
                 IR_port_menu_btn.Text += IR_port;
             }
 
-            speed_menu_btn.Text = "Скорость: " + speed;
-
-            foreach (string port in Port.get_ports())
+            if (Port.get_ports().Length == 0)
             {
-                port_menu_btn.DropDownItems.Add(port);
-                IR_port_menu_btn.DropDownItems.Add(port);
-            }
-            if (Port.get_ports().Length == 0) port_menu_btn.DropDownItems.Add("Портов не найдено");
-            if (Port.get_ports().Length == 0) IR_port_menu_btn.DropDownItems.Add("Портов не найдено");
-
-            foreach (string speed in Port.get_speeds())
-            {
-                speed_menu_btn.DropDownItems.Add(speed);
+                port_menu_btn.DropDownItems.Add("Портов не найдено");
+                IR_port_menu_btn.DropDownItems.Add("Портов не найдено");
             }
         }
 
@@ -222,7 +245,8 @@ namespace WindowsFormsApp1
 
         private void google_drive_btn_DropDownItem(object sender, EventArgs e)
         {
-            
+            Drive_settings_menu drive_settings = new Drive_settings_menu();
+            drive_settings.ShowDialog();
         }
 
         private string get_params()
@@ -712,6 +736,18 @@ namespace WindowsFormsApp1
         private void send_experiment_btn_Click(object sender, EventArgs e)
         {
             Auth.test();
+        }
+
+        private void google_drive_menu_btn_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            string drive_name = e.ClickedItem.Text;
+
+            if (e.ClickedItem.Tag != null) { 
+                New_Drive_menu new_drive_menu = new New_Drive_menu();
+                new_drive_menu.ShowDialog();
+            }
+            else
+                Google_data.Upload_drive(drive_name);
         }
     }
 }

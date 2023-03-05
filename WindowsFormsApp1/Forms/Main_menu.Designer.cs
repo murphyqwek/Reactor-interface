@@ -53,6 +53,7 @@
             this.port_menu_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.speed_menu_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.IR_port_menu_btn = new System.Windows.Forms.ToolStripMenuItem();
+            this.google_drive_menu_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.debug_menu_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.graphic_menu_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.send_experiment_btn = new System.Windows.Forms.ToolStripMenuItem();
@@ -74,7 +75,6 @@
             this.IR_button = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.googleDriveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mode_settings_box.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cold_bar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fire_bar)).BeginInit();
@@ -359,7 +359,7 @@
             this.port_menu_btn,
             this.speed_menu_btn,
             this.IR_port_menu_btn,
-            this.googleDriveToolStripMenuItem});
+            this.google_drive_menu_btn});
             this.settings_menu_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.settings_menu_btn.Name = "settings_menu_btn";
             this.settings_menu_btn.Size = new System.Drawing.Size(148, 38);
@@ -386,6 +386,14 @@
             this.IR_port_menu_btn.Size = new System.Drawing.Size(286, 40);
             this.IR_port_menu_btn.Text = "Порт IR:";
             this.IR_port_menu_btn.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.IR_port_menu_btn_DropDownItemClicked);
+            // 
+            // google_drive_menu_btn
+            // 
+            this.google_drive_menu_btn.Name = "google_drive_menu_btn";
+            this.google_drive_menu_btn.Size = new System.Drawing.Size(286, 40);
+            this.google_drive_menu_btn.Text = "Google Drive:";
+            this.google_drive_menu_btn.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.google_drive_menu_btn_DropDownItemClicked);
+            this.google_drive_menu_btn.Click += new System.EventHandler(this.google_drive_btn_DropDownItem);
             // 
             // debug_menu_btn
             // 
@@ -658,13 +666,6 @@
             this.button2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.arrow_btn_down);
             this.button2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.arrow_btn_up);
             // 
-            // googleDriveToolStripMenuItem
-            // 
-            this.googleDriveToolStripMenuItem.Name = "googleDriveToolStripMenuItem";
-            this.googleDriveToolStripMenuItem.Size = new System.Drawing.Size(286, 40);
-            this.googleDriveToolStripMenuItem.Text = "Google Drive:";
-            this.googleDriveToolStripMenuItem.Click += new System.EventHandler(this.google_drive_btn_DropDownItem);
-            // 
             // Main_menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -761,7 +762,7 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.ToolStripMenuItem send_experiment_btn;
-        private System.Windows.Forms.ToolStripMenuItem googleDriveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem google_drive_menu_btn;
     }
 }
 
