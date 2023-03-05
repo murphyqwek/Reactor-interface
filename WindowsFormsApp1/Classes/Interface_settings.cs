@@ -73,5 +73,33 @@ namespace WindowsFormsApp1.Classes
                 key.SetValue("IR port", IR_port);
             }
         }
+
+        static public Dictionary<string, string[]> get_drives()
+        {
+            Dictionary<string, string[]> drives = new Dictionary<string, string[]>();
+
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Reactor Interface TPU\Drives"))
+            {
+                string [] reg_drives = key.GetValueNames();
+                foreach(string drive_name in reg_drives)
+                {
+                    string[] data = key.GetValue(drive_name).ToString().Split(' ');
+                    drives.Add(drive_name, data);
+                }
+            }
+
+            return drives;
+        }
+
+        static public void save_drives(string name, string client_id, string client_secret)
+        {
+            string data = client_id + " " + client_secret;
+
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Reactor Interface TPU\Drives"))
+            {
+                key.SetValue(name, data);
+                //TODO: сделать безопасность
+            }
+        }
     }
 }

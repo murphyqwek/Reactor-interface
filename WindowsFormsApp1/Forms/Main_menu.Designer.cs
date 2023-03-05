@@ -55,6 +55,7 @@
             this.IR_port_menu_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.debug_menu_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.graphic_menu_btn = new System.Windows.Forms.ToolStripMenuItem();
+            this.send_experiment_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.left_btn = new System.Windows.Forms.Button();
             this.down_btn = new System.Windows.Forms.Button();
             this.right_btn = new System.Windows.Forms.Button();
@@ -73,6 +74,7 @@
             this.IR_button = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.googleDriveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mode_settings_box.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cold_bar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fire_bar)).BeginInit();
@@ -343,10 +345,11 @@
             this.menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.settings_menu_btn,
             this.debug_menu_btn,
-            this.graphic_menu_btn});
+            this.graphic_menu_btn,
+            this.send_experiment_btn});
             this.menu.Location = new System.Drawing.Point(0, 0);
             this.menu.Name = "menu";
-            this.menu.Size = new System.Drawing.Size(1664, 40);
+            this.menu.Size = new System.Drawing.Size(1664, 42);
             this.menu.TabIndex = 7;
             this.menu.Text = "menu";
             // 
@@ -355,10 +358,11 @@
             this.settings_menu_btn.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.port_menu_btn,
             this.speed_menu_btn,
-            this.IR_port_menu_btn});
+            this.IR_port_menu_btn,
+            this.googleDriveToolStripMenuItem});
             this.settings_menu_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.settings_menu_btn.Name = "settings_menu_btn";
-            this.settings_menu_btn.Size = new System.Drawing.Size(148, 36);
+            this.settings_menu_btn.Size = new System.Drawing.Size(148, 38);
             this.settings_menu_btn.Text = "Настройки";
             this.settings_menu_btn.DropDownOpened += new System.EventHandler(this.settings_menu_btn_DropDownOpened);
             // 
@@ -387,7 +391,7 @@
             // 
             this.debug_menu_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.debug_menu_btn.Name = "debug_menu_btn";
-            this.debug_menu_btn.Size = new System.Drawing.Size(95, 36);
+            this.debug_menu_btn.Size = new System.Drawing.Size(95, 38);
             this.debug_menu_btn.Text = "Дебаг";
             this.debug_menu_btn.Visible = false;
             this.debug_menu_btn.Click += new System.EventHandler(this.debug_menu_btn_Click);
@@ -396,9 +400,17 @@
             // 
             this.graphic_menu_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.graphic_menu_btn.Name = "graphic_menu_btn";
-            this.graphic_menu_btn.Size = new System.Drawing.Size(109, 36);
+            this.graphic_menu_btn.Size = new System.Drawing.Size(109, 38);
             this.graphic_menu_btn.Text = "График";
             this.graphic_menu_btn.Click += new System.EventHandler(this.graphic_menu_btn_Click);
+            // 
+            // send_experiment_btn
+            // 
+            this.send_experiment_btn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.send_experiment_btn.Name = "send_experiment_btn";
+            this.send_experiment_btn.Size = new System.Drawing.Size(224, 38);
+            this.send_experiment_btn.Text = "Отправить эксперимент";
+            this.send_experiment_btn.Click += new System.EventHandler(this.send_experiment_btn_Click);
             // 
             // left_btn
             // 
@@ -646,6 +658,13 @@
             this.button2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.arrow_btn_down);
             this.button2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.arrow_btn_up);
             // 
+            // googleDriveToolStripMenuItem
+            // 
+            this.googleDriveToolStripMenuItem.Name = "googleDriveToolStripMenuItem";
+            this.googleDriveToolStripMenuItem.Size = new System.Drawing.Size(286, 40);
+            this.googleDriveToolStripMenuItem.Text = "Google Drive:";
+            this.googleDriveToolStripMenuItem.Click += new System.EventHandler(this.google_drive_btn_DropDownItem);
+            // 
             // Main_menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -741,6 +760,8 @@
         private System.Windows.Forms.GroupBox tok_mode_box;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.ToolStripMenuItem send_experiment_btn;
+        private System.Windows.Forms.ToolStripMenuItem googleDriveToolStripMenuItem;
     }
 }
 

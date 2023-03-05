@@ -100,44 +100,45 @@
     <Compile Include="Classes\DPI.cs" />
     <Compile Include="Classes\Exl.cs" />
     <Compile Include="Classes\GoogleAPI\Auth.cs" />
+    <Compile Include="Classes\GoogleAPI\Google_data.cs" />
     <Compile Include="Classes\Interface_settings.cs" />
     <Compile Include="Classes\Port.cs" />
-    <Compile Include="Commands_menu.cs">
+    <Compile Include="Forms\Commands_menu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Commands_menu.Designer.cs">
+    <Compile Include="Forms\Commands_menu.Designer.cs">
       <DependentUpon>Commands_menu.cs</DependentUpon>
     </Compile>
-    <Compile Include="Debug_menu.cs">
+    <Compile Include="Forms\Debug_menu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Debug_menu.Designer.cs">
+    <Compile Include="Forms\Debug_menu.Designer.cs">
       <DependentUpon>Debug_menu.cs</DependentUpon>
     </Compile>
-    <Compile Include="Graphic.cs">
+    <Compile Include="Forms\Graphic.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Graphic.Designer.cs">
+    <Compile Include="Forms\Graphic.Designer.cs">
       <DependentUpon>Graphic.cs</DependentUpon>
     </Compile>
-    <Compile Include="Main_menu.cs">
+    <Compile Include="Forms\Main_menu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Main_menu.Designer.cs">
+    <Compile Include="Forms\Main_menu.Designer.cs">
       <DependentUpon>Main_menu.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Commands_menu.resx">
+    <EmbeddedResource Include="Forms\Commands_menu.resx">
       <DependentUpon>Commands_menu.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Debug_menu.resx">
+    <EmbeddedResource Include="Forms\Debug_menu.resx">
       <DependentUpon>Debug_menu.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Graphic.resx">
+    <EmbeddedResource Include="Forms\Graphic.resx">
       <DependentUpon>Graphic.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Main_menu.resx">
+    <EmbeddedResource Include="Forms\Main_menu.resx">
       <DependentUpon>Main_menu.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Reactor_Interface.Classes.GoogleAPI;
+using WindowsFormsApp1.Classes;
 
 namespace WindowsFormsApp1
 {
@@ -16,6 +18,7 @@ namespace WindowsFormsApp1
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            Google_data.Upload_data();
             Application.Run(new Main_menu());
         }
     }

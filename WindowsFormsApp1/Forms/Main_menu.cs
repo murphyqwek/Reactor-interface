@@ -1,5 +1,6 @@
 ﻿using Reactor_Interface;
 using Reactor_Interface.Classes;
+using Reactor_Interface.Classes.GoogleAPI;
 using System;
 using System.Collections.Concurrent;
 using System.ComponentModel;
@@ -217,6 +218,11 @@ namespace WindowsFormsApp1
             {
                 ShowError("Нельзя менять значение скорости во время работы реактора");
             }
+        }
+
+        private void google_drive_btn_DropDownItem(object sender, EventArgs e)
+        {
+            
         }
 
         private string get_params()
@@ -701,6 +707,11 @@ namespace WindowsFormsApp1
                 SerialPort.WriteLine(Data.stop_anod_command);
             }
             pressed_button = " ";
+        }
+
+        private void send_experiment_btn_Click(object sender, EventArgs e)
+        {
+            Auth.test();
         }
     }
 }

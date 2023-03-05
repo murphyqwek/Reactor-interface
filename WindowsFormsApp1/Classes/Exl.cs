@@ -17,12 +17,20 @@ using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Reactor_Interface.Classes
 {
-
     static class Exl
     {
         static readonly int stolbec_dannih = 78;
         static readonly double WIDTH = 500;
         static readonly double HEIGHT = 252;
+
+        static readonly Dictionary<string, XlRgbColor> name_axe_to_color = new Dictionary<string, XlRgbColor>
+        {
+            {"Температура", XlRgbColor.rgbRed },
+            {"Средний ток", XlRgbColor.rgbMidnightBlue },
+            {"Ток", XlRgbColor.rgbSkyBlue },
+            {"Шаг", XlRgbColor.rgbSandyBrown },
+        };
+
         static public void Save_Excel(string path, System.Windows.Forms.DataVisualization.Charting.Chart Graph)
         {
             Excel.Application xlApp;
@@ -63,11 +71,11 @@ namespace Reactor_Interface.Classes
                 //Заполение графика данных
                 chartPage.SetSourceData(data, XlRowCol.xlColumns);
                 //string Axis_label = get_axis_label(Graph.Series[i].LegendText);
-                set_data_to_chart(xlWorkSheet, chartPage, "Тест", stolbec_dannih, start_cell, stolbec_dannih + Graph.Series[i].Points.Count, start_cell + 1);
+                set_data_to_chart(xlWorkSheet, chartPage, "Тест", stolbec_dannih, start_cell, stolbec_dannih + Graph.Series[i].Points.Count, start_cell + 1, name_axe_to_color[Graph.Series[i].LegendText]);
 
                 start_cell += 3;
             }
-            xlWorkBook.SaveAs(path, Excel.XlFileFormat.xlAddIn, misValue, misValue, misValue, misValue, Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
+            xlWorkBook.SaveAs(path, Excel.XlFileFormat.xlWorkbookDefault, misValue, misValue, misValue, misValue, Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
             xlWorkBook.Close(true, misValue, misValue);
             xlApp.Quit();
 
@@ -106,18 +114,30 @@ namespace Reactor_Interface.Classes
             Marshal.ReleaseComObject(range);
         }
 
-        static void set_data_to_chart(Excel.Worksheet xlWorkSheet, Excel.Chart chart, string name_of_axis, int y1, int x1, int y2, int x2)
+        static void set_data_to_chart(Excel.Worksheet xlWorkSheet, Excel.Chart chart, string name_of_axis,int y1, int x1, int y2, int x2, XlRgbColor fore_color = XlRgbColor.rgbBlack)
         {
             y1 += 1; //Чтобы Excel не считывал название данных за данные 
+            if (chart.SeriesCollection().Count != 2)
+            {
+                Excel.Series s = (Excel.Series)chart.SeriesCollection(1);
+                s.Name = (string)(xlWorkSheet.Cells[y1 - 1, x2] as Excel.Range).Value;
+                s.Format.Line.ForeColor.RGB = (int)fore_color;
+                return;
+            }
+            Excel.Series s2 = (Excel.Series)chart.SeriesCollection(2);
             Excel.Series s1 = (Excel.Series)chart.SeriesCollection(1);
+
+            s1.Delete();
+
+            s2.Format.Line.ForeColor.RGB = (int)fore_color;
 
             Excel.Range c1 = xlWorkSheet.Cells[y1, x1];
             Excel.Range c2 = xlWorkSheet.Cells[y2, x1];
-            s1.XValues = xlWorkSheet.get_Range(c1, c2);
+            s2.XValues = xlWorkSheet.get_Range(c1, c2);
 
             c1 = xlWorkSheet.Cells[y1, x2];
             c2 = xlWorkSheet.Cells[y2, x2];
-            s1.Values = xlWorkSheet.get_Range(c1, c2);
+            s2.Values = xlWorkSheet.get_Range(c1, c2);
             Excel.Axis horizontal = chart.Axes(Excel.XlAxisType.xlValue, XlAxisGroup.xlPrimary);
 
             horizontal.HasTitle = true;
@@ -130,7 +150,7 @@ namespace Reactor_Interface.Classes
             Excel.ChartObject myChart = (Excel.ChartObject)xlCharts.Add(x, y, WIDTH, HEIGHT);
             Excel.Chart chartPage = myChart.Chart;
 
-            chartPage.ChartType = XlChartType.xlXYScatterLinesNoMarkers;
+            chartPage.ChartType = XlChartType.xlLine;//xlXYScatterLinesNoMarkers;
             return chartPage;
         }
 

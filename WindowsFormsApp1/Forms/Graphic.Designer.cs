@@ -67,7 +67,7 @@
             this.step_menubtn});
             this.graphic_setting_toolbar.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.graphic_setting_toolbar.Name = "graphic_setting_toolbar";
-            this.graphic_setting_toolbar.Size = new System.Drawing.Size(244, 36);
+            this.graphic_setting_toolbar.Size = new System.Drawing.Size(244, 38);
             this.graphic_setting_toolbar.Text = "Настройки графика";
             // 
             // tok_menubtn
@@ -124,7 +124,7 @@
             this.save_as_txt_file_stipbtn});
             this.save_graphic_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.save_graphic_btn.Name = "save_graphic_btn";
-            this.save_graphic_btn.Size = new System.Drawing.Size(230, 36);
+            this.save_graphic_btn.Size = new System.Drawing.Size(230, 38);
             this.save_graphic_btn.Text = "Сохранить график";
             // 
             // какКартинкуToolStripMenuItem
@@ -155,7 +155,7 @@
             // 
             this.очиститьГрафикToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.очиститьГрафикToolStripMenuItem.Name = "очиститьГрафикToolStripMenuItem";
-            this.очиститьГрафикToolStripMenuItem.Size = new System.Drawing.Size(217, 36);
+            this.очиститьГрафикToolStripMenuItem.Size = new System.Drawing.Size(217, 38);
             this.очиститьГрафикToolStripMenuItem.Text = "Очистить график";
             this.очиститьГрафикToolStripMenuItem.Click += new System.EventHandler(this.очиститьГрафикToolStripMenuItem_Click);
             // 
@@ -169,7 +169,7 @@
             this.очиститьГрафикToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1187, 40);
+            this.menuStrip1.Size = new System.Drawing.Size(1187, 42);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -224,7 +224,7 @@
             legend2.TableStyle = System.Windows.Forms.DataVisualization.Charting.LegendTableStyle.Wide;
             this.Graph.Legends.Add(legend1);
             this.Graph.Legends.Add(legend2);
-            this.Graph.Location = new System.Drawing.Point(0, 40);
+            this.Graph.Location = new System.Drawing.Point(0, 42);
             this.Graph.Name = "Graph";
             this.Graph.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.None;
             series1.BorderWidth = 3;
@@ -267,7 +267,7 @@
             this.Graph.Series.Add(series2);
             this.Graph.Series.Add(series3);
             this.Graph.Series.Add(series4);
-            this.Graph.Size = new System.Drawing.Size(1187, 550);
+            this.Graph.Size = new System.Drawing.Size(1187, 548);
             this.Graph.TabIndex = 1;
             this.Graph.Text = "Графики";
             // 

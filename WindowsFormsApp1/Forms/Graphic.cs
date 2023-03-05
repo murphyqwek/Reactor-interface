@@ -114,8 +114,8 @@ namespace Reactor_Interface
             {
                 sf.Title = "Сохранить файл как...";
                 sf.FileName = "График";
-                sf.Filter = "*.xls|*.xls;";
-                sf.DefaultExt = ".xls";
+                sf.Filter = "*.xlsx|*.xlsx;";
+                sf.DefaultExt = ".xlsx";
 
                 if (sf.ShowDialog() == DialogResult.OK)
                 {
