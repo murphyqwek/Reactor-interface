@@ -9,10 +9,22 @@ namespace Reactor_Interface.Classes.GoogleAPI
 {
     static class Google_data
     {
+        private static readonly int drive_storage_max = 10;
+
         private static Dictionary<string, string[]> Drives = new Dictionary<string, string[]>();
 
         public static string current_drive = "";
         public static string client_id = "", client_secret = "";
+
+        public static bool Is_name_taken(string drive_name)
+        {
+            return Drives.ContainsKey(drive_name);
+        }
+
+        public static bool Is_drive_storage_full()
+        {
+            return (Drives.Count == drive_storage_max);
+        }
 
         public static void Upload_drive(string drive_name)
         {
@@ -58,7 +70,7 @@ namespace Reactor_Interface.Classes.GoogleAPI
         public static void Create_drive(string name, string client_id, string client_secret)
         {
             Interface_settings.save_drives(name, client_id, client_secret);
-            string[] data = { client_id, client_id };
+            string[] data = { client_id, client_secret };
             Drives.Add(name, data);
             Upload_drive(name);
         }

@@ -245,8 +245,11 @@ namespace WindowsFormsApp1
 
         private void google_drive_btn_DropDownItem(object sender, EventArgs e)
         {
-            Drive_settings_menu drive_settings = new Drive_settings_menu();
-            drive_settings.ShowDialog();
+            if (Google_data.current_drive != null && Google_data.current_drive != "")
+            {
+                Drive_settings_menu drive_settings = new Drive_settings_menu();
+                drive_settings.ShowDialog();
+            }
         }
 
         private string get_params()
@@ -746,8 +749,10 @@ namespace WindowsFormsApp1
                 New_Drive_menu new_drive_menu = new New_Drive_menu();
                 new_drive_menu.ShowDialog();
             }
-            else
+            else if (!Google_data.Is_drive_storage_full())
                 Google_data.Upload_drive(drive_name);
+            else
+                MessageBox.Show("Хранилище заполнено", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
         }
     }
 }

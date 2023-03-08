@@ -19,7 +19,7 @@ namespace Reactor_Interface.Forms
             InitializeComponent();
         }
 
-        private void save_btn_Click(object sender, EventArgs e)
+        private bool check()
         {
             string name = drive_name_txtbx.Text.Trim();
             string client_id = client_id_txtbx.Text.Replace(" ", "");
@@ -28,23 +28,40 @@ namespace Reactor_Interface.Forms
             if (name.Length > 12)
             {
                 MessageBox.Show("Имя диска должно быть меньше 12 символов", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
-                return;
+                return false; 
+            }
+            if (Google_data.Is_name_taken(name))
+            {
+                MessageBox.Show("Диск с таким именем уже существует. Выберите другое имя", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+                return false;
             }
             if (name.Length == 0)
             {
                 MessageBox.Show("Укажите имя диска", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
-                return;
+                return false;
             }
-            if (client_id.Replace(" ", "").Length == 0)
+            if (client_id.Length == 0)
             {
                 MessageBox.Show("Укажите client id", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
-                return;
+                return false;
             }
-            if (client_secret.Replace(" ", "").Length == 0)
+            if (client_secret.Length == 0)
             {
                 MessageBox.Show("Укажите client secret", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
-                return;
+                return false;
             }
+
+            return true;
+        }
+
+        private void save_btn_Click(object sender, EventArgs e)
+        {
+            string name = drive_name_txtbx.Text.Trim();
+            string client_id = client_id_txtbx.Text.Replace(" ", "");
+            string client_secret = client_secret_txtbx.Text.Replace(" ", "");
+
+            if (!check())
+                return;
 
             DialogResult result = MessageBox.Show("Вы точно хотите создать диск?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
 

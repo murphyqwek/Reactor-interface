@@ -25,19 +25,20 @@ namespace Reactor_Interface.Classes.GoogleAPI
                             },
                             new[] { DriveService.Scope.DriveFile },
                             "user",
-                            CancellationToken.None);
+                            CancellationToken.None) ;
             var service = new DriveService(new BaseClientService.Initializer() { HttpClientInitializer = credential });//, ApplicationName = "TPU Reactor" });
-
+            var res1 = service.Drives.List();
+            //return;
             File folder = new File();
             var stream = System.IO.File.OpenRead("C://Users//qweka//Desktop//Данные//789.xlsx");
             
-            folder.Name = "Крутые графики";
-            folder.MimeType = "application/vnd.google-apps.spreadsheet";
-            //folder.Name = "MEGA PAPKA1";
-            //folder.MimeType = "application/vnd.google-apps.folder";
-
-            var res = await service.Files.Create(folder, stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet").UploadAsync();
-           
+            //folder.Name = "Крутые графики";
+            //folder.MimeType = "application/vnd.google-apps.spreadsheet";
+            folder.Name = "Test1";
+            folder.MimeType = "application/vnd.google-apps.folder";
+            var res = await service.Files.Create(folder).ExecuteAsync();
+            //var res = await service.Files.Create(folder, stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet").UploadAsync();
+            
             string id = "2";
         }
     }
