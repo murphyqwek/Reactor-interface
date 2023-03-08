@@ -145,7 +145,7 @@ namespace WindowsFormsApp1
         {
             google_drive_menu_btn.DropDown.Items.Clear();
 
-            google_drive_menu_btn.Text = "Google drive: " + Google_data.current_drive;
+            google_drive_menu_btn.Text = "Google drive: " + Drive.name;
 
             foreach (string drive in Google_data.Get_drives())
             {
@@ -245,7 +245,7 @@ namespace WindowsFormsApp1
 
         private void google_drive_btn_DropDownItem(object sender, EventArgs e)
         {
-            if (Google_data.current_drive != null && Google_data.current_drive != "")
+            if (Drive.name != null && Drive.name != "")
             {
                 Drive_settings_menu drive_settings = new Drive_settings_menu();
                 drive_settings.ShowDialog();
@@ -738,7 +738,12 @@ namespace WindowsFormsApp1
 
         private void send_experiment_btn_Click(object sender, EventArgs e)
         {
-            Auth.test();
+            //Auth.test();
+            //Internet_checker.IsConnectedToInternet();
+            if (Drive.Connect())
+                MessageBox.Show("Успешно!");
+            else
+                MessageBox.Show("Ошибка");
         }
 
         private void google_drive_menu_btn_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -750,7 +755,7 @@ namespace WindowsFormsApp1
                 new_drive_menu.ShowDialog();
             }
             else if (!Google_data.Is_drive_storage_full())
-                Google_data.Upload_drive(drive_name);
+                Drive.Upload(drive_name);
             else
                 MessageBox.Show("Хранилище заполнено", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
         }

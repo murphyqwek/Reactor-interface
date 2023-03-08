@@ -1,33 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Google.Apis.Auth.OAuth2;
-using Microsoft.Office.Interop.Excel;
 using Reactor_Interface.Classes.GoogleAPI;
 
 namespace Reactor_Interface.Forms
 {
-    public partial class Drive_settings_menu : Form
+    public partial class New_Drive_menu : Form
     {
-        public Drive_settings_menu()
+        public New_Drive_menu()
         {
             InitializeComponent();
-            drive_name_txtbx.Text = Google_data.current_drive;
-            client_id_txtbx.Text = Google_data.client_id;
-            client_secret_txtbx.Text = Google_data.client_secret;
-        }
-
-        protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
-        {
-            base.ScaleControl(factor, specified);
-            this.MinimumSize = this.MaximumSize = this.Size;
         }
 
         private bool check()
@@ -39,6 +28,11 @@ namespace Reactor_Interface.Forms
             if (name.Length > 12)
             {
                 MessageBox.Show("Имя диска должно быть меньше 12 символов", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+                return false; 
+            }
+            if (Google_data.Is_name_taken(name))
+            {
+                MessageBox.Show("Диск с таким именем уже существует. Выберите другое имя", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
                 return false;
             }
             if (name.Length == 0)
@@ -69,12 +63,13 @@ namespace Reactor_Interface.Forms
             if (!check())
                 return;
 
-            DialogResult result = MessageBox.Show("Вы точно хотите изменить этот диск?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+            DialogResult result = MessageBox.Show("Вы точно хотите создать диск?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
 
             if (result == DialogResult.Yes)
             {
-                Google_data.Update_drive(Google_data.current_drive, name, client_id, client_secret);
-                MessageBox.Show("Диск успешно изменён", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Google_data.Create_drive(name, client_id, client_secret);
+                Drive.Upload(name);
+                MessageBox.Show("Диск успешно создан", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
         }
@@ -82,17 +77,6 @@ namespace Reactor_Interface.Forms
         private void cancel_btn_Click(object sender, EventArgs e)
         {
             this.Close();
-        }
-
-        private void delete_btn_Click(object sender, EventArgs e)
-        {
-            DialogResult result = MessageBox.Show("Вы точно хотите удалить этот диск?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
-            if(result == DialogResult.Yes)
-            {
-                Google_data.Delete_drive(Google_data.current_drive);
-                MessageBox.Show("Диск успешно удалён", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.Close();
-            }
         }
     }
 }

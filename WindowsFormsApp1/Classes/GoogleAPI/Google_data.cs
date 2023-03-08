@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.Office.Interop.Excel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.RightsManagement;
 using System.Text;
 using System.Threading.Tasks;
 using WindowsFormsApp1.Classes;
@@ -13,9 +15,6 @@ namespace Reactor_Interface.Classes.GoogleAPI
 
         private static Dictionary<string, string[]> Drives = new Dictionary<string, string[]>();
 
-        public static string current_drive = "";
-        public static string client_id = "", client_secret = "";
-
         public static bool Is_name_taken(string drive_name)
         {
             return Drives.ContainsKey(drive_name);
@@ -26,22 +25,29 @@ namespace Reactor_Interface.Classes.GoogleAPI
             return (Drives.Count == drive_storage_max);
         }
 
-        public static void Upload_drive(string drive_name)
+        public static string Get_current_drive()
         {
-            if (drive_name == null || drive_name == "")
-                return;
+            return Interface_settings.get_current_drive();
+        }
 
+        public static void Save_current_drive(string drive_name)
+        {
             Interface_settings.save_current_drive(drive_name);
-            current_drive = drive_name;
-            client_id = Drives[drive_name][0];
-            client_secret = Drives[drive_name][1];
+        }
+
+        public static string Get_client_id(string drive_name)
+        {
+            return Drives[drive_name][0];
+        }
+
+        public static string Get_client_secret(string drive_name)
+        {
+            return Drives[drive_name][1];
         }
 
         public static void Upload_data()
         {
             Drives = Interface_settings.get_drives();
-            current_drive = Interface_settings.get_current_drive();
-            Upload_drive(current_drive);
         }
 
         public static void Delete_drive(string drive_name)
@@ -49,10 +55,6 @@ namespace Reactor_Interface.Classes.GoogleAPI
             Interface_settings.save_current_drive("");
             Interface_settings.delete_drive(drive_name);
             Drives.Remove(drive_name);
-
-            current_drive = "";
-            client_id = "";
-            client_secret = "";
         }
 
         public static void Update_drive(string old_name, string new_name, string client_id, string client_secret)
@@ -64,7 +66,6 @@ namespace Reactor_Interface.Classes.GoogleAPI
 
             string[] data = { client_id, client_id };
             Drives.Add(new_name, data);
-            Upload_drive(new_name);
         }
 
         public static void Create_drive(string name, string client_id, string client_secret)
@@ -72,7 +73,6 @@ namespace Reactor_Interface.Classes.GoogleAPI
             Interface_settings.save_drives(name, client_id, client_secret);
             string[] data = { client_id, client_secret };
             Drives.Add(name, data);
-            Upload_drive(name);
         }
 
         public static string[] Get_drives()
