@@ -740,10 +740,12 @@ namespace WindowsFormsApp1
         {
             //Auth.test();
             //Internet_checker.IsConnectedToInternet();
-            if (Drive.Connect())
+            /*if (Drive.Connect())
                 MessageBox.Show("Успешно!");
             else
-                MessageBox.Show("Ошибка");
+                MessageBox.Show("Ошибка");*/
+            Experiment exp = new Experiment();
+            exp.ShowDialog();
         }
 
         private void google_drive_menu_btn_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)

@@ -46,10 +46,13 @@ namespace Reactor_Interface.Classes.GoogleAPI
 
         public static bool Connect()
         {
-            if (Google_service.Connect(client_id, client_secret))
+            Google_service.Connect(client_id, client_secret);
+            /*if (Google_service.Connect(client_id, client_secret))
                 return true;
             else
-                return false;
+                return false;*/
+
+            return Google_service.Conecnted;
         }
     }
 }

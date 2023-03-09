@@ -35,7 +35,7 @@
             this.drive_name_txtbx = new System.Windows.Forms.TextBox();
             this.client_id_txtbx = new System.Windows.Forms.TextBox();
             this.client_secret_txtbx = new System.Windows.Forms.TextBox();
-            this.save_btn = new System.Windows.Forms.Button();
+            this.create_btn = new System.Windows.Forms.Button();
             this.cancel_btn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -87,20 +87,20 @@
             this.client_secret_txtbx.Size = new System.Drawing.Size(265, 26);
             this.client_secret_txtbx.TabIndex = 5;
             // 
-            // save_btn
+            // create_btn
             // 
-            this.save_btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.save_btn.Location = new System.Drawing.Point(12, 209);
-            this.save_btn.Name = "save_btn";
-            this.save_btn.Size = new System.Drawing.Size(125, 36);
-            this.save_btn.TabIndex = 6;
-            this.save_btn.Text = "Сохранить";
-            this.save_btn.UseVisualStyleBackColor = false;
-            this.save_btn.Click += new System.EventHandler(this.save_btn_Click);
+            this.create_btn.BackColor = System.Drawing.Color.YellowGreen;
+            this.create_btn.Location = new System.Drawing.Point(12, 209);
+            this.create_btn.Name = "create_btn";
+            this.create_btn.Size = new System.Drawing.Size(125, 36);
+            this.create_btn.TabIndex = 6;
+            this.create_btn.Text = "Создать";
+            this.create_btn.UseVisualStyleBackColor = false;
+            this.create_btn.Click += new System.EventHandler(this.create_btn_Click);
             // 
             // cancel_btn
             // 
-            this.cancel_btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.cancel_btn.BackColor = System.Drawing.Color.Brown;
             this.cancel_btn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancel_btn.Location = new System.Drawing.Point(157, 209);
             this.cancel_btn.Name = "cancel_btn";
@@ -117,7 +117,7 @@
             this.CancelButton = this.cancel_btn;
             this.ClientSize = new System.Drawing.Size(297, 257);
             this.Controls.Add(this.cancel_btn);
-            this.Controls.Add(this.save_btn);
+            this.Controls.Add(this.create_btn);
             this.Controls.Add(this.client_secret_txtbx);
             this.Controls.Add(this.client_id_txtbx);
             this.Controls.Add(this.drive_name_txtbx);
@@ -143,7 +143,7 @@
         private System.Windows.Forms.TextBox drive_name_txtbx;
         private System.Windows.Forms.TextBox client_id_txtbx;
         private System.Windows.Forms.TextBox client_secret_txtbx;
-        private System.Windows.Forms.Button save_btn;
+        private System.Windows.Forms.Button create_btn;
         private System.Windows.Forms.Button cancel_btn;
     }
 }

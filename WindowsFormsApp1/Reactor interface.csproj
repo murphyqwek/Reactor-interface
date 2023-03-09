@@ -106,6 +106,12 @@
     <Compile Include="Classes\Interface_settings.cs" />
     <Compile Include="Classes\Internet_checker.cs" />
     <Compile Include="Classes\Port.cs" />
+    <Compile Include="Forms\Experiment\Experiment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Experiment\Experiment.Designer.cs">
+      <DependentUpon>Experiment.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Commands_menu.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -123,12 +129,6 @@
     </Compile>
     <Compile Include="Forms\Experiment\Drive_settings_menu.Designer.cs">
       <DependentUpon>Drive_settings_menu.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Experiment\Experiment.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Experiment\Experiment.Designer.cs">
-      <DependentUpon>Experiment.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Graphic.cs">
       <SubType>Form</SubType>
@@ -150,6 +150,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Forms\Experiment\Experiment.resx">
+      <DependentUpon>Experiment.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Commands_menu.resx">
       <DependentUpon>Commands_menu.cs</DependentUpon>
     </EmbeddedResource>
@@ -158,9 +161,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Experiment\Drive_settings_menu.resx">
       <DependentUpon>Drive_settings_menu.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Experiment\Experiment.resx">
-      <DependentUpon>Experiment.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Graphic.resx">
       <DependentUpon>Graphic.cs</DependentUpon>

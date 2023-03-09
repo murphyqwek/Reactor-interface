@@ -53,7 +53,7 @@
             // 
             // save_btn
             // 
-            this.save_btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.save_btn.BackColor = System.Drawing.Color.YellowGreen;
             this.save_btn.Location = new System.Drawing.Point(11, 205);
             this.save_btn.Name = "save_btn";
             this.save_btn.Size = new System.Drawing.Size(125, 36);
@@ -112,8 +112,9 @@
             // 
             // delete_btn
             // 
-            this.delete_btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.delete_btn.BackColor = System.Drawing.Color.Brown;
             this.delete_btn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.delete_btn.ForeColor = System.Drawing.Color.Black;
             this.delete_btn.Location = new System.Drawing.Point(305, 205);
             this.delete_btn.Name = "delete_btn";
             this.delete_btn.Size = new System.Drawing.Size(125, 36);

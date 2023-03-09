@@ -54,7 +54,12 @@ namespace Reactor_Interface.Forms
             return true;
         }
 
-        private void save_btn_Click(object sender, EventArgs e)
+        private void cancel_btn_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void create_btn_Click(object sender, EventArgs e)
         {
             string name = drive_name_txtbx.Text.Trim();
             string client_id = client_id_txtbx.Text.Replace(" ", "");
@@ -72,11 +77,6 @@ namespace Reactor_Interface.Forms
                 MessageBox.Show("Диск успешно создан", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
-        }
-
-        private void cancel_btn_Click(object sender, EventArgs e)
-        {
-            this.Close();
         }
     }
 }

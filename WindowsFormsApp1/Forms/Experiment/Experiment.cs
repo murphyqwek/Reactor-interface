@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Reactor_Interface.Forms
+namespace Reactor_Interface
 {
     public partial class Experiment : Form
     {

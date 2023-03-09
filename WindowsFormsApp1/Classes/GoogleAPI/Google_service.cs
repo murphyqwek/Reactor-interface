@@ -16,6 +16,7 @@ namespace Reactor_Interface.Classes.GoogleAPI
     {
         static public DriveService service = null;
         static public bool Conecnted = false;
+        static public bool finished = false;
         static private string file_store = "Reactor.GoogleDrive.API.store";
 
         static private void Can_connect(string client_id, string client_secret)
@@ -33,28 +34,33 @@ namespace Reactor_Interface.Classes.GoogleAPI
             r.Wait();
         }
 
-        static public bool Connect(string client_id, string client_secret)
+        static public async void Connect(string client_id, string client_secret)
         {
-            Can_connect(client_id, client_secret);
+            //Can_connect(client_id, client_secret);
             try
             {
-                var credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                var credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
                                 new ClientSecrets
                                 {
-                                    ClientId = "client_id",
+                                    ClientId = client_id,
                                     ClientSecret = client_secret
                                 },
                                 new[] { DriveService.Scope.DriveFile },
-                                Environment.UserName,
+                                "erwerwerqewtwet",
                                 CancellationToken.None,
-                                new FileDataStore(file_store)).Result;
-                service = new DriveService(new BaseClientService.Initializer() { HttpClientInitializer = credential });
+                                new FileDataStore(file_store));
+                //TaskStatus.WaitingForActivation
+                var accessToken = await credential.GetAccessTokenForRequestAsync();
+
+                //service = new DriveService(new BaseClientService.Initializer() { HttpClientInitializer = credential });
+                Conecnted = true;
             }
             catch(Exception)
             {
-                return false;
+                Conecnted = false;
+                return;
             }
-            return true;
+            finished = true;
         }
     }
 }
