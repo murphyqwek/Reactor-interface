@@ -1,11 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using Google.Apis.Auth.OAuth2;
+using Google.Apis.Auth.OAuth2.Flows;
+using Google.Apis.Auth.OAuth2.Requests;
+using Google.Apis.Auth.OAuth2.Responses;
 using Google.Apis.Drive.v3;
+using Google.Apis.Drive.v3.Data;
+using Google.Apis.Http;
 using Google.Apis.Services;
 using Google.Apis.Util;
 using Google.Apis.Util.Store;
@@ -19,48 +28,39 @@ namespace Reactor_Interface.Classes.GoogleAPI
         static public bool finished = false;
         static private string file_store = "Reactor.GoogleDrive.API.store";
 
-        static private void Can_connect(string client_id, string client_secret)
+        static public bool Connect(string client_id, string client_secret)
         {
-            var r = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                                new ClientSecrets
-                                {
-                                    ClientId = client_id,
-                                    ClientSecret = client_secret
-                                },
-                                new[] { DriveService.Scope.DriveFile },
-                                "user",
-                                CancellationToken.None,
-                                new FileDataStore(file_store));
-            r.Wait();
-        }
-
-        static public async void Connect(string client_id, string client_secret)
-        {
-            //Can_connect(client_id, client_secret);
             try
             {
-                var credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
+                if (!Client_data_check.IsClientIdValid(client_id))
+                    return false;
+                TokenResponse token = new TokenResponse();
+                token.RefreshToken = "1//0cs-zC7Sad5RXCgYIARAAGAwSNwF-L9Ir7aV64-CBi_SyPr9uz8U7H0jyyAGbI6rwhL8CvKM_dPLyIow-TIKfeh6gcii0IposdR0";
+                TokenRequest token1 = new TokenRequest();
+                var credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
                                 new ClientSecrets
                                 {
                                     ClientId = client_id,
                                     ClientSecret = client_secret
                                 },
                                 new[] { DriveService.Scope.DriveFile },
-                                "erwerwerqewtwet",
+                                Environment.UserName,
                                 CancellationToken.None,
-                                new FileDataStore(file_store));
-                //TaskStatus.WaitingForActivation
-                var accessToken = await credential.GetAccessTokenForRequestAsync();
-
-                //service = new DriveService(new BaseClientService.Initializer() { HttpClientInitializer = credential });
-                Conecnted = true;
+                                new FileDataStore(file_store)
+                                ).Result;
+                var accessToken = credential.GetAccessTokenForRequestAsync().Result;
+                
+                service = new DriveService(new BaseClientService.Initializer() 
+                { 
+                    HttpClientInitializer = credential,
+                    
+                });
             }
-            catch(Exception)
+            catch(Exception e)
             {
-                Conecnted = false;
-                return;
+                return false;
             }
-            finished = true;
+            return true;
         }
     }
 }

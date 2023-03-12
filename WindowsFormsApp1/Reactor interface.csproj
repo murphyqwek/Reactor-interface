@@ -101,6 +101,7 @@
     <Compile Include="Classes\Exl.cs" />
     <Compile Include="Classes\GoogleAPI\Auth.cs" />
     <Compile Include="Classes\GoogleAPI\Drive.cs" />
+    <Compile Include="Classes\GoogleAPI\Client_data_check.cs" />
     <Compile Include="Classes\GoogleAPI\Google_data.cs" />
     <Compile Include="Classes\GoogleAPI\Google_service.cs" />
     <Compile Include="Classes\Interface_settings.cs" />

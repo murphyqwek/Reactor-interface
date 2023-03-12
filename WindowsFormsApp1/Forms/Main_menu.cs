@@ -259,14 +259,18 @@ namespace WindowsFormsApp1
             param += time_bar.Value.ToString() + "n";
 
             param += Data.get_tok_mode(tok_mode_list.Text);
+            if (tigel_rdbtn.Checked)
+                param += "0";
+            else
+                param += "1";
 
             if (duga_rdbtn.Checked)
             {
-                param += "0es";
+                param += "es";
             }
             else
             {
-                //param += "1es";
+                param += "es";
             }
 
             return param;
@@ -509,7 +513,8 @@ namespace WindowsFormsApp1
 
         private void graphic_menu_btn_Click(object sender, EventArgs e)
         {
-            graphic_menu.Show();
+            graphic_menu.Show(); 
+            graphic_menu.Focus();
         }
 
         private void ShowError(string text)
@@ -752,14 +757,17 @@ namespace WindowsFormsApp1
         {
             string drive_name = e.ClickedItem.Text;
 
-            if (e.ClickedItem.Tag != null) { 
+            if (e.ClickedItem.Tag != null) {
+                if (Google_data.Is_drive_storage_full())
+                {
+                    MessageBox.Show("Хранилище заполнено", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+                    return;
+                }
                 New_Drive_menu new_drive_menu = new New_Drive_menu();
                 new_drive_menu.ShowDialog();
-            }
-            else if (!Google_data.Is_drive_storage_full())
-                Drive.Upload(drive_name);
+            } 
             else
-                MessageBox.Show("Хранилище заполнено", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+                Drive.Upload(drive_name);
         }
     }
 }

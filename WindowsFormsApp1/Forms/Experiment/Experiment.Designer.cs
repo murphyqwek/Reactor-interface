@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Experiment));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.изменитьНомерToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.googleDriveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.data_groupbox = new System.Windows.Forms.GroupBox();
             this.after_groupbox = new System.Windows.Forms.GroupBox();
@@ -63,13 +64,12 @@
             this.tok_lbl = new System.Windows.Forms.Label();
             this.name_txtbox = new System.Windows.Forms.TextBox();
             this.name_lbl = new System.Windows.Forms.Label();
-            this.изменитьНомерToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reagents_txtbox = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.save_to_drive_btn = new System.Windows.Forms.Button();
+            this.save_on_computer_btn = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.data_groupbox.SuspendLayout();
             this.after_groupbox.SuspendLayout();
@@ -90,12 +90,20 @@
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
+            // изменитьНомерToolStripMenuItem
+            // 
+            this.изменитьНомерToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.изменитьНомерToolStripMenuItem.Name = "изменитьНомерToolStripMenuItem";
+            this.изменитьНомерToolStripMenuItem.Size = new System.Drawing.Size(183, 32);
+            this.изменитьНомерToolStripMenuItem.Text = "Изменить номер";
+            // 
             // googleDriveToolStripMenuItem
             // 
             this.googleDriveToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.googleDriveToolStripMenuItem.Name = "googleDriveToolStripMenuItem";
             this.googleDriveToolStripMenuItem.Size = new System.Drawing.Size(148, 32);
             this.googleDriveToolStripMenuItem.Text = "Google Drive:";
+            this.googleDriveToolStripMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.googleDriveToolStripMenuItem_DropDownItemClicked);
             // 
             // data_groupbox
             // 
@@ -389,13 +397,6 @@
             this.name_lbl.TabIndex = 0;
             this.name_lbl.Text = "Наименование";
             // 
-            // изменитьНомерToolStripMenuItem
-            // 
-            this.изменитьНомерToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.изменитьНомерToolStripMenuItem.Name = "изменитьНомерToolStripMenuItem";
-            this.изменитьНомерToolStripMenuItem.Size = new System.Drawing.Size(183, 32);
-            this.изменитьНомерToolStripMenuItem.Text = "Изменить номер";
-            // 
             // reagents_txtbox
             // 
             this.reagents_txtbox.Location = new System.Drawing.Point(526, 78);
@@ -433,31 +434,32 @@
             this.label2.TabIndex = 14;
             this.label2.Text = "Комментарии по эксперименту";
             // 
-            // button1
+            // save_to_drive_btn
             // 
-            this.button1.Location = new System.Drawing.Point(1216, 448);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(191, 92);
-            this.button1.TabIndex = 15;
-            this.button1.Text = "Сохранить на диск";
-            this.button1.UseVisualStyleBackColor = true;
+            this.save_to_drive_btn.Location = new System.Drawing.Point(1216, 448);
+            this.save_to_drive_btn.Name = "save_to_drive_btn";
+            this.save_to_drive_btn.Size = new System.Drawing.Size(191, 92);
+            this.save_to_drive_btn.TabIndex = 15;
+            this.save_to_drive_btn.Text = "Сохранить на диск";
+            this.save_to_drive_btn.UseVisualStyleBackColor = true;
+            this.save_to_drive_btn.Click += new System.EventHandler(this.save_to_drive_btn_Click);
             // 
-            // button2
+            // save_on_computer_btn
             // 
-            this.button2.Location = new System.Drawing.Point(1019, 448);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(191, 92);
-            this.button2.TabIndex = 16;
-            this.button2.Text = "Сохранить на компьютер";
-            this.button2.UseVisualStyleBackColor = true;
+            this.save_on_computer_btn.Location = new System.Drawing.Point(1019, 448);
+            this.save_on_computer_btn.Name = "save_on_computer_btn";
+            this.save_on_computer_btn.Size = new System.Drawing.Size(191, 92);
+            this.save_on_computer_btn.TabIndex = 16;
+            this.save_on_computer_btn.Text = "Сохранить на компьютер";
+            this.save_on_computer_btn.UseVisualStyleBackColor = true;
             // 
             // Experiment
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1419, 550);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.save_on_computer_btn);
+            this.Controls.Add(this.save_to_drive_btn);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.label1);
@@ -523,7 +525,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button save_to_drive_btn;
+        private System.Windows.Forms.Button save_on_computer_btn;
     }
 }

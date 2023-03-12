@@ -415,8 +415,9 @@
             // send_experiment_btn
             // 
             this.send_experiment_btn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.send_experiment_btn.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.send_experiment_btn.Name = "send_experiment_btn";
-            this.send_experiment_btn.Size = new System.Drawing.Size(224, 38);
+            this.send_experiment_btn.Size = new System.Drawing.Size(297, 38);
             this.send_experiment_btn.Text = "Отправить эксперимент";
             this.send_experiment_btn.Click += new System.EventHandler(this.send_experiment_btn_Click);
             // 
