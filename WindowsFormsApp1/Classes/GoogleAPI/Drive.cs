@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using WindowsFormsApp1.Classes;
@@ -21,32 +23,48 @@ namespace Reactor_Interface.Classes.GoogleAPI
             client_id = Google_data.Get_client_id(drive_name);
             client_secret = Google_data.Get_client_secret(drive_name);
             Google_data.Save_current_drive(name);
+            ConnectAsync();
+        }
+
+        public static void UploadFileOnDrive(string path)
+        {
+            System.IO.FileInfo fileInfo = new System.IO.FileInfo(path);
+            string file_name = fileInfo.Name;
+            string folder_name = "N9201_90";
+            FileStream stream = new FileStream(path, FileMode.Open);
+            Google_service.UploadFile(file_name, stream, folder_name);
         }
 
         public static void Update(string new_name, string client_id, string client_secret)
         {
-            Google_data.Update_drive(name, new_name, client_id, client_secret);
+            if (Drive.client_id == client_id && Drive.client_secret == client_secret && Drive.name != new_name) 
+                Google_service.UpdateNameTokenFile(name, new_name);
+            else
+                Google_service.DeleteTokenFile(name);
 
-            if (name != new_name)
-            {
-                name = new_name;
-                Google_data.Save_current_drive(new_name);
-            }
+            Google_data.Update_drive(name, new_name, client_id, client_secret);
+            Drive.name = new_name;
             Drive.client_id = client_id;
             Drive.client_secret = client_secret;
         }
 
         public static void Delete()
         {
+            Google_service.DeleteTokenFile(name);
             Google_data.Delete_drive(name);
             name = "";
             client_id = "";
             client_secret = "";
         }
 
+        private static void ConnectAsync()
+        {
+            Google_service.ConnectAsync(client_id, client_secret, name);
+        }
+
         public static bool Connect()
         {
-            return Google_service.Connect(client_id, client_secret);
+            return Google_service.Connect(client_id, client_secret, name);
         }
     }
 }

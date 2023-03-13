@@ -67,16 +67,21 @@ namespace Reactor_Interface.Forms
 
             if (!check())
                 return;
-
             DialogResult result = MessageBox.Show("Вы точно хотите создать диск?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
 
-            if (result == DialogResult.Yes)
+            if (result == DialogResult.No)
+                return;
+
+            if (!Google_service.Connect(client_id, client_secret, name)) 
             {
-                Google_data.Create_drive(name, client_id, client_secret);
-                Drive.Upload(name);
-                MessageBox.Show("Диск успешно создан", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.Close();
+                MessageBox.Show("Неверный client id или client secret", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                return;
             }
+
+            Google_data.Create_drive(name, client_id, client_secret);
+            Drive.Upload(name);
+            MessageBox.Show("Диск успешно создан", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            this.Close();
         }
     }
 }

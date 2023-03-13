@@ -35,13 +35,11 @@ namespace Reactor_Interface
             Drive.Upload(drive_name);
             googleDriveToolStripMenuItem.Text = "Google Drive: " + Drive.name;
         }
+        
 
         private void save_to_drive_btn_Click(object sender, EventArgs e)
         {
-            if (!Drive.Connect())
-                MessageBox.Show("Error");
-            else
-                MessageBox.Show("Success");
+            Drive.UploadFileOnDrive("C:\\Users\\qweka\\Desktop\\Данные\\Крутые Графики.xlsx");
         }
     }
 }

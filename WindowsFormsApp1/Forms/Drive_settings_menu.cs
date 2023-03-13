@@ -74,12 +74,29 @@ namespace Reactor_Interface.Forms
 
             DialogResult result = MessageBox.Show("Вы точно хотите изменить этот диск?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
 
-            if (result == DialogResult.Yes)
+            if (result == DialogResult.No)
+                return;
+            
+            if(client_id == Drive.client_id && client_secret == Drive.client_secret)
             {
                 Drive.Update(name, client_id, client_secret);
                 MessageBox.Show("Диск успешно изменён", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
+
+            if (!Google_service.Connect(client_id, client_secret, name))
+            {
+                this.Focus();
+                Google_service.DeleteTokenFile(name);
+                MessageBox.Show("Неверный client id или client secret", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                return;
+            }
+
+            this.Focus();
+            Google_service.DeleteTokenFile(Drive.name);
+            Drive.Update(name, client_id, client_secret);
+            MessageBox.Show("Диск успешно изменён", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            this.Close();
         }
 
         private void cancel_btn_Click(object sender, EventArgs e)

@@ -70,6 +70,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.save_to_drive_btn = new System.Windows.Forms.Button();
             this.save_on_computer_btn = new System.Windows.Forms.Button();
+            this.clear_exp_btn = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.data_groupbox.SuspendLayout();
             this.after_groupbox.SuspendLayout();
@@ -453,11 +454,21 @@
             this.save_on_computer_btn.Text = "Сохранить на компьютер";
             this.save_on_computer_btn.UseVisualStyleBackColor = true;
             // 
+            // clear_exp_btn
+            // 
+            this.clear_exp_btn.Location = new System.Drawing.Point(531, 448);
+            this.clear_exp_btn.Name = "clear_exp_btn";
+            this.clear_exp_btn.Size = new System.Drawing.Size(191, 92);
+            this.clear_exp_btn.TabIndex = 17;
+            this.clear_exp_btn.Text = "Очистить эксперимент";
+            this.clear_exp_btn.UseVisualStyleBackColor = true;
+            // 
             // Experiment
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1419, 550);
+            this.Controls.Add(this.clear_exp_btn);
             this.Controls.Add(this.save_on_computer_btn);
             this.Controls.Add(this.save_to_drive_btn);
             this.Controls.Add(this.label2);
@@ -468,6 +479,8 @@
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Experiment";
             this.Text = "Эксперимент";
             this.menuStrip1.ResumeLayout(false);
@@ -527,5 +540,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button save_to_drive_btn;
         private System.Windows.Forms.Button save_on_computer_btn;
+        private System.Windows.Forms.Button clear_exp_btn;
     }
 }

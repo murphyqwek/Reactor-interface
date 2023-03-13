@@ -99,6 +99,7 @@
     <Compile Include="Classes\Data.cs" />
     <Compile Include="Classes\DPI.cs" />
     <Compile Include="Classes\Exl.cs" />
+    <Compile Include="Classes\ExperimentExl.cs" />
     <Compile Include="Classes\GoogleAPI\Auth.cs" />
     <Compile Include="Classes\GoogleAPI\Drive.cs" />
     <Compile Include="Classes\GoogleAPI\Client_data_check.cs" />
@@ -125,11 +126,17 @@
     <Compile Include="Forms\Debug_menu.Designer.cs">
       <DependentUpon>Debug_menu.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Experiment\Drive_settings_menu.cs">
+    <Compile Include="Forms\Drive_settings_menu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Experiment\Drive_settings_menu.Designer.cs">
+    <Compile Include="Forms\Drive_settings_menu.Designer.cs">
       <DependentUpon>Drive_settings_menu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Experiment\Status_experiment_menu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Experiment\Status_experiment_menu.Designer.cs">
+      <DependentUpon>Status_experiment_menu.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Graphic.cs">
       <SubType>Form</SubType>
@@ -143,10 +150,10 @@
     <Compile Include="Forms\Main_menu.Designer.cs">
       <DependentUpon>Main_menu.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Experiment\New_Drive_menu.cs">
+    <Compile Include="Forms\New_Drive_menu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Experiment\New_Drive_menu.Designer.cs">
+    <Compile Include="Forms\New_Drive_menu.Designer.cs">
       <DependentUpon>New_Drive_menu.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -160,8 +167,11 @@
     <EmbeddedResource Include="Forms\Debug_menu.resx">
       <DependentUpon>Debug_menu.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Experiment\Drive_settings_menu.resx">
+    <EmbeddedResource Include="Forms\Drive_settings_menu.resx">
       <DependentUpon>Drive_settings_menu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Experiment\Status_experiment_menu.resx">
+      <DependentUpon>Status_experiment_menu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Graphic.resx">
       <DependentUpon>Graphic.cs</DependentUpon>
@@ -170,7 +180,7 @@
       <DependentUpon>Main_menu.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Experiment\New_Drive_menu.resx">
+    <EmbeddedResource Include="Forms\New_Drive_menu.resx">
       <DependentUpon>New_Drive_menu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
