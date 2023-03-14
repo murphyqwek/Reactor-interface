@@ -1,6 +1,6 @@
 ﻿namespace Reactor_Interface
 {
-    partial class Experiment
+    partial class Experiment_menu
     {
         /// <summary>
         /// Required designer variable.
@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Experiment));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Experiment_menu));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.изменитьНомерToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.change_serie_menubtn = new System.Windows.Forms.ToolStripMenuItem();
             this.googleDriveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.data_groupbox = new System.Windows.Forms.GroupBox();
             this.after_groupbox = new System.Windows.Forms.GroupBox();
@@ -83,7 +83,7 @@
             this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.изменитьНомерToolStripMenuItem,
+            this.change_serie_menubtn,
             this.googleDriveToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -91,12 +91,13 @@
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // изменитьНомерToolStripMenuItem
+            // change_serie_menubtn
             // 
-            this.изменитьНомерToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.изменитьНомерToolStripMenuItem.Name = "изменитьНомерToolStripMenuItem";
-            this.изменитьНомерToolStripMenuItem.Size = new System.Drawing.Size(183, 32);
-            this.изменитьНомерToolStripMenuItem.Text = "Изменить номер";
+            this.change_serie_menubtn.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.change_serie_menubtn.Name = "change_serie_menubtn";
+            this.change_serie_menubtn.Size = new System.Drawing.Size(182, 32);
+            this.change_serie_menubtn.Text = "Изменить серию";
+            this.change_serie_menubtn.Click += new System.EventHandler(this.change_serie_menubtn_Click);
             // 
             // googleDriveToolStripMenuItem
             // 
@@ -463,7 +464,7 @@
             this.clear_exp_btn.Text = "Очистить эксперимент";
             this.clear_exp_btn.UseVisualStyleBackColor = true;
             // 
-            // Experiment
+            // Experiment_menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -481,8 +482,8 @@
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "Experiment";
-            this.Text = "Эксперимент";
+            this.Name = "Experiment_menu";
+            this.Text = "Эксперимент. Серия:";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.data_groupbox.ResumeLayout(false);
@@ -533,7 +534,7 @@
         private System.Windows.Forms.Label mass_lbl;
         private System.Windows.Forms.TextBox tigel_after_txtbox;
         private System.Windows.Forms.Label tigel_after_lbl;
-        private System.Windows.Forms.ToolStripMenuItem изменитьНомерToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem change_serie_menubtn;
         private System.Windows.Forms.RichTextBox reagents_txtbox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.RichTextBox richTextBox1;

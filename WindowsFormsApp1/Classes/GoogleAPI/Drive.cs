@@ -26,13 +26,12 @@ namespace Reactor_Interface.Classes.GoogleAPI
             ConnectAsync();
         }
 
-        public static void UploadFileOnDrive(string path)
+        public static void UploadFileOnDrive(string path, string serie, string numer)
         {
             System.IO.FileInfo fileInfo = new System.IO.FileInfo(path);
-            string file_name = fileInfo.Name;
-            string folder_name = "N9201_90";
+            string file_name = serie + "_" + numer;
             FileStream stream = new FileStream(path, FileMode.Open);
-            Google_service.UploadFile(file_name, stream, folder_name);
+            Google_service.UploadFile(file_name, stream, serie);
         }
 
         public static void Update(string new_name, string client_id, string client_secret)
@@ -62,7 +61,7 @@ namespace Reactor_Interface.Classes.GoogleAPI
             Google_service.ConnectAsync(client_id, client_secret, name);
         }
 
-        public static bool Connect()
+        public static Google_service.RequestResult Connect()
         {
             return Google_service.Connect(client_id, client_secret, name);
         }

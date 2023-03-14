@@ -98,6 +98,7 @@
   <ItemGroup>
     <Compile Include="Classes\Data.cs" />
     <Compile Include="Classes\DPI.cs" />
+    <Compile Include="Classes\Error_message.cs" />
     <Compile Include="Classes\Exl.cs" />
     <Compile Include="Classes\ExperimentExl.cs" />
     <Compile Include="Classes\GoogleAPI\Auth.cs" />
@@ -108,11 +109,11 @@
     <Compile Include="Classes\Interface_settings.cs" />
     <Compile Include="Classes\Internet_checker.cs" />
     <Compile Include="Classes\Port.cs" />
-    <Compile Include="Forms\Experiment\Experiment.cs">
+    <Compile Include="Forms\Experiment\Experiment_menu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Experiment\Experiment.Designer.cs">
-      <DependentUpon>Experiment.cs</DependentUpon>
+    <Compile Include="Forms\Experiment\Experiment_menu.Designer.cs">
+      <DependentUpon>Experiment_menu.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Commands_menu.cs">
       <SubType>Form</SubType>
@@ -131,6 +132,18 @@
     </Compile>
     <Compile Include="Forms\Drive_settings_menu.Designer.cs">
       <DependentUpon>Drive_settings_menu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Experiment\Numer_menu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Experiment\Numer_menu.Designer.cs">
+      <DependentUpon>Numer_menu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Experiment\Serie_exp_menu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Experiment\Serie_exp_menu.Designer.cs">
+      <DependentUpon>Serie_exp_menu.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Experiment\Status_experiment_menu.cs">
       <SubType>Form</SubType>
@@ -158,8 +171,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Forms\Experiment\Experiment.resx">
-      <DependentUpon>Experiment.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\Experiment\Experiment_menu.resx">
+      <DependentUpon>Experiment_menu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Commands_menu.resx">
       <DependentUpon>Commands_menu.cs</DependentUpon>
@@ -169,6 +182,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Drive_settings_menu.resx">
       <DependentUpon>Drive_settings_menu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Experiment\Numer_menu.resx">
+      <DependentUpon>Numer_menu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Experiment\Serie_exp_menu.resx">
+      <DependentUpon>Serie_exp_menu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Experiment\Status_experiment_menu.resx">
       <DependentUpon>Status_experiment_menu.cs</DependentUpon>

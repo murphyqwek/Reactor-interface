@@ -12,14 +12,8 @@ namespace Reactor_Interface.Classes
     public static class Internet_checker
     {
         private static string ip = "142.250.185.106"; //google api drive IP
-        public enum Status
-        {
-            Success,
-            NoInternet,
-            Unknown
-        }
 
-        public static Status CheckInternet()
+        public static bool CheckInternet()
         {
             Ping ping = new Ping();
             PingReply response;
@@ -28,15 +22,13 @@ namespace Reactor_Interface.Classes
             {
                 response = ping.Send(google_api_ip);
                 if (response.Status == IPStatus.Success)
-                    return Status.Success;
-                else if (response.Status == IPStatus.HardwareError)
-                    return Status.NoInternet;
+                    return true;
                 else
-                    return Status.Unknown;
+                    return false;
             }
             catch (PingException)
             {
-                return Status.NoInternet;
+                return false;
             }
         }
     }

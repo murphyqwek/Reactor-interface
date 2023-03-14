@@ -19,7 +19,7 @@ namespace Reactor_Interface.Classes.GoogleAPI
 {
     static class Auth
     {
-        static public async void test2()
+        static public void test2()
         {
             UserCredential credential;
 
@@ -41,7 +41,7 @@ namespace Reactor_Interface.Classes.GoogleAPI
 
             if (ct.IsCancellationRequested) return;
         }
-        static public async void test()
+        static public void test()
         {
             CancellationToken cancellation = new CancellationToken();
             cancellation.ThrowIfCancellationRequested();
@@ -84,7 +84,7 @@ namespace Reactor_Interface.Classes.GoogleAPI
             //var res = await service.Files.Create(folder).ExecuteAsync();
             //var res = await service.Files.Create(folder, stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet").UploadAsync();
             
-            string id = "2";
+            //string id = "2";
         }
     }
 }

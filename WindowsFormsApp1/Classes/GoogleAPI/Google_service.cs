@@ -32,6 +32,15 @@ namespace Reactor_Interface.Classes.GoogleAPI
         static private readonly string file_store = "Reactor.GoogleDrive.API.store";
         static private readonly string file_prefix = "Google.Apis.Auth.OAuth2.Responses.TokenResponse";
 
+        public enum RequestResult
+        {
+            Succses,
+            WrongClientId,
+            WrongClientSecret,
+            NoInternet,
+            RunOutOfTime
+        }
+
         static public void DeleteTokenFile(string name)
         {
             string path = String.Format("{0}\\{1}\\{2}-{3}",
@@ -92,6 +101,8 @@ namespace Reactor_Interface.Classes.GoogleAPI
         {
             try
             {
+                if (!Internet_checker.CheckInternet())
+                    return;
                 if (!Client_data_check.IsClientIdValid(client_id))
                     return;
 
@@ -112,19 +123,26 @@ namespace Reactor_Interface.Classes.GoogleAPI
                     HttpClientInitializer = credential,
                 });
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 service = null;
             }
         }
 
-        static public bool Connect(string client_id, string client_secret, string name)
+        static public RequestResult Connect(string client_id, string client_secret, string name)
         {
             try
             {
+                if (!Internet_checker.CheckInternet())
+                    return RequestResult.NoInternet;
+
                 if (!Client_data_check.IsClientIdValid(client_id))
-                    return false;
-                
+                    return RequestResult.WrongClientId;
+
+                CancellationTokenSource cts = new CancellationTokenSource();
+                cts.CancelAfter(TimeSpan.FromSeconds(60));
+                CancellationToken ct = cts.Token;
+
                 var credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
                                 new ClientSecrets
                                 {
@@ -133,7 +151,7 @@ namespace Reactor_Interface.Classes.GoogleAPI
                                 },
                                 new[] { DriveService.Scope.DriveFile },
                                 name,
-                                CancellationToken.None,
+                                ct,
                                 new FileDataStore(file_store)
                                 ).Result;
                 
@@ -143,12 +161,12 @@ namespace Reactor_Interface.Classes.GoogleAPI
                     
                 });
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 service = null;
-                return false;
+                return RequestResult.WrongClientSecret;
             }
-            return true;
+            return RequestResult.Succses;
         }
     }
 }

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.Office.Interop.Excel;
+using Reactor_Interface.Classes;
 using Reactor_Interface.Classes.GoogleAPI;
 
 namespace Reactor_Interface.Forms
@@ -29,37 +30,6 @@ namespace Reactor_Interface.Forms
             base.ScaleControl(factor, specified);
             this.MinimumSize = this.MaximumSize = this.Size;
         }
-
-        private bool check()
-        {
-            string name = drive_name_txtbx.Text.Trim();
-            string client_id = client_id_txtbx.Text.Replace(" ", "");
-            string client_secret = client_secret_txtbx.Text.Replace(" ", "");
-
-            if (name.Length > 12)
-            {
-                MessageBox.Show("Имя диска должно быть меньше 12 символов", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
-                return false;
-            }
-            if (name.Length == 0)
-            {
-                MessageBox.Show("Укажите имя диска", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
-                return false;
-            }
-            if (client_id.Length == 0)
-            {
-                MessageBox.Show("Укажите client id", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
-                return false;
-            }
-            if (client_secret.Length == 0)
-            {
-                MessageBox.Show("Укажите client secret", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
-                return false;
-            }
-
-            return true;
-        }
-
         private void save_btn_Click(object sender, EventArgs e)
         {
             string name = drive_name_txtbx.Text.Trim();
@@ -69,8 +39,11 @@ namespace Reactor_Interface.Forms
             if (name == Drive.name && client_id == Drive.client_id && client_secret == Drive.client_secret)
                 return;
 
-            if (!check())
+            string data_error_text = Error_message.DriveDataInvalidError(name, client_id, client_secret);
+            if (data_error_text != "") {
+                MessageBox.Show(data_error_text, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 return;
+            }
 
             DialogResult result = MessageBox.Show("Вы точно хотите изменить этот диск?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
 
@@ -84,15 +57,22 @@ namespace Reactor_Interface.Forms
                 this.Close();
             }
 
-            if (!Google_service.Connect(client_id, client_secret, name))
+            var connect_result = Google_service.Connect(client_id, client_secret, name);
+
+            this.Focus();
+
+            string connect_error_text = Error_message.ConnectionError(connect_result);
+
+            if(connect_error_text != "")
             {
-                this.Focus();
-                Google_service.DeleteTokenFile(name);
-                MessageBox.Show("Неверный client id или client secret", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                if (connect_result == Google_service.RequestResult.WrongClientId
+                || connect_result == Google_service.RequestResult.WrongClientSecret)
+                    Google_service.DeleteTokenFile(name);
+
+                MessageBox.Show(connect_error_text, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 return;
             }
 
-            this.Focus();
             Google_service.DeleteTokenFile(Drive.name);
             Drive.Update(name, client_id, client_secret);
             MessageBox.Show("Диск успешно изменён", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information);
