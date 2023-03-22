@@ -91,5 +91,11 @@ namespace Reactor_Interface
             this.serie = serie;
             this.Text = "Эксперимент. Серия: " + serie;
         }
+
+        private void template_btn_Click(object sender, EventArgs e)
+        {
+            Template_menu template = new Template_menu();
+            template.Show();
+        }
     }
 }
