@@ -749,7 +749,7 @@ namespace WindowsFormsApp1
                 MessageBox.Show("Успешно!");
             else
                 MessageBox.Show("Ошибка");*/
-            Experiment_menu exp = new Experiment_menu();
+            Jounral_menu exp = new Jounral_menu();
             exp.ShowDialog();
         }
 

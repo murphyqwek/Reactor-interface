@@ -1,6 +1,6 @@
 ﻿namespace Reactor_Interface
 {
-    partial class Experiment_menu
+    partial class Jounral_menu
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Experiment_menu));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Jounral_menu));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.template_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.change_serie_menubtn = new System.Windows.Forms.ToolStripMenuItem();

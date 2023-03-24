@@ -12,8 +12,8 @@ namespace Reactor_Interface.Forms.Experiment
 {
     public partial class Serie_exp_menu : Form
     {
-        private Experiment_menu exp_menu;
-        public Serie_exp_menu(Experiment_menu exp_menu)
+        private Jounral_menu exp_menu;
+        public Serie_exp_menu(Jounral_menu exp_menu)
         {
             InitializeComponent();
             serie_textbx.Text = exp_menu.get_serie();

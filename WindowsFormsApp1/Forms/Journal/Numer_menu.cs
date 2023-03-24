@@ -13,8 +13,8 @@ namespace Reactor_Interface.Forms.Experiment
 {
     public partial class Numer_menu : Form
     {
-        private Experiment_menu exp_menu;
-        public Numer_menu(Experiment_menu exp_menu)
+        private Jounral_menu exp_menu;
+        public Numer_menu(Jounral_menu exp_menu)
         {
             InitializeComponent();
             this.exp_menu = exp_menu;

@@ -11,20 +11,31 @@ using System.Windows.Forms;
 using Newtonsoft.Json.Bson;
 using Reactor_Interface.Classes;
 using Reactor_Interface.Classes.GoogleAPI;
+using Reactor_Interface.Classes.Templates;
 using Reactor_Interface.Forms;
 using Reactor_Interface.Forms.Experiment;
 
 namespace Reactor_Interface
 {
-    public partial class Experiment_menu : Form
+    public partial class Jounral_menu : Form
     {
         public string serie = "";
         public string numer = "";
-        public Experiment_menu()
+        public Jounral_menu()
         {
             InitializeComponent();
             googleDriveToolStripMenuItem.Text = "Google Drive: " + Drive.name;
+            upload_using_template();
             upload_drives();
+        }
+
+        private void upload_using_template()
+        {
+            string using_template_name = Template_system.get_using_template();
+            if (!Template_system.IsTemplateCreated(using_template_name))
+                return;
+
+            template_btn.Text = "Шаблон: " + using_template_name;
         }
 
         private void upload_drives()
@@ -94,8 +105,13 @@ namespace Reactor_Interface
 
         private void template_btn_Click(object sender, EventArgs e)
         {
-            Template_menu template = new Template_menu();
+            Template_menu template = new Template_menu(this);
             template.Show();
+        }
+
+        public void upload_template(Reactor_Interface.Classes.Templates.Template template)
+        {
+            upload_using_template();
         }
     }
 }

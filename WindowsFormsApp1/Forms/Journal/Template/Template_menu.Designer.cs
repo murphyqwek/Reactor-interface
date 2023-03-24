@@ -28,22 +28,29 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Template_menu));
             this.template_gorupbox = new System.Windows.Forms.GroupBox();
-            this.template_list = new System.Windows.Forms.ListBox();
+            this.template_view = new System.Windows.Forms.ListView();
+            this.MainColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.template_contextmenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.change_btn = new System.Windows.Forms.ToolStripMenuItem();
+            this.delete_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.find_groupbx = new System.Windows.Forms.GroupBox();
-            this.find_btn = new System.Windows.Forms.Button();
             this.find_txtbx = new System.Windows.Forms.RichTextBox();
-            this.used_template_lbl = new System.Windows.Forms.Label();
+            this.find_btn = new System.Windows.Forms.Button();
+            this.using_template_lbl = new System.Windows.Forms.Label();
             this.upload_btn = new System.Windows.Forms.Button();
             this.create_btn = new System.Windows.Forms.Button();
+            this.chosen_template_lbl = new System.Windows.Forms.Label();
             this.template_gorupbox.SuspendLayout();
+            this.template_contextmenu.SuspendLayout();
             this.find_groupbx.SuspendLayout();
             this.SuspendLayout();
             // 
             // template_gorupbox
             // 
-            this.template_gorupbox.Controls.Add(this.template_list);
+            this.template_gorupbox.Controls.Add(this.template_view);
             this.template_gorupbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.template_gorupbox.Location = new System.Drawing.Point(12, 12);
             this.template_gorupbox.Name = "template_gorupbox";
@@ -52,14 +59,48 @@
             this.template_gorupbox.TabStop = false;
             this.template_gorupbox.Text = "Шаблоны";
             // 
-            // template_list
+            // template_view
             // 
-            this.template_list.FormattingEnabled = true;
-            this.template_list.ItemHeight = 25;
-            this.template_list.Location = new System.Drawing.Point(6, 25);
-            this.template_list.Name = "template_list";
-            this.template_list.Size = new System.Drawing.Size(420, 379);
-            this.template_list.TabIndex = 0;
+            this.template_view.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.MainColumn});
+            this.template_view.ContextMenuStrip = this.template_contextmenu;
+            this.template_view.FullRowSelect = true;
+            this.template_view.HideSelection = false;
+            this.template_view.Location = new System.Drawing.Point(6, 29);
+            this.template_view.MultiSelect = false;
+            this.template_view.Name = "template_view";
+            this.template_view.ShowGroups = false;
+            this.template_view.Size = new System.Drawing.Size(420, 391);
+            this.template_view.TabIndex = 7;
+            this.template_view.UseCompatibleStateImageBehavior = false;
+            this.template_view.View = System.Windows.Forms.View.List;
+            this.template_view.SelectedIndexChanged += new System.EventHandler(this.template_view_SelectedIndexChanged);
+            // 
+            // MainColumn
+            // 
+            this.MainColumn.Text = "";
+            // 
+            // template_contextmenu
+            // 
+            this.template_contextmenu.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.template_contextmenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.change_btn,
+            this.delete_btn});
+            this.template_contextmenu.Name = "template_contextmenu";
+            this.template_contextmenu.Size = new System.Drawing.Size(241, 101);
+            this.template_contextmenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.template_contextmenu_ItemClicked);
+            // 
+            // change_btn
+            // 
+            this.change_btn.Name = "change_btn";
+            this.change_btn.Size = new System.Drawing.Size(240, 32);
+            this.change_btn.Text = "Изменить шаблон";
+            // 
+            // delete_btn
+            // 
+            this.delete_btn.Name = "delete_btn";
+            this.delete_btn.Size = new System.Drawing.Size(240, 32);
+            this.delete_btn.Text = "Удалить шаблон";
             // 
             // find_groupbx
             // 
@@ -73,6 +114,14 @@
             this.find_groupbx.TabStop = false;
             this.find_groupbx.Text = "Поиск";
             // 
+            // find_txtbx
+            // 
+            this.find_txtbx.Location = new System.Drawing.Point(7, 32);
+            this.find_txtbx.Name = "find_txtbx";
+            this.find_txtbx.Size = new System.Drawing.Size(196, 37);
+            this.find_txtbx.TabIndex = 2;
+            this.find_txtbx.Text = "";
+            // 
             // find_btn
             // 
             this.find_btn.Location = new System.Drawing.Point(222, 32);
@@ -82,23 +131,15 @@
             this.find_btn.Text = "Найти";
             this.find_btn.UseVisualStyleBackColor = true;
             // 
-            // find_txtbx
+            // using_template_lbl
             // 
-            this.find_txtbx.Location = new System.Drawing.Point(7, 32);
-            this.find_txtbx.Name = "find_txtbx";
-            this.find_txtbx.Size = new System.Drawing.Size(196, 37);
-            this.find_txtbx.TabIndex = 2;
-            this.find_txtbx.Text = "";
-            // 
-            // used_template_lbl
-            // 
-            this.used_template_lbl.AutoSize = true;
-            this.used_template_lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.used_template_lbl.Location = new System.Drawing.Point(445, 219);
-            this.used_template_lbl.Name = "used_template_lbl";
-            this.used_template_lbl.Size = new System.Drawing.Size(235, 25);
-            this.used_template_lbl.TabIndex = 3;
-            this.used_template_lbl.Text = "Используемый шаблон:";
+            this.using_template_lbl.AutoSize = true;
+            this.using_template_lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.using_template_lbl.Location = new System.Drawing.Point(450, 241);
+            this.using_template_lbl.Name = "using_template_lbl";
+            this.using_template_lbl.Size = new System.Drawing.Size(235, 25);
+            this.using_template_lbl.TabIndex = 3;
+            this.using_template_lbl.Text = "Используемый шаблон:";
             // 
             // upload_btn
             // 
@@ -108,6 +149,7 @@
             this.upload_btn.TabIndex = 4;
             this.upload_btn.Text = "Загрузить шаблон";
             this.upload_btn.UseVisualStyleBackColor = true;
+            this.upload_btn.Click += new System.EventHandler(this.upload_btn_Click);
             // 
             // create_btn
             // 
@@ -119,20 +161,32 @@
             this.create_btn.UseVisualStyleBackColor = true;
             this.create_btn.Click += new System.EventHandler(this.create_btn_Click);
             // 
+            // chosen_template_lbl
+            // 
+            this.chosen_template_lbl.AutoSize = true;
+            this.chosen_template_lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.chosen_template_lbl.Location = new System.Drawing.Point(452, 134);
+            this.chosen_template_lbl.Name = "chosen_template_lbl";
+            this.chosen_template_lbl.Size = new System.Drawing.Size(199, 50);
+            this.chosen_template_lbl.TabIndex = 7;
+            this.chosen_template_lbl.Text = "Выбранный шаблон:\r\nШаблон не выбран ";
+            // 
             // Template_menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 444);
+            this.Controls.Add(this.chosen_template_lbl);
             this.Controls.Add(this.create_btn);
             this.Controls.Add(this.upload_btn);
-            this.Controls.Add(this.used_template_lbl);
+            this.Controls.Add(this.using_template_lbl);
             this.Controls.Add(this.find_groupbx);
             this.Controls.Add(this.template_gorupbox);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Template_menu";
-            this.Text = "Шаблоны";
+            this.Text = "Выберите шаблон";
             this.template_gorupbox.ResumeLayout(false);
+            this.template_contextmenu.ResumeLayout(false);
             this.find_groupbx.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -141,12 +195,17 @@
 
         #endregion
         private System.Windows.Forms.GroupBox template_gorupbox;
-        private System.Windows.Forms.ListBox template_list;
         private System.Windows.Forms.GroupBox find_groupbx;
         private System.Windows.Forms.RichTextBox find_txtbx;
         private System.Windows.Forms.Button find_btn;
-        private System.Windows.Forms.Label used_template_lbl;
+        private System.Windows.Forms.Label using_template_lbl;
         private System.Windows.Forms.Button upload_btn;
         private System.Windows.Forms.Button create_btn;
+        private System.Windows.Forms.ContextMenuStrip template_contextmenu;
+        private System.Windows.Forms.ToolStripMenuItem change_btn;
+        private System.Windows.Forms.ToolStripMenuItem delete_btn;
+        private System.Windows.Forms.ListView template_view;
+        private System.Windows.Forms.ColumnHeader MainColumn;
+        private System.Windows.Forms.Label chosen_template_lbl;
     }
 }

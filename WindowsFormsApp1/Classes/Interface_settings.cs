@@ -145,5 +145,23 @@ namespace WindowsFormsApp1.Classes
                 key.DeleteValue(name);
             }
         }
+
+        public static string get_using_template()
+        {
+            string template;
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Reactor Interface TPU"))
+            {
+                template = key?.GetValue("Using Template")?.ToString();
+            }
+            return template;
+        }
+
+        static public void save_using_template(string using_template)
+        {
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Reactor Interface TPU"))
+            {
+                key.SetValue("Using Template", using_template);
+            }
+        }
     }
 }

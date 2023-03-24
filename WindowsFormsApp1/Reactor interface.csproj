@@ -111,11 +111,12 @@
     <Compile Include="Classes\Internet_checker.cs" />
     <Compile Include="Classes\Port.cs" />
     <Compile Include="Classes\Templates\Template.cs" />
-    <Compile Include="Forms\Experiment\Experiment_menu.cs">
+    <Compile Include="Classes\Templates\Template_system.cs" />
+    <Compile Include="Forms\Journal\Jounral_menu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Experiment\Experiment_menu.Designer.cs">
-      <DependentUpon>Experiment_menu.cs</DependentUpon>
+    <Compile Include="Forms\Journal\Jounral_menu.Designer.cs">
+      <DependentUpon>Jounral_menu.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Commands_menu.cs">
       <SubType>Form</SubType>
@@ -135,34 +136,34 @@
     <Compile Include="Forms\Drive_settings_menu.Designer.cs">
       <DependentUpon>Drive_settings_menu.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Experiment\Numer_menu.cs">
+    <Compile Include="Forms\Journal\Numer_menu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Experiment\Numer_menu.Designer.cs">
+    <Compile Include="Forms\Journal\Numer_menu.Designer.cs">
       <DependentUpon>Numer_menu.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Experiment\Serie_exp_menu.cs">
+    <Compile Include="Forms\Journal\Serie_exp_menu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Experiment\Serie_exp_menu.Designer.cs">
+    <Compile Include="Forms\Journal\Serie_exp_menu.Designer.cs">
       <DependentUpon>Serie_exp_menu.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Experiment\Status_experiment_menu.cs">
+    <Compile Include="Forms\Journal\Status_experiment_menu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Experiment\Status_experiment_menu.Designer.cs">
+    <Compile Include="Forms\Journal\Status_experiment_menu.Designer.cs">
       <DependentUpon>Status_experiment_menu.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Template\Create_template_menu.cs">
+    <Compile Include="Forms\Journal\Template\Create_template_menu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Template\Create_template_menu.Designer.cs">
+    <Compile Include="Forms\Journal\Template\Create_template_menu.Designer.cs">
       <DependentUpon>Create_template_menu.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Template\Template_menu.cs">
+    <Compile Include="Forms\Journal\Template\Template_menu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Template\Template_menu.Designer.cs">
+    <Compile Include="Forms\Journal\Template\Template_menu.Designer.cs">
       <DependentUpon>Template_menu.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Graphic.cs">
@@ -185,8 +186,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Forms\Experiment\Experiment_menu.resx">
-      <DependentUpon>Experiment_menu.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\Journal\Jounral_menu.resx">
+      <DependentUpon>Jounral_menu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Commands_menu.resx">
       <DependentUpon>Commands_menu.cs</DependentUpon>
@@ -197,19 +198,19 @@
     <EmbeddedResource Include="Forms\Drive_settings_menu.resx">
       <DependentUpon>Drive_settings_menu.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Experiment\Numer_menu.resx">
+    <EmbeddedResource Include="Forms\Journal\Numer_menu.resx">
       <DependentUpon>Numer_menu.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Experiment\Serie_exp_menu.resx">
+    <EmbeddedResource Include="Forms\Journal\Serie_exp_menu.resx">
       <DependentUpon>Serie_exp_menu.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Experiment\Status_experiment_menu.resx">
+    <EmbeddedResource Include="Forms\Journal\Status_experiment_menu.resx">
       <DependentUpon>Status_experiment_menu.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Template\Create_template_menu.resx">
+    <EmbeddedResource Include="Forms\Journal\Template\Create_template_menu.resx">
       <DependentUpon>Create_template_menu.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Template\Template_menu.resx">
+    <EmbeddedResource Include="Forms\Journal\Template\Template_menu.resx">
       <DependentUpon>Template_menu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Graphic.resx">
