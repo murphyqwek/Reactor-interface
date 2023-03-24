@@ -89,41 +89,6 @@ namespace Reactor_Interface.Classes
             }
             return Save_result.Saved;
         }
-        static public Save_result Create_template(TabControl template_control, string name)
-        {
-            string template = "";
-
-            foreach (TabPage page in template_control.TabPages)
-            {
-                template += page.Text;
-                for (int i = 0; i < Create_template_menu.columns; i++)
-                {
-                    for (int y = 0; y < Create_template_menu.rows; y++)
-                    {
-                        string item_id = i.ToString() + y.ToString();
-                        var textbox = page.Controls.Find(item_id + Create_template_menu.text_box_item_suffix, true)
-                                                        .FirstOrDefault();
-                        if (textbox == null)
-                            continue;
-                        if (textbox.Text == "")
-                            return Save_result.EmptyFiled;
-                        template += "\r\t"+ textbox.Text;
-                    }
-                    template += (i < Create_template_menu.columns) ? "\r\t" : "";
-                }
-                template += "\r" + page_separator + '\r';
-            }
-            try
-            {
-                Write_template_to_file(template, name);
-            }
-            catch
-            {
-                return Save_result.CreationError;
-            }
-            return Save_result.Saved;
-        }
-
         static private void Write_template_to_file(string template, string template_name)
         {
             Create_folder();

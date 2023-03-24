@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Google.Apis.Auth.OAuth2.Responses;
 using Reactor_Interface;
+using Reactor_Interface.Classes;
 using Reactor_Interface.Classes.GoogleAPI;
 using Reactor_Interface.Forms.Experiment;
 using WindowsFormsApp1.Classes;
@@ -15,6 +17,7 @@ namespace WindowsFormsApp1
         /// <summary>
         /// Главная точка входа для приложения.
         /// </summary>
+
         [STAThread]
         static void Main()
         {
