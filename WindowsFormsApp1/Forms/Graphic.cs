@@ -96,6 +96,7 @@ namespace Reactor_Interface
 
         public void Clear_Graphic()
         {
+            return;
             if (!is_drawing)
             {
                 foreach (var series in Graph.Series)
@@ -105,6 +106,11 @@ namespace Reactor_Interface
                 Graph.Series["step"].Points.Add(new DataPoint { IsEmpty = true });
                 Graph.Series["tok"].Points.Add(new DataPoint { IsEmpty = true });
             }
+        }
+
+        public Chart GetChart()
+        {
+            return Graph;
         }
 
         private void какExcelТаблицуToolStripMenuItem_Click(object sender, EventArgs e)

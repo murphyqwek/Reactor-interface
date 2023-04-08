@@ -25,7 +25,8 @@ namespace WindowsFormsApp1
             Application.SetCompatibleTextRenderingDefault(false);
             Google_data.Upload_data();
             Drive.Upload(Google_data.Get_current_drive());
-            Application.Run(new Jounral_menu());
+            //Application.Run(new Jounral_menu());
+            Application.Run(new Main_menu());
         }
     }
 }

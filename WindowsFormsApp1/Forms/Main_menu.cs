@@ -1,6 +1,7 @@
 ﻿using Reactor_Interface;
 using Reactor_Interface.Classes;
 using Reactor_Interface.Classes.GoogleAPI;
+using Reactor_Interface.Classes.Weigher;
 using Reactor_Interface.Forms;
 using System;
 using System.Collections.Concurrent;
@@ -177,6 +178,12 @@ namespace WindowsFormsApp1
                 port_menu_btn.Text += port;
             }
 
+            foreach(string port in Port.get_ports())
+            {
+                port_menu_btn.DropDownItems.Add(port);
+                IR_port_menu_btn.DropDownItems.Add(port);
+            }
+
             IR_port_menu_btn.Text = "IR порт: ";
             if (Port.get_ports().Contains(IR_port))
             {
@@ -293,6 +300,7 @@ namespace WindowsFormsApp1
                 SerialPort.BaudRate = speed;
                 try
                 {
+                    
                     graphic_menu.Clear_Graphic();
                     graphic_menu.is_drawing = true;
 
@@ -304,7 +312,7 @@ namespace WindowsFormsApp1
 
                     SerialPort.Open();
                     SerialPort.Write(param);
-
+                    
                     state_lbl.ForeColor = Color.Green;
                     state_lbl.Text = "Работает";
 
@@ -749,7 +757,7 @@ namespace WindowsFormsApp1
                 MessageBox.Show("Успешно!");
             else
                 MessageBox.Show("Ошибка");*/
-            Jounral_menu exp = new Jounral_menu();
+            Jounral_menu exp = new Jounral_menu(graphic_menu.GetChart());
             exp.ShowDialog();
         }
 
@@ -768,6 +776,11 @@ namespace WindowsFormsApp1
             } 
             else
                 Drive.Upload(drive_name);
+        }
+
+        private void settings_menu_btn_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

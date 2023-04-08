@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using Reactor_Interface.Classes.Templates;
 using Microsoft.Office.Interop.Excel;
 using WindowsFormsApp1.Classes;
+using System.Web.UI;
 
 namespace Reactor_Interface.Classes
 {
@@ -49,15 +50,15 @@ namespace Reactor_Interface.Classes
 
         static public Save_result Create_template_json(TabControl template_control, string name)
         {
-            Dictionary<string, List<List<string>>> pages = new Dictionary<string, List<List<string>>>();
+            Dictionary<string, List<List<Pair>>> pages = new Dictionary<string, List<List<Pair>>>();
 
             foreach (TabPage page in template_control.TabPages)
             {
                 string name_page = page.Text;
-                List<List<string>> fields = new List<List<string>>();
+                List<List<Pair>> fields = new List<List<Pair>>();
                 for (int i = 0; i < Create_template_menu.columns; i++)
                 {
-                    List<string> column = new List<string>();
+                    List<Pair> column = new List<Pair>();
                     for (int y = 0; y < Create_template_menu.rows; y++)
                     {
                         string item_id = i.ToString() + y.ToString();
@@ -67,7 +68,8 @@ namespace Reactor_Interface.Classes
                             continue;
                         if (textbox.Text == "")
                             return Save_result.EmptyFiled;
-                        column.Add(textbox.Text);
+
+                        column.Add(new Pair(textbox.Text, textbox.Tag.ToString()));
                     }
                     if (column.Count > 0)
                         fields.Add(column);
@@ -99,6 +101,36 @@ namespace Reactor_Interface.Classes
                 // запись массива байтов в файл
                 fstream.Write(buffer, 0, buffer.Length);
             }
+        }
+
+        static public Dictionary<string, List<Pair>> get_experiment(TabControl pages, Template template)
+        {
+            Dictionary<string, List<Pair>> experiment = new Dictionary<string, List<Pair>>();
+
+            foreach (TabPage page in pages.TabPages)
+            {
+                string pageName = page.Text;
+
+                List<Pair> textboxes = new List<Pair>();
+
+                for (int column = 0; column < template.Pages[pageName].Count; column++)
+                {
+                    for (int row = 0; row < template.Pages[pageName][column].Count; row++)
+                    {
+                        var textbox = page.Controls.Find(column.ToString() + row.ToString() + Create_template_menu.text_box_item_suffix, true)
+                                                        .FirstOrDefault();
+
+                        string fieldName = textbox.Tag.ToString().Split(';')[0], value = textbox.Text;
+
+                        Pair pair = new Pair(fieldName, value);
+                        textboxes.Add(pair);
+                    }
+                }
+
+                experiment.Add(pageName, textboxes);
+            }
+
+            return experiment;
         }
 
         static public string[] get_template_array()

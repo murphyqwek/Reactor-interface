@@ -349,7 +349,7 @@
             this.send_experiment_btn});
             this.menu.Location = new System.Drawing.Point(0, 0);
             this.menu.Name = "menu";
-            this.menu.Size = new System.Drawing.Size(1664, 42);
+            this.menu.Size = new System.Drawing.Size(1664, 40);
             this.menu.TabIndex = 7;
             this.menu.Text = "menu";
             // 
@@ -362,9 +362,10 @@
             this.google_drive_menu_btn});
             this.settings_menu_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.settings_menu_btn.Name = "settings_menu_btn";
-            this.settings_menu_btn.Size = new System.Drawing.Size(148, 38);
+            this.settings_menu_btn.Size = new System.Drawing.Size(148, 36);
             this.settings_menu_btn.Text = "Настройки";
             this.settings_menu_btn.DropDownOpened += new System.EventHandler(this.settings_menu_btn_DropDownOpened);
+            this.settings_menu_btn.Click += new System.EventHandler(this.settings_menu_btn_Click);
             // 
             // port_menu_btn
             // 
@@ -399,7 +400,7 @@
             // 
             this.debug_menu_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.debug_menu_btn.Name = "debug_menu_btn";
-            this.debug_menu_btn.Size = new System.Drawing.Size(95, 38);
+            this.debug_menu_btn.Size = new System.Drawing.Size(95, 36);
             this.debug_menu_btn.Text = "Дебаг";
             this.debug_menu_btn.Visible = false;
             this.debug_menu_btn.Click += new System.EventHandler(this.debug_menu_btn_Click);
@@ -408,7 +409,7 @@
             // 
             this.graphic_menu_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.graphic_menu_btn.Name = "graphic_menu_btn";
-            this.graphic_menu_btn.Size = new System.Drawing.Size(109, 38);
+            this.graphic_menu_btn.Size = new System.Drawing.Size(109, 36);
             this.graphic_menu_btn.Text = "График";
             this.graphic_menu_btn.Click += new System.EventHandler(this.graphic_menu_btn_Click);
             // 
@@ -417,7 +418,7 @@
             this.send_experiment_btn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.send_experiment_btn.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.send_experiment_btn.Name = "send_experiment_btn";
-            this.send_experiment_btn.Size = new System.Drawing.Size(297, 38);
+            this.send_experiment_btn.Size = new System.Drawing.Size(297, 36);
             this.send_experiment_btn.Text = "Отправить эксперимент";
             this.send_experiment_btn.Click += new System.EventHandler(this.send_experiment_btn_Click);
             // 
@@ -581,10 +582,6 @@
             // port_checking
             // 
             this.port_checking.Tick += new System.EventHandler(this.port_checking_Tick);
-            // 
-            // IR_Serial_Port
-            // 
-            this.IR_Serial_Port.BaudRate = 19200;
             // 
             // IR_box
             // 

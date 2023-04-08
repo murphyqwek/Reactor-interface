@@ -28,23 +28,30 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Jounral_menu));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.template_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.change_serie_menubtn = new System.Windows.Forms.ToolStripMenuItem();
             this.googleDriveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.save_menubtn = new System.Windows.Forms.ToolStripMenuItem();
-            this.компьютерToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SaveOnComp_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.googleDriveToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.weigher_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.data_groupbox = new System.Windows.Forms.GroupBox();
             this.data_control = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
+            this.comments_txtbx = new System.Windows.Forms.RichTextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.clear_btn = new System.Windows.Forms.Button();
+            this.context_menu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.get_mass_btn = new System.Windows.Forms.Button();
+            this.weigh_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.data_groupbox.SuspendLayout();
-            this.data_control.SuspendLayout();
+            this.context_menu.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -55,10 +62,11 @@
             this.template_btn,
             this.change_serie_menubtn,
             this.googleDriveToolStripMenuItem,
-            this.save_menubtn});
+            this.save_menubtn,
+            this.weigher_btn});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1419, 36);
+            this.menuStrip1.Size = new System.Drawing.Size(1304, 36);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -90,18 +98,20 @@
             // 
             this.save_menubtn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.save_menubtn.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.компьютерToolStripMenuItem,
+            this.SaveOnComp_btn,
             this.googleDriveToolStripMenuItem1});
             this.save_menubtn.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.save_menubtn.Name = "save_menubtn";
             this.save_menubtn.Size = new System.Drawing.Size(279, 32);
             this.save_menubtn.Text = "Сохранить эксперимент на:";
+            this.save_menubtn.Click += new System.EventHandler(this.save_menubtn_Click);
             // 
-            // компьютерToolStripMenuItem
+            // SaveOnComp_btn
             // 
-            this.компьютерToolStripMenuItem.Name = "компьютерToolStripMenuItem";
-            this.компьютерToolStripMenuItem.Size = new System.Drawing.Size(230, 36);
-            this.компьютерToolStripMenuItem.Text = "Компьютер";
+            this.SaveOnComp_btn.Name = "SaveOnComp_btn";
+            this.SaveOnComp_btn.Size = new System.Drawing.Size(230, 36);
+            this.SaveOnComp_btn.Text = "Компьютер";
+            this.SaveOnComp_btn.Click += new System.EventHandler(this.SaveOnComp_btn_Click);
             // 
             // googleDriveToolStripMenuItem1
             // 
@@ -110,49 +120,49 @@
             this.googleDriveToolStripMenuItem1.Text = "Google Drive";
             this.googleDriveToolStripMenuItem1.Click += new System.EventHandler(this.save_to_drive_btn_Click);
             // 
+            // weigher_btn
+            // 
+            this.weigher_btn.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.weigher_btn.Name = "weigher_btn";
+            this.weigher_btn.Size = new System.Drawing.Size(136, 32);
+            this.weigher_btn.Text = "Порт весов:";
+            this.weigher_btn.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.weigher_btn_DropDownItemClicked);
+            // 
             // data_groupbox
             // 
             this.data_groupbox.Controls.Add(this.data_control);
             this.data_groupbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.data_groupbox.Location = new System.Drawing.Point(12, 50);
+            this.data_groupbox.Location = new System.Drawing.Point(12, 39);
             this.data_groupbox.Name = "data_groupbox";
-            this.data_groupbox.Size = new System.Drawing.Size(755, 490);
+            this.data_groupbox.Size = new System.Drawing.Size(734, 458);
             this.data_groupbox.TabIndex = 1;
             this.data_groupbox.TabStop = false;
             this.data_groupbox.Text = "Данные эксперимента";
             // 
             // data_control
             // 
-            this.data_control.Controls.Add(this.tabPage1);
-            this.data_control.Location = new System.Drawing.Point(7, 28);
+            this.data_control.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.data_control.Location = new System.Drawing.Point(3, 26);
             this.data_control.Name = "data_control";
             this.data_control.SelectedIndex = 0;
-            this.data_control.Size = new System.Drawing.Size(742, 456);
+            this.data_control.Size = new System.Drawing.Size(728, 429);
             this.data_control.TabIndex = 0;
-            // 
-            // tabPage1
-            // 
-            this.tabPage1.Location = new System.Drawing.Point(4, 34);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(734, 418);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.richTextBox1.Location = new System.Drawing.Point(975, 78);
+            this.richTextBox1.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.richTextBox1.Location = new System.Drawing.Point(2948, 198);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(432, 237);
+            this.richTextBox1.Size = new System.Drawing.Size(432, 236);
             this.richTextBox1.TabIndex = 13;
             this.richTextBox1.Text = "";
             // 
             // label2
             // 
+            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.label2.Location = new System.Drawing.Point(970, 50);
+            this.label2.Location = new System.Drawing.Point(2930, 104);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(313, 25);
             this.label2.TabIndex = 14;
@@ -160,18 +170,79 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(1226, 452);
+            this.button1.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.button1.Location = new System.Drawing.Point(3794, 1461);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(181, 78);
+            this.button1.Size = new System.Drawing.Size(182, 78);
             this.button1.TabIndex = 15;
             this.button1.Text = "Очитстить эксперимент";
             this.button1.UseVisualStyleBackColor = true;
             // 
-            // Experiment_menu
+            // comments_txtbx
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1419, 550);
+            this.comments_txtbx.Location = new System.Drawing.Point(900, 69);
+            this.comments_txtbx.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.comments_txtbx.Name = "comments_txtbx";
+            this.comments_txtbx.Size = new System.Drawing.Size(391, 206);
+            this.comments_txtbx.TabIndex = 16;
+            this.comments_txtbx.Text = "";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.Location = new System.Drawing.Point(895, 39);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(301, 25);
+            this.label1.TabIndex = 17;
+            this.label1.Text = "Комментарии к эксперименту";
+            // 
+            // clear_btn
+            // 
+            this.clear_btn.AutoEllipsis = true;
+            this.clear_btn.Location = new System.Drawing.Point(1107, 402);
+            this.clear_btn.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.clear_btn.Name = "clear_btn";
+            this.clear_btn.Size = new System.Drawing.Size(184, 86);
+            this.clear_btn.TabIndex = 18;
+            this.clear_btn.Text = "Очистить эксперимент";
+            this.clear_btn.UseVisualStyleBackColor = true;
+            // 
+            // context_menu
+            // 
+            this.context_menu.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.context_menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.weigh_btn});
+            this.context_menu.Name = "context_menu";
+            this.context_menu.Size = new System.Drawing.Size(286, 69);
+            // 
+            // get_mass_btn
+            // 
+            this.get_mass_btn.Location = new System.Drawing.Point(764, 402);
+            this.get_mass_btn.Name = "get_mass_btn";
+            this.get_mass_btn.Size = new System.Drawing.Size(155, 86);
+            this.get_mass_btn.TabIndex = 20;
+            this.get_mass_btn.Text = "Получить массу";
+            this.get_mass_btn.UseVisualStyleBackColor = true;
+            this.get_mass_btn.Click += new System.EventHandler(this.get_mass_btn_Click);
+            // 
+            // weigh_btn
+            // 
+            this.weigh_btn.Name = "weigh_btn";
+            this.weigh_btn.Size = new System.Drawing.Size(285, 32);
+            this.weigh_btn.Text = "Произвести взешивание";
+            this.weigh_btn.Click += new System.EventHandler(this.weigh_btn_Click);
+            // 
+            // Jounral_menu
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.ClientSize = new System.Drawing.Size(1304, 500);
+            this.Controls.Add(this.get_mass_btn);
+            this.Controls.Add(this.clear_btn);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.comments_txtbx);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.richTextBox1);
@@ -181,12 +252,12 @@
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "Experiment_menu";
+            this.Name = "Jounral_menu";
             this.Text = "Эксперимент. Серия:";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.data_groupbox.ResumeLayout(false);
-            this.data_control.ResumeLayout(false);
+            this.context_menu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -201,11 +272,17 @@
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ToolStripMenuItem save_menubtn;
-        private System.Windows.Forms.ToolStripMenuItem компьютерToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem SaveOnComp_btn;
         private System.Windows.Forms.ToolStripMenuItem googleDriveToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem template_btn;
         private System.Windows.Forms.TabControl data_control;
-        private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.RichTextBox comments_txtbx;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button clear_btn;
+        private System.Windows.Forms.ContextMenuStrip context_menu;
+        private System.Windows.Forms.Button get_mass_btn;
+        private System.Windows.Forms.ToolStripMenuItem weigher_btn;
+        private System.Windows.Forms.ToolStripMenuItem weigh_btn;
     }
 }

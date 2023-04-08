@@ -40,7 +40,7 @@ namespace Reactor_Interface.Classes
 
             xlApp = new Excel.Application();
             xlApp.DisplayAlerts = false;
-            xlWorkBook = xlApp.Workbooks.Add(misValue);
+            xlWorkBook = xlApp.Workbooks.Add();
             xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
 
             xlWorkSheet.Cells[stolbec_dannih, 1] = "Время";

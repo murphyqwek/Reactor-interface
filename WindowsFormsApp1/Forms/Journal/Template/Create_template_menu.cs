@@ -22,21 +22,23 @@ namespace Reactor_Interface.Forms.Template
         static public readonly int rows = 4;
 
         static public readonly int max_count_tabs = 4;
-        static public readonly int a_d_button_size = 30;
-        static public readonly int add_button_x = 761, add_button_y = 6;
-        static public readonly int delete_button_x = 722, delete_button_y = 6;
+        static public readonly int a_d_button_size = (int)(DPI.factor.Width * 30);
+        static public readonly int add_button_x = (int)(DPI.factor.Width * 761), add_button_y = 6;
+        static public readonly int delete_button_x = (int)(DPI.factor.Width * 722), delete_button_y = 6;
 
-        static public readonly int button_height = 120, button_width = 60;
-        static public readonly int space_y = 80;
-        static public readonly int space_x = 302;
+        static public readonly int button_height = (int)(DPI.factor.Height * 120), button_width = (int)(DPI.factor.Width * 60);
+        static public readonly int space_y = (int)(DPI.factor.Height * 80);
+        static public readonly int space_x = (int)(DPI.factor.Width * 302);
         static public readonly int button_x = 6;
         static public readonly int button_y = 40;
         static public readonly string button_item_suffix = "_btn";
 
         static public readonly int max_txtbx_len = 30;
-        static public readonly int txtbx_width = 180, txtbx_height = 30;
+        static public readonly int txtbx_width = (int)(DPI.factor.Width * 180), txtbx_height = (int)(DPI.factor.Height * 30);
         static public readonly int space_txtbx_delete_filed_btn = 20;
         static public readonly string text_box_item_suffix = "_txtbx";
+
+        static private readonly string weigherTag = "$МАССА$";
 
         Template_menu template_menu;
         public Create_template_menu(Template_menu template)
@@ -46,6 +48,12 @@ namespace Reactor_Interface.Forms.Template
             template_menu = template;
             setup_new_tab(template_control.TabPages[0]);
             template_control.TabPages[0].Text = "Основные настройки";
+        }
+
+        protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
+        {
+            base.ScaleControl(factor, specified);
+            //DPI.SetFactor(factor);
         }
 
         private void Create_template_menu_FormClosed(object sender, FormClosedEventArgs e)
@@ -95,25 +103,34 @@ namespace Reactor_Interface.Forms.Template
             int x = Convert.ToInt32(btn_loc[0]), y = Convert.ToInt32(btn_loc[1]);
             Point location = new Point(x, y + button_width / 4);
 
-            RichTextBox textbx = new RichTextBox();
-            textbx.Location = location;
-            textbx.Font = new Font("Microsoft Sans Serif", 8);
-            textbx.MaxLength = max_txtbx_len;
-            textbx.Multiline = false;
-            textbx.Size = new Size(txtbx_width, txtbx_height);
-            textbx.Name = item_ind + text_box_item_suffix;
+            RichTextBox textbx = new RichTextBox {
+                Location = location,
+                Font = new Font("Microsoft Sans Serif", 8),
+                MaxLength = max_txtbx_len,
+                Multiline = false,
+                Size = new Size(txtbx_width, txtbx_height),
+                Name = item_ind + text_box_item_suffix,
+                ContextMenuStrip = context_menu,
+                Tag = ""
+            };
+
             btn.Visible = false;
-            
-            Button delete_field_btn = new Button();
-            if ((x - button_x) / space_x < columns - 1) location.X += txtbx_width + space_txtbx_delete_filed_btn;
-            else location.X -= (txtbx_height + space_txtbx_delete_filed_btn);
-            delete_field_btn.Location = location;
-            delete_field_btn.Text = "-";
-            delete_field_btn.Name = item_ind;
-            delete_field_btn.Font =  new Font("Microsoft Sans Serif", 10);
-            delete_field_btn.FlatStyle = FlatStyle.Popup;
-            delete_field_btn.BackColor = Color.Red;
-            delete_field_btn.Size = new Size(txtbx_height, txtbx_height);
+
+            if ((x - button_x) / space_x < columns - 1)
+                location.X += txtbx_width + space_txtbx_delete_filed_btn;
+            else
+                location.X -= (txtbx_height + space_txtbx_delete_filed_btn);
+
+            Button delete_field_btn = new Button {
+                Location = location,
+                Text = "-",
+                Name = item_ind,
+                Font = new Font("Microsoft Sans Serif", 10),
+                FlatStyle = FlatStyle.Popup,
+                BackColor = Color.Red,
+                Size = new Size(txtbx_height, txtbx_height),
+            };
+
             delete_field_btn.Click += delete_field_btn_Click;
 
             template_control.SelectedTab.Controls.Add(textbx);
@@ -189,20 +206,44 @@ namespace Reactor_Interface.Forms.Template
             add_delete_buttons(e.TabPage);
         }
 
+        private void select_weigh_btn_Click(object sender, EventArgs e)
+        {
+            var textbox = getRichTextBoxFromContextMenuStrip((ToolStripItem)sender);
+
+            if (textbox == null)
+                return;
+
+            textbox.BackColor = Color.LightGray;
+            textbox.Tag += ";" + weigherTag;
+        }
+
+        private void unselect_weigh_btn_Click(object sender, EventArgs e)
+        {
+            var textbox = getRichTextBoxFromContextMenuStrip((ToolStripItem)sender);
+
+            if (textbox == null)
+                return;
+
+            textbox.BackColor = Color.White;
+            textbox.Tag = textbox.Tag.ToString().Replace(";" + weigherTag, "");
+        }
+
         public void add_delete_buttons(TabPage page)
         {
             Button delete_btn = (page.Controls.Find("delete_btn", true).FirstOrDefault() as Button);
             page.Controls.Remove(delete_btn);
             if (template_control.TabCount > 1)
             {
-                delete_btn = new Button();
-                delete_btn.Name = "delete_btn";
-                delete_btn.Text = "-";
-                delete_btn.FlatStyle = FlatStyle.Popup;
-                delete_btn.BackColor = Color.Red;
-                delete_btn.Size = new Size(a_d_button_size, a_d_button_size);
-                delete_btn.Font = new Font("Microsoft Sans Serif", 10);
-                delete_btn.Location = new Point(delete_button_x, delete_button_y);
+                delete_btn = new Button { 
+                    Name = "delete_btn",
+                    Text = "-",
+                    FlatStyle = FlatStyle.Popup,
+                    BackColor = Color.Red,
+                    Size = new Size(a_d_button_size, a_d_button_size),
+                    Font = new Font("Microsoft Sans Serif", 10),
+                    Location = new Point(delete_button_x, delete_button_y)
+                };
+
                 delete_btn.Click += delte_btn_Click;
                 page.Controls.Add(delete_btn);
             }
@@ -211,34 +252,71 @@ namespace Reactor_Interface.Forms.Template
         public void setup_new_tab(TabPage page)
         {
             page.Text = "Новое окно";
-            for(int i = 0; i < columns; i++)
+            for (int i = 0; i < columns; i++)
             {
-                for(int y = 0; y < rows; y++)
+                for (int y = 0; y < rows; y++)
                 {
-                    Button btn = new Button();
+                    Button btn = new Button {
 
-                    btn.Location= new Point(button_x + i * space_x, button_y + y * space_y);
-                    btn.Size = new Size(button_height, button_width);
-                    btn.Text = "Добавить поле";
-                    btn.Name = i.ToString() + y.ToString() + button_item_suffix;
-                    btn.BackColor = Color.YellowGreen;
-                    btn.ForeColor = Color.Black;
+                        Location = new Point(button_x + i * space_x, button_y + y * space_y),
+                        Size = new Size(button_height, button_width),
+                        Text = "Добавить поле",
+                        Name = i.ToString() + y.ToString() + button_item_suffix,
+                        BackColor = Color.YellowGreen,
+                        ForeColor = Color.Black,
+                        Visible = true
+                    };
+
                     btn.Tag = btn.Location.X.ToString() + ";" + btn.Location.Y.ToString();
-                    btn.Visible = true;
                     btn.Click += field_btn_Click;
+
                     page.Controls.Add(btn);
                 }
             }
-            Button add_ = new Button();
-            add_.Text = "+";
-            add_.Name = "add_btn";
-            add_.FlatStyle = FlatStyle.Popup;
-            add_.BackColor = Color.Lime;
-            add_.Size = new Size(a_d_button_size, a_d_button_size);
-            add_.Location = new Point(add_button_x, add_button_y);
-            add_.Font = new Font("Microsoft Sans Serif", 10);
+            Button add_ = new Button {
+                Text = "+",
+                Name = "add_btn",
+                FlatStyle = FlatStyle.Popup,
+                BackColor = Color.Lime,
+                Size = new Size(a_d_button_size, a_d_button_size),
+                Location = new Point(add_button_x, add_button_y),
+                Font = new Font("Microsoft Sans Serif", 10),
+            };
+
             add_.Click += add_btn_Click;
+
             page.Controls.Add(add_);
         }
+
+        private RichTextBox getRichTextBoxFromContextMenuStrip(ToolStripItem toolStripItem)
+        {
+            if (toolStripItem == null)
+                return null;
+
+            ContextMenuStrip owner = toolStripItem.Owner as ContextMenuStrip;
+
+            if (owner == null)
+                return null;
+
+            RichTextBox textbox = (RichTextBox)owner.SourceControl;
+
+            return textbox;
+        }
+
+        private void context_menu_Opening(object sender, CancelEventArgs e)
+        {
+            RichTextBox textbox = (RichTextBox)context_menu.SourceControl;
+
+            if (textbox == null)
+                return;
+
+            bool isWeigherfield = textbox.Tag.ToString().Contains(weigherTag);
+
+            context_menu.Items[0].Visible = !isWeigherfield;
+            context_menu.Items[1].Visible = isWeigherfield;
+
+            e.Cancel = false;
+        }
+
     }
 }

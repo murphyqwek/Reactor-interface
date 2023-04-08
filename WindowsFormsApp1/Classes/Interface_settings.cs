@@ -9,6 +9,27 @@ namespace WindowsFormsApp1.Classes
 {
     static class Interface_settings
     {
+        static public string get_weigher_port()
+        {
+            string port;
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Reactor Interface TPU"))
+            {
+                port = key?.GetValue("Weigher port")?.ToString();
+            }
+
+            if (!Port.get_ports().Contains(port)) port = null;
+
+            return port;
+        }
+
+        static public void save_weigher_port(string port)
+        {
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Reactor Interface TPU"))
+            {
+                key.SetValue("Weigher port", port);
+            }
+        }
+
         static public string get_port()
         {
             string port;
