@@ -117,6 +117,8 @@ namespace Reactor_Interface.Classes
             graphic.Title.Text = dataName;
             graphic.Series[0].Header = dataName;
             graphic.Legend.Position = eLegendPosition.TopRight;
+
+            graphic.YAxis.Crosses = 0;
         }
 
         public static void FillDataIntoSheets(ExcelWorksheet graphicSheet, ExcelWorksheet dataSheet, FormChart.Chart chart)
@@ -143,7 +145,7 @@ namespace Reactor_Interface.Classes
             bool AutoSizeSecondColumn = false;
 
             var comment_title = mainSheet.Cells["D1:J2"];
-            var comment_section = mainSheet.Cells["D3:J12"];
+            var comment_section = mainSheet.Cells["D3:J20"];
 
             comment_title.Merge = true;
             comment_title.Value = "Комментарии к эксперименту";
@@ -152,6 +154,7 @@ namespace Reactor_Interface.Classes
 
             comment_section.Merge = true;
             comment_section.Value = comments;
+            comment_section.Style.WrapText = true;
             comment_section.Style.VerticalAlignment = ExcelVerticalAlignment.Top;
 
             foreach (var table_name in fields.Keys)

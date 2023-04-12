@@ -32,8 +32,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Jounral_menu));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.template_btn = new System.Windows.Forms.ToolStripMenuItem();
-            this.change_serie_menubtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.облачноеХранилищеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.googleDriveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.change_serie_menubtn = new System.Windows.Forms.ToolStripMenuItem();
             this.save_menubtn = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveOnComp_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.googleDriveToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -47,8 +48,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.clear_btn = new System.Windows.Forms.Button();
             this.context_menu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.get_mass_btn = new System.Windows.Forms.Button();
             this.weigh_btn = new System.Windows.Forms.ToolStripMenuItem();
+            this.get_mass_btn = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.data_groupbox.SuspendLayout();
             this.context_menu.SuspendLayout();
@@ -60,8 +61,7 @@
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.template_btn,
-            this.change_serie_menubtn,
-            this.googleDriveToolStripMenuItem,
+            this.облачноеХранилищеToolStripMenuItem,
             this.save_menubtn,
             this.weigher_btn});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
@@ -78,21 +78,29 @@
             this.template_btn.Text = "Шаблон:";
             this.template_btn.Click += new System.EventHandler(this.template_btn_Click);
             // 
-            // change_serie_menubtn
+            // облачноеХранилищеToolStripMenuItem
             // 
-            this.change_serie_menubtn.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.change_serie_menubtn.Name = "change_serie_menubtn";
-            this.change_serie_menubtn.Size = new System.Drawing.Size(173, 32);
-            this.change_serie_menubtn.Text = "Выбрать серию:";
-            this.change_serie_menubtn.Click += new System.EventHandler(this.change_serie_menubtn_Click);
+            this.облачноеХранилищеToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.googleDriveToolStripMenuItem,
+            this.change_serie_menubtn});
+            this.облачноеХранилищеToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.облачноеХранилищеToolStripMenuItem.Name = "облачноеХранилищеToolStripMenuItem";
+            this.облачноеХранилищеToolStripMenuItem.Size = new System.Drawing.Size(230, 32);
+            this.облачноеХранилищеToolStripMenuItem.Text = "Облачное хранилище";
             // 
             // googleDriveToolStripMenuItem
             // 
-            this.googleDriveToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.googleDriveToolStripMenuItem.Name = "googleDriveToolStripMenuItem";
-            this.googleDriveToolStripMenuItem.Size = new System.Drawing.Size(148, 32);
+            this.googleDriveToolStripMenuItem.Size = new System.Drawing.Size(259, 36);
             this.googleDriveToolStripMenuItem.Text = "Google Drive:";
-            this.googleDriveToolStripMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.googleDriveToolStripMenuItem_DropDownItemClicked);
+            this.googleDriveToolStripMenuItem.Click += new System.EventHandler(this.googleDriveToolStripMenuItem_DropDownItemClicked);
+            // 
+            // change_serie_menubtn
+            // 
+            this.change_serie_menubtn.Name = "change_serie_menubtn";
+            this.change_serie_menubtn.Size = new System.Drawing.Size(259, 36);
+            this.change_serie_menubtn.Text = "Выбрать серию:";
+            this.change_serie_menubtn.Click += new System.EventHandler(this.change_serie_menubtn_Click);
             // 
             // save_menubtn
             // 
@@ -127,6 +135,7 @@
             this.weigher_btn.Size = new System.Drawing.Size(136, 32);
             this.weigher_btn.Text = "Порт весов:";
             this.weigher_btn.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.weigher_btn_DropDownItemClicked);
+            this.weigher_btn.Click += new System.EventHandler(this.weigher_btn_Click);
             // 
             // data_groupbox
             // 
@@ -215,7 +224,14 @@
             this.context_menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.weigh_btn});
             this.context_menu.Name = "context_menu";
-            this.context_menu.Size = new System.Drawing.Size(286, 69);
+            this.context_menu.Size = new System.Drawing.Size(286, 36);
+            // 
+            // weigh_btn
+            // 
+            this.weigh_btn.Name = "weigh_btn";
+            this.weigh_btn.Size = new System.Drawing.Size(285, 32);
+            this.weigh_btn.Text = "Произвести взешивание";
+            this.weigh_btn.Click += new System.EventHandler(this.weigh_btn_Click);
             // 
             // get_mass_btn
             // 
@@ -226,13 +242,6 @@
             this.get_mass_btn.Text = "Получить массу";
             this.get_mass_btn.UseVisualStyleBackColor = true;
             this.get_mass_btn.Click += new System.EventHandler(this.get_mass_btn_Click);
-            // 
-            // weigh_btn
-            // 
-            this.weigh_btn.Name = "weigh_btn";
-            this.weigh_btn.Size = new System.Drawing.Size(285, 32);
-            this.weigh_btn.Text = "Произвести взешивание";
-            this.weigh_btn.Click += new System.EventHandler(this.weigh_btn_Click);
             // 
             // Jounral_menu
             // 
@@ -266,9 +275,7 @@
         #endregion
 
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem googleDriveToolStripMenuItem;
         private System.Windows.Forms.GroupBox data_groupbox;
-        private System.Windows.Forms.ToolStripMenuItem change_serie_menubtn;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ToolStripMenuItem save_menubtn;
@@ -284,5 +291,8 @@
         private System.Windows.Forms.Button get_mass_btn;
         private System.Windows.Forms.ToolStripMenuItem weigher_btn;
         private System.Windows.Forms.ToolStripMenuItem weigh_btn;
+        private System.Windows.Forms.ToolStripMenuItem облачноеХранилищеToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem googleDriveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem change_serie_menubtn;
     }
 }

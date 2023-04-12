@@ -14,7 +14,7 @@ namespace Reactor_Interface.Classes.Weigher
 {
     public class WeigherReader
     {
-        SerialPort port = null;
+        //SerialPort _weigherSerialPort = null;
 
         ConcurrentQueue<string> dataQueue = new ConcurrentQueue<string>();
         public delegate void dataChange(string data);
@@ -23,31 +23,24 @@ namespace Reactor_Interface.Classes.Weigher
 
         static byte[] text_bytes;
 
-        public WeigherReader(SerialPort port)
-        {
-            this.port = port;
-        }
+        private SerialPort _weigherSerialPort;
 
-        public void Test()
+        public WeigherReader(SerialPort serialPort)
         {
-            OnMassGet("190");
+            _weigherSerialPort = serialPort;
         }
 
         public string GetMass()
         {
-            if (port == null)
-                return null;
-
-            if (!port.IsOpen)
-                return null;
-
-            port.Write(" ");
-            while (port.BytesToRead == 0) { }
-            var bytesRead = new byte[port.BytesToRead];
             try
             {
-                string text = port.ReadExisting();
-                port.DiscardInBuffer();
+                _weigherSerialPort.Open();
+
+                _weigherSerialPort.WriteLine(" ");
+                while (_weigherSerialPort.BytesToRead < 10) { }
+            
+                string text = _weigherSerialPort.ReadExisting();
+                _weigherSerialPort.DiscardInBuffer();
                 text_bytes = Encoding.UTF8.GetBytes(text);
 
                 string j = "";
@@ -56,7 +49,20 @@ namespace Reactor_Interface.Classes.Weigher
                     j += text_bytes[i].ToString();
                 }
 
-                return j;
+                j = j.Remove(7, j.Length - 7);
+
+                char[] jchars = j.ToCharArray();
+                Array.Reverse(jchars);
+                j = new string(jchars);
+
+                string int_part = j.Substring(0, 3).TrimStart('0');
+                int_part = (int_part == "") ? "0" : int_part;
+
+                string mass = int_part + "." + j.Substring(3, j.Length - 3);
+
+                _weigherSerialPort.Close();
+
+                return mass;
             }
             catch
             {
@@ -67,27 +73,29 @@ namespace Reactor_Interface.Classes.Weigher
 
         public void UpdateMass()
         {
-            string data = GetMass();
+            //string data = GetMass();
 
-            OnMassGet(data);
+            //OnMassGet(data);
         }
     
 
         public void TRead()
         {
-            if (port == null)
+            return;
+            /*
+            if (_weigherSerialPort == null)
                 return;
 
             int i = 0;
             byte[] bytesRead;
             while (true)
             {
-                while (port.BytesToRead == 0) { }
-                bytesRead = new byte[port.BytesToRead];
+                while (_weigherSerialPort.BytesToRead == 0) { }
+                bytesRead = new byte[_weigherSerialPort.BytesToRead];
                 try
                 {
-                    string text = port.ReadExisting();
-                    port.DiscardInBuffer();
+                    string text = _weigherSerialPort.ReadExisting();
+                    _weigherSerialPort.DiscardInBuffer();
                     text_bytes = Encoding.UTF8.GetBytes(text);
 
                     string j = "";
@@ -108,23 +116,7 @@ namespace Reactor_Interface.Classes.Weigher
                     MessageBox.Show("ERROR");
                 }
             }
-        }
-
-        private void Event_DataReceived(object sender, SerialDataReceivedEventArgs e)
-        {
-            
-        }
-
-        public void ReadFromQueue()
-        {
-            ;
-            using (FileStream fstream = new FileStream("vesy.txt", FileMode.Create))
-            {
-                // преобразуем строку в байты
-                byte[] buffer = Encoding.Default.GetBytes(dataQueue.ToString());
-                // запись массива байтов в файл
-                fstream.Write(buffer, 0, buffer.Length);
-            }
+            */
         }
     }
 }

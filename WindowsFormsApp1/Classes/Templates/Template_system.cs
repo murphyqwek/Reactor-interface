@@ -30,7 +30,7 @@ namespace Reactor_Interface.Classes
             CreationError,
             Saved
         }
-
+        
         static private string get_full_path(string name)
         {
             return templates_folder + name + extension;

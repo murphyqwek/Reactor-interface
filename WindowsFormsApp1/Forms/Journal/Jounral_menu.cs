@@ -20,6 +20,7 @@ using Reactor_Interface.Classes.Templates;
 using Reactor_Interface.Classes.Weigher;
 using Reactor_Interface.Forms;
 using Reactor_Interface.Forms.Experiment;
+using Reactor_Interface.Forms.Journal;
 using WindowsFormsApp1;
 using WindowsFormsApp1.Classes;
 
@@ -46,7 +47,7 @@ namespace Reactor_Interface
             InitializeComponent();
             weigherReader = new WeigherReader(weigherSerialPort);
 
-            weigherReader.OnMassGet += UpdateWeigherFields;
+            //weigherReader.OnMassGet += UpdateWeigherFields;
             _chart = chart; 
             googleDriveToolStripMenuItem.Text = "Google Drive: " + Drive.name;
             upload_ports();
@@ -56,6 +57,8 @@ namespace Reactor_Interface
 
         private void upload_ports()
         {
+            weigher_btn.DropDownItems.Clear();
+
             var ports = Port.get_ports();
             weigherPort = Interface_settings.get_weigher_port();
 
@@ -65,7 +68,10 @@ namespace Reactor_Interface
             }
 
             weigher_btn.Text = "Порт весов: " + weigherPort;
-            weigherSerialPort.PortName = weigherTag;
+
+            weigherPort = weigherPort == null ? weigherSerialPort.PortName : weigherPort;
+            
+            weigherSerialPort.PortName = weigherPort;
         }
 
         private void weigher_btn_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -101,6 +107,9 @@ namespace Reactor_Interface
         private void parse_template(Template template)
         {
             data_control.TabPages.Clear();
+
+            weigherListBox.Clear();
+
             foreach (string page_name in template.Pages.Keys)
             {
                 TabPage page = new TabPage {
@@ -295,26 +304,43 @@ namespace Reactor_Interface
         {
             var textbox = getRichTextBoxFromContextMenuStrip((ToolStripItem)sender);
 
-            textbox.Text = "190";//weigherReader.GetMass();
+            string mass = weigherReader.GetMass();
+
+            if(mass == null)
+                MessageBox.Show("Проблема с подключением. Проверьте соединение с портом", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else
+                textbox.Text = mass + " г";
         }
 
         private void get_mass_btn_Click(object sender, EventArgs e)
         {
-            weigherReader.Test();
-            return;
+            if (weigherListBox.Count == 0)
+                return;
 
-            try
+            Dictionary<string, List<RichTextBox>> massboxes = new Dictionary<string, List<RichTextBox>>();
+
+            foreach(var massbox in weigherListBox)
             {
-                weigherSerialPort.Open();
-
-                weigherReader.UpdateMass();
-
-                weigherSerialPort.Close();
+                string page = massbox.Parent.Text;
+                
+                if(massboxes.Keys.Contains(page))
+                    massboxes[page].Add(massbox);
+                else
+                    massboxes.Add(page, new List<RichTextBox> { massbox });
             }
-            catch
-            {
-                MessageBox.Show("Ошибка");
-            }
+
+            Fill_mass_field_menu massFieldMenu = new Fill_mass_field_menu(massboxes, weigherReader);
+            massFieldMenu.ShowDialog();
+        }
+
+        private void googleDriveToolStripMenuItem_DropDownItemClicked(object sender, EventArgs e)
+        {
+
+        }
+
+        private void weigher_btn_Click(object sender, EventArgs e)
+        {
+            upload_ports();
         }
     }
 

@@ -11,6 +11,7 @@ using System.Windows.Forms.VisualStyles;
 using WindowsFormsApp1.Classes;
 using Reactor_Interface.Classes;
 using Reactor_Interface.Forms.Template;
+using Reactor_Interface.Classes.Templates;
 
 namespace Reactor_Interface.Forms.Experiment
 {
@@ -18,6 +19,7 @@ namespace Reactor_Interface.Forms.Experiment
     {
         private string chosen_template_text = "Выбранный шаблон:\r";
         private string using_template_text = "Используемый шаблон:\r";
+        private string template_not_chosen = "Шаблон не выбран";
 
         private string[] templates_array = new string[0];
 
@@ -42,12 +44,12 @@ namespace Reactor_Interface.Forms.Experiment
 
             if (!templates_array.Contains(using_template))
             {
-                using_template_lbl.Text += "Шаблон не выбран";
+                using_template_lbl.Text += template_not_chosen;
                 Interface_settings.save_using_template("");
             }
             else if (using_template == "" || using_template == null)
             {
-                using_template_lbl.Text += "Шаблон не выбран";
+                using_template_lbl.Text += template_not_chosen;
             }
             else
             {
@@ -87,6 +89,19 @@ namespace Reactor_Interface.Forms.Experiment
             return chosen_template_lbl.Tag.ToString();
         }
 
+        public void upload_template(string new_template, string old_template)
+        {
+            string chosen_template = using_template_lbl.Text.Split('\r')[1];
+
+            if (old_template != chosen_template && chosen_template != template_not_chosen)
+                return;
+
+            Classes.Templates.Template template = Template_system.Upload_template(new_template);
+            Template_system.Save_using_template_registry(template.Name);
+            jounral_menu.upload_template(template);
+            using_template_lbl.Text = using_template_text + template.Name;
+        }
+
         private void upload_btn_Click(object sender, EventArgs e)
         {
             string chosen_template_name = get_chosen_template();
@@ -112,6 +127,7 @@ namespace Reactor_Interface.Forms.Experiment
                 jounral_menu.upload_template(template);
                 using_template_lbl.Text = using_template_text + template.Name;
                 MessageBox.Show("Шаблон загружен", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                this.Close();
             }
         }
 
@@ -134,8 +150,16 @@ namespace Reactor_Interface.Forms.Experiment
             {
                 Template_system.Delete_template(get_chosen_template());
                 Load_templates();
-                chosen_template_lbl.Text = chosen_template_text+ "Шаблон не выбран";
+                chosen_template_lbl.Text = chosen_template_text + template_not_chosen;
             }
+        }
+
+        private void change_btn_Click(object sender, EventArgs e)
+        {
+            Classes.Templates.Template template = Template_system.Upload_template(get_chosen_template());
+            Create_template_menu modify_Template_menu = new Create_template_menu(this, template);
+            this.Hide();
+            modify_Template_menu.Show();
         }
     }
 }

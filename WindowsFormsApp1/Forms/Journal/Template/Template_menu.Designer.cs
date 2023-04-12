@@ -95,6 +95,7 @@
             this.change_btn.Name = "change_btn";
             this.change_btn.Size = new System.Drawing.Size(240, 32);
             this.change_btn.Text = "Изменить шаблон";
+            this.change_btn.Click += new System.EventHandler(this.change_btn_Click);
             // 
             // delete_btn
             // 

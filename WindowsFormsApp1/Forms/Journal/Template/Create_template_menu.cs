@@ -11,6 +11,10 @@ using Reactor_Interface.Forms.Experiment;
 using Microsoft.VisualBasic;
 using Reactor_Interface.Classes;
 using WindowsFormsApp1.Classes;
+using Templates = Reactor_Interface.Classes.Templates;
+using Reactor_Interface.Classes.Templates;
+using System.Web.UI;
+using System.Data.Common;
 
 namespace Reactor_Interface.Forms.Template
 {
@@ -40,12 +44,154 @@ namespace Reactor_Interface.Forms.Template
 
         static private readonly string weigherTag = "$МАССА$";
 
+        private string template_name = "";
+        private bool Ismodifying = false;
+
         Template_menu template_menu;
-        public Create_template_menu(Template_menu template)
+        public Create_template_menu(Template_menu template_menu, Templates.Template template = null)
         {
             InitializeComponent();
+            this.template_menu = template_menu;
+
+            if (template == null)
+                setup_new_template();
+            else
+                parse_template(template);
+        }
+
+        private void parse_template(Templates.Template template)
+        {
+            template_control.TabPages.Clear();
+
+            template_name = template.Name;
+
+            Ismodifying = true;
+
+            this.Text = "Редактирование шаблона: " + template_name;
+
+            foreach (string page_name in template.Pages.Keys)
+            {
+                TabPage page = new TabPage
+                {
+                    Text = page_name,
+                    BackColor = Color.White
+                };
+
+                for (int column = 0; column < columns; column++)
+                {
+                    for (int row = 0; row < rows; row++)
+                    {
+                        if (column >= template.Pages[page_name].Count)
+                        {
+                            create_new_field(column, row, page);
+                            continue;
+                        }
+
+                        if (row >= template.Pages[page_name][column].Count)
+                        {
+                            create_new_field(column, row, page);
+                            continue;
+                        }
+
+                        string box_type = template.Pages[page_name][column][row].Second.ToString();
+                        string field_name = template.Pages[page_name][column][row].First.ToString();
+
+                        add_created_textbox(column, row, template, box_type, field_name, page);
+                    }
+                }
+
+                template_control.TabPages.Add(page);
+            }
+        }
+
+        private void create_new_field(int column, int row, TabPage page, bool IsVisible = true)
+        {
+            Button btn = new Button
+            {
+                Location = new Point(button_x + column * space_x, button_y + row * space_y),
+                Size = new Size(button_height, button_width),
+                Text = "Добавить поле",
+                Name = column.ToString() + row.ToString() + button_item_suffix,
+                BackColor = Color.YellowGreen,
+                ForeColor = Color.Black,
+                Visible = IsVisible
+            };
+
+            btn.Tag = btn.Location.X.ToString() + ";" + btn.Location.Y.ToString();
+            btn.Click += field_btn_Click;
+
+            page.Controls.Add(btn);
+        }
+
+        private void create_add_page_btn(TabPage page)
+        {
+            Button add_ = new Button
+            {
+                Text = "+",
+                Name = "add_btn",
+                FlatStyle = FlatStyle.Popup,
+                BackColor = Color.Lime,
+                Size = new Size(a_d_button_size, a_d_button_size),
+                Location = new Point(add_button_x, add_button_y),
+                Font = new Font("Microsoft Sans Serif", 10),
+            };
+
+            add_.Click += add_btn_Click;
+
+            page.Controls.Add(add_);
+        }
+
+        private void add_created_textbox(int column, int row, Templates.Template template, string type, string field_name, TabPage page)
+        {
+            string item_ind = string.Format("{0}{1}", column, row);
+            Point location = new Point(column * space_x + button_x, button_y + row * space_y + button_width / 4);
+
+            create_new_field(column, row, page, false);
+            create_add_page_btn(page);
+
+            RichTextBox textBox = new RichTextBox
+            {
+                Text = field_name,
+                Location = location,
+                Size = new Size(txtbx_width, txtbx_height),
+                Font = new Font("Microsoft Sans Serif", 8),
+                MaxLength = max_txtbx_len,
+                Name = item_ind + text_box_item_suffix,
+                Tag = type,
+                ContextMenuStrip = context_menu,
+                Multiline = false
+            };
+
+            if (!string.IsNullOrEmpty(type))
+            {
+                textBox.BackColor = Color.LightGray;
+            }
+
+            if (column < columns - 1)
+                location.X += txtbx_width + space_txtbx_delete_filed_btn;
+            else
+                location.X -= (txtbx_height + space_txtbx_delete_filed_btn);
+
+            Button delete_field_btn = new Button
+            {
+                Location = location,
+                Text = "-",
+                Name = item_ind,
+                Font = new Font("Microsoft Sans Serif", 10),
+                FlatStyle = FlatStyle.Popup,
+                BackColor = Color.Red,
+                Size = new Size(txtbx_height, txtbx_height),
+            };
+
+            delete_field_btn.Click += delete_field_btn_Click;
+
+            page.Controls.Add(delete_field_btn);
+            page.Controls.Add(textBox);
+        }
+
+        private void setup_new_template()
+        {
             is_created_new_template = false;
-            template_menu = template;
             setup_new_tab(template_control.TabPages[0]);
             template_control.TabPages[0].Text = "Основные настройки";
         }
@@ -137,28 +283,11 @@ namespace Reactor_Interface.Forms.Template
             template_control.SelectedTab.Controls.Add(delete_field_btn);
         }
 
-        private void save_menu_btn_Click(object sender, EventArgs e)
+        private void show_result(Template_system.Save_result result)
         {
-            string template_name = Interaction.InputBox("Введите название шаблона", "Сохранение шаблона", "");
-
-            if(template_name.Trim() == "")
-            {
-                MessageBox.Show("Ввёденно пустое название шаблона", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
-                return;
-            }
-
-            if (Template_system.IsTemplateCreated(template_name))
-            {
-                MessageBox.Show("Шалбон с таким названием существует. Выберите другое название", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
-                return;
-            }
-
-            Template_system.Save_result result = Template_system.Create_template_json(template_control, template_name);
-
             string msg_text = "", msg_title = "";
             MessageBoxIcon msg_icon = MessageBoxIcon.Information;
 
-            this.UseWaitCursor = true;
             switch (result)
             {
                 case Template_system.Save_result.EmptyFiled:
@@ -183,15 +312,59 @@ namespace Reactor_Interface.Forms.Template
                     break;
             }
 
-            this.UseWaitCursor = false;
             MessageBox.Show(msg_text, msg_title, MessageBoxButtons.OK, msg_icon, MessageBoxDefaultButton.Button1);
+        }
+
+        private void save_menu_btn_Click(object sender, EventArgs e)
+        {
+            string old_template_name = this.template_name;
+            string template_name = Interaction.InputBox("Введите название шаблона", "Сохранение шаблона", this.template_name);
+
+            if(template_name.Trim() == "")
+            {
+                MessageBox.Show("Ввёденно пустое название шаблона", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                return;
+            }
+
+            if (Template_system.IsTemplateCreated(template_name) && !Ismodifying)
+            {
+                bool recreated = Recreate_template(template_name);
+                if (!recreated)
+                    return;
+            }
+
+            if (Ismodifying)
+                Template_system.Delete_template(this.template_name);
+
+            Template_system.Save_result result = Template_system.Create_template_json(template_control, template_name);
+
+            show_result(result);
 
             if (result == Template_system.Save_result.Saved)
             {
                 template_menu.Load_templates(template_name);
                 is_created_new_template = true;
+                if (Ismodifying)
+                    template_menu.upload_template(template_name, old_template_name);
                 this.Close();
             }
+        }
+
+        private bool Recreate_template(string template_name)
+        {
+            var result = MessageBox.Show("Шалбон с таким названием существует. Перезаписать шаблон?", 
+                                        "Внимание", 
+                                        MessageBoxButtons.YesNoCancel, 
+                                        MessageBoxIcon.Error, 
+                                        MessageBoxDefaultButton.Button3);
+
+            if(result == DialogResult.Yes) 
+            { 
+                Template_system.Delete_template(template_name);
+                return true;
+            }
+
+            return false;
         }
 
         private void rename_page_menu_btn_Click(object sender, EventArgs e)
@@ -252,40 +425,15 @@ namespace Reactor_Interface.Forms.Template
         public void setup_new_tab(TabPage page)
         {
             page.Text = "Новое окно";
-            for (int i = 0; i < columns; i++)
+            for (int column = 0; column < columns; column++)
             {
-                for (int y = 0; y < rows; y++)
+                for (int row = 0; row < rows; row++)
                 {
-                    Button btn = new Button {
-
-                        Location = new Point(button_x + i * space_x, button_y + y * space_y),
-                        Size = new Size(button_height, button_width),
-                        Text = "Добавить поле",
-                        Name = i.ToString() + y.ToString() + button_item_suffix,
-                        BackColor = Color.YellowGreen,
-                        ForeColor = Color.Black,
-                        Visible = true
-                    };
-
-                    btn.Tag = btn.Location.X.ToString() + ";" + btn.Location.Y.ToString();
-                    btn.Click += field_btn_Click;
-
-                    page.Controls.Add(btn);
+                    create_new_field(column, row, page);
                 }
             }
-            Button add_ = new Button {
-                Text = "+",
-                Name = "add_btn",
-                FlatStyle = FlatStyle.Popup,
-                BackColor = Color.Lime,
-                Size = new Size(a_d_button_size, a_d_button_size),
-                Location = new Point(add_button_x, add_button_y),
-                Font = new Font("Microsoft Sans Serif", 10),
-            };
 
-            add_.Click += add_btn_Click;
-
-            page.Controls.Add(add_);
+            create_add_page_btn(page);
         }
 
         private RichTextBox getRichTextBoxFromContextMenuStrip(ToolStripItem toolStripItem)
@@ -310,7 +458,8 @@ namespace Reactor_Interface.Forms.Template
             if (textbox == null)
                 return;
 
-            bool isWeigherfield = textbox.Tag.ToString().Contains(weigherTag);
+            string tag = textbox.Tag.ToString();
+            bool isWeigherfield = tag.Contains(weigherTag);
 
             context_menu.Items[0].Visible = !isWeigherfield;
             context_menu.Items[1].Visible = isWeigherfield;
