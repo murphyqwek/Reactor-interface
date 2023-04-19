@@ -40,19 +40,23 @@
             this.find_txtbx = new System.Windows.Forms.RichTextBox();
             this.find_btn = new System.Windows.Forms.Button();
             this.using_template_lbl = new System.Windows.Forms.Label();
-            this.upload_btn = new System.Windows.Forms.Button();
-            this.create_btn = new System.Windows.Forms.Button();
             this.chosen_template_lbl = new System.Windows.Forms.Label();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.AddTemplateBtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.UploadTemplateBtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.CreateNewTemplateBtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.UpdateTemplateBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.template_gorupbox.SuspendLayout();
             this.template_contextmenu.SuspendLayout();
             this.find_groupbx.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // template_gorupbox
             // 
             this.template_gorupbox.Controls.Add(this.template_view);
             this.template_gorupbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.template_gorupbox.Location = new System.Drawing.Point(12, 12);
+            this.template_gorupbox.Location = new System.Drawing.Point(12, 36);
             this.template_gorupbox.Name = "template_gorupbox";
             this.template_gorupbox.Size = new System.Drawing.Size(432, 426);
             this.template_gorupbox.TabIndex = 1;
@@ -87,20 +91,20 @@
             this.change_btn,
             this.delete_btn});
             this.template_contextmenu.Name = "template_contextmenu";
-            this.template_contextmenu.Size = new System.Drawing.Size(241, 101);
+            this.template_contextmenu.Size = new System.Drawing.Size(232, 68);
             this.template_contextmenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.template_contextmenu_ItemClicked);
             // 
             // change_btn
             // 
             this.change_btn.Name = "change_btn";
-            this.change_btn.Size = new System.Drawing.Size(240, 32);
+            this.change_btn.Size = new System.Drawing.Size(231, 32);
             this.change_btn.Text = "Изменить шаблон";
             this.change_btn.Click += new System.EventHandler(this.change_btn_Click);
             // 
             // delete_btn
             // 
             this.delete_btn.Name = "delete_btn";
-            this.delete_btn.Size = new System.Drawing.Size(240, 32);
+            this.delete_btn.Size = new System.Drawing.Size(231, 32);
             this.delete_btn.Text = "Удалить шаблон";
             // 
             // find_groupbx
@@ -108,7 +112,7 @@
             this.find_groupbx.Controls.Add(this.find_txtbx);
             this.find_groupbx.Controls.Add(this.find_btn);
             this.find_groupbx.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.find_groupbx.Location = new System.Drawing.Point(450, 25);
+            this.find_groupbx.Location = new System.Drawing.Point(455, 36);
             this.find_groupbx.Name = "find_groupbx";
             this.find_groupbx.Size = new System.Drawing.Size(338, 79);
             this.find_groupbx.TabIndex = 2;
@@ -136,59 +140,84 @@
             // 
             this.using_template_lbl.AutoSize = true;
             this.using_template_lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.using_template_lbl.Location = new System.Drawing.Point(450, 241);
+            this.using_template_lbl.Location = new System.Drawing.Point(457, 328);
             this.using_template_lbl.Name = "using_template_lbl";
             this.using_template_lbl.Size = new System.Drawing.Size(235, 25);
             this.using_template_lbl.TabIndex = 3;
             this.using_template_lbl.Text = "Используемый шаблон:";
             // 
-            // upload_btn
-            // 
-            this.upload_btn.Location = new System.Drawing.Point(450, 342);
-            this.upload_btn.Name = "upload_btn";
-            this.upload_btn.Size = new System.Drawing.Size(153, 74);
-            this.upload_btn.TabIndex = 4;
-            this.upload_btn.Text = "Загрузить шаблон";
-            this.upload_btn.UseVisualStyleBackColor = true;
-            this.upload_btn.Click += new System.EventHandler(this.upload_btn_Click);
-            // 
-            // create_btn
-            // 
-            this.create_btn.Location = new System.Drawing.Point(648, 342);
-            this.create_btn.Name = "create_btn";
-            this.create_btn.Size = new System.Drawing.Size(140, 74);
-            this.create_btn.TabIndex = 5;
-            this.create_btn.Text = "Создать новый шаблон";
-            this.create_btn.UseVisualStyleBackColor = true;
-            this.create_btn.Click += new System.EventHandler(this.create_btn_Click);
-            // 
             // chosen_template_lbl
             // 
             this.chosen_template_lbl.AutoSize = true;
             this.chosen_template_lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.chosen_template_lbl.Location = new System.Drawing.Point(452, 134);
+            this.chosen_template_lbl.Location = new System.Drawing.Point(457, 207);
             this.chosen_template_lbl.Name = "chosen_template_lbl";
             this.chosen_template_lbl.Size = new System.Drawing.Size(199, 50);
             this.chosen_template_lbl.TabIndex = 7;
             this.chosen_template_lbl.Text = "Выбранный шаблон:\r\nШаблон не выбран ";
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.AddTemplateBtn,
+            this.UploadTemplateBtn,
+            this.CreateNewTemplateBtn,
+            this.UpdateTemplateBtn});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(821, 33);
+            this.menuStrip1.TabIndex = 8;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // AddTemplateBtn
+            // 
+            this.AddTemplateBtn.Name = "AddTemplateBtn";
+            this.AddTemplateBtn.Size = new System.Drawing.Size(174, 29);
+            this.AddTemplateBtn.Text = "Добавить шаблон";
+            this.AddTemplateBtn.Click += new System.EventHandler(this.AddTemplateBtn_Click);
+            // 
+            // UploadTemplateBtn
+            // 
+            this.UploadTemplateBtn.Name = "UploadTemplateBtn";
+            this.UploadTemplateBtn.Size = new System.Drawing.Size(176, 29);
+            this.UploadTemplateBtn.Text = "Загрузить шаблон";
+            this.UploadTemplateBtn.Click += new System.EventHandler(this.UploadTemplateBtn_Click);
+            // 
+            // CreateNewTemplateBtn
+            // 
+            this.CreateNewTemplateBtn.Name = "CreateNewTemplateBtn";
+            this.CreateNewTemplateBtn.Size = new System.Drawing.Size(220, 29);
+            this.CreateNewTemplateBtn.Text = "Создать новый шаблон";
+            this.CreateNewTemplateBtn.Click += new System.EventHandler(this.CreateNewTemplateBtn_Click);
+            // 
+            // UpdateTemplateBtn
+            // 
+            this.UpdateTemplateBtn.Name = "UpdateTemplateBtn";
+            this.UpdateTemplateBtn.Size = new System.Drawing.Size(190, 29);
+            this.UpdateTemplateBtn.Text = "Обновить шаблоны";
+            this.UpdateTemplateBtn.Click += new System.EventHandler(this.UpdateTemplateBtn_Click);
+            // 
             // Template_menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 444);
+            this.ClientSize = new System.Drawing.Size(821, 464);
+            this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.chosen_template_lbl);
-            this.Controls.Add(this.create_btn);
-            this.Controls.Add(this.upload_btn);
             this.Controls.Add(this.using_template_lbl);
             this.Controls.Add(this.find_groupbx);
             this.Controls.Add(this.template_gorupbox);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "Template_menu";
             this.Text = "Выберите шаблон";
             this.template_gorupbox.ResumeLayout(false);
             this.template_contextmenu.ResumeLayout(false);
             this.find_groupbx.ResumeLayout(false);
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -200,13 +229,16 @@
         private System.Windows.Forms.RichTextBox find_txtbx;
         private System.Windows.Forms.Button find_btn;
         private System.Windows.Forms.Label using_template_lbl;
-        private System.Windows.Forms.Button upload_btn;
-        private System.Windows.Forms.Button create_btn;
         private System.Windows.Forms.ContextMenuStrip template_contextmenu;
         private System.Windows.Forms.ToolStripMenuItem change_btn;
         private System.Windows.Forms.ToolStripMenuItem delete_btn;
         private System.Windows.Forms.ListView template_view;
         private System.Windows.Forms.ColumnHeader MainColumn;
         private System.Windows.Forms.Label chosen_template_lbl;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem AddTemplateBtn;
+        private System.Windows.Forms.ToolStripMenuItem UploadTemplateBtn;
+        private System.Windows.Forms.ToolStripMenuItem CreateNewTemplateBtn;
+        private System.Windows.Forms.ToolStripMenuItem UpdateTemplateBtn;
     }
 }

@@ -21,6 +21,7 @@ using Google.Apis.Util.Store;
 using System.IO;
 using Microsoft.Office.Interop.Excel;
 using System.Runtime.InteropServices.ComTypes;
+using OfficeOpenXml.Style;
 
 namespace Reactor_Interface.Classes.GoogleAPI
 {
@@ -31,7 +32,7 @@ namespace Reactor_Interface.Classes.GoogleAPI
         static public bool finished = false;
         static private readonly string file_store = "Reactor.GoogleDrive.API.store";
         static private readonly string file_prefix = "Google.Apis.Auth.OAuth2.Responses.TokenResponse";
-
+        static private readonly string temp_folder_name = "TEMP";
         public enum RequestResult
         {
             Succses,
@@ -39,6 +40,20 @@ namespace Reactor_Interface.Classes.GoogleAPI
             WrongClientSecret,
             NoInternet,
             RunOutOfTime
+        }
+
+        static public string GetFileTempFolderPath()
+        {
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\" + file_store;
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
+            path += "\\" + temp_folder_name;
+
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
+            return path;
         }
 
         static public void DeleteTokenFile(string name)
@@ -68,30 +83,55 @@ namespace Reactor_Interface.Classes.GoogleAPI
             System.IO.File.Move(path + old_name, path + new_name);
         }
 
-        static public async void UploadFile(string name, FileStream stream, string folder_name)
+        static public async Task<string> CreateFolder(string folderName)
         {
-            string q = String.Format("mimeType = 'application/vnd.google-apps.folder' and name = '{0}' and trashed = false", folder_name);
+            var folder_file_body = new Google.Apis.Drive.v3.Data.File();
+            folder_file_body.MimeType = "application/vnd.google-apps.folder";
+            folder_file_body.Name = folderName;
+
+            var result = await service.Files.Create(folder_file_body).ExecuteAsync();
+            return result.Id;
+        }
+
+        static public async Task<bool> IsFolderExist(string folderName)
+        {
+            string q = string.Format("mimeType = 'application/vnd.google-apps.folder' and name = '{0}' and trashed = false", folderName);
+
+            var list = service.Files.List();
+            list.Q = q;
+
+            var files = await list.ExecuteAsync();
+
+            return files.Files.Count > 0;
+        }
+
+        static public async void UploadFile(string fileName, FileStream stream, FileData folder)
+        {
+            //string q = String.Format("id = {0} and trashed = false", folder.ID);
             string folder_id;
 
-            var request = service.Files.List();
-            request.Q = q;
-            var result = await request.ExecuteAsync();
+            var request = service.Files.Get(folder.ID);
 
-            if (result.Files.Count == 0)
+            if(folder.ID == null)
             {
-                var folder_file_body = new Google.Apis.Drive.v3.Data.File();
-                folder_file_body.MimeType = "application/vnd.google-apps.folder";
-                folder_file_body.Name = folder_name;
-
-                var res_temp = await service.Files.Create(folder_file_body).ExecuteAsync();
-                folder_id = res_temp.Id;
+                folder_id = await CreateFolder(folder.Name);
             }
             else
-                folder_id = result.Files.First().Id;
+            {
+                try
+                {
+                    var result = await request.ExecuteAsync();
+                    folder_id = folder.ID;
+                }
+                catch
+                {
+                    folder_id = await CreateFolder(folder.Name);
+                }                    
+            }
 
             var file_body = new Google.Apis.Drive.v3.Data.File();
             file_body.MimeType = "application/vnd.google-apps.spreadsheet";
-            file_body.Name = name;
+            file_body.Name = fileName;
             file_body.Parents = new List<string> { folder_id };
 
             await service.Files.Create(file_body, stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet").UploadAsync();
@@ -167,6 +207,49 @@ namespace Reactor_Interface.Classes.GoogleAPI
                 return RequestResult.WrongClientSecret;
             }
             return RequestResult.Succses;
+        }
+
+        public static async Task<Dictionary<string, List<FileData>>> GetSeries()
+        {
+            Dictionary<string, List<FileData>> Series = new Dictionary<string, List<FileData>>();
+            
+            if (!Internet_checker.CheckInternet() || service == null)
+                return null;
+
+            string q = "(mimeType = 'application/vnd.google-apps.folder' or mimeType = 'application/vnd.google-apps.spreadsheet' or mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') and trashed = false and 'me' in owners";
+            string orderBy = "folder";
+            string fields = "files(id, name, parents, mimeType)";
+            var getFilseFunc = service.Files.List();
+
+            getFilseFunc.Q = q;
+            getFilseFunc.OrderBy = orderBy;
+            getFilseFunc.Fields = fields;
+
+            string nextPage = null;
+            do
+            {
+                var file_list = await getFilseFunc.ExecuteAsync();
+                nextPage = file_list.NextPageToken;
+
+                foreach(var file in file_list.Files)
+                {
+                    FileData fileData = new FileData(file.Name, file.Id, file.MimeType);
+                    if (file.MimeType == "application/vnd.google-apps.folder")
+                    {
+                        if(!Series.ContainsKey(file.Id))
+                            Series.Add(file.Id, new List<FileData> { fileData });
+                        continue;
+                    }
+
+                    if (Series.ContainsKey(file.Parents.Last()))
+                    {
+                        Series[file.Parents.Last()].Add(fileData);
+                    }
+                }
+            }
+            while (!string.IsNullOrEmpty(nextPage));
+            
+            return Series;
         }
     }
 }

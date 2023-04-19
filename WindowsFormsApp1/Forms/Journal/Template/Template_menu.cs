@@ -12,6 +12,8 @@ using WindowsFormsApp1.Classes;
 using Reactor_Interface.Classes;
 using Reactor_Interface.Forms.Template;
 using Reactor_Interface.Classes.Templates;
+using Reactor_Interface.Classes.GoogleAPI;
+using System.IO;
 
 namespace Reactor_Interface.Forms.Experiment
 {
@@ -71,9 +73,7 @@ namespace Reactor_Interface.Forms.Experiment
 
         private void create_btn_Click(object sender, EventArgs e)
         {
-            Create_template_menu create_menu = new Create_template_menu(this);
-            this.Hide();
-            create_menu.Show();
+            
         }
         private void template_view_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -104,31 +104,7 @@ namespace Reactor_Interface.Forms.Experiment
 
         private void upload_btn_Click(object sender, EventArgs e)
         {
-            string chosen_template_name = get_chosen_template();
-
-            if (chosen_template_name == null)
-            {
-                MessageBox.Show("Шаблон не выбран", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
-                return;
-            }
-
-            if (Interface_settings.get_using_template() == chosen_template_name)
-                return;
-
-            Classes.Templates.Template template = Template_system.Upload_template(chosen_template_name);
-
-            if (template == null)
-            {
-                MessageBox.Show("Данный шаблон был повреждён либо удалён", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
-            }
-            else
-            {
-                Template_system.Save_using_template_registry(template.Name);
-                jounral_menu.upload_template(template);
-                using_template_lbl.Text = using_template_text + template.Name;
-                MessageBox.Show("Шаблон загружен", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
-                this.Close();
-            }
+            
         }
 
         private void template_contextmenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -160,6 +136,67 @@ namespace Reactor_Interface.Forms.Experiment
             Create_template_menu modify_Template_menu = new Create_template_menu(this, template);
             this.Hide();
             modify_Template_menu.Show();
+        }
+
+        private void UploadTemplateBtn_Click(object sender, EventArgs e)
+        {
+            string chosen_template_name = get_chosen_template();
+
+            if (chosen_template_name == null)
+            {
+                MessageBox.Show("Шаблон не выбран", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                return;
+            }
+
+            if (Interface_settings.get_using_template() == chosen_template_name)
+                return;
+
+            Classes.Templates.Template template = Template_system.Upload_template(chosen_template_name);
+
+            if (template == null)
+            {
+                MessageBox.Show("Данный шаблон был повреждён либо удалён", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+            }
+            else
+            {
+                Template_system.Save_using_template_registry(template.Name);
+                jounral_menu.upload_template(template);
+                using_template_lbl.Text = using_template_text + template.Name;
+                MessageBox.Show("Шаблон загружен", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                this.Close();
+            }
+        }
+
+        private void CreateNewTemplateBtn_Click(object sender, EventArgs e)
+        {
+            Create_template_menu create_menu = new Create_template_menu(this);
+            this.Hide();
+            create_menu.Show();
+        }
+
+        private void AddTemplateBtn_Click(object sender, EventArgs e)
+        {
+            using (FileDialog fileDialog = new OpenFileDialog())
+            {
+                fileDialog.Filter = "Template files (*.template)|*.template";
+
+                if (fileDialog.ShowDialog() != DialogResult.OK)
+                    return;
+
+                var templates = fileDialog.FileNames;
+
+                Template_system.UploadTemplates(templates);
+
+                Load_templates();
+
+                MessageBox.Show("Шаблоны загружены", "Успешно", 
+                                MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+            }
+        }
+
+        private void UpdateTemplateBtn_Click(object sender, EventArgs e)
+        {
+            Load_templates();
         }
     }
 }

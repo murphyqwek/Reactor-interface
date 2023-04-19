@@ -45,7 +45,6 @@
             // 
             // menuStrip1
             // 
-            this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.save_menu_btn,
@@ -99,7 +98,7 @@
             this.select_weigh_btn,
             this.unselect_weigh_btn});
             this.context_menu.Name = "context_menu";
-            this.context_menu.Size = new System.Drawing.Size(300, 101);
+            this.context_menu.Size = new System.Drawing.Size(300, 68);
             this.context_menu.Opening += new System.ComponentModel.CancelEventHandler(this.context_menu_Opening);
             // 
             // select_weigh_btn

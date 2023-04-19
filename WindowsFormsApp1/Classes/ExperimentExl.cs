@@ -71,7 +71,7 @@ namespace Reactor_Interface.Classes
 
         }
 
-        public static void CreateTable(ExcelWorksheet workSheet, int y0, int y)
+        private static void CreateTable(ExcelWorksheet workSheet, int y0, int y)
         {
             var table = workSheet.Cells[y0, 1, y, 2];
             table.Style.Border.BorderAround(ExcelBorderStyle.Medium);
@@ -96,7 +96,7 @@ namespace Reactor_Interface.Classes
             string dataName = dataSheet.Cells[1, startCellColumn + 1].Value.ToString();
             var graphic = graphicsSheet.Drawings.AddLineChart(dataName, eLineChartType.Line);
             graphic.SetSize(600, 300);
-            graphic.SetPosition((startCellColumn / 4) * 300, 0);
+            graphic.SetPosition(startCellColumn / 3 * 300, 0);
 
             graphic.StyleManager.SetChartStyle(ePresetChartStyle.LineChartStyle1, ePresetChartColors.ColorfulPalette1);
 
@@ -121,7 +121,7 @@ namespace Reactor_Interface.Classes
             graphic.YAxis.Crosses = 0;
         }
 
-        public static void FillDataIntoSheets(ExcelWorksheet graphicSheet, ExcelWorksheet dataSheet, FormChart.Chart chart)
+        private static void FillDataIntoSheets(ExcelWorksheet graphicSheet, ExcelWorksheet dataSheet, FormChart.Chart chart)
         {
             int start_cell = 1;
             for (int i = 0; i < chart.Series.Count; i++)
@@ -133,12 +133,12 @@ namespace Reactor_Interface.Classes
                 //Заполение стоблцов данными для графиков
                 fillSerie(dataSheet, chart.Series[i].Points, start_cell);
                 //if(i == 0)
-                    FillGraphicsSheet(graphicSheet, dataSheet, start_cell, chart.Series[i].Points.Count);
+                FillGraphicsSheet(graphicSheet, dataSheet, start_cell, chart.Series[i].Points.Count);
                 start_cell += 3;
             }
         }
 
-        public static void FillMainSheet(ExcelWorksheet mainSheet, Dictionary<string, List<Pair>> fields, string comments)
+        private static void FillMainSheet(ExcelWorksheet mainSheet, Dictionary<string, List<Pair>> fields, string comments)
         {
             int y = 1;
 

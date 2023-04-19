@@ -41,6 +41,16 @@ namespace Reactor_Interface.Classes
             Directory.CreateDirectory(templates_folder);
         }
 
+        static public void UploadTemplates(string[] templates)
+        {
+            foreach(var template in templates)
+            {
+                string filename =Path.GetFileName(template);
+                Create_folder();
+                File.Move(template, templates_folder + filename);
+            }
+        }
+
         static public bool IsTemplateCreated(string name)
         {
             Directory.CreateDirectory(templates_folder);

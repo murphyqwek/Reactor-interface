@@ -192,9 +192,9 @@
     <Compile Include="Classes\Error_message.cs" />
     <Compile Include="Classes\Exl.cs" />
     <Compile Include="Classes\ExperimentExl.cs" />
-    <Compile Include="Classes\GoogleAPI\Auth.cs" />
     <Compile Include="Classes\GoogleAPI\Drive.cs" />
     <Compile Include="Classes\GoogleAPI\Client_data_check.cs" />
+    <Compile Include="Classes\GoogleAPI\FileData.cs" />
     <Compile Include="Classes\GoogleAPI\Google_data.cs" />
     <Compile Include="Classes\GoogleAPI\Google_service.cs" />
     <Compile Include="Classes\Interface_settings.cs" />
@@ -239,11 +239,11 @@
     <Compile Include="Forms\Journal\Numer_menu.Designer.cs">
       <DependentUpon>Numer_menu.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Journal\Serie_exp_menu.cs">
+    <Compile Include="Forms\Journal\SerieChosenMenu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Journal\Serie_exp_menu.Designer.cs">
-      <DependentUpon>Serie_exp_menu.cs</DependentUpon>
+    <Compile Include="Forms\Journal\SerieChosenMenu.Designer.cs">
+      <DependentUpon>SerieChosenMenu.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Journal\Status_experiment_menu.cs">
       <SubType>Form</SubType>
@@ -268,6 +268,12 @@
     </Compile>
     <Compile Include="Forms\Graphic.Designer.cs">
       <DependentUpon>Graphic.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Journal\Uploading_information_menu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Journal\Uploading_information_menu.Designer.cs">
+      <DependentUpon>Uploading_information_menu.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Main_menu.cs">
       <SubType>Form</SubType>
@@ -301,8 +307,8 @@
     <EmbeddedResource Include="Forms\Journal\Numer_menu.resx">
       <DependentUpon>Numer_menu.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Journal\Serie_exp_menu.resx">
-      <DependentUpon>Serie_exp_menu.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\Journal\SerieChosenMenu.resx">
+      <DependentUpon>SerieChosenMenu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Journal\Status_experiment_menu.resx">
       <DependentUpon>Status_experiment_menu.cs</DependentUpon>
@@ -315,6 +321,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Graphic.resx">
       <DependentUpon>Graphic.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Journal\Uploading_information_menu.resx">
+      <DependentUpon>Uploading_information_menu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Main_menu.resx">
       <DependentUpon>Main_menu.cs</DependentUpon>
@@ -363,7 +372,9 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="TreeIcons\" />
+  </ItemGroup>
   <ItemGroup>
     <COMReference Include="ACTIVEXLib">
       <Guid>{012F24C1-35B0-11D0-BF2D-0000E8D0D146}</Guid>

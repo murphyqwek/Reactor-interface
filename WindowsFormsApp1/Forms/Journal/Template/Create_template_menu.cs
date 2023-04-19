@@ -34,7 +34,7 @@ namespace Reactor_Interface.Forms.Template
         static public readonly int space_y = (int)(DPI.factor.Height * 80);
         static public readonly int space_x = (int)(DPI.factor.Width * 302);
         static public readonly int button_x = 6;
-        static public readonly int button_y = 40;
+        static public readonly int button_y = 25;
         static public readonly string button_item_suffix = "_btn";
 
         static public readonly int max_txtbx_len = 30;

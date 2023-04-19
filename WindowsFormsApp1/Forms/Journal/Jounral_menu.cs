@@ -35,7 +35,7 @@ namespace Reactor_Interface
 
         private readonly string weigherTag = "$МАССА$";
 
-        public string serie = "";
+        public FileData serie;
         public string numer = "";
 
         private string weigherPort = null;
@@ -67,7 +67,8 @@ namespace Reactor_Interface
                 weigher_btn.DropDownItems.Add(port);
             }
 
-            weigher_btn.Text = "Порт весов: " + weigherPort;
+            weigher_btn.Text = "Порт весов: ";
+            weigher_btn.Text += string.IsNullOrEmpty(weigherPort) ? "Нет доступных портов" : weigherPort;
 
             weigherPort = weigherPort == null ? weigherSerialPort.PortName : weigherPort;
             
@@ -183,7 +184,7 @@ namespace Reactor_Interface
                 return;
             }
 
-            if(serie == "")
+            if(serie == null)
             {
                 MessageBox.Show("Не указана серия экспериментов", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 return;
@@ -198,28 +199,38 @@ namespace Reactor_Interface
                 return;
             }
 
-            Drive.UploadFileOnDrive("C:\\Users\\qweka\\Desktop\\Данные\\Крутые Графики.xlsx", serie, numer);
+            string exlname = string.Format("{0}_{1}.xlsx", serie, numer);
+
+            string path = string.Format("{0}\\{1}", Google_service.GetFileTempFolderPath(), exlname);
+            var experiment = Template_system.get_experiment(data_control, template);
+
+            ExperimentExl.CreateExcelExperiment(path, experiment, _chart, comments_txtbx.Text);
+            Drive.UploadFileOnDrive(path, serie, numer);
+            MessageBox.Show("Файл успешно загружен!!!", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void change_serie_menubtn_Click(object sender, EventArgs e)
         {
-            Serie_exp_menu serie = new Serie_exp_menu(this);
-            serie.ShowDialog();
-        }
+            if (!Internet_checker.CheckInternet())
+            {
+                MessageBox.Show("Отсутсвует подклчение к интернету", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                return;
+            }
 
-        public string get_serie()
-        {
-            return serie;
+            SerieChosenMenu serie = new SerieChosenMenu(this);
+            serie.ShowDialog();
         }
 
         public void set_numer(string numer)
         {
             this.numer = numer;
         }
-        public void set_serie(string serie)
+
+        public void set_serie(FileData serie)
         {
             this.serie = serie;
-            this.Text = "Эксперимент. Серия: " + serie;
+            this.Text = "Эксперимент. Серия: " + serie.Name;
+            change_serie_menubtn.Text = "Выбрать серию: " + serie.Name;
         }
 
         private void template_btn_Click(object sender, EventArgs e)
@@ -347,12 +358,12 @@ namespace Reactor_Interface
     struct Control_settings
     {
         public static Color BackColor = Color.WhiteSmoke;
-        public static int label_x = 6, label_y = 27;
-        public static int textbox_x = 11, textbox_y = 55;
+        public static int label_x = 6, label_y = 17;
+        public static int textbox_x = 11, textbox_y = 45;
 
         public static int textbox_width = (int)(DPI.factor.Width * 105), text_box_height = (int)(DPI.factor.Height * 30);
 
-        public static int space_x = (int)(DPI.factor.Width * 270), space_y = (int)(DPI.factor.Height * 100);
+        public static int space_x = (int)(DPI.factor.Width * 270), space_y = (int)(DPI.factor.Height * 90);
 
         public static string label_suffix = "_lbl";
         public static string textbox_suffix = "_txtbx";

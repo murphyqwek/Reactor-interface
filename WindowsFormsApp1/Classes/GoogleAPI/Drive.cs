@@ -26,12 +26,11 @@ namespace Reactor_Interface.Classes.GoogleAPI
             ConnectAsync();
         }
 
-        public static void UploadFileOnDrive(string path, string serie, string numer)
+        public static void UploadFileOnDrive(string path, FileData serie, string numer)
         {
-            System.IO.FileInfo fileInfo = new System.IO.FileInfo(path);
-            string file_name = serie + "_" + numer;
+            FileInfo fileInfo = new FileInfo(path);
             FileStream stream = new FileStream(path, FileMode.Open);
-            Google_service.UploadFile(file_name, stream, serie);
+            Google_service.UploadFile(serie.Name + "_" + numer, stream, serie);
         }
 
         public static void Update(string new_name, string client_id, string client_secret)

@@ -11,7 +11,7 @@ namespace Reactor_Interface.Classes
 {
     public static class Internet_checker
     {
-        private static string ip = "142.250.185.106"; //google api drive IP
+        private static readonly string ip = "142.250.185.106"; //google api drive IP
 
         public static bool CheckInternet()
         {
