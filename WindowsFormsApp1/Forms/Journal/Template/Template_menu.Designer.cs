@@ -39,7 +39,6 @@
             this.find_groupbx = new System.Windows.Forms.GroupBox();
             this.find_txtbx = new System.Windows.Forms.RichTextBox();
             this.find_btn = new System.Windows.Forms.Button();
-            this.using_template_lbl = new System.Windows.Forms.Label();
             this.chosen_template_lbl = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.AddTemplateBtn = new System.Windows.Forms.ToolStripMenuItem();
@@ -91,20 +90,20 @@
             this.change_btn,
             this.delete_btn});
             this.template_contextmenu.Name = "template_contextmenu";
-            this.template_contextmenu.Size = new System.Drawing.Size(232, 68);
+            this.template_contextmenu.Size = new System.Drawing.Size(241, 101);
             this.template_contextmenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.template_contextmenu_ItemClicked);
             // 
             // change_btn
             // 
             this.change_btn.Name = "change_btn";
-            this.change_btn.Size = new System.Drawing.Size(231, 32);
+            this.change_btn.Size = new System.Drawing.Size(240, 32);
             this.change_btn.Text = "Изменить шаблон";
             this.change_btn.Click += new System.EventHandler(this.change_btn_Click);
             // 
             // delete_btn
             // 
             this.delete_btn.Name = "delete_btn";
-            this.delete_btn.Size = new System.Drawing.Size(231, 32);
+            this.delete_btn.Size = new System.Drawing.Size(240, 32);
             this.delete_btn.Text = "Удалить шаблон";
             // 
             // find_groupbx
@@ -136,21 +135,11 @@
             this.find_btn.Text = "Найти";
             this.find_btn.UseVisualStyleBackColor = true;
             // 
-            // using_template_lbl
-            // 
-            this.using_template_lbl.AutoSize = true;
-            this.using_template_lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.using_template_lbl.Location = new System.Drawing.Point(457, 328);
-            this.using_template_lbl.Name = "using_template_lbl";
-            this.using_template_lbl.Size = new System.Drawing.Size(235, 25);
-            this.using_template_lbl.TabIndex = 3;
-            this.using_template_lbl.Text = "Используемый шаблон:";
-            // 
             // chosen_template_lbl
             // 
             this.chosen_template_lbl.AutoSize = true;
             this.chosen_template_lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.chosen_template_lbl.Location = new System.Drawing.Point(457, 207);
+            this.chosen_template_lbl.Location = new System.Drawing.Point(459, 135);
             this.chosen_template_lbl.Name = "chosen_template_lbl";
             this.chosen_template_lbl.Size = new System.Drawing.Size(199, 50);
             this.chosen_template_lbl.TabIndex = 7;
@@ -204,9 +193,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(821, 464);
-            this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.chosen_template_lbl);
-            this.Controls.Add(this.using_template_lbl);
+            this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.find_groupbx);
             this.Controls.Add(this.template_gorupbox);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -228,7 +216,6 @@
         private System.Windows.Forms.GroupBox find_groupbx;
         private System.Windows.Forms.RichTextBox find_txtbx;
         private System.Windows.Forms.Button find_btn;
-        private System.Windows.Forms.Label using_template_lbl;
         private System.Windows.Forms.ContextMenuStrip template_contextmenu;
         private System.Windows.Forms.ToolStripMenuItem change_btn;
         private System.Windows.Forms.ToolStripMenuItem delete_btn;

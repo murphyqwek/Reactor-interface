@@ -167,21 +167,21 @@ namespace WindowsFormsApp1.Classes
             }
         }
 
-        public static string get_using_template()
+        public static string get_current_experiment()
         {
-            string template;
+            string currentExperiment;
             using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Reactor Interface TPU"))
             {
-                template = key?.GetValue("Using Template")?.ToString();
+                currentExperiment = key?.GetValue("Current Experiment")?.ToString();
             }
-            return template;
+            return currentExperiment;
         }
 
-        static public void save_using_template(string using_template)
+        public static void set_current_experiment(string experimentPath)
         {
             using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Reactor Interface TPU"))
             {
-                key.SetValue("Using Template", using_template);
+                key.SetValue("Current Experiment", experimentPath);
             }
         }
     }

@@ -212,7 +212,7 @@ namespace Reactor_Interface.Classes.GoogleAPI
         public static async Task<Dictionary<string, List<FileData>>> GetSeries()
         {
             Dictionary<string, List<FileData>> Series = new Dictionary<string, List<FileData>>();
-            
+
             if (!Internet_checker.CheckInternet() || service == null)
                 return null;
 
@@ -231,12 +231,12 @@ namespace Reactor_Interface.Classes.GoogleAPI
                 var file_list = await getFilseFunc.ExecuteAsync();
                 nextPage = file_list.NextPageToken;
 
-                foreach(var file in file_list.Files)
+                foreach (var file in file_list.Files)
                 {
                     FileData fileData = new FileData(file.Name, file.Id, file.MimeType);
                     if (file.MimeType == "application/vnd.google-apps.folder")
                     {
-                        if(!Series.ContainsKey(file.Id))
+                        if (!Series.ContainsKey(file.Id))
                             Series.Add(file.Id, new List<FileData> { fileData });
                         continue;
                     }
@@ -248,7 +248,7 @@ namespace Reactor_Interface.Classes.GoogleAPI
                 }
             }
             while (!string.IsNullOrEmpty(nextPage));
-            
+
             return Series;
         }
     }

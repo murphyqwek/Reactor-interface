@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Net;
@@ -15,6 +16,7 @@ using System.Windows.Forms.DataVisualization.Charting;
 using Microsoft.VisualBasic;
 using Newtonsoft.Json.Bson;
 using Reactor_Interface.Classes;
+using Reactor_Interface.Classes.Experiment;
 using Reactor_Interface.Classes.GoogleAPI;
 using Reactor_Interface.Classes.Templates;
 using Reactor_Interface.Classes.Weigher;
@@ -29,7 +31,7 @@ namespace Reactor_Interface
     public partial class Jounral_menu : Form
     {
         private Chart _chart;
-        private Template template;
+        private ExperimentData _experiment;
         private SerialPort weigherSerialPort = new SerialPort();
         private WeigherReader weigherReader;
 
@@ -51,7 +53,7 @@ namespace Reactor_Interface
             _chart = chart; 
             googleDriveToolStripMenuItem.Text = "Google Drive: " + Drive.name;
             upload_ports();
-            upload_using_template();
+            uploadCurrentExperiment();
             upload_drives();
         }
 
@@ -93,65 +95,75 @@ namespace Reactor_Interface
             this.MaximumSize = this.MinimumSize;
         }
 
-        private void upload_using_template()
+        private void uploadCurrentExperiment()
         {
-            string using_template_name = Template_system.get_using_template();
-            if (!Template_system.IsTemplateCreated(using_template_name))
+            var currentExperiment = ExperimentSystem.UploadCurrentExperiment();
+
+            if (currentExperiment == null)
                 return;
 
-            template_btn.Text = "Шаблон: " + using_template_name;
-
-            template = Template_system.Upload_template(using_template_name);
-            parse_template(template);
+            uploadExperiment(currentExperiment);
         }
 
-        private void parse_template(Template template)
+        private void uploadExperiment(ExperimentData experiment)
+        {
+            if (experiment == null)
+                MessageBox.Show("Шаблон был повреждён. Невозможно загрузить.", "Ошибка",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+            else
+            {
+                _experiment = experiment;
+                parseExperimentData(_experiment);
+                SetExperimentName(_experiment.Name);
+            }
+        }
+
+        private void parseExperimentData(ExperimentData experiment)
         {
             data_control.TabPages.Clear();
 
             weigherListBox.Clear();
 
-            foreach (string page_name in template.Pages.Keys)
+            foreach (string page_name in experiment.Pages.Keys)
             {
-                TabPage page = new TabPage {
+                TabPage page = new TabPage
+                {
                     Text = page_name,
                     BackColor = Control_settings.BackColor
                 };
 
-                for (int column = 0; column < template.Pages[page_name].Count; column++)
+                foreach (FieldData field in experiment.Pages[page_name])
                 {
-                    for(int row = 0; row < template.Pages[page_name][column].Count; row++)
+                    Label field_label = new Label
                     {
-                        Label field_label = new Label
-                        {
-                            Text = template.Pages[page_name][column][row].First.ToString(),
-                            AutoSize = true,
-                            Location = new Point(Control_settings.label_x + column * Control_settings.space_x,
-                                                 Control_settings.label_y + row * Control_settings.space_y),
-                        };
+                        Text = field.FieldName.ToString(),
+                        AutoSize = true,
+                        Location = new Point(Control_settings.label_x + field.Column * Control_settings.space_x,
+                                             Control_settings.label_y + field.Row * Control_settings.space_y),
+                    };
 
-                        RichTextBox textBox = new RichTextBox
-                        {
-                            Size = new Size(Control_settings.textbox_width, Control_settings.text_box_height),
-                            Location = new Point(Control_settings.textbox_x + column * Control_settings.space_x,
-                                                 Control_settings.textbox_y + row * Control_settings.space_y),
-                            Name = column.ToString() + row.ToString() + Control_settings.textbox_suffix,
-                            Tag = template.Pages[page_name][column][row].First,
-                            Multiline = false
-                        };
+                    RichTextBox textBox = new RichTextBox
+                    {
+                        Size = new Size(Control_settings.textbox_width, Control_settings.text_box_height),
+                        Location = new Point(Control_settings.textbox_x + field.Column * Control_settings.space_x,
+                                             Control_settings.textbox_y + field.Row * Control_settings.space_y),
+                        Name = field.Row.ToString() + "_" + field.Column.ToString() + Control_settings.textbox_suffix,
+                        Tag = field.FieldName,
+                        Text = field.FieldValue,
+                        Multiline = false
+                    };
 
-                        //DPI.ResizeRichTextBox(textBox
+                    //DPI.ResizeRichTextBox(textBox
 
-                        if (template.Pages[page_name][column][row].Second.ToString().Contains(weigherTag))
-                        {
-                            textBox.ContextMenuStrip = context_menu;
-                            textBox.BackColor = Color.LightGray;
-                            weigherListBox.Add(textBox);
-                        }
-
-                        page.Controls.Add(field_label);
-                        page.Controls.Add(textBox);
+                    if (field.MetaData.Contains(weigherTag))
+                    {
+                        textBox.ContextMenuStrip = context_menu;
+                        textBox.BackColor = Color.LightGray;
+                        weigherListBox.Add(textBox);
                     }
+
+                    page.Controls.Add(field_label);
+                    page.Controls.Add(textBox);
                 }
 
                 data_control.TabPages.Add(page);
@@ -202,7 +214,7 @@ namespace Reactor_Interface
             string exlname = string.Format("{0}_{1}.xlsx", serie, numer);
 
             string path = string.Format("{0}\\{1}", Google_service.GetFileTempFolderPath(), exlname);
-            var experiment = Template_system.get_experiment(data_control, template);
+            var experiment = TemplateSystem.get_experiment(data_control, _experiment);
 
             ExperimentExl.CreateExcelExperiment(path, experiment, _chart, comments_txtbx.Text);
             Drive.UploadFileOnDrive(path, serie, numer);
@@ -233,15 +245,9 @@ namespace Reactor_Interface
             change_serie_menubtn.Text = "Выбрать серию: " + serie.Name;
         }
 
-        private void template_btn_Click(object sender, EventArgs e)
+        public void upload_template(ExperimentData template)
         {
-            Template_menu template = new Template_menu(this);
-            template.Show();
-        }
-
-        public void upload_template(Reactor_Interface.Classes.Templates.Template template)
-        {
-            upload_using_template();
+            uploadExperiment(template);
         }
 
         private void SaveOnComp_btn_Click(object sender, EventArgs e)
@@ -263,7 +269,7 @@ namespace Reactor_Interface
                     return;
                 }
 
-                var experiment = Template_system.get_experiment(data_control, template);
+                var experiment = TemplateSystem.get_experiment(data_control, _experiment);
 
                 ExperimentExl.CreateExcelExperiment(path, experiment, _chart, comments_txtbx.Text);
 
@@ -352,6 +358,73 @@ namespace Reactor_Interface
         private void weigher_btn_Click(object sender, EventArgs e)
         {
             upload_ports();
+        }
+
+        private void CreateNewExperimentBtn_Click(object sender, EventArgs e)
+        {
+            Template_menu template = new Template_menu(this);
+            template.Show();
+        }
+
+        private void UploadExperimentComputerBtn_Click(object sender, EventArgs e)
+        {
+            using (FileDialog fileDialog = new OpenFileDialog())
+            {
+                fileDialog.Title = "Выберите эксперимент";
+                fileDialog.Filter = string.Format("Experiment (*{0})|*{0}", ExperimentSystem.experimentExtension);
+
+                if (fileDialog.ShowDialog() != DialogResult.OK)
+                    return;
+
+                string path = fileDialog.FileName;
+
+                var experiment = ExperimentSystem.UploadExperiment(path);
+
+                if (experiment == null)
+                {
+                    MessageBox.Show("Шаблон был удалён или повреждён", "Ошибка",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                    return;
+                }
+
+                _experiment = experiment;
+
+                parseExperimentData(_experiment);
+            }
+        }
+
+        private void experiment_btn_DropDownOpening(object sender, EventArgs e)
+        {
+            SaveExperimentBtn.Visible = _experiment != null;
+        }
+
+        private void SaveExperimentBtn_Click(object sender, EventArgs e)
+        {
+            using(SaveFileDialog fileDialog = new SaveFileDialog())
+            {
+                fileDialog.Title = "Выберите эксперимент";
+                fileDialog.Filter = string.Format("Experiment (*{0})|*{0}", ExperimentSystem.experimentExtension);
+
+                if (fileDialog.ShowDialog() != DialogResult.OK)
+                    return;
+
+                string path = fileDialog.FileName;
+                string experimentName = Path.GetFileName(path);
+
+                SetExperimentName(experimentName);
+                _experiment = FormNewExperiment(experimentName);
+                ExperimentSystem.SaveExperiment(_experiment, path);
+            }
+        }
+
+        private void SetExperimentName(string experimentName)
+        {
+            experiment_btn.Text = "Эксперимент: " + experimentName;
+        }
+
+        private ExperimentData FormNewExperiment(string experimentName)
+        {
+            return ExperimentSystem.FormNewExperiment(data_control, experimentName, comments_txtbx.Text);
         }
     }
 

@@ -85,8 +85,7 @@ namespace WindowsFormsApp1
         {
             base.ScaleControl(factor, specified);
             DPI.SetFactor(factor);
-            this.Size = new Size((int)((button2.Location.X + button2.Size.Width * 1.4) * factor.Width), (int)((stop_btn.Location.Y + stop_btn.Size.Height * 1.4) * factor.Height));//this.Size.Height);
-            //this.MinimumSize = new Size(this.Width, this.Height);
+            this.Size = new Size((int)((button2.Location.X + button2.Size.Width * 1.4) * factor.Width), (int)((stop_btn.Location.Y + stop_btn.Size.Height * 1.4) * factor.Height));
         }
 
         private void time_syntes_bar_Scroll(object sender, EventArgs e)

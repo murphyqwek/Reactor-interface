@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Jounral_menu));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.template_btn = new System.Windows.Forms.ToolStripMenuItem();
+            this.experiment_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.облачноеХранилищеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.googleDriveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.change_serie_menubtn = new System.Windows.Forms.ToolStripMenuItem();
@@ -50,6 +50,11 @@
             this.context_menu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.weigh_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.get_mass_btn = new System.Windows.Forms.Button();
+            this.CreateNewExperimentBtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.UploadExperimentBtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.UploadExperimentComputerBtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.сОблачногоХранилищаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SaveExperimentBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.data_groupbox.SuspendLayout();
             this.context_menu.SuspendLayout();
@@ -60,7 +65,7 @@
             this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.template_btn,
+            this.experiment_btn,
             this.облачноеХранилищеToolStripMenuItem,
             this.save_menubtn,
             this.weigher_btn});
@@ -70,13 +75,17 @@
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // template_btn
+            // experiment_btn
             // 
-            this.template_btn.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.template_btn.Name = "template_btn";
-            this.template_btn.Size = new System.Drawing.Size(108, 32);
-            this.template_btn.Text = "Шаблон:";
-            this.template_btn.Click += new System.EventHandler(this.template_btn_Click);
+            this.experiment_btn.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.CreateNewExperimentBtn,
+            this.UploadExperimentBtn,
+            this.SaveExperimentBtn});
+            this.experiment_btn.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.experiment_btn.Name = "experiment_btn";
+            this.experiment_btn.Size = new System.Drawing.Size(153, 32);
+            this.experiment_btn.Text = "Эксперимент:";
+            this.experiment_btn.DropDownOpening += new System.EventHandler(this.experiment_btn_DropDownOpening);
             // 
             // облачноеХранилищеToolStripMenuItem
             // 
@@ -117,14 +126,14 @@
             // SaveOnComp_btn
             // 
             this.SaveOnComp_btn.Name = "SaveOnComp_btn";
-            this.SaveOnComp_btn.Size = new System.Drawing.Size(230, 36);
+            this.SaveOnComp_btn.Size = new System.Drawing.Size(270, 36);
             this.SaveOnComp_btn.Text = "Компьютер";
             this.SaveOnComp_btn.Click += new System.EventHandler(this.SaveOnComp_btn_Click);
             // 
             // googleDriveToolStripMenuItem1
             // 
             this.googleDriveToolStripMenuItem1.Name = "googleDriveToolStripMenuItem1";
-            this.googleDriveToolStripMenuItem1.Size = new System.Drawing.Size(230, 36);
+            this.googleDriveToolStripMenuItem1.Size = new System.Drawing.Size(270, 36);
             this.googleDriveToolStripMenuItem1.Text = "Google Drive";
             this.googleDriveToolStripMenuItem1.Click += new System.EventHandler(this.save_to_drive_btn_Click);
             // 
@@ -243,6 +252,43 @@
             this.get_mass_btn.UseVisualStyleBackColor = true;
             this.get_mass_btn.Click += new System.EventHandler(this.get_mass_btn_Click);
             // 
+            // CreateNewExperimentBtn
+            // 
+            this.CreateNewExperimentBtn.Name = "CreateNewExperimentBtn";
+            this.CreateNewExperimentBtn.Size = new System.Drawing.Size(334, 36);
+            this.CreateNewExperimentBtn.Text = "Шаблоны";
+            this.CreateNewExperimentBtn.Click += new System.EventHandler(this.CreateNewExperimentBtn_Click);
+            // 
+            // UploadExperimentBtn
+            // 
+            this.UploadExperimentBtn.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.UploadExperimentComputerBtn,
+            this.сОблачногоХранилищаToolStripMenuItem});
+            this.UploadExperimentBtn.Name = "UploadExperimentBtn";
+            this.UploadExperimentBtn.Size = new System.Drawing.Size(334, 36);
+            this.UploadExperimentBtn.Text = "Загрузить эксперимент";
+            // 
+            // UploadExperimentComputerBtn
+            // 
+            this.UploadExperimentComputerBtn.Name = "UploadExperimentComputerBtn";
+            this.UploadExperimentComputerBtn.Size = new System.Drawing.Size(340, 36);
+            this.UploadExperimentComputerBtn.Text = "С компьютера";
+            this.UploadExperimentComputerBtn.Click += new System.EventHandler(this.UploadExperimentComputerBtn_Click);
+            // 
+            // сОблачногоХранилищаToolStripMenuItem
+            // 
+            this.сОблачногоХранилищаToolStripMenuItem.Name = "сОблачногоХранилищаToolStripMenuItem";
+            this.сОблачногоХранилищаToolStripMenuItem.Size = new System.Drawing.Size(340, 36);
+            this.сОблачногоХранилищаToolStripMenuItem.Text = "С облачного хранилища";
+            // 
+            // SaveExperimentBtn
+            // 
+            this.SaveExperimentBtn.Name = "SaveExperimentBtn";
+            this.SaveExperimentBtn.Size = new System.Drawing.Size(334, 36);
+            this.SaveExperimentBtn.Text = "Сохранить эксперимент";
+            this.SaveExperimentBtn.Visible = false;
+            this.SaveExperimentBtn.Click += new System.EventHandler(this.SaveExperimentBtn_Click);
+            // 
             // Jounral_menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
@@ -262,7 +308,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Jounral_menu";
-            this.Text = "Эксперимент. Серия:";
+            this.Text = "Журнал. Серия:";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.data_groupbox.ResumeLayout(false);
@@ -281,7 +327,7 @@
         private System.Windows.Forms.ToolStripMenuItem save_menubtn;
         private System.Windows.Forms.ToolStripMenuItem SaveOnComp_btn;
         private System.Windows.Forms.ToolStripMenuItem googleDriveToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem template_btn;
+        private System.Windows.Forms.ToolStripMenuItem experiment_btn;
         private System.Windows.Forms.TabControl data_control;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.RichTextBox comments_txtbx;
@@ -294,5 +340,10 @@
         private System.Windows.Forms.ToolStripMenuItem облачноеХранилищеToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem googleDriveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem change_serie_menubtn;
+        private System.Windows.Forms.ToolStripMenuItem CreateNewExperimentBtn;
+        private System.Windows.Forms.ToolStripMenuItem UploadExperimentBtn;
+        private System.Windows.Forms.ToolStripMenuItem UploadExperimentComputerBtn;
+        private System.Windows.Forms.ToolStripMenuItem сОблачногоХранилищаToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem SaveExperimentBtn;
     }
 }

@@ -31,6 +31,8 @@ namespace Reactor_Interface.Classes.GoogleAPI
             FileInfo fileInfo = new FileInfo(path);
             FileStream stream = new FileStream(path, FileMode.Open);
             Google_service.UploadFile(serie.Name + "_" + numer, stream, serie);
+
+            File.Delete(path);
         }
 
         public static void Update(string new_name, string client_id, string client_secret)

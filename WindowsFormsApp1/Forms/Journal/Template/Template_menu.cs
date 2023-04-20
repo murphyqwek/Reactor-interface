@@ -35,28 +35,11 @@ namespace Reactor_Interface.Forms.Experiment
         }
         public void Load_templates(string selected_template = "")
         {
-            using_template_lbl.Text = using_template_text;
-            templates_array = Template_system.get_template_array();
+            templates_array = TemplateSystem.get_template_array();
 
             template_view.Items.Clear();
             foreach (string template in templates_array)
                 template_view.Items.Add(template);
-
-            string using_template = Interface_settings.get_using_template();
-
-            if (!templates_array.Contains(using_template))
-            {
-                using_template_lbl.Text += template_not_chosen;
-                Interface_settings.save_using_template("");
-            }
-            else if (using_template == "" || using_template == null)
-            {
-                using_template_lbl.Text += template_not_chosen;
-            }
-            else
-            {
-                using_template_lbl.Text += using_template;
-            }
 
             if (selected_template != "")
             {
@@ -89,24 +72,6 @@ namespace Reactor_Interface.Forms.Experiment
             return chosen_template_lbl.Tag.ToString();
         }
 
-        public void upload_template(string new_template, string old_template)
-        {
-            string chosen_template = using_template_lbl.Text.Split('\r')[1];
-
-            if (old_template != chosen_template && chosen_template != template_not_chosen)
-                return;
-
-            Classes.Templates.Template template = Template_system.Upload_template(new_template);
-            Template_system.Save_using_template_registry(template.Name);
-            jounral_menu.upload_template(template);
-            using_template_lbl.Text = using_template_text + template.Name;
-        }
-
-        private void upload_btn_Click(object sender, EventArgs e)
-        {
-            
-        }
-
         private void template_contextmenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             switch (e.ClickedItem.Name)
@@ -124,7 +89,7 @@ namespace Reactor_Interface.Forms.Experiment
 
             if (result == DialogResult.Yes)
             {
-                Template_system.Delete_template(get_chosen_template());
+                TemplateSystem.Delete_template(get_chosen_template());
                 Load_templates();
                 chosen_template_lbl.Text = chosen_template_text + template_not_chosen;
             }
@@ -132,8 +97,9 @@ namespace Reactor_Interface.Forms.Experiment
 
         private void change_btn_Click(object sender, EventArgs e)
         {
-            Classes.Templates.Template template = Template_system.Upload_template(get_chosen_template());
-            Create_template_menu modify_Template_menu = new Create_template_menu(this, template);
+            string templateName = get_chosen_template();
+            ExperimentData template = TemplateSystem.Upload_template(templateName);
+            Create_template_menu modify_Template_menu = new Create_template_menu(this, template, templateName);
             this.Hide();
             modify_Template_menu.Show();
         }
@@ -148,21 +114,18 @@ namespace Reactor_Interface.Forms.Experiment
                 return;
             }
 
-            if (Interface_settings.get_using_template() == chosen_template_name)
-                return;
-
-            Classes.Templates.Template template = Template_system.Upload_template(chosen_template_name);
+            ExperimentData template = TemplateSystem.Upload_template(chosen_template_name);
 
             if (template == null)
             {
                 MessageBox.Show("Данный шаблон был повреждён либо удалён", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
             }
+
             else
             {
-                Template_system.Save_using_template_registry(template.Name);
                 jounral_menu.upload_template(template);
-                using_template_lbl.Text = using_template_text + template.Name;
                 MessageBox.Show("Шаблон загружен", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+
                 this.Close();
             }
         }
@@ -185,7 +148,7 @@ namespace Reactor_Interface.Forms.Experiment
 
                 var templates = fileDialog.FileNames;
 
-                Template_system.UploadTemplates(templates);
+                TemplateSystem.UploadTemplates(templates);
 
                 Load_templates();
 

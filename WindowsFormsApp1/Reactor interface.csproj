@@ -191,7 +191,9 @@
     <Compile Include="Classes\DPI.cs" />
     <Compile Include="Classes\Error_message.cs" />
     <Compile Include="Classes\Exl.cs" />
-    <Compile Include="Classes\ExperimentExl.cs" />
+    <Compile Include="Classes\Experiment\ExperimentExl.cs" />
+    <Compile Include="Classes\Experiment\ExperimentSystem.cs" />
+    <Compile Include="Classes\Experiment\FieldData.cs" />
     <Compile Include="Classes\GoogleAPI\Drive.cs" />
     <Compile Include="Classes\GoogleAPI\Client_data_check.cs" />
     <Compile Include="Classes\GoogleAPI\FileData.cs" />
@@ -200,8 +202,8 @@
     <Compile Include="Classes\Interface_settings.cs" />
     <Compile Include="Classes\Internet_checker.cs" />
     <Compile Include="Classes\Port.cs" />
-    <Compile Include="Classes\Templates\Template.cs" />
-    <Compile Include="Classes\Templates\Template_system.cs" />
+    <Compile Include="Classes\Experiment\ExperimentData.cs" />
+    <Compile Include="Classes\Experiment\TemplateSystem.cs" />
     <Compile Include="Classes\Weigher\WeigherReader.cs" />
     <Compile Include="Forms\Journal\Fill_mass_field_menu.cs">
       <SubType>Form</SubType>

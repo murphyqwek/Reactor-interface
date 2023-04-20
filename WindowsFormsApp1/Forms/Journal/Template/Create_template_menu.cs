@@ -15,6 +15,8 @@ using Templates = Reactor_Interface.Classes.Templates;
 using Reactor_Interface.Classes.Templates;
 using System.Web.UI;
 using System.Data.Common;
+using Microsoft.Office.Interop.Access.Dao;
+using Reactor_Interface.Classes.Experiment;
 
 namespace Reactor_Interface.Forms.Template
 {
@@ -42,13 +44,13 @@ namespace Reactor_Interface.Forms.Template
         static public readonly int space_txtbx_delete_filed_btn = 20;
         static public readonly string text_box_item_suffix = "_txtbx";
 
-        static private readonly string weigherTag = "$МАССА$";
+        static public readonly string weigherTag = "$МАССА$";
 
         private string template_name = "";
         private bool Ismodifying = false;
 
         Template_menu template_menu;
-        public Create_template_menu(Template_menu template_menu, Templates.Template template = null)
+        public Create_template_menu(Template_menu template_menu, ExperimentData template = null, string templateName = null)
         {
             InitializeComponent();
             this.template_menu = template_menu;
@@ -56,14 +58,14 @@ namespace Reactor_Interface.Forms.Template
             if (template == null)
                 setup_new_template();
             else
-                parse_template(template);
+                parse_template(template, templateName);
         }
 
-        private void parse_template(Templates.Template template)
+        private void parse_template(ExperimentData template, string templateName)
         {
             template_control.TabPages.Clear();
 
-            template_name = template.Name;
+            template_name = templateName;
 
             Ismodifying = true;
 
@@ -77,24 +79,27 @@ namespace Reactor_Interface.Forms.Template
                     BackColor = Color.White
                 };
 
+                Dictionary<string, FieldData> fields = new Dictionary<string, FieldData>();
+
+                foreach(var field in template.Pages[page_name])
+                {
+                    fields.Add(field.Row.ToString() + "_" + field.Column.ToString(), field);
+                }
+
                 for (int column = 0; column < columns; column++)
                 {
                     for (int row = 0; row < rows; row++)
                     {
-                        if (column >= template.Pages[page_name].Count)
+                        FieldData field;
+
+                        if(!fields.TryGetValue(row.ToString() + "_" + column.ToString(), out field))
                         {
                             create_new_field(column, row, page);
                             continue;
                         }
 
-                        if (row >= template.Pages[page_name][column].Count)
-                        {
-                            create_new_field(column, row, page);
-                            continue;
-                        }
-
-                        string box_type = template.Pages[page_name][column][row].Second.ToString();
-                        string field_name = template.Pages[page_name][column][row].First.ToString();
+                        string box_type = field.MetaData.ToString();
+                        string field_name = field.FieldName.ToString();
 
                         add_created_textbox(column, row, template, box_type, field_name, page);
                     }
@@ -141,7 +146,7 @@ namespace Reactor_Interface.Forms.Template
             page.Controls.Add(add_);
         }
 
-        private void add_created_textbox(int column, int row, Templates.Template template, string type, string field_name, TabPage page)
+        private void add_created_textbox(int column, int row, Templates.ExperimentData template, string type, string field_name, TabPage page)
         {
             string item_ind = string.Format("{0}{1}", column, row);
             Point location = new Point(column * space_x + button_x, button_y + row * space_y + button_width / 4);
@@ -283,29 +288,29 @@ namespace Reactor_Interface.Forms.Template
             template_control.SelectedTab.Controls.Add(delete_field_btn);
         }
 
-        private void show_result(Template_system.Save_result result)
+        private void show_result(TemplateSystem.Save_result result)
         {
             string msg_text = "", msg_title = "";
             MessageBoxIcon msg_icon = MessageBoxIcon.Information;
 
             switch (result)
             {
-                case Template_system.Save_result.EmptyFiled:
+                case TemplateSystem.Save_result.EmptyFiled:
                     msg_text = "Одно или несколько полей были не заполнены";
                     msg_title = "Ошибка";
                     msg_icon = MessageBoxIcon.Error;
                     break;
-                case Template_system.Save_result.CreationError:
+                case TemplateSystem.Save_result.CreationError:
                     msg_text = "Ошибка при сохранении шаблона";
                     msg_title = "Ошибка";
                     msg_icon = MessageBoxIcon.Error;
                     break;
-                case Template_system.Save_result.EmptyPages:
+                case TemplateSystem.Save_result.EmptyPages:
                     msg_text = "Все страницы пусты";
                     msg_title = "Ошибка";
                     msg_icon = MessageBoxIcon.Error;
                     break;
-                case Template_system.Save_result.Saved:
+                case TemplateSystem.Save_result.Saved:
                     msg_text = "Шаблон сохранён";
                     msg_title = "Успешно";
                     msg_icon = MessageBoxIcon.Information;
@@ -326,7 +331,7 @@ namespace Reactor_Interface.Forms.Template
                 return;
             }
 
-            if (Template_system.IsTemplateCreated(template_name) && !Ismodifying)
+            if (TemplateSystem.IsTemplateCreated(template_name) && !Ismodifying)
             {
                 bool recreated = Recreate_template(template_name);
                 if (!recreated)
@@ -334,18 +339,16 @@ namespace Reactor_Interface.Forms.Template
             }
 
             if (Ismodifying)
-                Template_system.Delete_template(this.template_name);
+                TemplateSystem.Delete_template(this.template_name);
 
-            Template_system.Save_result result = Template_system.Create_template_json(template_control, template_name);
+            TemplateSystem.Save_result result = TemplateSystem.Create_template_json(template_control, template_name);
 
             show_result(result);
 
-            if (result == Template_system.Save_result.Saved)
+            if (result == TemplateSystem.Save_result.Saved)
             {
                 template_menu.Load_templates(template_name);
                 is_created_new_template = true;
-                if (Ismodifying)
-                    template_menu.upload_template(template_name, old_template_name);
                 this.Close();
             }
         }
@@ -360,7 +363,7 @@ namespace Reactor_Interface.Forms.Template
 
             if(result == DialogResult.Yes) 
             { 
-                Template_system.Delete_template(template_name);
+                TemplateSystem.Delete_template(template_name);
                 return true;
             }
 
