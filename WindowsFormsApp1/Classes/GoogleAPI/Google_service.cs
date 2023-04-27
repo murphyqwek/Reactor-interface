@@ -25,6 +25,13 @@ using OfficeOpenXml.Style;
 
 namespace Reactor_Interface.Classes.GoogleAPI
 {
+    public enum FileTypes
+    {
+        Exl,
+        Text,
+        Folder
+    }
+
     static class Google_service
     {
         static public DriveService service = null;
@@ -33,6 +40,14 @@ namespace Reactor_Interface.Classes.GoogleAPI
         static private readonly string file_store = "Reactor.GoogleDrive.API.store";
         static private readonly string file_prefix = "Google.Apis.Auth.OAuth2.Responses.TokenResponse";
         static private readonly string temp_folder_name = "TEMP";
+
+        private static readonly Dictionary<FileTypes, string> mimeTypes = new Dictionary<FileTypes, string>
+        {
+            { FileTypes.Text, "application/vnd.google-apps.file" },
+            { FileTypes.Exl, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" },
+            { FileTypes.Folder, "application/vnd.google-apps.folder" }
+        };
+
         public enum RequestResult
         {
             Succses,
@@ -86,7 +101,7 @@ namespace Reactor_Interface.Classes.GoogleAPI
         static public async Task<string> CreateFolder(string folderName)
         {
             var folder_file_body = new Google.Apis.Drive.v3.Data.File();
-            folder_file_body.MimeType = "application/vnd.google-apps.folder";
+            folder_file_body.MimeType = mimeTypes[FileTypes.Folder];
             folder_file_body.Name = folderName;
 
             var result = await service.Files.Create(folder_file_body).ExecuteAsync();
@@ -95,7 +110,7 @@ namespace Reactor_Interface.Classes.GoogleAPI
 
         static public async Task<bool> IsFolderExist(string folderName)
         {
-            string q = string.Format("mimeType = 'application/vnd.google-apps.folder' and name = '{0}' and trashed = false", folderName);
+            string q = string.Format("mimeType = '{0}' and name = '{1}' and trashed = false", mimeTypes[FileTypes.Folder], folderName);
 
             var list = service.Files.List();
             list.Q = q;
@@ -104,6 +119,19 @@ namespace Reactor_Interface.Classes.GoogleAPI
 
             return files.Files.Count > 0;
         }
+        
+        static public bool IsFileExist(string fileName, string parent)
+        {
+            string q = string.Format("name = '{1}' and '{2}' in parents and trashed = false", fileName, parent);
+            var list = service.Files.List();
+
+            list.Q = q;
+
+            var files = list.Execute();
+
+            return files.Files.Count > 0;
+        }
+
 
         static public async void UploadFile(string fileName, FileStream stream, FileData folder)
         {
@@ -134,7 +162,7 @@ namespace Reactor_Interface.Classes.GoogleAPI
             file_body.Name = fileName;
             file_body.Parents = new List<string> { folder_id };
 
-            await service.Files.Create(file_body, stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet").UploadAsync();
+            await service.Files.Create(file_body, stream, mimeTypes[FileTypes.Exl]).UploadAsync();
         }
 
         static public async void ConnectAsync(string client_id, string client_secret, string name)
@@ -216,7 +244,7 @@ namespace Reactor_Interface.Classes.GoogleAPI
             if (!Internet_checker.CheckInternet() || service == null)
                 return null;
 
-            string q = "(mimeType = 'application/vnd.google-apps.folder' or mimeType = 'application/vnd.google-apps.spreadsheet' or mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') and trashed = false and 'me' in owners";
+            string q = string.Format("(mimeType = '{0}' or mimeType = 'application/vnd.google-apps.spreadsheet' or mimeType = '{1}') and trashed = false and 'me' in owners", mimeTypes[FileTypes.Folder], mimeTypes[FileTypes.Exl]);
             string orderBy = "folder";
             string fields = "files(id, name, parents, mimeType)";
             var getFilseFunc = service.Files.List();
@@ -234,7 +262,7 @@ namespace Reactor_Interface.Classes.GoogleAPI
                 foreach (var file in file_list.Files)
                 {
                     FileData fileData = new FileData(file.Name, file.Id, file.MimeType);
-                    if (file.MimeType == "application/vnd.google-apps.folder")
+                    if (file.MimeType == mimeTypes[FileTypes.Folder])
                     {
                         if (!Series.ContainsKey(file.Id))
                             Series.Add(file.Id, new List<FileData> { fileData });

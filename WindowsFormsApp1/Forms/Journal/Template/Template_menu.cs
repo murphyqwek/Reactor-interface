@@ -106,6 +106,12 @@ namespace Reactor_Interface.Forms.Experiment
 
         private void UploadTemplateBtn_Click(object sender, EventArgs e)
         {
+            if (jounral_menu.NeedToCancel())
+            {
+                return;
+            }
+
+
             string chosen_template_name = get_chosen_template();
 
             if (chosen_template_name == null)

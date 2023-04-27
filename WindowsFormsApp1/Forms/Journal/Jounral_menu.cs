@@ -36,21 +36,43 @@ namespace Reactor_Interface
         private WeigherReader weigherReader;
 
         private readonly string weigherTag = "$МАССА$";
+        private readonly string diskPreffix = "D_";
+        private readonly string computerPreffix = "C_";
 
         public FileData serie;
         public string numer = "";
 
         private string weigherPort = null;
 
+        private string LoadFrom = null;
+
         private List<RichTextBox> weigherListBox = new List<RichTextBox>();
+
+        private bool _isSaved = true;
+
+        public bool IsSaved 
+        {
+            get
+            {
+                return _isSaved;
+            }
+
+            private set
+            {
+                _isSaved = value;
+
+                experiment_btn.Text = "Эксперимент: " + _experiment.Name;
+
+                experiment_btn.Text += _isSaved ? "" : "*";
+            }
+        }
 
         public Jounral_menu(Chart chart = null)
         {
             InitializeComponent();
             weigherReader = new WeigherReader(weigherSerialPort);
 
-            //weigherReader.OnMassGet += UpdateWeigherFields;
-            _chart = chart; 
+            _chart = chart;
             googleDriveToolStripMenuItem.Text = "Google Drive: " + Drive.name;
             upload_ports();
             uploadCurrentExperiment();
@@ -70,7 +92,7 @@ namespace Reactor_Interface
             }
 
             weigher_btn.Text = "Порт весов: ";
-            weigher_btn.Text += string.IsNullOrEmpty(weigherPort) ? "Нет доступных портов" : weigherPort;
+            weigher_btn.Text += weigherPort;
 
             weigherPort = weigherPort == null ? weigherSerialPort.PortName : weigherPort;
             
@@ -82,7 +104,8 @@ namespace Reactor_Interface
             weigherPort = e.ClickedItem.Text;
 
             Interface_settings.save_weigher_port(weigherPort);
-            weigher_btn.Text = "Порт весов: " + weigherSerialPort;
+            weigher_btn.Text = "Порт весов: " + weigherPort;
+            weigherSerialPort.PortName = weigherPort;
         }
 
         protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
@@ -98,23 +121,26 @@ namespace Reactor_Interface
         private void uploadCurrentExperiment()
         {
             var currentExperiment = ExperimentSystem.UploadCurrentExperiment();
+            string expPath = ExperimentSystem.GetCurrentExperimentPath();
 
             if (currentExperiment == null)
                 return;
 
-            uploadExperiment(currentExperiment);
+            uploadExperimentFromComputer(currentExperiment, expPath);
         }
 
-        private void uploadExperiment(ExperimentData experiment)
+        private void uploadExperimentFromComputer(ExperimentData experiment, string loadFromPath)
         {
             if (experiment == null)
                 MessageBox.Show("Шаблон был повреждён. Невозможно загрузить.", "Ошибка",
                                 MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
             else
             {
+                LoadFrom = computerPreffix + Path.GetDirectoryName(loadFromPath);
                 _experiment = experiment;
                 parseExperimentData(_experiment);
                 SetExperimentName(_experiment.Name);
+                IsSaved = true;
             }
         }
 
@@ -150,8 +176,10 @@ namespace Reactor_Interface
                         Name = field.Row.ToString() + "_" + field.Column.ToString() + Control_settings.textbox_suffix,
                         Tag = field.FieldName,
                         Text = field.FieldValue,
-                        Multiline = false
+                        Multiline = false,
                     };
+
+                    textBox.TextChanged += onTextChanged;
 
                     //DPI.ResizeRichTextBox(textBox
 
@@ -168,6 +196,8 @@ namespace Reactor_Interface
 
                 data_control.TabPages.Add(page);
             }
+
+            comments_txtbx.Text = experiment.Comments;
         }
 
         private void upload_drives()
@@ -214,9 +244,8 @@ namespace Reactor_Interface
             string exlname = string.Format("{0}_{1}.xlsx", serie, numer);
 
             string path = string.Format("{0}\\{1}", Google_service.GetFileTempFolderPath(), exlname);
-            var experiment = TemplateSystem.get_experiment(data_control, _experiment);
 
-            ExperimentExl.CreateExcelExperiment(path, experiment, _chart, comments_txtbx.Text);
+            //ExperimentExl.CreateExcelExperiment(path, experiment);
             Drive.UploadFileOnDrive(path, serie, numer);
             MessageBox.Show("Файл успешно загружен!!!", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -247,16 +276,24 @@ namespace Reactor_Interface
 
         public void upload_template(ExperimentData template)
         {
-            uploadExperiment(template);
+            uploadExperimentFromComputer(template, null);
+            IsSaved = false;
         }
 
         private void SaveOnComp_btn_Click(object sender, EventArgs e)
         {
+            if (!IsSaved)
+            {
+                MessageBox.Show("Эксперимент не сохранён. Прежде сохранить отчёт, сохраните эксперимент", "Внимание",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                return;
+            }
+
             string path = "";
             using (SaveFileDialog sf = new SaveFileDialog())
             {
                 sf.Title = "Сохранить файл как...";
-                sf.FileName = "График";
+                sf.FileName = _experiment.Name + " Отчёт";
                 sf.Filter = "*.xlsx|*.xlsx;";
                 sf.DefaultExt = ".xlsx";
 
@@ -269,9 +306,7 @@ namespace Reactor_Interface
                     return;
                 }
 
-                var experiment = TemplateSystem.get_experiment(data_control, _experiment);
-
-                ExperimentExl.CreateExcelExperiment(path, experiment, _chart, comments_txtbx.Text);
+                ExperimentExl.CreateExcelExperiment(path, _experiment);
 
                 MessageBox.Show("Excel файл сохранен", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -355,19 +390,17 @@ namespace Reactor_Interface
 
         }
 
-        private void weigher_btn_Click(object sender, EventArgs e)
-        {
-            upload_ports();
-        }
-
         private void CreateNewExperimentBtn_Click(object sender, EventArgs e)
         {
             Template_menu template = new Template_menu(this);
             template.Show();
         }
 
-        private void UploadExperimentComputerBtn_Click(object sender, EventArgs e)
+        private void GetUploadedExperimentFromComputer()
         {
+            if (NeedToCancel())
+                return;
+
             using (FileDialog fileDialog = new OpenFileDialog())
             {
                 fileDialog.Title = "Выберите эксперимент";
@@ -380,41 +413,98 @@ namespace Reactor_Interface
 
                 var experiment = ExperimentSystem.UploadExperiment(path);
 
-                if (experiment == null)
-                {
-                    MessageBox.Show("Шаблон был удалён или повреждён", "Ошибка",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
-                    return;
-                }
-
-                _experiment = experiment;
-
-                parseExperimentData(_experiment);
+                uploadExperimentFromComputer(experiment, path);
             }
+        }
+
+        private void UploadExperimentComputerBtn_Click(object sender, EventArgs e)
+        {
+            GetUploadedExperimentFromComputer();
         }
 
         private void experiment_btn_DropDownOpening(object sender, EventArgs e)
         {
-            SaveExperimentBtn.Visible = _experiment != null;
+            bool isExperimentNotNull = _experiment != null;
+            SaveExperimentBtn.Visible = isExperimentNotNull;
+            renameExperimentBtn.Visible = isExperimentNotNull;
+            DataExperimentBtn.Visible = isExperimentNotNull;
         }
 
-        private void SaveExperimentBtn_Click(object sender, EventArgs e)
+        public void SaveExperimentOnComputer()
         {
-            using(SaveFileDialog fileDialog = new SaveFileDialog())
+            using (SaveFileDialog fileDialog = new SaveFileDialog())
             {
                 fileDialog.Title = "Выберите эксперимент";
                 fileDialog.Filter = string.Format("Experiment (*{0})|*{0}", ExperimentSystem.experimentExtension);
+                fileDialog.FileName = _experiment.Name;
 
                 if (fileDialog.ShowDialog() != DialogResult.OK)
                     return;
 
                 string path = fileDialog.FileName;
-                string experimentName = Path.GetFileName(path);
+                string experimentName = Path.GetFileNameWithoutExtension(path);
+
+                LoadFrom = computerPreffix + Path.GetDirectoryName(path);
 
                 SetExperimentName(experimentName);
-                _experiment = FormNewExperiment(experimentName);
-                ExperimentSystem.SaveExperiment(_experiment, path);
+                _experiment = FormNewExperiment(experimentName, _experiment.ApplianceData);
+                ExperimentSystem.SaveExperimentOnComputer(_experiment, path);
+                IsSaved = true;
             }
+        }
+
+        private void SaveAutomaticly()
+        {
+            if (IsSaved)
+                return;
+
+            if (string.IsNullOrEmpty(LoadFrom))
+            {
+                SaveExperimentOnComputer();
+                return;
+            }
+
+            string path = LoadFrom.Substring(2);
+            if (LoadFrom.StartsWith(computerPreffix))
+            {
+                if (!ExperimentSystem.IsExperimentExists(path, _experiment.Name,
+                                                    ExperimentSystem.ExperimentStorePlace.OnComputer))
+                {
+                    SaveExperimentOnComputer();
+                }
+                else
+                {
+                    _experiment = FormNewExperiment(_experiment.Name, _experiment.ApplianceData);
+                    ExperimentSystem.SaveExperimentOnComputer(_experiment, path);
+                    IsSaved = true;
+                }
+            }
+
+            if (LoadFrom.StartsWith(diskPreffix))
+            {
+                if (!Internet_checker.CheckInternet())
+                {
+                    MessageBox.Show("Отсутсвует подключение к интернету", "Ошибка",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                    return;
+                }
+
+                if (!ExperimentSystem.IsExperimentExists(path, _experiment.Name,
+                                                    ExperimentSystem.ExperimentStorePlace.OnComputer))
+                {
+                    MessageBox.Show("Ошибка при сохранении файла. Проверьте, подключены ли вы к диску", "Ошибка",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                    return;
+                }
+
+                _experiment = FormNewExperiment(_experiment.Name, _experiment.ApplianceData);
+                ExperimentSystem.SaveExperimentOnDisk(_experiment, path);
+            }
+        }
+
+        private void SaveExperimentBtn_Click(object sender, EventArgs e)
+        {
+            SaveAutomaticly();
         }
 
         private void SetExperimentName(string experimentName)
@@ -422,9 +512,145 @@ namespace Reactor_Interface
             experiment_btn.Text = "Эксперимент: " + experimentName;
         }
 
-        private ExperimentData FormNewExperiment(string experimentName)
+        private ExperimentData FormNewExperiment(string experimentName, Dictionary<string, ApplianceData> appData)
         {
-            return ExperimentSystem.FormNewExperiment(data_control, experimentName, comments_txtbx.Text);
+            return ExperimentSystem.FormNewExperiment(data_control, experimentName, comments_txtbx.Text, appData);
+        }
+
+        private void onTextChanged(object sender, EventArgs e)
+        {
+            IsSaved = false;    
+        }
+
+        public bool NeedToCancel()
+        {
+            if (IsSaved)
+                return false;
+
+            var result = MessageBox.Show("Эксперимент не сохранён. Вы хотите его сохранить?", "Внимание",
+                                MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+
+            if (result == DialogResult.Yes)
+            {
+                SaveAutomaticly();
+                return false;
+            }
+            if (result == DialogResult.No)
+                return false;
+            else
+                return true;
+        }
+
+        private void Jounral_menu_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            var store = LoadFrom.Substring(0, 2) == computerPreffix ? ExperimentSystem.ExperimentStorePlace.OnComputer : ExperimentSystem.ExperimentStorePlace.OnDisk;
+            string path = LoadFrom.Substring(2);
+            if (IsSaved && !ExperimentSystem.IsExperimentExists(path, _experiment.Name, store))
+            {
+                SaveExperimentOnComputer();
+                return;
+            }
+            e.Cancel = NeedToCancel();
+        }
+
+        private void DataExperimentBtn_DropDownOpening(object sender, EventArgs e)
+        {
+            if (_experiment.ApplianceData == null)
+            {
+                SeeGraphBtn.Visible = false;
+                ClearGraphBtn.Visible = false;
+            }
+            else
+            {
+                SeeGraphBtn.Visible = true;
+                ClearGraphBtn.Visible = true;
+            }
+
+        }
+
+        private void ClearGraphBtn_Click(object sender, EventArgs e)
+        {
+            var result = MessageBox.Show("Вы точно хотите очистить данные с оборудования? Данные будут утеряны", "Внимание",
+                                         MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+
+            if (result == DialogResult.Yes)
+            {
+                _experiment.ClearApplianceData();
+                IsSaved = false;
+            }
+        }
+
+        private void UploadNewGraphBtn_Click(object sender, EventArgs e)
+        {
+            if(_experiment.ApplianceData == null)
+            {
+                ExperimentSystem.UploadApplianceDataToExperiment(ref _experiment, _chart.Series);
+                IsSaved = false;
+                return;
+            }
+
+            var result = MessageBox.Show("Вы точно загрузить новые данные с оборудования? Данные будут утеряны", "Внимание",
+                                         MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+
+            if (result == DialogResult.Yes)
+            {
+                ExperimentSystem.UploadApplianceDataToExperiment(ref _experiment, _chart.Series);
+                IsSaved = false;
+            }
+        }
+
+        private void SeeGraphBtn_Click(object sender, EventArgs e)
+        {
+            Graphic_menu graphicMenu = new Graphic_menu(_experiment.ApplianceData);
+            graphicMenu.ShowDialog();
+        }
+
+        private void SaveOnComputerBtn_Click(object sender, EventArgs e)
+        {
+            experiment_btn.HideDropDown();
+            SaveExperimentOnComputer();
+        }
+
+        private void renameExperimentBtn_Click(object sender, EventArgs e)
+        {
+            string newExperimentName = Interaction.InputBox("Введите новое название", "Переименовать", _experiment.Name);
+
+            newExperimentName = newExperimentName.Trim();
+
+            if(string.IsNullOrEmpty(newExperimentName))
+            {
+                MessageBox.Show("Пустое название", "Ошибка", 
+                                MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                return;
+            }
+
+            string placePreffix = LoadFrom.Substring(0, 2);
+            ExperimentSystem.ExperimentStorePlace place = (placePreffix == computerPreffix) ? ExperimentSystem.ExperimentStorePlace.OnComputer : ExperimentSystem.ExperimentStorePlace.OnDisk;
+
+            LoadFrom = ExperimentSystem.RenameExperiment(_experiment, newExperimentName, LoadFrom.Substring(2), place);
+            string path = LoadFrom;
+            LoadFrom = LoadFrom != null ? placePreffix + LoadFrom : null;
+
+            if (newExperimentName != _experiment.Name)
+            {
+                _experiment.Rename(newExperimentName);
+                if (path != null)
+                {
+                    experiment_btn.Text = "Эксперимент: " + _experiment.Name;
+                    ExperimentSystem.SaveExperimentOnComputer(_experiment, path);
+                }
+                else
+                {
+                    IsSaved = false;
+                    SaveExperimentOnComputer();
+                }
+
+            }
+        }
+
+        private void weigher_btn_DropDownOpening(object sender, EventArgs e)
+        {
+            upload_ports();
         }
     }
 

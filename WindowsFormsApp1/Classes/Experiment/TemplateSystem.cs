@@ -49,7 +49,7 @@ namespace Reactor_Interface.Classes
             {
                 string filename =Path.GetFileName(template);
                 Create_folder();
-                File.Move(template, templates_folder + filename);
+                File.Copy(template, templates_folder + filename);
             }
         }
 

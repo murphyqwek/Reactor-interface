@@ -34,12 +34,16 @@
             System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint1 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint2 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(10D, 30D);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint3 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(20D, 34D);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint4 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(30D, 19D);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint5 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(76D, 1D);
             System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint2 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint6 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
             System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint3 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint7 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
             System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint4 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint8 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Graphic_menu));
             this.graphic_setting_toolbar = new System.Windows.Forms.ToolStripMenuItem();
             this.tok_menubtn = new System.Windows.Forms.ToolStripMenuItem();
@@ -50,7 +54,7 @@
             this.какКартинкуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.какExcelТаблицуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.save_as_txt_file_stipbtn = new System.Windows.Forms.ToolStripMenuItem();
-            this.очиститьГрафикToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ClearGraphBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.Graph = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.menuStrip1.SuspendLayout();
@@ -151,13 +155,13 @@
             this.save_as_txt_file_stipbtn.Text = "Как текстовый файл";
             this.save_as_txt_file_stipbtn.Click += new System.EventHandler(this.save_as_txt_file_stipbtn_Click);
             // 
-            // очиститьГрафикToolStripMenuItem
+            // ClearGraphBtn
             // 
-            this.очиститьГрафикToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this.очиститьГрафикToolStripMenuItem.Name = "очиститьГрафикToolStripMenuItem";
-            this.очиститьГрафикToolStripMenuItem.Size = new System.Drawing.Size(217, 36);
-            this.очиститьГрафикToolStripMenuItem.Text = "Очистить график";
-            this.очиститьГрафикToolStripMenuItem.Click += new System.EventHandler(this.очиститьГрафикToolStripMenuItem_Click);
+            this.ClearGraphBtn.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.ClearGraphBtn.Name = "ClearGraphBtn";
+            this.ClearGraphBtn.Size = new System.Drawing.Size(217, 36);
+            this.ClearGraphBtn.Text = "Очистить график";
+            this.ClearGraphBtn.Click += new System.EventHandler(this.очиститьГрафикToolStripMenuItem_Click);
             // 
             // menuStrip1
             // 
@@ -166,7 +170,7 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.graphic_setting_toolbar,
             this.save_graphic_btn,
-            this.очиститьГрафикToolStripMenuItem});
+            this.ClearGraphBtn});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1187, 40);
@@ -235,6 +239,10 @@
             series1.LegendText = "Температура";
             series1.Name = "temperature";
             series1.Points.Add(dataPoint1);
+            series1.Points.Add(dataPoint2);
+            series1.Points.Add(dataPoint3);
+            series1.Points.Add(dataPoint4);
+            series1.Points.Add(dataPoint5);
             series2.BorderWidth = 3;
             series2.ChartArea = "tok_area";
             series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
@@ -243,7 +251,7 @@
             series2.LegendText = "Средний ток";
             series2.MarkerBorderWidth = 3;
             series2.Name = "aver_tok";
-            series2.Points.Add(dataPoint2);
+            series2.Points.Add(dataPoint6);
             series3.BorderWidth = 3;
             series3.ChartArea = "tok_area";
             series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
@@ -251,8 +259,8 @@
             series3.Legend = "tok_legend";
             series3.LegendText = "Ток";
             series3.Name = "tok";
-            dataPoint3.IsEmpty = true;
-            series3.Points.Add(dataPoint3);
+            dataPoint7.IsEmpty = true;
+            series3.Points.Add(dataPoint7);
             series4.BorderWidth = 5;
             series4.ChartArea = "temperature_area";
             series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.StepLine;
@@ -261,8 +269,8 @@
             series4.Legend = "tok_legend";
             series4.LegendText = "Шаг";
             series4.Name = "step";
-            dataPoint4.IsEmpty = true;
-            series4.Points.Add(dataPoint4);
+            dataPoint8.IsEmpty = true;
+            series4.Points.Add(dataPoint8);
             this.Graph.Series.Add(series1);
             this.Graph.Series.Add(series2);
             this.Graph.Series.Add(series3);
@@ -302,7 +310,7 @@
         private System.Windows.Forms.ToolStripMenuItem save_graphic_btn;
         private System.Windows.Forms.ToolStripMenuItem какКартинкуToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem какExcelТаблицуToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem очиститьГрафикToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ClearGraphBtn;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.DataVisualization.Charting.Chart Graph;
         private System.Windows.Forms.ToolStripMenuItem save_as_txt_file_stipbtn;

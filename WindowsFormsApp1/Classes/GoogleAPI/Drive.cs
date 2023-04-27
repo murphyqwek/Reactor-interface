@@ -26,6 +26,21 @@ namespace Reactor_Interface.Classes.GoogleAPI
             ConnectAsync();
         }
 
+        public static bool isFileExist(string fileName, string parent)
+        {
+            if (Google_service.service == null)
+                return false;
+
+            try
+            {
+                return Google_service.IsFileExist(fileName, parent);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public static void UploadFileOnDrive(string path, FileData serie, string numer)
         {
             FileInfo fileInfo = new FileInfo(path);

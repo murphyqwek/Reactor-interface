@@ -1,4 +1,5 @@
 ﻿using Reactor_Interface.Classes;
+using Reactor_Interface.Classes.Experiment;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -21,11 +22,32 @@ namespace Reactor_Interface
     public partial class Graphic_menu : Form
     {
         public bool is_drawing = false;
-        public Graphic_menu()
+
+        public Graphic_menu(Dictionary<string, ApplianceData> appData = null)
         {
             InitializeComponent();
+            if(appData != null )
+            {
+                UploadExperimentData(appData);
+                ClearGraphBtn.Visible = false;
+            }
         }
 
+        private void UploadExperimentData(Dictionary<string, ApplianceData> appData)
+        {
+            foreach(var serie in Graph.Series)
+            {
+                serie.Points.Clear();
+                string name = serie.Name;
+
+                var dataSerie = appData[name];
+                    
+                foreach(var point in dataSerie.Data)
+                {
+                    serie.Points.AddXY(point.X, point.Y);
+                }
+            }
+        }
 
         public void update_aver_tok(long time, double aver_tok)
         {

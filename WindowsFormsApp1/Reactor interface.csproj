@@ -191,9 +191,11 @@
     <Compile Include="Classes\DPI.cs" />
     <Compile Include="Classes\Error_message.cs" />
     <Compile Include="Classes\Exl.cs" />
+    <Compile Include="Classes\Experiment\ApplianceData.cs" />
     <Compile Include="Classes\Experiment\ExperimentExl.cs" />
     <Compile Include="Classes\Experiment\ExperimentSystem.cs" />
     <Compile Include="Classes\Experiment\FieldData.cs" />
+    <Compile Include="Classes\Experiment\GraphPoint.cs" />
     <Compile Include="Classes\GoogleAPI\Drive.cs" />
     <Compile Include="Classes\GoogleAPI\Client_data_check.cs" />
     <Compile Include="Classes\GoogleAPI\FileData.cs" />

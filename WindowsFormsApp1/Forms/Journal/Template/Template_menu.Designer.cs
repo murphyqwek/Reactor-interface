@@ -90,20 +90,20 @@
             this.change_btn,
             this.delete_btn});
             this.template_contextmenu.Name = "template_contextmenu";
-            this.template_contextmenu.Size = new System.Drawing.Size(241, 101);
+            this.template_contextmenu.Size = new System.Drawing.Size(232, 68);
             this.template_contextmenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.template_contextmenu_ItemClicked);
             // 
             // change_btn
             // 
             this.change_btn.Name = "change_btn";
-            this.change_btn.Size = new System.Drawing.Size(240, 32);
+            this.change_btn.Size = new System.Drawing.Size(231, 32);
             this.change_btn.Text = "Изменить шаблон";
             this.change_btn.Click += new System.EventHandler(this.change_btn_Click);
             // 
             // delete_btn
             // 
             this.delete_btn.Name = "delete_btn";
-            this.delete_btn.Size = new System.Drawing.Size(240, 32);
+            this.delete_btn.Size = new System.Drawing.Size(231, 32);
             this.delete_btn.Text = "Удалить шаблон";
             // 
             // find_groupbx
@@ -147,11 +147,10 @@
             // 
             // menuStrip1
             // 
-            this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.AddTemplateBtn,
             this.UploadTemplateBtn,
+            this.AddTemplateBtn,
             this.CreateNewTemplateBtn,
             this.UpdateTemplateBtn});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
@@ -170,8 +169,8 @@
             // UploadTemplateBtn
             // 
             this.UploadTemplateBtn.Name = "UploadTemplateBtn";
-            this.UploadTemplateBtn.Size = new System.Drawing.Size(176, 29);
-            this.UploadTemplateBtn.Text = "Загрузить шаблон";
+            this.UploadTemplateBtn.Size = new System.Drawing.Size(202, 29);
+            this.UploadTemplateBtn.Text = "Создать эксперимент";
             this.UploadTemplateBtn.Click += new System.EventHandler(this.UploadTemplateBtn_Click);
             // 
             // CreateNewTemplateBtn

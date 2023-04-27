@@ -21,6 +21,8 @@ using OfficeOpenXml.Drawing.Chart;
 using System.Drawing;
 using FormChart = System.Windows.Forms.DataVisualization.Charting;
 using OfficeOpenXml.Drawing.Chart.Style;
+using Reactor_Interface.Classes.Templates;
+using Reactor_Interface.Classes.Experiment;
 
 namespace Reactor_Interface.Classes
 {
@@ -42,7 +44,7 @@ namespace Reactor_Interface.Classes
             {"Шаг", "Шаг" }
         };
 
-        public static void CreateExcelExperiment(string path, Dictionary<string, List<Pair>> fields, FormChart.Chart chart = null, string comments = null)
+        public static void CreateExcelExperiment(string path, ExperimentData experiment)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
@@ -58,10 +60,10 @@ namespace Reactor_Interface.Classes
                 ExcelWorksheet graphicsSheet = excelPackage.Workbook.Worksheets.Add("Графики");
 
                 //Fill the Sheets
-                FillMainSheet(mainSheet, fields, comments);
-                if(chart != null)
+                FillMainSheet(mainSheet, experiment.Pages, experiment.Comments);
+                if(experiment.ApplianceData != null)
                 {
-                    FillDataIntoSheets(graphicsSheet, dataSheet, chart);
+                    FillDataIntoSheets(graphicsSheet, dataSheet, experiment.ApplianceData);
                 }
 
                 //Save your file
@@ -77,14 +79,14 @@ namespace Reactor_Interface.Classes
             table.Style.Border.BorderAround(ExcelBorderStyle.Medium);
         }
 
-        private static void fillSerie(ExcelWorksheet dataSheet, DataPointCollection points, int firstCellColumn)
+        private static void fillSerie(ExcelWorksheet dataSheet, List<GraphPoint> points, int firstCellColumn)
         {
             int y = 2;
             int x = firstCellColumn;
             for (int i = 0; i < points.Count; i++)
             {
-                dataSheet.Cells[y, x].Value = points[i].XValue;
-                dataSheet.Cells[y, x + 1].Value = points[i].YValues[0];
+                dataSheet.Cells[y, x].Value = points[i].X;
+                dataSheet.Cells[y, x + 1].Value = points[i].Y;
                 y++;
             }
             dataSheet.Columns[firstCellColumn].AutoFit();
@@ -121,24 +123,24 @@ namespace Reactor_Interface.Classes
             graphic.YAxis.Crosses = 0;
         }
 
-        private static void FillDataIntoSheets(ExcelWorksheet graphicSheet, ExcelWorksheet dataSheet, FormChart.Chart chart)
+        private static void FillDataIntoSheets(ExcelWorksheet graphicSheet, ExcelWorksheet dataSheet, Dictionary<string, ApplianceData> applianceData)
         {
             int start_cell = 1;
-            for (int i = 0; i < chart.Series.Count; i++)
+            foreach (var serie in applianceData.Keys)
             {
                 //Заполнение заголовков
                 dataSheet.Cells[1, start_cell].Value = "Время";
-                dataSheet.Cells[1, start_cell+1].Value = chart.Series[i].LegendText;
+                dataSheet.Cells[1, start_cell+1].Value = applianceData[serie].LegendText;
 
                 //Заполение стоблцов данными для графиков
-                fillSerie(dataSheet, chart.Series[i].Points, start_cell);
+                fillSerie(dataSheet, applianceData[serie].Data, start_cell);
                 //if(i == 0)
-                FillGraphicsSheet(graphicSheet, dataSheet, start_cell, chart.Series[i].Points.Count);
+                FillGraphicsSheet(graphicSheet, dataSheet, start_cell, applianceData[serie].Data.Count);
                 start_cell += 3;
             }
         }
 
-        private static void FillMainSheet(ExcelWorksheet mainSheet, Dictionary<string, List<Pair>> fields, string comments)
+        private static void FillMainSheet(ExcelWorksheet mainSheet, Dictionary<string, List<FieldData>> fields, string comments)
         {
             int y = 1;
 
@@ -169,11 +171,11 @@ namespace Reactor_Interface.Classes
                 foreach (var data in fields[table_name])
                 {
                     y++;
-                    mainSheet.Cells[y, 1].Value = data.First;
+                    mainSheet.Cells[y, 1].Value = data.FieldName;
 
-                    if (data.Second != null)
+                    if (!string.IsNullOrEmpty(data.FieldValue))
                     {
-                        mainSheet.Cells[y, 2].Value = data.Second;
+                        mainSheet.Cells[y, 2].Value = data.FieldValue;
                         AutoSizeSecondColumn = true;
                     }
                 }

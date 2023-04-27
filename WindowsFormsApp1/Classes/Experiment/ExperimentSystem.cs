@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using Reactor_Interface.Forms.Template;
 using System.Drawing;
 using System.Windows.Forms.DataVisualization.Charting;
+using Reactor_Interface.Classes.GoogleAPI;
 
 namespace Reactor_Interface.Classes.Experiment
 {
@@ -19,7 +20,31 @@ namespace Reactor_Interface.Classes.Experiment
     {
         public static readonly string experimentExtension = ".exp";
 
-        public static ExperimentData FormNewExperiment(TabControl dataPages, string experimentName, string comments, Chart chart = null)
+        public enum ExperimentStorePlace
+        {
+            OnComputer,
+            OnDisk
+        }
+
+        public static ExperimentData FormNewExperiment(TabControl dataPages, string experimentName, string comments, SeriesCollection series)
+        {
+            var experiment = FormNewExperiment(dataPages, experimentName, comments);
+
+            UploadApplianceDataToExperiment(ref experiment, series);
+
+            return experiment;
+        }
+
+        public static ExperimentData FormNewExperiment(TabControl dataPages, string experimentName, string comments, Dictionary<string, ApplianceData> applianceDatas)
+        {
+            var experiment = FormNewExperiment(dataPages, experimentName, comments);
+
+            experiment.SetNewApplianceData(applianceDatas);
+
+            return experiment;
+        }
+
+        private static ExperimentData FormNewExperiment(TabControl dataPages, string experimentName, string comments)
         {
             Dictionary<string, List<FieldData>> experimentData = new Dictionary<string, List<FieldData>>();
 
@@ -33,7 +58,7 @@ namespace Reactor_Interface.Classes.Experiment
                 {
                     string metadata = field.BackColor == Color.LightGray ? Create_template_menu.weigherTag : "";
                     var tablePosition = field.Name.Split('_');
-                    int Column = Convert.ToInt32(tablePosition[0]), Row = Convert.ToInt32(tablePosition[1]);
+                    int Column = Convert.ToInt32(tablePosition[1]), Row = Convert.ToInt32(tablePosition[0]);
                     fields.Add(new FieldData(
                                     field.Tag.ToString(),
                                     metadata,
@@ -44,14 +69,55 @@ namespace Reactor_Interface.Classes.Experiment
                 }
                 experimentData.Add(pageName, fields);
             }
-            ExperimentData experiment = new ExperimentData(experimentName, experimentData, chart, comments);
+
+            ExperimentData experiment = new ExperimentData(experimentName, experimentData, null, comments);
 
             return experiment;
         }
 
-        public static void SaveExperiment(ExperimentData experiment, string filePath)
+        public static void UploadApplianceDataToExperiment(ref ExperimentData experimentData, SeriesCollection series) 
+        { 
+            var appData = UploadApplianceData(series);
+
+            experimentData.SetNewApplianceData(appData);
+        }
+
+        private static Dictionary<string, ApplianceData> UploadApplianceData(SeriesCollection series)
+        {
+            Dictionary<string, ApplianceData> appData = new Dictionary<string, ApplianceData>();
+
+            foreach (var serie in series)
+            {
+                appData.Add(serie.Name, GetApplianceData(serie));
+            }
+
+            return appData;
+        }
+
+        private static ApplianceData GetApplianceData(Series serie)
+        {
+            List<GraphPoint> points = new List<GraphPoint>();
+
+            foreach (var point in serie.Points)
+            {
+                points.Add(new GraphPoint(point.XValue, point.YValues[0]));
+            }
+
+            return new ApplianceData(points, serie.Color, serie.LegendText, serie.Name);
+        }
+
+        public static string GetCurrentExperimentPath()
+        {
+            return Interface_settings.get_current_experiment();
+        }
+
+        public static void SaveExperimentOnComputer(ExperimentData experiment, string filePath)
         {
             string experimentSerialized = JsonConvert.SerializeObject(experiment);
+
+            if (!filePath.EndsWith(experimentExtension))
+                filePath = Path.Combine(filePath, experiment.Name + experimentExtension);
+
             using (FileStream fstream = new FileStream(filePath, FileMode.Create))
             {
                 byte[] buffer = Encoding.Default.GetBytes(experimentSerialized);
@@ -68,7 +134,18 @@ namespace Reactor_Interface.Classes.Experiment
             if (string.IsNullOrEmpty(currentExperimentPath))
                 return null;
 
+            if (!IsExperimentExists(currentExperimentPath))
+            {
+                Interface_settings.set_current_experiment("");
+                return null;
+            }
+
             return UploadExperiment(currentExperimentPath);
+        }
+
+        private static bool IsExperimentExists(string fullPath)
+        {
+            return File.Exists(fullPath);
         }
 
         public static ExperimentData UploadExperiment(string experimentPath)
@@ -85,12 +162,38 @@ namespace Reactor_Interface.Classes.Experiment
                 textFromFile = Encoding.Default.GetString(buffer);
             }
 
-            var experiment = JsonConvert.DeserializeObject<ExperimentData>(textFromFile);
+            var test = JsonConvert.DeserializeObject(textFromFile).ToString();
+
+            var experiment = JsonConvert.DeserializeObject<ExperimentData>(test);
 
             if (isExperimentDamaged(experiment, experimentPath))
                 return null;
 
+            Interface_settings.set_current_experiment(experimentPath);
             return experiment; 
+        }
+
+        static private bool isExperimentExistOnComputer(string path, string fileName)
+        {
+            path = Path.Combine(path, fileName + experimentExtension);
+
+            return File.Exists(path);
+        }
+
+        private static bool isExperimentExistOnDisk(string path, string fileName)
+        {
+            fileName += experimentExtension;
+
+            return Drive.isFileExist(fileName, path);
+        }
+
+        static public bool IsExperimentExists(string path, string fileName, ExperimentStorePlace storePlace)
+        {
+            if (storePlace == ExperimentStorePlace.OnComputer)
+                return isExperimentExistOnComputer(path, fileName);
+
+            else
+                return isExperimentExistOnDisk(path, fileName);
         }
 
         private static bool isExperimentDamaged(ExperimentData experiment, string experimentPath)
@@ -105,6 +208,44 @@ namespace Reactor_Interface.Classes.Experiment
                 return true;
             }
             return false;
+        }
+
+        public static void SaveExperimentOnDisk(ExperimentData experiment, string path)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static string RenameExperimentOnComputer(string experimentName, string newExperimentName, string path)
+        {
+            string newPath = Path.Combine(path, newExperimentName + experimentExtension);
+            string oldPath = Path.Combine(path, experimentName + experimentExtension);
+
+            if (File.Exists(oldPath))
+            {
+                File.Move(oldPath, newPath);
+                return path;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private static string RenameExperimentOnDisk(string name, string newExperimentName, string path)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static string RenameExperiment(ExperimentData experiment, string newExperimentName, string path, ExperimentStorePlace place)
+        {
+            if (experiment.Name  == newExperimentName)
+                return path;
+
+            if (place == ExperimentStorePlace.OnComputer)
+                return RenameExperimentOnComputer(experiment.Name, newExperimentName, path);
+
+            else
+                return RenameExperimentOnDisk(experiment.Name, newExperimentName, path);
         }
     }
 }

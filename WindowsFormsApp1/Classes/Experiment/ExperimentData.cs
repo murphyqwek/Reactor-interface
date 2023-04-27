@@ -11,16 +11,31 @@ namespace Reactor_Interface.Classes.Templates
 {
     public class ExperimentData
     {
-        public string Name { get; }
-        public Dictionary<string, List<FieldData>> Pages { get; }
-        public Chart Chart { get; }
-        public string Comments { get; }
-        public ExperimentData(string name, Dictionary<string, List<FieldData>> pages, Chart chart = null, string comments = null)
+        public string Name { get; private set; }
+        public Dictionary<string, List<FieldData>> Pages { get; private set; }
+        public Dictionary<string, ApplianceData> ApplianceData { get; private set; }
+        public string Comments { get; private set; }
+        public ExperimentData(string name, Dictionary<string, List<FieldData>> pages, Dictionary<string, ApplianceData> applianceData = null, string comments = null)
         {
             Pages = pages;
             Name = name;
-            Chart = chart;
+            ApplianceData = applianceData;
             Comments = comments;
+        }
+
+        public void ClearApplianceData()
+        {
+            ApplianceData = null;
+        }
+
+        public void SetNewApplianceData(Dictionary<string, ApplianceData> newAppData)
+        {
+            ApplianceData = newAppData;
+        }
+
+        internal void Rename(string newExperimentName)
+        {
+            Name = newExperimentName;
         }
     }
 }
