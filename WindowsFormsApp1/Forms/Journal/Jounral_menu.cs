@@ -39,6 +39,8 @@ namespace Reactor_Interface
         private readonly string diskPreffix = "D_";
         private readonly string computerPreffix = "C_";
 
+        private bool IsToolTipShown = false;
+
         public FileData serie;
         public string numer = "";
 
@@ -176,18 +178,20 @@ namespace Reactor_Interface
                         Name = field.Row.ToString() + "_" + field.Column.ToString() + Control_settings.textbox_suffix,
                         Tag = field.FieldName,
                         Text = field.FieldValue,
-                        Multiline = false,
+                        Multiline = false,  
                     };
 
                     textBox.TextChanged += onTextChanged;
-
                     //DPI.ResizeRichTextBox(textBox
 
                     if (field.MetaData.Contains(weigherTag))
                     {
                         textBox.ContextMenuStrip = context_menu;
                         textBox.BackColor = Color.LightGray;
+                        textBox.DoubleClick += DobuleClickMass;
                         weigherListBox.Add(textBox);
+                        textBox.MouseHover += showToolTip;
+                        //textBox.MouseHover
                     }
 
                     page.Controls.Add(field_label);
@@ -198,6 +202,22 @@ namespace Reactor_Interface
             }
 
             comments_txtbx.Text = experiment.Comments;
+        }
+
+        private void showToolTip(object sender, EventArgs e)
+        {
+            RichTextBox TB = (RichTextBox)sender;
+            int VisibleTime = 1000;  //in milliseconds
+
+            ToolTip tt = new ToolTip();
+            tt.Show("Щёлкните два раза левой кнопкой мыши чтобы записать массу", TB, VisibleTime);
+        }
+
+        private void DobuleClickMass(object sender, EventArgs e)
+        {
+            RichTextBox textBox = (RichTextBox)sender;
+
+            getMass(textBox);
         }
 
         private void upload_drives()
@@ -352,16 +372,21 @@ namespace Reactor_Interface
             e.Cancel = !isWeigherfield;
         }
 
+        private void getMass(RichTextBox textBox)
+        {
+            string mass = weigherReader.GetMass();
+
+            if (mass == null)
+                MessageBox.Show("Проблема с подключением к весам. Проверьте соединение с портом", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else
+                textBox.Text = mass + " г";
+        }
+
         private void weigh_btn_Click(object sender, EventArgs e)
         {
             var textbox = getRichTextBoxFromContextMenuStrip((ToolStripItem)sender);
 
-            string mass = weigherReader.GetMass();
-
-            if(mass == null)
-                MessageBox.Show("Проблема с подключением. Проверьте соединение с портом", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            else
-                textbox.Text = mass + " г";
+            getMass(textbox);
         }
 
         private void get_mass_btn_Click(object sender, EventArgs e)
@@ -504,6 +529,7 @@ namespace Reactor_Interface
 
         private void SaveExperimentBtn_Click(object sender, EventArgs e)
         {
+            experiment_btn.HideDropDown();
             SaveAutomaticly();
         }
 
@@ -585,23 +611,27 @@ namespace Reactor_Interface
             if(_experiment.ApplianceData == null)
             {
                 ExperimentSystem.UploadApplianceDataToExperiment(ref _experiment, _chart.Series);
+                MessageBox.Show("Данные загружены", "Успешно", MessageBoxButtons.OK,
+                                 MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
                 IsSaved = false;
                 return;
             }
 
-            var result = MessageBox.Show("Вы точно загрузить новые данные с оборудования? Данные будут утеряны", "Внимание",
+            var result = MessageBox.Show("Вы точно хотите загрузить новые данные с оборудования? Данные будут утеряны", "Внимание",
                                          MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
 
             if (result == DialogResult.Yes)
             {
                 ExperimentSystem.UploadApplianceDataToExperiment(ref _experiment, _chart.Series);
+                MessageBox.Show("Данные загружены", "Успешно", MessageBoxButtons.OK,
+                                 MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
                 IsSaved = false;
             }
         }
 
         private void SeeGraphBtn_Click(object sender, EventArgs e)
         {
-            Graphic_menu graphicMenu = new Graphic_menu(_experiment.ApplianceData);
+            ExperimentGraphicDemonstationMenu graphicMenu = new ExperimentGraphicDemonstationMenu(_experiment);
             graphicMenu.ShowDialog();
         }
 
@@ -651,6 +681,15 @@ namespace Reactor_Interface
         private void weigher_btn_DropDownOpening(object sender, EventArgs e)
         {
             upload_ports();
+        }
+
+        private void UploadDataFromOtherApplianceBtn_Click(object sender, EventArgs e)
+        {
+            UploadingApplicienceDataMenu dataMenu = new UploadingApplicienceDataMenu(_chart, _experiment);
+            var result = dataMenu.ShowDialog();
+
+            if (result == DialogResult.Yes)
+                IsSaved = false;
         }
     }
 

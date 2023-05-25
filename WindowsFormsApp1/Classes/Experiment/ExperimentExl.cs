@@ -14,15 +14,14 @@ using System.Globalization;
 using System.Web.UI.WebControls;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TreeView;
 using System.Data;
-using Microsoft.Office.Interop.Excel;
 using OfficeOpenXml.Drawing.Chart;
 using System.Drawing;
 using FormChart = System.Windows.Forms.DataVisualization.Charting;
 using OfficeOpenXml.Drawing.Chart.Style;
 using Reactor_Interface.Classes.Templates;
 using Reactor_Interface.Classes.Experiment;
+using System.ServiceProcess.Design;
 
 namespace Reactor_Interface.Classes
 {
@@ -34,14 +33,16 @@ namespace Reactor_Interface.Classes
             {"Средний ток", Color.MidnightBlue },
             {"Ток", Color.SkyBlue },
             {"Шаг", Color.SandyBrown },
+            {"XRD", Color.Indigo }
         };
 
-        static readonly Dictionary<string, string> YAxisLabel = new Dictionary<string, string>
+        static readonly Dictionary<string, string[]> AxisesLabel = new Dictionary<string, string[]>
         {
-            {"Температура", "Температура, °C"},
-            {"Средний ток", "Средний ток, А" },
-            {"Ток", "Ток, А" },
-            {"Шаг", "Шаг" }
+            {"Температура", new string[] {"Время, мс", "Температура, °C",} },
+            {"Средний ток", new string[] {"Время, мс", "Средний ток, А" } },
+            {"Ток", new string[] {"Время, мс", "Ток, А" } },
+            {"Шаг", new string[] {"Время, мс", "Шаг" } },
+            {"XRD", new string[] { "2θ градусов", "Интенсивность" } },
         };
 
         public static void CreateExcelExperiment(string path, ExperimentData experiment)
@@ -56,14 +57,19 @@ namespace Reactor_Interface.Classes
 
                 //Create the WorkSheet
                 ExcelWorksheet mainSheet = excelPackage.Workbook.Worksheets.Add("Отчёт");
-                ExcelWorksheet dataSheet = excelPackage.Workbook.Worksheets.Add("Данные с оборудования");
+                ExcelWorksheet dataSheet = excelPackage.Workbook.Worksheets.Add("Данные с оборудованиия");
                 ExcelWorksheet graphicsSheet = excelPackage.Workbook.Worksheets.Add("Графики");
+
 
                 //Fill the Sheets
                 FillMainSheet(mainSheet, experiment.Pages, experiment.Comments);
                 if(experiment.ApplianceData != null)
                 {
-                    FillDataIntoSheets(graphicsSheet, dataSheet, experiment.ApplianceData);
+                    ExcelWorksheet xrdSheet = null;
+                    if (experiment.ApplianceData.ContainsKey("xrd"))
+                        xrdSheet = excelPackage.Workbook.Worksheets.Add("Рентген");
+
+                    FillDataIntoSheets(graphicsSheet, dataSheet, xrdSheet, experiment.ApplianceData);
                 }
 
                 //Save your file
@@ -93,12 +99,12 @@ namespace Reactor_Interface.Classes
             dataSheet.Columns[firstCellColumn + 1].AutoFit();
         }
 
-        private static void FillGraphicsSheet(ExcelWorksheet graphicsSheet, ExcelWorksheet dataSheet, int startCellColumn, int lastCellRow)
+        private static void FillGraphicsSheet(ExcelWorksheet graphicsSheet, ExcelWorksheet dataSheet, int startCellColumn, int lastCellRow, int chartColumn)
         {
             string dataName = dataSheet.Cells[1, startCellColumn + 1].Value.ToString();
             var graphic = graphicsSheet.Drawings.AddLineChart(dataName, eLineChartType.Line);
-            graphic.SetSize(600, 300);
-            graphic.SetPosition(startCellColumn / 3 * 300, 0);
+            graphic.SetSize(900, 450);
+            graphic.SetPosition(chartColumn / 3 * 450, 0);
 
             graphic.StyleManager.SetChartStyle(ePresetChartStyle.LineChartStyle1, ePresetChartColors.ColorfulPalette1);
 
@@ -108,12 +114,13 @@ namespace Reactor_Interface.Classes
             
             graphic.Series.Add(dataRange, timeRange);
 
-            //graphic.Series[0].XSeries = dataRange.ToString();
+            string[] AxisesNames = AxisesLabel[dataName];
+
             graphic.Series[0].Border.Fill.Color = name_axe_to_color[dataName];
             graphic.XAxis.AddGridlines();
-            graphic.XAxis.Title.Text = "Время, мс";
+            graphic.XAxis.Title.Text = AxisesNames[0];
 
-            graphic.YAxis.Title.Text = YAxisLabel[dataName];
+            graphic.YAxis.Title.Text = AxisesNames[1];
             graphic.YAxis.Title.TextBody.VerticalText = OfficeOpenXml.Drawing.eTextVerticalType.Vertical270;
 
             graphic.Title.Text = dataName;
@@ -123,19 +130,25 @@ namespace Reactor_Interface.Classes
             graphic.YAxis.Crosses = 0;
         }
 
-        private static void FillDataIntoSheets(ExcelWorksheet graphicSheet, ExcelWorksheet dataSheet, Dictionary<string, ApplianceData> applianceData)
+        private static void FillDataIntoSheets(ExcelWorksheet graphicSheet, ExcelWorksheet dataSheet, ExcelWorksheet xrdSheet, Dictionary<string, ApplianceData> applianceData)
         {
             int start_cell = 1;
             foreach (var serie in applianceData.Keys)
             {
                 //Заполнение заголовков
-                dataSheet.Cells[1, start_cell].Value = "Время";
+                dataSheet.Cells[1, start_cell].Value = serie == "XRD" ? "2θ градусов" : "Время";
                 dataSheet.Cells[1, start_cell+1].Value = applianceData[serie].LegendText;
 
                 //Заполение стоблцов данными для графиков
                 fillSerie(dataSheet, applianceData[serie].Data, start_cell);
                 //if(i == 0)
-                FillGraphicsSheet(graphicSheet, dataSheet, start_cell, applianceData[serie].Data.Count);
+                if (serie == "xrd")
+                {
+                    FillGraphicsSheet(xrdSheet, dataSheet, start_cell, applianceData[serie].Data.Count, 1);
+                    continue;
+                }
+
+                FillGraphicsSheet(graphicSheet, dataSheet, start_cell, applianceData[serie].Data.Count, start_cell);
                 start_cell += 3;
             }
         }

@@ -38,6 +38,8 @@ namespace Reactor_Interface.Forms.Experiment
             templates_array = TemplateSystem.get_template_array();
 
             template_view.Items.Clear();
+            template_view.DoubleClick += Template_view_DoubleClick;
+
             foreach (string template in templates_array)
                 template_view.Items.Add(template);
 
@@ -46,6 +48,11 @@ namespace Reactor_Interface.Forms.Experiment
                 if (templates_array.Contains(selected_template))
                     update_chosen_lbl(selected_template);
             }
+        }
+
+        private void Template_view_DoubleClick(object sender, EventArgs e)
+        {
+            UploadTemplate();
         }
 
         public void update_chosen_lbl(string template)
@@ -104,7 +111,7 @@ namespace Reactor_Interface.Forms.Experiment
             modify_Template_menu.Show();
         }
 
-        private void UploadTemplateBtn_Click(object sender, EventArgs e)
+        private void UploadTemplate()
         {
             if (jounral_menu.NeedToCancel())
             {
@@ -134,6 +141,11 @@ namespace Reactor_Interface.Forms.Experiment
 
                 this.Close();
             }
+        }
+
+        private void UploadTemplateBtn_Click(object sender, EventArgs e)
+        {
+            UploadTemplate();
         }
 
         private void CreateNewTemplateBtn_Click(object sender, EventArgs e)

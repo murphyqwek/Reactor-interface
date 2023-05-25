@@ -23,30 +23,9 @@ namespace Reactor_Interface
     {
         public bool is_drawing = false;
 
-        public Graphic_menu(Dictionary<string, ApplianceData> appData = null)
+        public Graphic_menu()
         {
             InitializeComponent();
-            if(appData != null )
-            {
-                UploadExperimentData(appData);
-                ClearGraphBtn.Visible = false;
-            }
-        }
-
-        private void UploadExperimentData(Dictionary<string, ApplianceData> appData)
-        {
-            foreach(var serie in Graph.Series)
-            {
-                serie.Points.Clear();
-                string name = serie.Name;
-
-                var dataSerie = appData[name];
-                    
-                foreach(var point in dataSerie.Data)
-                {
-                    serie.Points.AddXY(point.X, point.Y);
-                }
-            }
         }
 
         public void update_aver_tok(long time, double aver_tok)
@@ -118,7 +97,6 @@ namespace Reactor_Interface
 
         public void Clear_Graphic()
         {
-            return;
             if (!is_drawing)
             {
                 foreach (var series in Graph.Series)

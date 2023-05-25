@@ -206,7 +206,14 @@
     <Compile Include="Classes\Port.cs" />
     <Compile Include="Classes\Experiment\ExperimentData.cs" />
     <Compile Include="Classes\Experiment\TemplateSystem.cs" />
+    <Compile Include="Classes\XRD\XRDParser.cs" />
     <Compile Include="Classes\Weigher\WeigherReader.cs" />
+    <Compile Include="Forms\Journal\ExperimentGraphicDemonstationMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Journal\ExperimentGraphicDemonstationMenu.Designer.cs">
+      <DependentUpon>ExperimentGraphicDemonstationMenu.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Journal\Fill_mass_field_menu.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -273,6 +280,12 @@
     <Compile Include="Forms\Graphic.Designer.cs">
       <DependentUpon>Graphic.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Journal\UploadingApplicienceDataMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Journal\UploadingApplicienceDataMenu.Designer.cs">
+      <DependentUpon>UploadingApplicienceDataMenu.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Journal\Uploading_information_menu.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -293,6 +306,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Forms\Journal\ExperimentGraphicDemonstationMenu.resx">
+      <DependentUpon>ExperimentGraphicDemonstationMenu.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Journal\Fill_mass_field_menu.resx">
       <DependentUpon>Fill_mass_field_menu.cs</DependentUpon>
     </EmbeddedResource>
@@ -325,6 +341,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Graphic.resx">
       <DependentUpon>Graphic.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Journal\UploadingApplicienceDataMenu.resx">
+      <DependentUpon>UploadingApplicienceDataMenu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Journal\Uploading_information_menu.resx">
       <DependentUpon>Uploading_information_menu.cs</DependentUpon>

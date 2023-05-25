@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.RightsManagement;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.UI;
@@ -33,7 +34,7 @@ namespace Reactor_Interface.Classes.Templates
             ApplianceData = newAppData;
         }
 
-        internal void Rename(string newExperimentName)
+        public void Rename(string newExperimentName)
         {
             Name = newExperimentName;
         }

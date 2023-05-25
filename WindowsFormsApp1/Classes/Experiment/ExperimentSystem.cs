@@ -88,7 +88,8 @@ namespace Reactor_Interface.Classes.Experiment
 
             foreach (var serie in series)
             {
-                appData.Add(serie.Name, GetApplianceData(serie));
+                if(serie.Name != "temperature")
+                    appData.Add(serie.Name, GetApplianceData(serie));
             }
 
             return appData;

@@ -65,7 +65,7 @@ namespace WindowsFormsApp1
             InitializeComponent();
 
             graphic_menu = new Graphic_menu();
-            graphic_menu.Clear_Graphic();
+            //graphic_menu.Clear_Graphic();
 
             IntPtr intPtr = graphic_menu.Handle; //Создаётся Handle, без этой строчки данные с реактора не смогут отображаться на графике, когда окно закрыто
 

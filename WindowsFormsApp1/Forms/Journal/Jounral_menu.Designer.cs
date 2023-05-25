@@ -61,7 +61,7 @@
             this.clear_btn = new System.Windows.Forms.Button();
             this.context_menu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.weigh_btn = new System.Windows.Forms.ToolStripMenuItem();
-            this.get_mass_btn = new System.Windows.Forms.Button();
+            this.UploadDataFromOtherApplianceBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.data_groupbox.SuspendLayout();
             this.context_menu.SuspendLayout();
@@ -78,7 +78,7 @@
             this.weigher_btn});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1304, 36);
+            this.menuStrip1.Size = new System.Drawing.Size(1304, 38);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -132,6 +132,7 @@
             this.сОблачногоХранилищаToolStripMenuItem.Name = "сОблачногоХранилищаToolStripMenuItem";
             this.сОблачногоХранилищаToolStripMenuItem.Size = new System.Drawing.Size(340, 36);
             this.сОблачногоХранилищаToolStripMenuItem.Text = "С облачного хранилища";
+            this.сОблачногоХранилищаToolStripMenuItem.Visible = false;
             // 
             // SaveExperimentBtn
             // 
@@ -147,20 +148,22 @@
             // SaveOnComputerBtn
             // 
             this.SaveOnComputerBtn.Name = "SaveOnComputerBtn";
-            this.SaveOnComputerBtn.Size = new System.Drawing.Size(259, 36);
+            this.SaveOnComputerBtn.Size = new System.Drawing.Size(342, 36);
             this.SaveOnComputerBtn.Text = "На компьютер";
             this.SaveOnComputerBtn.Click += new System.EventHandler(this.SaveOnComputerBtn_Click);
             // 
             // SaveOnDriveBtn
             // 
             this.SaveOnDriveBtn.Name = "SaveOnDriveBtn";
-            this.SaveOnDriveBtn.Size = new System.Drawing.Size(259, 36);
-            this.SaveOnDriveBtn.Text = "На Google Drive";
+            this.SaveOnDriveBtn.Size = new System.Drawing.Size(342, 36);
+            this.SaveOnDriveBtn.Text = "На облачное хранилище";
+            this.SaveOnDriveBtn.Visible = false;
             // 
             // DataExperimentBtn
             // 
             this.DataExperimentBtn.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.UploadNewGraphBtn,
+            this.UploadDataFromOtherApplianceBtn,
             this.ClearGraphBtn,
             this.SeeGraphBtn});
             this.DataExperimentBtn.Name = "DataExperimentBtn";
@@ -172,21 +175,21 @@
             // UploadNewGraphBtn
             // 
             this.UploadNewGraphBtn.Name = "UploadNewGraphBtn";
-            this.UploadNewGraphBtn.Size = new System.Drawing.Size(342, 36);
-            this.UploadNewGraphBtn.Text = "Загрузить новые данные";
+            this.UploadNewGraphBtn.Size = new System.Drawing.Size(515, 36);
+            this.UploadNewGraphBtn.Text = "Загрузить данные с реактора";
             this.UploadNewGraphBtn.Click += new System.EventHandler(this.UploadNewGraphBtn_Click);
             // 
             // ClearGraphBtn
             // 
             this.ClearGraphBtn.Name = "ClearGraphBtn";
-            this.ClearGraphBtn.Size = new System.Drawing.Size(342, 36);
+            this.ClearGraphBtn.Size = new System.Drawing.Size(515, 36);
             this.ClearGraphBtn.Text = "Очистить";
             this.ClearGraphBtn.Click += new System.EventHandler(this.ClearGraphBtn_Click);
             // 
             // SeeGraphBtn
             // 
             this.SeeGraphBtn.Name = "SeeGraphBtn";
-            this.SeeGraphBtn.Size = new System.Drawing.Size(342, 36);
+            this.SeeGraphBtn.Size = new System.Drawing.Size(515, 36);
             this.SeeGraphBtn.Text = "Просмотр";
             this.SeeGraphBtn.Click += new System.EventHandler(this.SeeGraphBtn_Click);
             // 
@@ -229,14 +232,14 @@
             // SaveOnComp_btn
             // 
             this.SaveOnComp_btn.Name = "SaveOnComp_btn";
-            this.SaveOnComp_btn.Size = new System.Drawing.Size(230, 36);
+            this.SaveOnComp_btn.Size = new System.Drawing.Size(270, 36);
             this.SaveOnComp_btn.Text = "Компьютер";
             this.SaveOnComp_btn.Click += new System.EventHandler(this.SaveOnComp_btn_Click);
             // 
             // googleDriveToolStripMenuItem1
             // 
             this.googleDriveToolStripMenuItem1.Name = "googleDriveToolStripMenuItem1";
-            this.googleDriveToolStripMenuItem1.Size = new System.Drawing.Size(230, 36);
+            this.googleDriveToolStripMenuItem1.Size = new System.Drawing.Size(270, 36);
             this.googleDriveToolStripMenuItem1.Text = "Google Drive";
             this.googleDriveToolStripMenuItem1.Click += new System.EventHandler(this.save_to_drive_btn_Click);
             // 
@@ -346,22 +349,18 @@
             this.weigh_btn.Text = "Произвести взешивание";
             this.weigh_btn.Click += new System.EventHandler(this.weigh_btn_Click);
             // 
-            // get_mass_btn
+            // UploadDataFromOtherApplianceBtn
             // 
-            this.get_mass_btn.Location = new System.Drawing.Point(764, 402);
-            this.get_mass_btn.Name = "get_mass_btn";
-            this.get_mass_btn.Size = new System.Drawing.Size(155, 86);
-            this.get_mass_btn.TabIndex = 20;
-            this.get_mass_btn.Text = "Получить массу";
-            this.get_mass_btn.UseVisualStyleBackColor = true;
-            this.get_mass_btn.Click += new System.EventHandler(this.get_mass_btn_Click);
+            this.UploadDataFromOtherApplianceBtn.Name = "UploadDataFromOtherApplianceBtn";
+            this.UploadDataFromOtherApplianceBtn.Size = new System.Drawing.Size(515, 36);
+            this.UploadDataFromOtherApplianceBtn.Text = "Загрузить данные внешнего оборудования";
+            this.UploadDataFromOtherApplianceBtn.Click += new System.EventHandler(this.UploadDataFromOtherApplianceBtn_Click);
             // 
             // Jounral_menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(1304, 500);
-            this.Controls.Add(this.get_mass_btn);
             this.Controls.Add(this.clear_btn);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.comments_txtbx);
@@ -402,7 +401,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button clear_btn;
         private System.Windows.Forms.ContextMenuStrip context_menu;
-        private System.Windows.Forms.Button get_mass_btn;
         private System.Windows.Forms.ToolStripMenuItem weigher_btn;
         private System.Windows.Forms.ToolStripMenuItem weigh_btn;
         private System.Windows.Forms.ToolStripMenuItem облачноеХранилищеToolStripMenuItem;
@@ -420,5 +418,6 @@
         private System.Windows.Forms.ToolStripMenuItem SeeGraphBtn;
         private System.Windows.Forms.ToolStripMenuItem ClearGraphBtn;
         private System.Windows.Forms.ToolStripMenuItem renameExperimentBtn;
+        private System.Windows.Forms.ToolStripMenuItem UploadDataFromOtherApplianceBtn;
     }
 }
