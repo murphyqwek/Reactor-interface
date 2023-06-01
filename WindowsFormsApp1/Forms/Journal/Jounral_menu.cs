@@ -18,11 +18,14 @@ using Newtonsoft.Json.Bson;
 using Reactor_Interface.Classes;
 using Reactor_Interface.Classes.Experiment;
 using Reactor_Interface.Classes.GoogleAPI;
+using Reactor_Interface.Classes.Serie;
 using Reactor_Interface.Classes.Templates;
 using Reactor_Interface.Classes.Weigher;
 using Reactor_Interface.Forms;
 using Reactor_Interface.Forms.Experiment;
 using Reactor_Interface.Forms.Journal;
+using Reactor_Interface.Forms.Journal.SerieMenus;
+using Reactor_Interface.Forms.Template;
 using WindowsFormsApp1;
 using WindowsFormsApp1.Classes;
 
@@ -32,8 +35,10 @@ namespace Reactor_Interface
     {
         private Chart _chart;
         private ExperimentData _experiment;
+        private SerieData _serie;
         private SerialPort weigherSerialPort = new SerialPort();
         private WeigherReader weigherReader;
+        private Main_menu _mainMenu;
 
         private readonly string weigherTag = "$МАССА$";
         private readonly string diskPreffix = "D_";
@@ -69,15 +74,48 @@ namespace Reactor_Interface
             }
         }
 
-        public Jounral_menu(Chart chart = null)
+        public Jounral_menu(SerieData serie, Chart chart = null, Main_menu _mainMenu = null)
+        {
+            setupJournal(chart, _mainMenu);
+
+            CreateExperimentSerieBtn.Visible = true;
+            QuitSerieBtn.Visible = true;
+            AddTemplatesBtn.Visible = true;
+
+            changeExperimentTemplatebtn.Visible = false;
+            SaveOnComputerBtn.Visible = false;
+            SaveOnDriveBtn.Visible = false;
+            CreateNewExperimentBtn.Visible = false;
+            renameExperimentBtn.Visible = false;
+            UploadExperimentBtn.Visible = false;
+
+            _serie = serie;
+
+            Text = "Журнал. Серия: " + serie.Name; 
+            this.Focus();
+        }
+
+        public Jounral_menu(Chart chart = null, Main_menu _mainMenu = null)
+        {
+            setupJournal(chart, _mainMenu);
+            uploadCurrentExperiment();
+        }
+
+        private void setupJournal(Chart chart, Main_menu _mainMenu)
         {
             InitializeComponent();
+
             weigherReader = new WeigherReader(weigherSerialPort);
 
             _chart = chart;
+
+            this._mainMenu = _mainMenu;
+
+            if (chart == null)
+                UploadNewGraphBtn.Visible = false;
+
             googleDriveToolStripMenuItem.Text = "Google Drive: " + Drive.name;
             upload_ports();
-            uploadCurrentExperiment();
             upload_drives();
         }
 
@@ -297,6 +335,13 @@ namespace Reactor_Interface
         public void upload_template(ExperimentData template)
         {
             uploadExperimentFromComputer(template, null);
+            IsSaved = false;
+        }
+
+        public void UploadChangedExperiment(ExperimentData experiment)
+        {
+            parseExperimentData(experiment);
+            _experiment = experiment;
             IsSaved = false;
         }
 
@@ -569,6 +614,12 @@ namespace Reactor_Interface
 
         private void Jounral_menu_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if(_experiment == null)
+            {
+                e.Cancel = NeedToCancel();
+                return;
+            }
+
             var store = LoadFrom.Substring(0, 2) == computerPreffix ? ExperimentSystem.ExperimentStorePlace.OnComputer : ExperimentSystem.ExperimentStorePlace.OnDisk;
             string path = LoadFrom.Substring(2);
             if (IsSaved && !ExperimentSystem.IsExperimentExists(path, _experiment.Name, store))
@@ -690,6 +741,107 @@ namespace Reactor_Interface
 
             if (result == DialogResult.Yes)
                 IsSaved = false;
+        }
+
+        private void changeExperimentTemplatebtn_Click(object sender, EventArgs e)
+        {
+            Create_template_menu template_Menu = new Create_template_menu(_experiment, this);
+            template_Menu.ShowDialog();
+        }
+
+        private bool ConfirmMessageBox(string text)
+        {
+            var result = MessageBox.Show(text, "Внимание",
+                                          MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button3);
+
+            if (result == DialogResult.Yes)
+                return true;
+            else
+                return false;
+        }
+
+        public void CreateNewSerie(ExperimentData template, string templatePath)
+        {
+            SerieData serie = SerieSystem.CreateNewSerie(template, templatePath);
+
+            if(serie  == null) return;
+
+            this.Close();
+            OpenNewJounral(serie);
+            //jounralSerie.Focus();
+            //jounralSerie.
+        }
+
+
+        private void CreateNewSerieBtn_Click(object sender, EventArgs e)
+        {
+            if (!ConfirmMessageBox("Вы уверены, что хотите создать новую серию?"))
+                return;
+
+            if (!IsSaved && _experiment != null)
+            {
+                MessageBox.Show("Перед созданием серии сохраните текущий эксперимент", "Внимание",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+                return;
+            }
+            GetTemplateMenu getTemplateMenu = new GetTemplateMenu(this);
+            getTemplateMenu.ShowDialog();
+        }
+
+        private void QuitSerieBtn_Click(object sender, EventArgs e)
+        {
+            if (!ConfirmMessageBox("Вы уверены, что хотите выйти из режима серии экспериментов?"))
+                return;
+
+            if(!IsSaved && _experiment != null)
+            {
+                MessageBox.Show("Перед выходом сохраните текущий эксперимент", "Внимание",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+                return;
+            }
+
+            OpenNewJounral();
+        }
+
+        private void ChooseSerieBtn_Click(object sender, EventArgs e)
+        {
+            if (!IsSaved)
+            {
+                MessageBox.Show("Перед выходом сохраните текущий эксперимент", "Внимание",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+                return;
+            }
+
+
+            SerieData newSerie = SerieSystem.GetSerie();
+
+            if (newSerie == null)
+                return;
+
+            this.Close();
+            OpenNewJounral(newSerie);
+        }
+
+        private void OpenNewJounral(SerieData Serie = null)
+        {
+            Jounral_menu newJournal = new Jounral_menu(_chart, _mainMenu);
+
+            if (Serie != null)
+                newJournal = new Jounral_menu(Serie, _chart, _mainMenu);
+
+            this.Hide();
+            if (_mainMenu != null)
+            {
+                _mainMenu.ShowNewJounral(newJournal);
+            }
+            else
+                newJournal.Show();
+        }
+
+        private void CreateExperimentSerieBtn_Click(object sender, EventArgs e)
+        {
+            CreateNewSerieExperiment createNewSerieMenu = new CreateNewSerieExperiment(_serie);
+            createNewSerieMenu.ShowDialog();
         }
     }
 

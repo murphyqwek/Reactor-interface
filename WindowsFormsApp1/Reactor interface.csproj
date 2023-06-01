@@ -190,6 +190,11 @@
     <Compile Include="Classes\Data.cs" />
     <Compile Include="Classes\DPI.cs" />
     <Compile Include="Classes\Error_message.cs" />
+    <Compile Include="Classes\Exceptions\EmptyTextBoxException.cs" />
+    <Compile Include="Classes\Exceptions\NotExistedSeriePathException.cs" />
+    <Compile Include="Classes\Exceptions\NullPagesException.cs" />
+    <Compile Include="Classes\Exceptions\SameFieldsNamesException.cs" />
+    <Compile Include="Classes\Exceptions\TemplateDoesNotExistExcpetion.cs" />
     <Compile Include="Classes\Exl.cs" />
     <Compile Include="Classes\Experiment\ApplianceData.cs" />
     <Compile Include="Classes\Experiment\ExperimentExl.cs" />
@@ -206,6 +211,10 @@
     <Compile Include="Classes\Port.cs" />
     <Compile Include="Classes\Experiment\ExperimentData.cs" />
     <Compile Include="Classes\Experiment\TemplateSystem.cs" />
+    <Compile Include="Classes\Serie\SerieClassChecker.cs" />
+    <Compile Include="Classes\Serie\SerieData.cs" />
+    <Compile Include="Classes\Serie\SerieSystem.cs" />
+    <Compile Include="Classes\Serie\SerieTemplate.cs" />
     <Compile Include="Classes\XRD\XRDParser.cs" />
     <Compile Include="Classes\Weigher\WeigherReader.cs" />
     <Compile Include="Forms\Journal\ExperimentGraphicDemonstationMenu.cs">
@@ -256,11 +265,29 @@
     <Compile Include="Forms\Journal\SerieChosenMenu.Designer.cs">
       <DependentUpon>SerieChosenMenu.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Journal\SerieMenus\CreateNewSerieExperiment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Journal\SerieMenus\CreateNewSerieExperiment.Designer.cs">
+      <DependentUpon>CreateNewSerieExperiment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Journal\Template\GetTemplateMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Journal\Template\GetTemplateMenu.Designer.cs">
+      <DependentUpon>GetTemplateMenu.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Journal\Status_experiment_menu.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Journal\Status_experiment_menu.Designer.cs">
       <DependentUpon>Status_experiment_menu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Journal\Template\ConnectionOfFieldsMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Journal\Template\ConnectionOfFieldsMenu.Designer.cs">
+      <DependentUpon>ConnectionOfFieldsMenu.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Journal\Template\Create_template_menu.cs">
       <SubType>Form</SubType>
@@ -330,8 +357,17 @@
     <EmbeddedResource Include="Forms\Journal\SerieChosenMenu.resx">
       <DependentUpon>SerieChosenMenu.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Journal\SerieMenus\CreateNewSerieExperiment.resx">
+      <DependentUpon>CreateNewSerieExperiment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Journal\Template\GetTemplateMenu.resx">
+      <DependentUpon>GetTemplateMenu.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Journal\Status_experiment_menu.resx">
       <DependentUpon>Status_experiment_menu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Journal\Template\ConnectionOfFieldsMenu.resx">
+      <DependentUpon>ConnectionOfFieldsMenu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Journal\Template\Create_template_menu.resx">
       <DependentUpon>Create_template_menu.cs</DependentUpon>

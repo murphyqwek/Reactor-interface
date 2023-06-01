@@ -15,8 +15,8 @@ using Templates = Reactor_Interface.Classes.Templates;
 using Reactor_Interface.Classes.Templates;
 using System.Web.UI;
 using System.Data.Common;
-using Microsoft.Office.Interop.Access.Dao;
 using Reactor_Interface.Classes.Experiment;
+using Reactor_Interface.Classes.Exceptions;
 
 namespace Reactor_Interface.Forms.Template
 {
@@ -49,16 +49,33 @@ namespace Reactor_Interface.Forms.Template
         private string template_name = "";
         private bool Ismodifying = false;
 
-        Template_menu template_menu;
-        public Create_template_menu(Template_menu template_menu, ExperimentData template = null, string templateName = null)
+        Template_menu template_menu = null;
+        Jounral_menu _journal = null;
+        ExperimentData _experiment = null;
+        //Dictionary<string, > template_
+
+        public Create_template_menu(Template_menu template_menu, ExperimentData template, string templateName)
         {
             InitializeComponent();
             this.template_menu = template_menu;
+            parse_template(template, templateName);
+        }
 
-            if (template == null)
-                setup_new_template();
-            else
-                parse_template(template, templateName);
+        public Create_template_menu(ExperimentData modifyingExperimentTemplate, Jounral_menu jounral)
+        {
+            InitializeComponent();
+            _journal = jounral;
+            parse_template(modifyingExperimentTemplate, modifyingExperimentTemplate.Name);
+            save_menu_btn.Text = "Изменить шаблон эксперимента";
+            Name = "Изменение шаблона эксперимента";
+            _experiment= modifyingExperimentTemplate;
+        }
+
+        public Create_template_menu(Template_menu template_menu)
+        {
+            InitializeComponent();
+            this.template_menu = template_menu;
+            setup_new_template();    
         }
 
         private void parse_template(ExperimentData template, string templateName)
@@ -209,6 +226,9 @@ namespace Reactor_Interface.Forms.Template
 
         private void Create_template_menu_FormClosed(object sender, FormClosedEventArgs e)
         {
+            if (_journal != null)
+                return;
+
             if(!is_created_new_template)
                 template_menu.Load_templates();
             template_menu.Show();
@@ -262,7 +282,8 @@ namespace Reactor_Interface.Forms.Template
                 Size = new Size(txtbx_width, txtbx_height),
                 Name = item_ind + text_box_item_suffix,
                 ContextMenuStrip = context_menu,
-                Tag = ""
+                Tag = "",
+                BackColor = Color.White
             };
 
             btn.Visible = false;
@@ -288,40 +309,33 @@ namespace Reactor_Interface.Forms.Template
             template_control.SelectedTab.Controls.Add(delete_field_btn);
         }
 
-        private void show_result(TemplateSystem.Save_result result)
+        private void returnChangedExperiment()
         {
-            string msg_text = "", msg_title = "";
-            MessageBoxIcon msg_icon = MessageBoxIcon.Information;
-
-            switch (result)
+            try
             {
-                case TemplateSystem.Save_result.EmptyFiled:
-                    msg_text = "Одно или несколько полей были не заполнены";
-                    msg_title = "Ошибка";
-                    msg_icon = MessageBoxIcon.Error;
-                    break;
-                case TemplateSystem.Save_result.CreationError:
-                    msg_text = "Ошибка при сохранении шаблона";
-                    msg_title = "Ошибка";
-                    msg_icon = MessageBoxIcon.Error;
-                    break;
-                case TemplateSystem.Save_result.EmptyPages:
-                    msg_text = "Все страницы пусты";
-                    msg_title = "Ошибка";
-                    msg_icon = MessageBoxIcon.Error;
-                    break;
-                case TemplateSystem.Save_result.Saved:
-                    msg_text = "Шаблон сохранён";
-                    msg_title = "Успешно";
-                    msg_icon = MessageBoxIcon.Information;
-                    break;
+                ExperimentData changedExperiment = TemplateSystem.ChagneExperimentTemplate(template_control, _experiment);
+                _journal.UploadChangedExperiment(changedExperiment);
             }
-
-            MessageBox.Show(msg_text, msg_title, MessageBoxButtons.OK, msg_icon, MessageBoxDefaultButton.Button1);
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error,
+                                MessageBoxDefaultButton.Button1);   
+            }
         }
 
         private void save_menu_btn_Click(object sender, EventArgs e)
         {
+            if(_journal != null)
+            {
+                var res = MessageBox.Show("Вы уверены, что хотите изменить шаблон эксперимента?", "Внимание",
+                                            MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+                if (res == DialogResult.Yes)
+                {
+                    returnChangedExperiment();
+                    this.Close();
+                }
+                return;
+            }
             string old_template_name = this.template_name;
             string template_name = Interaction.InputBox("Введите название шаблона", "Сохранение шаблона", this.template_name);
 
@@ -341,15 +355,29 @@ namespace Reactor_Interface.Forms.Template
             if (Ismodifying)
                 TemplateSystem.Delete_template(this.template_name);
 
-            TemplateSystem.Save_result result = TemplateSystem.Create_template_json(template_control, template_name);
-
-            show_result(result);
-
-            if (result == TemplateSystem.Save_result.Saved)
+            try
             {
+                TemplateSystem.Create_template_json(template_control, template_name);
                 template_menu.Load_templates(template_name);
                 is_created_new_template = true;
+                MessageBox.Show("Шаблон сохранён", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information,
+                                MessageBoxDefaultButton.Button1);
                 this.Close();
+            }
+            catch (NullPagesException ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error,
+                                MessageBoxDefaultButton.Button1);
+            }
+            catch (EmptyTextBoxException ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error,
+                                MessageBoxDefaultButton.Button1);
+            }
+            catch(Exception)
+            {
+                MessageBox.Show("Ошибка при сохранении шаблона", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error,
+                                MessageBoxDefaultButton.Button1);
             }
         }
 
@@ -374,6 +402,9 @@ namespace Reactor_Interface.Forms.Template
         {
             string page_name = Interaction.InputBox("Введите название вкладки", "Изменение вклакди", template_control.SelectedTab.Text);
             page_name = page_name == "" ? template_control.SelectedTab.Text : page_name;
+            var Data = _experiment.Pages[template_control.SelectedTab.Text];
+            _experiment.Pages.Remove(template_control.SelectedTab.Text);
+            _experiment.Pages.Add(page_name, Data);
             template_control.SelectedTab.Text = page_name;
         }
 

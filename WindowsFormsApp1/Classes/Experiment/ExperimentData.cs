@@ -10,18 +10,56 @@ using System.Windows.Forms.DataVisualization.Charting;
 
 namespace Reactor_Interface.Classes.Templates
 {
+    public struct ConnectedFields
+    {
+        public string firstFieldName;
+        public string secondFieldName;
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if(obj == null || !(obj is ConnectedFields)) return false;
+
+            ConnectedFields secondcnFields = (ConnectedFields)obj;
+
+            if(firstFieldName == secondcnFields.firstFieldName &&
+                secondFieldName == secondcnFields.secondFieldName)
+                return true;
+
+            return false;
+        }
+    }
+
     public class ExperimentData
     {
         public string Name { get; private set; }
         public Dictionary<string, List<FieldData>> Pages { get; private set; }
         public Dictionary<string, ApplianceData> ApplianceData { get; private set; }
         public string Comments { get; private set; }
-        public ExperimentData(string name, Dictionary<string, List<FieldData>> pages, Dictionary<string, ApplianceData> applianceData = null, string comments = null)
+        public List<ConnectedFields> ConnectedFields { get; private set; }
+        public ExperimentData(string name, Dictionary<string, List<FieldData>> pages, Dictionary<string, ApplianceData> applianceData = null, string comments = null, List<ConnectedFields> connectedFields = null)
         {
             Pages = pages;
             Name = name;
             ApplianceData = applianceData;
             Comments = comments;
+            ConnectedFields = connectedFields;
+        }
+
+        public List<FieldData> GetAllFields()
+        {
+            List<FieldData> fields = new List<FieldData>();
+            foreach(var key in Pages.Keys)
+            {
+                foreach (var field in Pages[key])
+                    fields.Add(field);
+            }
+
+            return fields;
         }
 
         public void ClearApplianceData()

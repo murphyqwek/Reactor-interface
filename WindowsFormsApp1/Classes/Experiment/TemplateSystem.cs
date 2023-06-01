@@ -14,6 +14,7 @@ using WindowsFormsApp1.Classes;
 using System.Web.UI;
 using Reactor_Interface.Classes.Experiment;
 using Reactor_Interface.Classes.GoogleAPI;
+using Reactor_Interface.Classes.Exceptions;
 
 namespace Reactor_Interface.Classes
 {
@@ -23,8 +24,7 @@ namespace Reactor_Interface.Classes
                                                             Environment.SpecialFolder.ApplicationData) 
                                                           + "\\Journal templates\\";
 
-        static private readonly string page_separator = string.Concat(Enumerable.Repeat("-" , Create_template_menu.max_txtbx_len + 10));
-        static private readonly string extension = ".template";
+        static public readonly string EXTENSION = ".template";
 
         public enum Save_result {
             EmptyFiled,
@@ -35,7 +35,7 @@ namespace Reactor_Interface.Classes
         
         static private string get_full_path(string name)
         {
-            return templates_folder + name + extension;
+            return templates_folder + name + EXTENSION;
         }
 
         static private void Create_folder()
@@ -60,9 +60,42 @@ namespace Reactor_Interface.Classes
             return File.Exists(get_full_path(name));
         }
 
-        static public Save_result Create_template_json(TabControl template_control, string name)
+        static public ExperimentData ChagneExperimentTemplate(TabControl control, ExperimentData modifyingExperiment)
+        {
+            ExperimentData tempExperiment = CreateTemplate(control, modifyingExperiment.Name);
+            tempExperiment.SetNewApplianceData(modifyingExperiment.ApplianceData);
+
+            var Pages = tempExperiment.Pages;
+
+            foreach(var page in modifyingExperiment.Pages.Keys)
+            {
+                foreach(var Field in modifyingExperiment.Pages[page])
+                {
+                    for(int i = 0; i < tempExperiment.Pages[page].Count; i++)
+                    {
+                        if (tempExperiment.Pages[page][i].Column == Field.Column && tempExperiment.Pages[page][i].Row == Field.Row)
+                        {
+                            FieldData updetedField = new FieldData(tempExperiment.Pages[page][i].FieldName,
+                                                                   tempExperiment.Pages[page][i].MetaData,
+                                                                   Field.FieldValue,
+                                                                   tempExperiment.Pages[page][i].Row,
+                                                                   tempExperiment.Pages[page][i].Column);
+
+                            tempExperiment.Pages[page][i] = updetedField;
+                            continue;
+                        }
+                    }
+                }
+            }
+
+            return tempExperiment;
+        }
+
+        static public ExperimentData CreateTemplate(TabControl template_control, string ExperimentName)
         {
             Dictionary<string, List<FieldData>> pages = new Dictionary<string, List<FieldData>>();
+
+            HashSet<string> usedFieldsNames = new HashSet<string>();
 
             foreach (TabPage page in template_control.TabPages)
             {
@@ -78,7 +111,10 @@ namespace Reactor_Interface.Classes
                         if (textbox == null)
                             continue;
                         if (textbox.Text == "")
-                            return Save_result.EmptyFiled;
+                            throw new EmptyTextBoxException();
+
+                        if(usedFieldsNames.Contains(textbox.Text))
+                            throw new SameFieldsNamesException();
 
                         fields.Add(new FieldData(textbox.Text, textbox.Tag.ToString(), "", y, i));
                     }
@@ -86,18 +122,17 @@ namespace Reactor_Interface.Classes
                 pages.Add(name_page, fields);
             }
             if (pages.Count == 0)
-                return Save_result.EmptyPages;
-            try
-            {
-                ExperimentData template = new ExperimentData("Новый эксперимент", pages);
-                string str_template = JsonConvert.SerializeObject(template);
-                Write_template_to_file(str_template, name);
-            }
-            catch
-            {
-                return Save_result.CreationError;
-            }
-            return Save_result.Saved;
+                throw new NullPagesException();
+
+            ExperimentData template = new ExperimentData(ExperimentName, pages);
+            return template;
+        }
+
+        static public void Create_template_json(TabControl template_control, string name)
+        {
+            ExperimentData template = CreateTemplate(template_control, "Новый эксперимент");
+            string str_template = JsonConvert.SerializeObject(template);
+            Write_template_to_file(str_template, name);
         }
         static private void Write_template_to_file(string template, string template_name)
         {
@@ -139,15 +174,36 @@ namespace Reactor_Interface.Classes
             return experiment;
         }
 
-        static public string[] get_template_array()
+        static public string[] GetTemplatesArray()
         {
             Create_folder();
 
             List<string> templates = new List<string>();
             foreach(string file in Directory.GetFiles(templates_folder))
             {
-                if (Path.GetExtension(file) == extension)
+                if (Path.GetExtension(file) == EXTENSION)
                     templates.Add(Path.GetFileNameWithoutExtension(file));
+            }
+
+            return templates.ToArray();
+        }
+
+        static public string[] GetTemplatesPathesArrayFromOrigin()
+        {
+            Create_folder();
+            return GetTemplatesPathesArray(templates_folder);
+        }
+
+        static public string[] GetTemplatesPathesArray(string templates_folder)
+        {
+            if (!Directory.Exists(templates_folder))
+                return null;
+
+            List<string> templates = new List<string>();
+            foreach (string file in Directory.GetFiles(templates_folder))
+            {
+                if (Path.GetExtension(file) == EXTENSION)
+                    templates.Add(file);
             }
 
             return templates.ToArray();

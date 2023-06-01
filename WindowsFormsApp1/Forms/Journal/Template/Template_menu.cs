@@ -35,7 +35,7 @@ namespace Reactor_Interface.Forms.Experiment
         }
         public void Load_templates(string selected_template = "")
         {
-            templates_array = TemplateSystem.get_template_array();
+            templates_array = TemplateSystem.GetTemplatesArray();
 
             template_view.Items.Clear();
             template_view.DoubleClick += Template_view_DoubleClick;

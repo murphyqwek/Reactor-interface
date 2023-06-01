@@ -38,6 +38,7 @@
             this.context_menu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.select_weigh_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.unselect_weigh_btn = new System.Windows.Forms.ToolStripMenuItem();
+            this.PairColorPallete = new System.Windows.Forms.ColorDialog();
             this.menuStrip1.SuspendLayout();
             this.template_control.SuspendLayout();
             this.context_menu.SuspendLayout();
@@ -45,6 +46,7 @@
             // 
             // menuStrip1
             // 
+            this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.save_menu_btn,
@@ -149,5 +151,6 @@
         private System.Windows.Forms.ContextMenuStrip context_menu;
         private System.Windows.Forms.ToolStripMenuItem select_weigh_btn;
         private System.Windows.Forms.ToolStripMenuItem unselect_weigh_btn;
+        private System.Windows.Forms.ColorDialog PairColorPallete;
     }
 }

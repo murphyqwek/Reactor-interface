@@ -756,7 +756,7 @@ namespace WindowsFormsApp1
                 MessageBox.Show("Успешно!");
             else
                 MessageBox.Show("Ошибка");*/
-            Jounral_menu exp = new Jounral_menu(graphic_menu.GetChart());
+            Jounral_menu exp = new Jounral_menu(graphic_menu.GetChart(), this);
             exp.ShowDialog();
         }
 
@@ -780,6 +780,11 @@ namespace WindowsFormsApp1
         private void settings_menu_btn_Click(object sender, EventArgs e)
         {
 
+        }
+
+        internal void ShowNewJounral(Jounral_menu newJournal)
+        {
+            newJournal.ShowDialog();
         }
     }
 }
