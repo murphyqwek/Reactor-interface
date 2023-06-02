@@ -149,6 +149,11 @@ namespace Reactor_Interface.Classes.Experiment
             return File.Exists(fullPath);
         }
 
+        public static void SetCurrentExperimentIntoRegister(string experimentPath)
+        {
+            Interface_settings.set_current_experiment(experimentPath);
+        }
+
         public static ExperimentData UploadExperiment(string experimentPath)
         {
             if (!File.Exists(experimentPath))
@@ -163,14 +168,24 @@ namespace Reactor_Interface.Classes.Experiment
                 textFromFile = Encoding.Default.GetString(buffer);
             }
 
-            var test = JsonConvert.DeserializeObject(textFromFile).ToString();
+            string experimentDeserializedString;
+            ExperimentData experiment;
 
-            var experiment = JsonConvert.DeserializeObject<ExperimentData>(test);
+            try
+            {
+                experimentDeserializedString = JsonConvert.DeserializeObject(textFromFile).ToString();
+
+                experiment = JsonConvert.DeserializeObject<ExperimentData>(experimentDeserializedString);
+            }
+            catch
+            {
+                return null;
+            }
 
             if (isExperimentDamaged(experiment, experimentPath))
                 return null;
 
-            Interface_settings.set_current_experiment(experimentPath);
+            //Interface_settings.set_current_experiment(experimentPath);
             return experiment; 
         }
 

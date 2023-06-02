@@ -17,6 +17,7 @@ using System.Web.UI;
 using System.Data.Common;
 using Reactor_Interface.Classes.Experiment;
 using Reactor_Interface.Classes.Exceptions;
+using Reactor_Interface.Forms.Journal;
 
 namespace Reactor_Interface.Forms.Template
 {
@@ -337,7 +338,17 @@ namespace Reactor_Interface.Forms.Template
                 return;
             }
             string old_template_name = this.template_name;
-            string template_name = Interaction.InputBox("Введите название шаблона", "Сохранение шаблона", this.template_name);
+
+            using(InputFormMenu inForm = new InputFormMenu("Сохранение шаблона", "Введите название шаблона", this.template_name))
+            {
+                var result = inForm.ShowDialog();
+
+                if (result != DialogResult.OK)
+                    return;
+
+                template_name = inForm.OutputValue;
+            }
+            
 
             if(template_name.Trim() == "")
             {
@@ -400,11 +411,25 @@ namespace Reactor_Interface.Forms.Template
 
         private void rename_page_menu_btn_Click(object sender, EventArgs e)
         {
-            string page_name = Interaction.InputBox("Введите название вкладки", "Изменение вклакди", template_control.SelectedTab.Text);
+            string page_name;
+
+            using(InputFormMenu inFrom = new InputFormMenu("Изменение вклакди", "Введите название вкладки", template_control.SelectedTab.Text))
+            {
+                var result = inFrom.ShowDialog();
+
+                if (result != DialogResult.OK)
+                    return;
+
+                page_name = inFrom.OutputValue;
+            }
+            
             page_name = page_name == "" ? template_control.SelectedTab.Text : page_name;
-            var Data = _experiment.Pages[template_control.SelectedTab.Text];
-            _experiment.Pages.Remove(template_control.SelectedTab.Text);
-            _experiment.Pages.Add(page_name, Data);
+            if (_experiment != null)
+            {
+                var Data = _experiment.Pages[template_control.SelectedTab.Text];
+                _experiment.Pages.Remove(template_control.SelectedTab.Text);
+                _experiment.Pages.Add(page_name, Data);
+            }
             template_control.SelectedTab.Text = page_name;
         }
 

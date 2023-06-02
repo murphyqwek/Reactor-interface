@@ -18,6 +18,7 @@ using Newtonsoft.Json.Bson;
 using Reactor_Interface.Classes;
 using Reactor_Interface.Classes.Experiment;
 using Reactor_Interface.Classes.GoogleAPI;
+using Reactor_Interface.Classes.Message;
 using Reactor_Interface.Classes.Serie;
 using Reactor_Interface.Classes.Templates;
 using Reactor_Interface.Classes.Weigher;
@@ -39,6 +40,8 @@ namespace Reactor_Interface
         private SerialPort weigherSerialPort = new SerialPort();
         private WeigherReader weigherReader;
         private Main_menu _mainMenu;
+
+        private SerieExperiment _serieExperiment;
 
         private readonly string weigherTag = "$МАССА$";
         private readonly string diskPreffix = "D_";
@@ -78,13 +81,12 @@ namespace Reactor_Interface
         {
             setupJournal(chart, _mainMenu);
 
-            CreateExperimentSerieBtn.Visible = true;
+            SerieExperimentBtn.Visible = true;
             QuitSerieBtn.Visible = true;
             AddTemplatesBtn.Visible = true;
 
             changeExperimentTemplatebtn.Visible = false;
-            SaveOnComputerBtn.Visible = false;
-            SaveOnDriveBtn.Visible = false;
+            SaveExperimentBtn.Visible = false;
             CreateNewExperimentBtn.Visible = false;
             renameExperimentBtn.Visible = false;
             UploadExperimentBtn.Visible = false;
@@ -166,14 +168,13 @@ namespace Reactor_Interface
             if (currentExperiment == null)
                 return;
 
-            uploadExperimentFromComputer(currentExperiment, expPath);
+            uploadExperimentFromComputer(currentExperiment, expPath, false);
         }
 
-        private void uploadExperimentFromComputer(ExperimentData experiment, string loadFromPath)
+        private void uploadExperimentFromComputer(ExperimentData experiment, string loadFromPath, bool SaveIntoRegister)
         {
             if (experiment == null)
-                MessageBox.Show("Шаблон был повреждён. Невозможно загрузить.", "Ошибка",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                ErrorMessage.Show("Шаблон был повреждён. Невозможно загрузить.");
             else
             {
                 LoadFrom = computerPreffix + Path.GetDirectoryName(loadFromPath);
@@ -181,6 +182,8 @@ namespace Reactor_Interface
                 parseExperimentData(_experiment);
                 SetExperimentName(_experiment.Name);
                 IsSaved = true;
+                if (SaveIntoRegister)
+                    ExperimentSystem.SetCurrentExperimentIntoRegister(loadFromPath);
             }
         }
 
@@ -280,13 +283,13 @@ namespace Reactor_Interface
             string connect_error_text = Error_message.ConnectionError(connect_result);
             if(connect_error_text != "")
             {
-                MessageBox.Show(connect_error_text, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                ErrorMessage.Show(connect_error_text);
                 return;
             }
 
             if(serie == null)
             {
-                MessageBox.Show("Не указана серия экспериментов", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                ErrorMessage.Show("Не указана серия экспериментов");
                 return;
             }
 
@@ -295,7 +298,7 @@ namespace Reactor_Interface
 
             if (numer == "")
             {
-                MessageBox.Show("Не указан номер эксперимента", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                ErrorMessage.Show("Не указан номер эксперимента");
                 return;
             }
 
@@ -305,14 +308,14 @@ namespace Reactor_Interface
 
             //ExperimentExl.CreateExcelExperiment(path, experiment);
             Drive.UploadFileOnDrive(path, serie, numer);
-            MessageBox.Show("Файл успешно загружен!!!", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            SuccesMessage.Show("Файл успешно загружен!!!");
         }
 
         private void change_serie_menubtn_Click(object sender, EventArgs e)
         {
             if (!Internet_checker.CheckInternet())
             {
-                MessageBox.Show("Отсутсвует подклчение к интернету", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                ErrorMessage.Show("Отсутсвует подклчение к интернету");
                 return;
             }
 
@@ -334,7 +337,7 @@ namespace Reactor_Interface
 
         public void upload_template(ExperimentData template)
         {
-            uploadExperimentFromComputer(template, null);
+            uploadExperimentFromComputer(template, null, false);
             IsSaved = false;
         }
 
@@ -373,7 +376,7 @@ namespace Reactor_Interface
 
                 ExperimentExl.CreateExcelExperiment(path, _experiment);
 
-                MessageBox.Show("Excel файл сохранен", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                SuccesMessage.Show("Excel файл сохранен");
             }
         }
 
@@ -422,7 +425,7 @@ namespace Reactor_Interface
             string mass = weigherReader.GetMass();
 
             if (mass == null)
-                MessageBox.Show("Проблема с подключением к весам. Проверьте соединение с портом", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ErrorMessage.Show("Проблема с подключением к весам. Проверьте соединение с портом");
             else
                 textBox.Text = mass + " г";
         }
@@ -482,8 +485,7 @@ namespace Reactor_Interface
                 string path = fileDialog.FileName;
 
                 var experiment = ExperimentSystem.UploadExperiment(path);
-
-                uploadExperimentFromComputer(experiment, path);
+                uploadExperimentFromComputer(experiment, path, true);
             }
         }
 
@@ -495,8 +497,9 @@ namespace Reactor_Interface
         private void experiment_btn_DropDownOpening(object sender, EventArgs e)
         {
             bool isExperimentNotNull = _experiment != null;
-            SaveExperimentBtn.Visible = isExperimentNotNull;
-            renameExperimentBtn.Visible = isExperimentNotNull;
+            bool isSerie = _serie != null;
+            SaveExperimentBtn.Visible = isExperimentNotNull & !isSerie;
+            renameExperimentBtn.Visible = isExperimentNotNull & !isSerie;
             DataExperimentBtn.Visible = isExperimentNotNull;
         }
 
@@ -554,16 +557,14 @@ namespace Reactor_Interface
             {
                 if (!Internet_checker.CheckInternet())
                 {
-                    MessageBox.Show("Отсутсвует подключение к интернету", "Ошибка",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                    ErrorMessage.Show("Отсутсвует подключение к интернету");
                     return;
                 }
 
                 if (!ExperimentSystem.IsExperimentExists(path, _experiment.Name,
                                                     ExperimentSystem.ExperimentStorePlace.OnComputer))
                 {
-                    MessageBox.Show("Ошибка при сохранении файла. Проверьте, подключены ли вы к диску", "Ошибка",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                    ErrorMessage.Show("Ошибка при сохранении файла. Проверьте, подключены ли вы к диску");
                     return;
                 }
 
@@ -614,7 +615,7 @@ namespace Reactor_Interface
 
         private void Jounral_menu_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if(_experiment == null)
+            if(_serie != null)
             {
                 e.Cancel = NeedToCancel();
                 return;
@@ -662,8 +663,7 @@ namespace Reactor_Interface
             if(_experiment.ApplianceData == null)
             {
                 ExperimentSystem.UploadApplianceDataToExperiment(ref _experiment, _chart.Series);
-                MessageBox.Show("Данные загружены", "Успешно", MessageBoxButtons.OK,
-                                 MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                SuccesMessage.Show("Данные загружены");
                 IsSaved = false;
                 return;
             }
@@ -674,8 +674,7 @@ namespace Reactor_Interface
             if (result == DialogResult.Yes)
             {
                 ExperimentSystem.UploadApplianceDataToExperiment(ref _experiment, _chart.Series);
-                MessageBox.Show("Данные загружены", "Успешно", MessageBoxButtons.OK,
-                                 MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                SuccesMessage.Show("Данные загружены");
                 IsSaved = false;
             }
         }
@@ -700,8 +699,7 @@ namespace Reactor_Interface
 
             if(string.IsNullOrEmpty(newExperimentName))
             {
-                MessageBox.Show("Пустое название", "Ошибка", 
-                                MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                ErrorMessage.Show("Пустое название");
                 return;
             }
 
@@ -749,17 +747,6 @@ namespace Reactor_Interface
             template_Menu.ShowDialog();
         }
 
-        private bool ConfirmMessageBox(string text)
-        {
-            var result = MessageBox.Show(text, "Внимание",
-                                          MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button3);
-
-            if (result == DialogResult.Yes)
-                return true;
-            else
-                return false;
-        }
-
         public void CreateNewSerie(ExperimentData template, string templatePath)
         {
             SerieData serie = SerieSystem.CreateNewSerie(template, templatePath);
@@ -775,7 +762,7 @@ namespace Reactor_Interface
 
         private void CreateNewSerieBtn_Click(object sender, EventArgs e)
         {
-            if (!ConfirmMessageBox("Вы уверены, что хотите создать новую серию?"))
+            if (!ConfirmMessageBox.Show("Вы уверены, что хотите создать новую серию?"))
                 return;
 
             if (!IsSaved && _experiment != null)
@@ -784,13 +771,13 @@ namespace Reactor_Interface
                                 MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
                 return;
             }
-            GetTemplateMenu getTemplateMenu = new GetTemplateMenu(this);
+            GetTemplateMenu getTemplateMenu = new GetTemplateMenu(CreateNewSerie);
             getTemplateMenu.ShowDialog();
         }
 
         private void QuitSerieBtn_Click(object sender, EventArgs e)
         {
-            if (!ConfirmMessageBox("Вы уверены, что хотите выйти из режима серии экспериментов?"))
+            if (!ConfirmMessageBox.Show("Вы уверены, что хотите выйти из режима серии экспериментов?"))
                 return;
 
             if(!IsSaved && _experiment != null)
@@ -840,8 +827,48 @@ namespace Reactor_Interface
 
         private void CreateExperimentSerieBtn_Click(object sender, EventArgs e)
         {
-            CreateNewSerieExperiment createNewSerieMenu = new CreateNewSerieExperiment(_serie);
+            CreateNewSerieExperiment createNewSerieMenu = new CreateNewSerieExperiment(_serie, UploadSerieExperiment);
             createNewSerieMenu.ShowDialog();
+        }
+
+        private void AddTemplatesBtn_Click(object sender, EventArgs e)
+        {
+            GetTemplateMenu getTemplateMenu = new GetTemplateMenu(AddNewTemplateToSerie);
+            getTemplateMenu.ShowDialog();
+        }
+
+        private void AddNewTemplateToSerie(ExperimentData template, string templatePath)
+        {
+            SerieSystem.AddNewTemplateToSerie(_serie, template, templatePath);
+        }
+
+        private void ShowSerieExperimentsBtn_Click(object sender, EventArgs e)
+        {
+            //SerieExperimentsMenu serieExperimentsMenu = new SerieExperimentsMenu();
+            //serieExperimentsMenu.ShowDialog();
+        }
+
+        public void UploadSerieExperiment(SerieExperiment serieExperiment, ExperimentData experiment, bool isSaved)
+        {
+            if (experiment == null)
+                SetNullExperiment();
+
+            parseExperimentData(experiment);
+            SetExperimentName(experiment.Name);
+
+            _experiment = experiment;
+            _serieExperiment = serieExperiment;
+            IsSaved = isSaved;
+            SaveSerieExperimentBtn.Visible = true;
+        }
+
+        private void SetNullExperiment()
+        {
+            SaveSerieExperimentBtn.Visible = false;
+            _experiment = null;
+            IsSaved = true;
+            data_control.TabPages.Clear();
+            comments_txtbx.Clear();
         }
     }
 

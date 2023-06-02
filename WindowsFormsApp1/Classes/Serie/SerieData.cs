@@ -24,29 +24,34 @@ namespace Reactor_Interface.Classes.Serie
         public readonly List<SerieTemplate> SerieTemplates;
         public readonly Dictionary<int, List<SerieExperiment>> Experiments;
         public readonly string Name;
+
+        private int LastExperimentIndex;
+
         private string FolderPath;
-        public string SeriePath { get { return Path.Combine(FolderPath, Name + EXTENSION); } }
+        public string SerieFilePath { get { return Path.Combine(FolderPath, Name + EXTENSION); } }
         public string ExperimentPath { get { return Path.Combine(FolderPath, "Эксперименты"); } }
         public string ReportPath { get { return Path.Combine(FolderPath, "Отчёты"); } }
         public string TemplatesPath { get { return Path.Combine(FolderPath, "Шаблоны"); } }
 
         [JsonConstructor]
-        public SerieData(List<SerieTemplate> serieTemplates, Dictionary<int, List<SerieExperiment>> experiments, string name, string seriePath)
+        public SerieData(List<SerieTemplate> serieTemplates, Dictionary<int, List<SerieExperiment>> experiments, string name, string seriePath, int lastExperimentIndex)
         {
             SerieTemplates = serieTemplates;
             Experiments = experiments;
             Name = name;
             FolderPath = seriePath;
+            LastExperimentIndex = lastExperimentIndex;
         }
 
-        public SerieData(ExperimentData template, string templatePath, string name, string seriePath)
+        public SerieData(ExperimentData template, string templatePath, string name, string folderPath)
         {
             SerieTemplates = new List<SerieTemplate>()
             {
                 new SerieTemplate(template.GetAllFields(), template.ConnectedFields, templatePath),
             };
             Name = name;
-            FolderPath = Path.GetDirectoryName(seriePath);
+            FolderPath = folderPath;
+            LastExperimentIndex = 0;
         }
 
         public string GetSerieFileName()
@@ -60,6 +65,8 @@ namespace Reactor_Interface.Classes.Serie
                 return false;
 
             //Experiments.Add();
+
+            LastExperimentIndex++;
             return true;
         }
 
@@ -70,6 +77,17 @@ namespace Reactor_Interface.Classes.Serie
 
 
             FolderPath = Path.GetDirectoryName(seriePath);
+        }
+
+        public void AddNewTemplate(ExperimentData template, string templatePath)
+        {
+            var serieTemplate = new SerieTemplate(template.GetAllFields(), template.ConnectedFields, templatePath);
+            SerieTemplates.Add(serieTemplate);
+        }
+
+        public int GetLastExpIndex()
+        {
+            return LastExperimentIndex + 1;
         }
     }
 }

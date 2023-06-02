@@ -131,14 +131,13 @@ namespace Reactor_Interface.Forms.Experiment
 
             if (template == null)
             {
-                MessageBox.Show("Данный шаблон был повреждён либо удалён", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                ErrorMessage.Show("Данный шаблон был повреждён либо удалён");
             }
 
             else
             {
                 jounral_menu.upload_template(template);
-                MessageBox.Show("Шаблон загружен", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
-
+                SuccesMessage.Show("Шаблон загружен");
                 this.Close();
             }
         }
@@ -170,8 +169,7 @@ namespace Reactor_Interface.Forms.Experiment
 
                 Load_templates();
 
-                MessageBox.Show("Шаблоны загружены", "Успешно", 
-                                MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                SuccesMessage.Show("Шаблон загружен");
             }
         }
 

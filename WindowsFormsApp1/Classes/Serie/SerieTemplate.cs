@@ -15,14 +15,16 @@ namespace Reactor_Interface.Classes.Serie
     {
         public readonly Dictionary<string, bool> Fields;
         public readonly List<ConnectedFields> ConnectedFieldsList;
-        public readonly string TemplateName;
+        public string TemplateName { get; private set; }
+        public bool IsDeleted { get; private set; }
 
         [JsonConstructor]
-        public SerieTemplate(Dictionary<string, bool> fields, List<ConnectedFields> connectedFieldsList, string templateName)
+        public SerieTemplate(Dictionary<string, bool> fields, List<ConnectedFields> connectedFieldsList, string templateName, bool isDeleted = false)
         {
             Fields = fields;
             ConnectedFieldsList = connectedFieldsList;
             TemplateName = templateName;
+            IsDeleted = isDeleted;
         }
 
         public SerieTemplate(List<string> fields, List<ConnectedFields> connectedFieldsList, string templatePath)
@@ -104,6 +106,16 @@ namespace Reactor_Interface.Classes.Serie
                 convertedStrings.Add(field.FieldName);
             }
             return convertedStrings;
+        }
+
+        public void SetTemplateName(string newNameTemplate)
+        {
+            TemplateName = newNameTemplate;
+        }
+
+        public void SetDeleted(bool deleted)
+        {
+            IsDeleted = deleted;
         }
     }
 }

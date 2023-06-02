@@ -15,13 +15,13 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
 {
     public partial class GetTemplateMenu : Form
     {
-        Jounral_menu _journal;
+        Action<ExperimentData, string> _returnTemplateFunc;
 
-        public GetTemplateMenu(Jounral_menu journal, string templatesFolder = null)
+        public GetTemplateMenu(Action<ExperimentData, string> returnTemplateFunc, string templatesFolder = null)
         {
             InitializeComponent();
-            _journal = journal;
             UploadTemplates(templatesFolder);
+            _returnTemplateFunc = returnTemplateFunc;
         }
 
         private void UploadTemplates(string templatesFolder)
@@ -49,12 +49,13 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
 
             if (template == null)
             {
-                MessageBox.Show("Данный шаблон был повреждён либо удалён", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                ErrorMessage.Show("Данный шаблон был повреждён либо удалён");
             }
 
             else
             {
-                _journal.CreateNewSerie(template, templatePath);
+                //_journal.CreateNewSerie(template, templatePath);
+                _returnTemplateFunc(template, templatePath);
                 this.Close();
             }
         }

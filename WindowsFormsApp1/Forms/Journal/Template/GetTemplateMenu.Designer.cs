@@ -35,6 +35,7 @@
             // TemplateListBox
             // 
             this.TemplateListBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TemplateListBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.TemplateListBox.HideSelection = false;
             this.TemplateListBox.Location = new System.Drawing.Point(0, 0);
             this.TemplateListBox.Name = "TemplateListBox";

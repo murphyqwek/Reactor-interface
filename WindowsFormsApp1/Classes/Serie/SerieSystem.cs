@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using Reactor_Interface.Classes.Experiment;
 using Reactor_Interface.Classes.Templates;
+using Reactor_Interface.Forms.Journal;
 
 namespace Reactor_Interface.Classes.Serie
 {
@@ -40,11 +42,20 @@ namespace Reactor_Interface.Classes.Serie
             bool isSerieNameChosen = false;
             while (!isSerieNameChosen)
             {
-                string serieName = Interaction.InputBox("Введите название серии", "Создание новой серии");
+                string serieName;
+                using (InputFormMenu inputForm = new InputFormMenu("Создание новой серии", "Введите название серии"))
+                {
+                    var result = inputForm.ShowDialog();
+
+                    if (result != DialogResult.OK)
+                        return null;
+
+                    serieName = inputForm.OutputValue;
+                }
+
                 if (string.IsNullOrEmpty(serieName))
                 {
-                    MessageBox.Show("Пустое название", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error,
-                                    MessageBoxDefaultButton.Button1);
+                    ErrorMessage.Show("Пустое название");
                     continue;
                 }
 
@@ -52,8 +63,7 @@ namespace Reactor_Interface.Classes.Serie
 
                 if (Directory.Exists(tempPath))
                 {
-                    MessageBox.Show("Серия с таким названием уже существует. Выберите другое название", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error,
-                                    MessageBoxDefaultButton.Button1);
+                    ErrorMessage.Show("Серия с таким названием уже существует. Выберите другое название");
                     continue;
                 }
 
@@ -62,6 +72,51 @@ namespace Reactor_Interface.Classes.Serie
             }
 
             return seriePath;
+        }
+
+        static public void AddNewTemplateToSerie(SerieData serie, ExperimentData template, string templatePath, string newTemplateName = null)
+        {
+            string templateName = newTemplateName;
+
+            if (!File.Exists(templatePath))
+            {
+                ErrorMessage.Show("Шаблон был удалён");
+                return;
+            }
+
+            if (!File.Exists(serie.SerieFilePath))
+            {
+                ErrorMessage.Show("Файл серии удалён");
+                return;
+            }
+
+            if (!Directory.Exists(serie.TemplatesPath))
+                Directory.CreateDirectory(serie.TemplatesPath);
+
+            if (newTemplateName == null)
+                templateName = Path.GetFileName(templatePath);
+
+            if (!templateName.EndsWith(TemplateSystem.EXTENSION))
+                templateName += TemplateSystem.EXTENSION;
+
+            if(File.Exists(Path.Combine(serie.TemplatesPath, templateName)))
+            {
+                ErrorMessage.Show("Шаблон с таким же названием уже существует");
+                return;
+            }
+
+            try
+            {
+                File.Copy(templatePath, Path.Combine(serie.TemplatesPath, templateName), true);
+                serie.AddNewTemplate(template, Path.Combine(serie.TemplatesPath, templateName));
+                SaveSerieJSON(serie);
+                SuccesMessage.Show("Новый шаблон загружен");
+            }
+            catch
+            {
+                File.Delete(Path.Combine(serie.TemplatesPath, templateName));
+                ErrorMessage.Show("Ошибка при добавлении нового шаблона в серию");
+            }
         }
 
         static public SerieData CreateNewSerie(ExperimentData template, string templatePath)
@@ -86,13 +141,17 @@ namespace Reactor_Interface.Classes.Serie
 
             SerieData newSerie = new SerieData(template, templatePath, name, seriePath);
 
-            if (!SaveNewSerieJSON(newSerie, seriePath))
+            try
             {
+                SaveSerieJSON(newSerie);
+                return newSerie;
+            }
+            catch
+            {
+                ErrorMessage.Show("Ошибка при создании серии. Попробуйте выбрать новую папку серии");
                 DeleteSerieFolder(seriePath);
                 return null;
             }
-
-            return newSerie;
         }
 
         private static bool CopyTemplateToTempletesFolder(string templatePath, string seriePath)
@@ -100,15 +159,13 @@ namespace Reactor_Interface.Classes.Serie
             string templateName = Path.GetFileName(templatePath);
             if (!File.Exists(templatePath))
             {
-                MessageBox.Show("Не существует шаблона по пути: " + templatePath, "Ошибка",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                ErrorMessage.Show("Не существует шаблона по пути: " + templatePath);
                 return false;
             }
 
             if(File.Exists(seriePath + "\\Шаблоны\\" + templateName))
             {
-                MessageBox.Show("Шаблон с таким же названием уже существует", "Ошибка",
-                                                MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                ErrorMessage.Show("Шаблон с таким же названием уже существует");
                 return false;
             }
 
@@ -119,33 +176,21 @@ namespace Reactor_Interface.Classes.Serie
             }
             catch
             {
-                MessageBox.Show("Ошибка при создании шаблона", "Ошибка",
-                                                MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                ErrorMessage.Show("Ошибка при создании шаблона");
                 return false;
             }
         }
 
-        public static bool SaveNewSerieJSON(SerieData serie, string seriePath)
+        public static void SaveSerieJSON(SerieData serie)
         {
-            try
-            {
-                string serializedSerie = JsonConvert.SerializeObject(serie);
-                string file = Path.Combine(seriePath, serie.GetSerieFileName());
+            string serializedSerie = JsonConvert.SerializeObject(serie);
 
-                using (FileStream fstream = new FileStream(file, FileMode.Create))
-                {
-                    // преобразуем строку в байты
-                    byte[] buffer = Encoding.Default.GetBytes(serializedSerie);
-                    // запись массива байтов в файл
-                    fstream.Write(buffer, 0, buffer.Length);
-                }
-                return true;
-            }
-            catch
+            using (FileStream fstream = new FileStream(serie.SerieFilePath, FileMode.Create))
             {
-                MessageBox.Show("Ошибка при создании серии. Попробуйте выбрать новую папку серии", "Ошибка",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
-                return false;
+                // преобразуем строку в байты
+                byte[] buffer = Encoding.Default.GetBytes(serializedSerie);
+                // запись массива байтов в файл
+                fstream.Write(buffer, 0, buffer.Length);
             }
         }
 
@@ -157,8 +202,7 @@ namespace Reactor_Interface.Classes.Serie
             }
             catch
             {
-                MessageBox.Show("Не удалось удалить папку серии", "Ошибка",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                ErrorMessage.Show("Не удалось удалить папку серии");
             }
         }
 
@@ -179,8 +223,7 @@ namespace Reactor_Interface.Classes.Serie
             }
             catch
             {
-                MessageBox.Show("Ошибка при создании серии. Попробуйте выбрать другую папку", "Ошибка", 
-                                MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                ErrorMessage.Show("Ошибка при создании серии. Попробуйте выбрать другую папку");
                 return false;
             }
         }
@@ -240,7 +283,30 @@ namespace Reactor_Interface.Classes.Serie
 
         public static bool IsSerieExists(SerieData serie)
         {
-            return File.Exists(serie.SeriePath);
+            return File.Exists(serie.SerieFilePath);
+        }
+
+        public static void DeleteTemplate(SerieData serie, int templateIndex)
+        {
+            if (serie.SerieTemplates.Count <= templateIndex)
+                return;
+
+            serie.SerieTemplates[templateIndex].SetDeleted(true);
+
+            string templatePath = Path.Combine(serie.TemplatesPath, serie.SerieTemplates[templateIndex].GetTemplateFileName());
+
+            if (File.Exists(templatePath))
+                File.Delete(templatePath);
+
+            if (serie.Experiments != null)
+            {
+                if (!serie.Experiments.ContainsKey(templateIndex))
+                    serie.SerieTemplates.RemoveAt(templateIndex);
+            }
+            else
+                serie.SerieTemplates.RemoveAt(templateIndex);
+
+            SaveSerieJSON(serie);
         }
 
         private static void CheckTemplates(SerieData serieData)

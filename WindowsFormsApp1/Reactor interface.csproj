@@ -189,6 +189,8 @@
   <ItemGroup>
     <Compile Include="Classes\Data.cs" />
     <Compile Include="Classes\DPI.cs" />
+    <Compile Include="Classes\Message\ConfirmMessageBox.cs" />
+    <Compile Include="Classes\Message\ErrorMessage.cs" />
     <Compile Include="Classes\Error_message.cs" />
     <Compile Include="Classes\Exceptions\EmptyTextBoxException.cs" />
     <Compile Include="Classes\Exceptions\NotExistedSeriePathException.cs" />
@@ -206,6 +208,7 @@
     <Compile Include="Classes\GoogleAPI\FileData.cs" />
     <Compile Include="Classes\GoogleAPI\Google_data.cs" />
     <Compile Include="Classes\GoogleAPI\Google_service.cs" />
+    <Compile Include="Classes\Message\SuccessMessage.cs" />
     <Compile Include="Classes\Interface_settings.cs" />
     <Compile Include="Classes\Internet_checker.cs" />
     <Compile Include="Classes\Port.cs" />
@@ -228,6 +231,12 @@
     </Compile>
     <Compile Include="Forms\Journal\Fill_mass_field_menu.Designer.cs">
       <DependentUpon>Fill_mass_field_menu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Journal\InputFormMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Journal\InputFormMenu.Designer.cs">
+      <DependentUpon>InputFormMenu.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Journal\Jounral_menu.cs">
       <SubType>Form</SubType>
@@ -270,6 +279,12 @@
     </Compile>
     <Compile Include="Forms\Journal\SerieMenus\CreateNewSerieExperiment.Designer.cs">
       <DependentUpon>CreateNewSerieExperiment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Journal\SerieMenus\SerieExperimentsMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Journal\SerieMenus\SerieExperimentsMenu.Designer.cs">
+      <DependentUpon>SerieExperimentsMenu.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Journal\Template\GetTemplateMenu.cs">
       <SubType>Form</SubType>
@@ -339,6 +354,9 @@
     <EmbeddedResource Include="Forms\Journal\Fill_mass_field_menu.resx">
       <DependentUpon>Fill_mass_field_menu.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Journal\InputFormMenu.resx">
+      <DependentUpon>InputFormMenu.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Journal\Jounral_menu.resx">
       <DependentUpon>Jounral_menu.cs</DependentUpon>
     </EmbeddedResource>
@@ -359,6 +377,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Journal\SerieMenus\CreateNewSerieExperiment.resx">
       <DependentUpon>CreateNewSerieExperiment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Journal\SerieMenus\SerieExperimentsMenu.resx">
+      <DependentUpon>SerieExperimentsMenu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Journal\Template\GetTemplateMenu.resx">
       <DependentUpon>GetTemplateMenu.cs</DependentUpon>
