@@ -16,6 +16,7 @@ using System.Windows.Forms.DataVisualization.Charting;
 using Microsoft.VisualBasic;
 using Newtonsoft.Json.Bson;
 using Reactor_Interface.Classes;
+using Reactor_Interface.Classes.Exceptions;
 using Reactor_Interface.Classes.Experiment;
 using Reactor_Interface.Classes.GoogleAPI;
 using Reactor_Interface.Classes.Message;
@@ -41,7 +42,7 @@ namespace Reactor_Interface
         private WeigherReader weigherReader;
         private Main_menu _mainMenu;
 
-        private SerieExperiment _serieExperiment;
+        private SerieExperimentMetaData _serieExperimentMetaData;
 
         private readonly string weigherTag = "$МАССА$";
         private readonly string diskPreffix = "D_";
@@ -621,6 +622,13 @@ namespace Reactor_Interface
                 return;
             }
 
+            if(_experiment == null)
+            {
+                e.Cancel = false;
+                return;
+            }
+
+
             var store = LoadFrom.Substring(0, 2) == computerPreffix ? ExperimentSystem.ExperimentStorePlace.OnComputer : ExperimentSystem.ExperimentStorePlace.OnDisk;
             string path = LoadFrom.Substring(2);
             if (IsSaved && !ExperimentSystem.IsExperimentExists(path, _experiment.Name, store))
@@ -844,20 +852,20 @@ namespace Reactor_Interface
 
         private void ShowSerieExperimentsBtn_Click(object sender, EventArgs e)
         {
-            //SerieExperimentsMenu serieExperimentsMenu = new SerieExperimentsMenu();
-            //serieExperimentsMenu.ShowDialog();
+            SerieExperimentsMenu serieExperimentsMenu = new SerieExperimentsMenu(_serie, UploadSerieExperiment);
+            serieExperimentsMenu.ShowDialog();
         }
 
-        public void UploadSerieExperiment(SerieExperiment serieExperiment, ExperimentData experiment, bool isSaved)
+        public void UploadSerieExperiment(SerieExperimentMetaData serieExperiment, ExperimentData experiment, bool isSaved)
         {
             if (experiment == null)
                 SetNullExperiment();
 
+            _experiment = experiment;
             parseExperimentData(experiment);
             SetExperimentName(experiment.Name);
 
-            _experiment = experiment;
-            _serieExperiment = serieExperiment;
+            _serieExperimentMetaData = serieExperiment;
             IsSaved = isSaved;
             SaveSerieExperimentBtn.Visible = true;
         }
@@ -869,6 +877,33 @@ namespace Reactor_Interface
             IsSaved = true;
             data_control.TabPages.Clear();
             comments_txtbx.Clear();
+        }
+
+        private void SaveSerieExperimentBtn_Click(object sender, EventArgs e)
+        {
+            if (!ConfirmMessageBox.Show("Вы действительно хотите сохранить эксперимент?"))
+                return;
+
+            try
+            {
+                _experiment = FormNewExperiment(_experiment.Name, _experiment.ApplianceData);
+                SerieSystem.AddExperiment(_serie, _experiment, _serieExperimentMetaData);
+                IsSaved = true;
+            }
+            catch (NullTemplateException ex)
+            {
+                ErrorMessage.Show(ex.Message);
+                //SetNullExperiment();
+            }
+            catch(ExperimentIsNotCapableWithTemplateExcpetion ex)
+            {
+                ErrorMessage.Show(ex.Message);
+                //SetNullExperiment();
+            }
+            catch(Exception ex)
+            {
+                ErrorMessage.Show(ex.Message);
+            }
         }
     }
 

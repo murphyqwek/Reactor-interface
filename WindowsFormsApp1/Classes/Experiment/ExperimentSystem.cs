@@ -114,6 +114,13 @@ namespace Reactor_Interface.Classes.Experiment
 
         public static void SaveExperimentOnComputer(ExperimentData experiment, string filePath)
         {
+            SaveExperiment(experiment, filePath);
+
+            Interface_settings.set_current_experiment(filePath);
+        }
+
+        public static void SaveExperiment(ExperimentData experiment, string filePath)
+        {
             string experimentSerialized = JsonConvert.SerializeObject(experiment);
 
             if (!filePath.EndsWith(experimentExtension))
@@ -124,8 +131,6 @@ namespace Reactor_Interface.Classes.Experiment
                 byte[] buffer = Encoding.Default.GetBytes(experimentSerialized);
                 fstream.Write(buffer, 0, buffer.Length);
             }
-
-            Interface_settings.set_current_experiment(filePath);
         }
 
         public static ExperimentData UploadCurrentExperiment()

@@ -189,6 +189,8 @@
   <ItemGroup>
     <Compile Include="Classes\Data.cs" />
     <Compile Include="Classes\DPI.cs" />
+    <Compile Include="Classes\Exceptions\ExperimentIsNotCapableWithTemplateExcpetion.cs" />
+    <Compile Include="Classes\Exceptions\NullTemplateException.cs" />
     <Compile Include="Classes\Message\ConfirmMessageBox.cs" />
     <Compile Include="Classes\Message\ErrorMessage.cs" />
     <Compile Include="Classes\Error_message.cs" />

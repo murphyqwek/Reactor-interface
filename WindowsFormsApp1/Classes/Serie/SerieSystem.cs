@@ -11,7 +11,9 @@ using System.Windows.Forms;
 using Microsoft.Office.Core;
 using Microsoft.VisualBasic;
 using Newtonsoft.Json;
+using Reactor_Interface.Classes.Exceptions;
 using Reactor_Interface.Classes.Experiment;
+using Reactor_Interface.Classes.Message;
 using Reactor_Interface.Classes.Templates;
 using Reactor_Interface.Forms.Journal;
 
@@ -316,6 +318,63 @@ namespace Reactor_Interface.Classes.Serie
                 if (template.TemplateName == NOTFOUND)
                     continue;
             }
+        }
+
+        public static void AddExperiment(SerieData serie, ExperimentData experiment, SerieExperimentMetaData experimentMetaData)
+        {
+            if(!Directory.Exists(serie.ExperimentPath))
+                Directory.CreateDirectory(serie.ExperimentPath);
+
+            var template = serie.SerieTemplates[experimentMetaData.TemplateIndex];
+
+            if(template == null)
+            {
+                throw new NullTemplateException();
+            }
+            if (!template.IsExperimentCapabledWithTemplate(experiment))
+            {
+                throw new ExperimentIsNotCapableWithTemplateExcpetion();
+            }
+
+            serie.AddExperiment(experimentMetaData);
+            ExperimentSystem.SaveExperiment(experiment, serie.GetExperimentFilePath(experimentMetaData.ExperimentName));
+            SaveSerieJSON(serie);
+        }
+
+        public static ExperimentData UploadExperiment(SerieData serie, SerieExperimentMetaData metaData)
+        {
+            if (!Directory.Exists(serie.ExperimentPath))
+            {
+                ErrorMessage.Show("Файл эксперимента не существует");
+                return null;
+            }
+
+            if(serie.SerieTemplates.Count <= metaData.TemplateIndex)
+            {
+                ErrorMessage.Show("Отсутсвует шаблон эксперимента в базе шаблонов");
+                return null;
+
+            }
+
+            string experimentPath = Path.Combine(serie.ExperimentPath, metaData.GetExperimentFileName());
+
+            if(!File.Exists(experimentPath))
+            {
+                ErrorMessage.Show("Файл эксперимента не существует");
+                return null;
+            }
+
+            ExperimentData experiment = ExperimentSystem.UploadExperiment(experimentPath);
+
+            var template = serie.SerieTemplates[metaData.TemplateIndex];
+
+            if (!template.IsExperimentCapabledWithTemplate(experiment))
+            {
+                ErrorMessage.Show("Эксперимент не соответсвует шаблону");
+                return null;
+            }
+
+            return experiment;
         }
     }
 }
