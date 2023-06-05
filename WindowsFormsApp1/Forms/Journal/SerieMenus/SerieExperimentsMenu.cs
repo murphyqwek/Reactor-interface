@@ -61,19 +61,19 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
             if (Serie.Experiments.Count == 0 || !Directory.Exists(Serie.ExperimentPath))
                 return;
 
-            foreach(int templateIndex in Serie.Experiments.Keys)
+            foreach(string templateKey in Serie.Experiments.Keys)
             {
-                if (Serie.Experiments[templateIndex].Count == 0)
+                if (Serie.Experiments[templateKey].Count == 0)
                     continue;
 
-                string templateName = Serie.SerieTemplates[templateIndex].TemplateName;
+                string templateName = Serie.SerieTemplates[templateKey].TemplateName;
 
                 TreeNode serieNode = new TreeNode(templateName, 0, 0);
-                serieNode.Tag = templateIndex;
+                serieNode.Tag = templateKey;
                 serieNode.ToolTipText = TEMPLATETIPTEXT;
 
                 SerieTree.Nodes.Add(serieNode);
-                AddExperimentsToSerieNode(serieNode, Serie.Experiments[templateIndex]);
+                AddExperimentsToSerieNode(serieNode, Serie.Experiments[templateKey]);
             }
         }
         private void AddExperimentsToSerieNode(TreeNode serieNode, List<SerieExperimentMetaData> serieExperiments)
@@ -86,11 +86,11 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
 
                 var expData = ExperimentSystem.UploadExperiment(experimentPath);
 
-                int templateIndex = Experiment.TemplateIndex;
+                string templateKey = Experiment.TemplateName;
 
                 if (expData == null)
                     AddDamagedExperiment(serieNode, Experiment.ExperimentName);
-                else if (!Serie.SerieTemplates[templateIndex].IsExperimentCapabledWithTemplate(expData))
+                else if (!Serie.SerieTemplates[templateKey].IsExperimentCapabledWithTemplate(expData))
                     AddChangedExperiment(serieNode, Experiment.ExperimentName);
                 else
                     AddExperiment(serieNode, Experiment.ExperimentName);
@@ -172,13 +172,13 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
 
         private void OpenExperimentBtn_Click(object sender, EventArgs e)
         {
-            int tamplateIndex = Convert.ToInt32(SelectedExperiment.Parent.Tag);
+            string tamplateKey = SelectedExperiment.Parent.Tag.ToString();
             string experimentName = SelectedExperiment.Text;
 
             SerieExperimentMetaData metaData = new SerieExperimentMetaData()
             {
                 ExperimentName = experimentName,
-                TemplateIndex = tamplateIndex
+                TemplateName = tamplateKey
             };
 
             ExperimentData experiment = SerieSystem.UploadExperiment(Serie, metaData);

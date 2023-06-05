@@ -110,7 +110,25 @@ namespace Reactor_Interface.Classes.Serie
             try
             {
                 File.Copy(templatePath, Path.Combine(serie.TemplatesPath, templateName), true);
-                serie.AddNewTemplate(template, Path.Combine(serie.TemplatesPath, templateName));
+                string templateNameWihtouExtension = Path.GetFileNameWithoutExtension(templatePath);
+
+                if (serie.SerieTemplates.ContainsKey(templateNameWihtouExtension))
+                {
+                    var DeletedTemplate = serie.SerieTemplates[templateNameWihtouExtension];
+                    if (DeletedTemplate.IsExperimentCapabledWithTemplate(template))
+                    {
+                        serie.SerieTemplates[templateNameWihtouExtension] = new SerieTemplate(template.GetAllFields(), template.ConnectedFields, templatePath);
+                        InfoMessage.Show("В базе данных был найден индентичный удалённый шаблон. Он был заменён на данный");
+                    }
+                    else
+                    {
+                        ErrorMessage.Show("В базе шаблонов присутсвует удалённый шаблон с таким же именем. Переименутйе данный шаблон");
+                        return;
+                    }
+                }
+                else
+                    serie.AddNewTemplate(template, Path.Combine(serie.TemplatesPath, templateName));
+
                 SaveSerieJSON(serie);
                 SuccesMessage.Show("Новый шаблон загружен");
             }
@@ -288,36 +306,27 @@ namespace Reactor_Interface.Classes.Serie
             return File.Exists(serie.SerieFilePath);
         }
 
-        public static void DeleteTemplate(SerieData serie, int templateIndex)
+        public static void DeleteTemplate(SerieData serie, string templateName)
         {
-            if (serie.SerieTemplates.Count <= templateIndex)
+            if (!serie.SerieTemplates.ContainsKey(templateName))
                 return;
 
-            serie.SerieTemplates[templateIndex].SetDeleted(true);
+            serie.SerieTemplates[templateName].SetDeleted(true);
 
-            string templatePath = Path.Combine(serie.TemplatesPath, serie.SerieTemplates[templateIndex].GetTemplateFileName());
+            string templatePath = Path.Combine(serie.TemplatesPath, serie.SerieTemplates[templateName].GetTemplateFileName());
 
             if (File.Exists(templatePath))
                 File.Delete(templatePath);
 
             if (serie.Experiments != null)
             {
-                if (!serie.Experiments.ContainsKey(templateIndex))
-                    serie.SerieTemplates.RemoveAt(templateIndex);
+                if (!serie.Experiments.ContainsKey(templateName))
+                    serie.SerieTemplates.Remove(templateName);
             }
             else
-                serie.SerieTemplates.RemoveAt(templateIndex);
+                serie.SerieTemplates.Remove(templateName);
 
             SaveSerieJSON(serie);
-        }
-
-        private static void CheckTemplates(SerieData serieData)
-        {
-            foreach(var template in serieData.SerieTemplates)
-            {
-                if (template.TemplateName == NOTFOUND)
-                    continue;
-            }
         }
 
         public static void AddExperiment(SerieData serie, ExperimentData experiment, SerieExperimentMetaData experimentMetaData)
@@ -325,7 +334,7 @@ namespace Reactor_Interface.Classes.Serie
             if(!Directory.Exists(serie.ExperimentPath))
                 Directory.CreateDirectory(serie.ExperimentPath);
 
-            var template = serie.SerieTemplates[experimentMetaData.TemplateIndex];
+            var template = serie.SerieTemplates[experimentMetaData.TemplateName];
 
             if(template == null)
             {
@@ -349,7 +358,7 @@ namespace Reactor_Interface.Classes.Serie
                 return null;
             }
 
-            if(serie.SerieTemplates.Count <= metaData.TemplateIndex)
+            if(!serie.SerieTemplates.ContainsKey(metaData.TemplateName))
             {
                 ErrorMessage.Show("Отсутсвует шаблон эксперимента в базе шаблонов");
                 return null;
@@ -366,7 +375,7 @@ namespace Reactor_Interface.Classes.Serie
 
             ExperimentData experiment = ExperimentSystem.UploadExperiment(experimentPath);
 
-            var template = serie.SerieTemplates[metaData.TemplateIndex];
+            var template = serie.SerieTemplates[metaData.TemplateName];
 
             if (!template.IsExperimentCapabledWithTemplate(experiment))
             {

@@ -858,6 +858,11 @@ namespace Reactor_Interface
 
         public void UploadSerieExperiment(SerieExperimentMetaData serieExperiment, ExperimentData experiment, bool isSaved)
         {
+            if(_experiment != null && !IsSaved)
+            {
+                ErrorMessage.Show("Текущий эксперимент не сохранён");
+                return;
+            }
             if (experiment == null)
                 SetNullExperiment();
 

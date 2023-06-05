@@ -15,7 +15,7 @@ namespace Reactor_Interface.Classes.Serie
     public struct SerieExperimentMetaData
     {
         public string ExperimentName;
-        public int TemplateIndex;
+        public string TemplateName;
 
         public string GetExperimentFileName()
         {
@@ -27,8 +27,8 @@ namespace Reactor_Interface.Classes.Serie
     {
         public static readonly string EXTENSION = ".serie";
 
-        public readonly List<SerieTemplate> SerieTemplates;
-        public readonly Dictionary<int, List<SerieExperimentMetaData>> Experiments;
+        public readonly Dictionary<string, SerieTemplate> SerieTemplates;
+        public readonly Dictionary<string, List<SerieExperimentMetaData>> Experiments;
         public readonly string Name;
 
         public int LastExperimentIndex { get; private set;  }
@@ -40,10 +40,10 @@ namespace Reactor_Interface.Classes.Serie
         public string TemplatesPath { get { return Path.Combine(FolderPath, "Шаблоны"); } }
 
         [JsonConstructor]
-        public SerieData(List<SerieTemplate> serieTemplates, Dictionary<int, List<SerieExperimentMetaData>> experiments, string name, string seriePath, int lastExperimentIndex)
+        public SerieData(Dictionary<string, SerieTemplate> serieTemplates, Dictionary<string, List<SerieExperimentMetaData>> experiments, string name, string seriePath, int lastExperimentIndex)
         {
-            SerieTemplates = serieTemplates == null ? new List<SerieTemplate>() : serieTemplates;
-            Experiments = experiments == null ? new Dictionary<int, List<SerieExperimentMetaData>>() : experiments;
+            SerieTemplates = serieTemplates == null ? new Dictionary<string, SerieTemplate>() : serieTemplates;
+            Experiments = experiments == null ? new Dictionary<string, List<SerieExperimentMetaData>>() : experiments;
             Name = name;
             FolderPath = seriePath;
             LastExperimentIndex = lastExperimentIndex;
@@ -51,11 +51,12 @@ namespace Reactor_Interface.Classes.Serie
 
         public SerieData(ExperimentData template, string templatePath, string name, string folderPath)
         {
-            SerieTemplates = new List<SerieTemplate>()
+            SerieTemplate serieTemplate = new SerieTemplate(template.GetAllFields(), template.ConnectedFields, templatePath);
+            SerieTemplates = new Dictionary<string, SerieTemplate>()
             {
-                new SerieTemplate(template.GetAllFields(), template.ConnectedFields, templatePath),
+                { serieTemplate.TemplateName, serieTemplate },
             };
-            Experiments = new Dictionary<int, List<SerieExperimentMetaData>>();
+            Experiments = new Dictionary<string, List<SerieExperimentMetaData>>();
             Name = name;
             FolderPath = folderPath;
             LastExperimentIndex = 0;
@@ -78,7 +79,7 @@ namespace Reactor_Interface.Classes.Serie
         public void AddNewTemplate(ExperimentData template, string templatePath)
         {
             var serieTemplate = new SerieTemplate(template.GetAllFields(), template.ConnectedFields, templatePath);
-            SerieTemplates.Add(serieTemplate);
+            SerieTemplates.Add(serieTemplate.TemplateName, serieTemplate);
         }
 
         public int GetLastExpIndex()
@@ -88,28 +89,28 @@ namespace Reactor_Interface.Classes.Serie
 
         public void AddExperiment(SerieExperimentMetaData metaData)
         {
-            int templateIndex = metaData.TemplateIndex;
+            string templateName = metaData.TemplateName;
 
-            if (SerieTemplates.Count <= templateIndex)
+            if (!SerieTemplates.ContainsKey(templateName))
                 throw new NullTemplateException();
 
-            if (!Experiments.ContainsKey(templateIndex))
+            if (!Experiments.ContainsKey(templateName))
             {
-                Experiments.Add(templateIndex, new List<SerieExperimentMetaData>() { metaData });
+                Experiments.Add(templateName, new List<SerieExperimentMetaData>() { metaData });
                 LastExperimentIndex++;
                 return;
             }
 
-            int experimentIndex = Experiments[templateIndex].IndexOf(metaData);
+            int experimentIndex = Experiments[templateName].IndexOf(metaData);
 
             if (experimentIndex == -1) 
             {
-                Experiments[templateIndex].Add(metaData);
+                Experiments[templateName].Add(metaData);
                 LastExperimentIndex++;
             }
 
             else
-                Experiments[templateIndex][experimentIndex] = metaData;
+                Experiments[templateName][experimentIndex] = metaData;
         }
 
         public string GetExperimentFilePath(string experimentName)

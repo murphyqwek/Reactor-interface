@@ -210,6 +210,7 @@
     <Compile Include="Classes\GoogleAPI\FileData.cs" />
     <Compile Include="Classes\GoogleAPI\Google_data.cs" />
     <Compile Include="Classes\GoogleAPI\Google_service.cs" />
+    <Compile Include="Classes\Message\InfoMessage.cs" />
     <Compile Include="Classes\Message\SuccessMessage.cs" />
     <Compile Include="Classes\Interface_settings.cs" />
     <Compile Include="Classes\Internet_checker.cs" />

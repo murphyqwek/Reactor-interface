@@ -73,7 +73,7 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
             if (!Directory.Exists(Serie.ExperimentPath))
                 return;
 
-            for (int i = 0; i < Serie.SerieTemplates.Count; i++)
+            foreach (var i in Serie.SerieTemplates.Keys)
             {
                 var template = Serie.SerieTemplates[i];
                 string templatePath = Path.Combine(Serie.TemplatesPath, template.GetTemplateFileName());
@@ -81,41 +81,41 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
             }
         }
 
-        private void AddMissingTemplate(string templateName, int index)
+        private void AddMissingTemplate(string templateName, string templateKey)
         {
             var Item = SerieTemplateListView.Items.Add(templateName, 1);
-            Item.Tag = index;
+            Item.Tag = templateKey;
             Item.ToolTipText = MISSINGTIP;
         }
 
-        private void AddChangedTemplate(string templateName, int index)
+        private void AddChangedTemplate(string templateName, string templateKey)
         {
             var Item = SerieTemplateListView.Items.Add(templateName, 0);
-            Item.Tag = index;
+            Item.Tag = templateKey;
             Item.ToolTipText = CHANGEDTIP;
         }
 
-        private void AddTemplate(string templateName, int index)
+        private void AddTemplate(string templateName, string templateKey)
         {
             var Item = SerieTemplateListView.Items.Add(templateName);
-            Item.Tag = index;
+            Item.Tag = templateKey;
         }
 
-        private void AddDamagedTemplate(string templateName, int index)
+        private void AddDamagedTemplate(string templateName, string templateKey)
         {
             var Item = SerieTemplateListView.Items.Add(templateName, 2);
-            Item.Tag = index;
+            Item.Tag = templateKey;
             Item.ToolTipText = DAMAGEDTIP;
         }
 
-        private void UploadTemplateOnListView(SerieTemplate template, int index, string templatePath)
+        private void UploadTemplateOnListView(SerieTemplate template, string templateKey, string templatePath)
         {
             if (template.IsDeleted)
                 return;
 
             if (!File.Exists(templatePath))
             {
-                AddMissingTemplate(template.TemplateName, index);
+                AddMissingTemplate(template.TemplateName, templateKey);
                 return;
             }
 
@@ -123,17 +123,17 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
 
             if (templateOnComp == null) 
             {
-                AddDamagedTemplate(template.TemplateName, index);
+                AddDamagedTemplate(template.TemplateName, templateKey);
                 return;
             }
 
             if(!template.IsExperimentCapabledWithTemplate(templateOnComp))
             {
-                AddChangedTemplate(template.TemplateName, index);
+                AddChangedTemplate(template.TemplateName, templateKey);
                 return;
             }
 
-            AddTemplate(template.TemplateName, index);
+            AddTemplate(template.TemplateName, templateKey);
         }
 
         private void SerieTemplateListView_SelectedIndexChanged(object sender, EventArgs e)
@@ -178,10 +178,10 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
             var Item = SelectedTemplate;
 
             string templateName = Item.Text;
-            int index = Convert.ToInt32(Item.Tag);
+            string templateKey = Item.Tag.ToString();
             string newNameTemplate;
 
-            string templatePath = Path.Combine(Serie.TemplatesPath, Serie.SerieTemplates[index].GetTemplateFileName());
+            string templatePath = Path.Combine(Serie.TemplatesPath, Serie.SerieTemplates[templateKey].GetTemplateFileName());
 
             if (!File.Exists(templatePath))
             {
@@ -227,17 +227,17 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
             if (!confirm)
                 return;
 
-            int templateIndex = Convert.ToInt32(SelectedTemplate.Tag);
+            string templateKey = SelectedTemplate.Tag.ToString();
 
-            SerieSystem.DeleteTemplate(Serie, templateIndex);
+            SerieSystem.DeleteTemplate(Serie, templateKey);
             SelectedTemplate = null;
             UploadTemplates();
         }
 
         private void CreateExperimentBtn_Click(object sender, EventArgs e)
         {
-            int templateIndex = Convert.ToInt32(SelectedTemplate.Tag);
-            ExperimentData newExperiment = CreateExperimentFromTemplate(Serie.SerieTemplates[templateIndex]);
+            string templateKey = SelectedTemplate.Tag.ToString();
+            ExperimentData newExperiment = CreateExperimentFromTemplate(Serie.SerieTemplates[templateKey]);
 
             if(newExperiment  == null)
             {
@@ -247,7 +247,7 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
             }
 
             SerieExperimentMetaData newSerieExperiment;
-            newSerieExperiment.TemplateIndex = templateIndex;
+            newSerieExperiment.TemplateName = templateKey;
             newSerieExperiment.ExperimentName = Serie.Name + "_" + (Serie.GetLastExpIndex() + 1).ToString();
             newExperiment.Rename(newSerieExperiment.ExperimentName);
 
