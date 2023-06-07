@@ -1,6 +1,7 @@
 ﻿using Reactor_Interface.Classes.Experiment;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Security.RightsManagement;
 using System.Text;
@@ -14,6 +15,7 @@ namespace Reactor_Interface.Classes.Templates
     {
         public string firstFieldName;
         public string secondFieldName;
+        public Color color;
 
         public override int GetHashCode()
         {

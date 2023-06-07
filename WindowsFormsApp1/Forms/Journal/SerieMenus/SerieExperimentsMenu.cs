@@ -192,5 +192,10 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
             _returnExperiment(metaData, experiment, true);
             this.Close();
         }
+
+        private void ExcelExportBtn_Click(object sender, EventArgs e)
+        {
+            SerieExcel.CreateSerieExcel(Serie);
+        }
     }
 }

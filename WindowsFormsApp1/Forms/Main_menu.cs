@@ -225,7 +225,7 @@ namespace WindowsFormsApp1
             }
             else if (is_IR_working || is_reactor_working)
             {
-                MessageBox.Show("Нельзя менять порт во время работы термометра");
+                ErrorMessage.Show("Нельзя менять порт во время работы термометра");
             }
             else if (e.ClickedItem.Text == port)
             {
@@ -466,7 +466,7 @@ namespace WindowsFormsApp1
 
             if (ShowMessageStop)
             {
-                MessageBox.Show("Синтез закончен", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                SuccesMessage.Show("Синтез закончен");
             }
         }
 
@@ -527,11 +527,7 @@ namespace WindowsFormsApp1
         private void ShowError(string text)
         {
             if (!graphic_menu.IsDisposed) graphic_menu.setChartVisible(false);
-            MessageBox.Show(
-                    text,
-                    "Ошибка",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+            ErrorMessage.Show(text);
             if (!graphic_menu.IsDisposed) graphic_menu.setChartVisible(true);
         }
 
@@ -750,12 +746,6 @@ namespace WindowsFormsApp1
 
         private void send_experiment_btn_Click(object sender, EventArgs e)
         {
-            //Auth.test();
-            //Internet_checker.IsConnectedToInternet();
-            /*if (Drive.Connect())
-                MessageBox.Show("Успешно!");
-            else
-                MessageBox.Show("Ошибка");*/
             Jounral_menu exp = new Jounral_menu(graphic_menu.GetChart(), this);
             exp.ShowDialog();
         }

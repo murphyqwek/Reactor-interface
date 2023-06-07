@@ -21,8 +21,8 @@ namespace Reactor_Interface.Classes.Serie
         [JsonConstructor]
         public SerieTemplate(Dictionary<string, bool> fields, List<ConnectedFields> connectedFieldsList, string templateName, bool isDeleted = false)
         {
-            Fields = fields;
-            ConnectedFieldsList = connectedFieldsList;
+            Fields = fields ?? new Dictionary<string, bool>();
+            ConnectedFieldsList = connectedFieldsList ?? new List<ConnectedFields>();
             TemplateName = templateName;
             IsDeleted = isDeleted;
         }
@@ -72,27 +72,25 @@ namespace Reactor_Interface.Classes.Serie
                     return false;
             }
 
-            var ExpConFields = experiment.ConnectedFields == null ? new List<ConnectedFields>() : experiment.ConnectedFields;
-            var СonFields = ConnectedFieldsList == null ? new List<ConnectedFields>() : ConnectedFieldsList;
+            var ExpConFields = experiment.ConnectedFields ?? new List<ConnectedFields>();
+            var СonFields = ConnectedFieldsList ?? new List<ConnectedFields>();
 
-            if (experiment.ConnectedFields == null &&
-                ConnectedFieldsList == null)
-                return true;
-
-            if ((experiment.ConnectedFields != null &&
-                ConnectedFieldsList == null) ||
-                (experiment.ConnectedFields == null &&
-                ConnectedFieldsList != null))
+            if (ExpConFields.Count != СonFields.Count)
                 return false;
 
             foreach (var pair in ExpConFields)
             {
+                bool finded = false;
                 foreach(var secondPair in СonFields)
                 {
-                    if(pair.firstFieldName != secondPair.firstFieldName || 
-                        pair.secondFieldName != secondPair.secondFieldName)
-                        return false;
+                    if (pair.Equals(secondPair))
+                    {
+                        finded = true;
+                        break;
+                    }
                 }
+                if (!finded)
+                    return false;
             }
 
             return true;

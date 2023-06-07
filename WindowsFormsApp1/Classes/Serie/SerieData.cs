@@ -42,8 +42,8 @@ namespace Reactor_Interface.Classes.Serie
         [JsonConstructor]
         public SerieData(Dictionary<string, SerieTemplate> serieTemplates, Dictionary<string, List<SerieExperimentMetaData>> experiments, string name, string seriePath, int lastExperimentIndex)
         {
-            SerieTemplates = serieTemplates == null ? new Dictionary<string, SerieTemplate>() : serieTemplates;
-            Experiments = experiments == null ? new Dictionary<string, List<SerieExperimentMetaData>>() : experiments;
+            SerieTemplates = serieTemplates ?? new Dictionary<string, SerieTemplate>();
+            Experiments = experiments ?? new Dictionary<string, List<SerieExperimentMetaData>>();
             Name = name;
             FolderPath = seriePath;
             LastExperimentIndex = lastExperimentIndex;

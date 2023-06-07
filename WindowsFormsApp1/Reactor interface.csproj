@@ -219,6 +219,7 @@
     <Compile Include="Classes\Experiment\TemplateSystem.cs" />
     <Compile Include="Classes\Serie\SerieClassChecker.cs" />
     <Compile Include="Classes\Serie\SerieData.cs" />
+    <Compile Include="Classes\Serie\SerieExcel.cs" />
     <Compile Include="Classes\Serie\SerieSystem.cs" />
     <Compile Include="Classes\Serie\SerieTemplate.cs" />
     <Compile Include="Classes\XRD\XRDParser.cs" />
@@ -300,12 +301,6 @@
     </Compile>
     <Compile Include="Forms\Journal\Status_experiment_menu.Designer.cs">
       <DependentUpon>Status_experiment_menu.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Journal\Template\ConnectionOfFieldsMenu.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Journal\Template\ConnectionOfFieldsMenu.Designer.cs">
-      <DependentUpon>ConnectionOfFieldsMenu.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Journal\Template\Create_template_menu.cs">
       <SubType>Form</SubType>
@@ -389,9 +384,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Journal\Status_experiment_menu.resx">
       <DependentUpon>Status_experiment_menu.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Journal\Template\ConnectionOfFieldsMenu.resx">
-      <DependentUpon>ConnectionOfFieldsMenu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Journal\Template\Create_template_menu.resx">
       <DependentUpon>Create_template_menu.cs</DependentUpon>

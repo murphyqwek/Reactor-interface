@@ -25,13 +25,6 @@ namespace Reactor_Interface.Classes
                                                           + "\\Journal templates\\";
 
         static public readonly string EXTENSION = ".template";
-
-        public enum Save_result {
-            EmptyFiled,
-            EmptyPages,
-            CreationError,
-            Saved
-        }
         
         static private string get_full_path(string name)
         {
@@ -47,7 +40,7 @@ namespace Reactor_Interface.Classes
         {
             foreach(var template in templates)
             {
-                string filename =Path.GetFileName(template);
+                string filename = Path.GetFileName(template);
                 Create_folder();
                 File.Copy(template, templates_folder + filename);
             }
@@ -60,9 +53,9 @@ namespace Reactor_Interface.Classes
             return File.Exists(get_full_path(name));
         }
 
-        static public ExperimentData ChagneExperimentTemplate(TabControl control, ExperimentData modifyingExperiment)
+        static public ExperimentData ChagneExperimentTemplate(TabControl control, ExperimentData modifyingExperiment, List<ConnectedFields> connectedFields)
         {
-            ExperimentData tempExperiment = CreateTemplate(control, modifyingExperiment.Name);
+            ExperimentData tempExperiment = CreateTemplate(control, modifyingExperiment.Name, connectedFields);
             tempExperiment.SetNewApplianceData(modifyingExperiment.ApplianceData);
 
             var Pages = tempExperiment.Pages;
@@ -91,7 +84,7 @@ namespace Reactor_Interface.Classes
             return tempExperiment;
         }
 
-        static public ExperimentData CreateTemplate(TabControl template_control, string ExperimentName)
+        static public ExperimentData CreateTemplate(TabControl template_control, string ExperimentName, List<ConnectedFields> ConnectedFields)
         {
             Dictionary<string, List<FieldData>> pages = new Dictionary<string, List<FieldData>>();
 
@@ -124,16 +117,17 @@ namespace Reactor_Interface.Classes
             if (pages.Count == 0)
                 throw new NullPagesException();
 
-            ExperimentData template = new ExperimentData(ExperimentName, pages);
+            ExperimentData template = new ExperimentData(ExperimentName, pages, connectedFields:ConnectedFields);
             return template;
         }
 
-        static public void Create_template_json(TabControl template_control, string name)
+        static public void Create_template_json(TabControl template_control, string name, List<ConnectedFields> connectedFields)
         {
-            ExperimentData template = CreateTemplate(template_control, "Новый эксперимент");
+            ExperimentData template = CreateTemplate(template_control, "Новый эксперимент", connectedFields);
             string str_template = JsonConvert.SerializeObject(template);
             Write_template_to_file(str_template, name);
         }
+
         static private void Write_template_to_file(string template, string template_name)
         {
             Create_folder();

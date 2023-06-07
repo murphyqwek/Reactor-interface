@@ -48,8 +48,6 @@ namespace Reactor_Interface
         private readonly string diskPreffix = "D_";
         private readonly string computerPreffix = "C_";
 
-        private bool IsToolTipShown = false;
-
         public FileData serie;
         public string numer = "";
 
@@ -137,7 +135,7 @@ namespace Reactor_Interface
             weigher_btn.Text = "Порт весов: ";
             weigher_btn.Text += weigherPort;
 
-            weigherPort = weigherPort == null ? weigherSerialPort.PortName : weigherPort;
+            weigherPort = weigherPort ?? weigherSerialPort.PortName;
             
             weigherSerialPort.PortName = weigherPort;
         }
@@ -521,7 +519,7 @@ namespace Reactor_Interface
                 LoadFrom = computerPreffix + Path.GetDirectoryName(path);
 
                 SetExperimentName(experimentName);
-                _experiment = FormNewExperiment(experimentName, _experiment.ApplianceData);
+                _experiment = FormNewExperiment(experimentName, _experiment.ApplianceData, _experiment.ConnectedFields);
                 ExperimentSystem.SaveExperimentOnComputer(_experiment, path);
                 IsSaved = true;
             }
@@ -548,7 +546,7 @@ namespace Reactor_Interface
                 }
                 else
                 {
-                    _experiment = FormNewExperiment(_experiment.Name, _experiment.ApplianceData);
+                    _experiment = FormNewExperiment(_experiment.Name, _experiment.ApplianceData, _experiment.ConnectedFields);
                     ExperimentSystem.SaveExperimentOnComputer(_experiment, path);
                     IsSaved = true;
                 }
@@ -569,7 +567,7 @@ namespace Reactor_Interface
                     return;
                 }
 
-                _experiment = FormNewExperiment(_experiment.Name, _experiment.ApplianceData);
+                _experiment = FormNewExperiment(_experiment.Name, _experiment.ApplianceData, _experiment.ConnectedFields);
                 ExperimentSystem.SaveExperimentOnDisk(_experiment, path);
             }
         }
@@ -585,9 +583,9 @@ namespace Reactor_Interface
             experiment_btn.Text = "Эксперимент: " + experimentName;
         }
 
-        private ExperimentData FormNewExperiment(string experimentName, Dictionary<string, ApplianceData> appData)
+        private ExperimentData FormNewExperiment(string experimentName, Dictionary<string, ApplianceData> appData, List<ConnectedFields> connectedFields)
         {
-            return ExperimentSystem.FormNewExperiment(data_control, experimentName, comments_txtbx.Text, appData);
+            return ExperimentSystem.FormNewExperiment(data_control, experimentName, comments_txtbx.Text, appData, connectedFields);
         }
 
         private void onTextChanged(object sender, EventArgs e)
@@ -891,7 +889,7 @@ namespace Reactor_Interface
 
             try
             {
-                _experiment = FormNewExperiment(_experiment.Name, _experiment.ApplianceData);
+                _experiment = FormNewExperiment(_experiment.Name, _experiment.ApplianceData, _experiment.ConnectedFields);
                 SerieSystem.AddExperiment(_serie, _experiment, _serieExperimentMetaData);
                 IsSaved = true;
             }

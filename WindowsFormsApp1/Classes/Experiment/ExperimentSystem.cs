@@ -26,25 +26,14 @@ namespace Reactor_Interface.Classes.Experiment
             OnDisk
         }
 
-        public static ExperimentData FormNewExperiment(TabControl dataPages, string experimentName, string comments, SeriesCollection series)
+        public static ExperimentData FormNewExperiment(TabControl dataPages, string experimentName, string comments, Dictionary<string, ApplianceData> applianceDatas, List<ConnectedFields> connectedFields)
         {
-            var experiment = FormNewExperiment(dataPages, experimentName, comments);
-
-            UploadApplianceDataToExperiment(ref experiment, series);
+            var experiment = FormNewExperiment(dataPages, experimentName, comments, connectedFields, applianceDatas);
 
             return experiment;
         }
 
-        public static ExperimentData FormNewExperiment(TabControl dataPages, string experimentName, string comments, Dictionary<string, ApplianceData> applianceDatas)
-        {
-            var experiment = FormNewExperiment(dataPages, experimentName, comments);
-
-            experiment.SetNewApplianceData(applianceDatas);
-
-            return experiment;
-        }
-
-        private static ExperimentData FormNewExperiment(TabControl dataPages, string experimentName, string comments)
+        private static ExperimentData FormNewExperiment(TabControl dataPages, string experimentName, string comments, List<ConnectedFields> connectedFields, Dictionary<string, ApplianceData> applianceDatas)
         {
             Dictionary<string, List<FieldData>> experimentData = new Dictionary<string, List<FieldData>>();
 
@@ -70,7 +59,7 @@ namespace Reactor_Interface.Classes.Experiment
                 experimentData.Add(pageName, fields);
             }
 
-            ExperimentData experiment = new ExperimentData(experimentName, experimentData, null, comments);
+            ExperimentData experiment = new ExperimentData(experimentName, experimentData, applianceDatas, comments, connectedFields);//, comments);
 
             return experiment;
         }
@@ -189,7 +178,7 @@ namespace Reactor_Interface.Classes.Experiment
 
             if (isExperimentDamaged(experiment, experimentPath))
                 return null;
-
+            
             //Interface_settings.set_current_experiment(experimentPath);
             return experiment; 
         }

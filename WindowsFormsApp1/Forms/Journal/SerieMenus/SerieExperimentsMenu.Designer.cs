@@ -122,6 +122,7 @@
             this.ExcelExportBtn.Name = "ExcelExportBtn";
             this.ExcelExportBtn.Size = new System.Drawing.Size(220, 29);
             this.ExcelExportBtn.Text = "Экспортировать в Excel";
+            this.ExcelExportBtn.Click += new System.EventHandler(this.ExcelExportBtn_Click);
             // 
             // OpenExperimentFolderBtn
             // 
