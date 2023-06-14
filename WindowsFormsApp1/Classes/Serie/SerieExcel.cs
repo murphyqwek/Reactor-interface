@@ -3,12 +3,15 @@ using OfficeOpenXml.FormulaParsing.Excel.Functions;
 using OfficeOpenXml.Style;
 using Reactor_Interface.Classes.Experiment;
 using Reactor_Interface.Classes.Templates;
+using Reactor_Interface.Forms;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Reactor_Interface.Classes.Serie
 {
@@ -29,15 +32,61 @@ namespace Reactor_Interface.Classes.Serie
             return true;
         }
 
-        public static void CreateSerieExcel(SerieData serieData)
+        private static string CreateReportFolder(SerieData serieData)
         {
             if (!Directory.Exists(serieData.ReportPath))
                 Directory.CreateDirectory(serieData.ReportPath);
 
+            string path = serieData.ReportPath;
+
+
+            path = Path.Combine(path, DateTime.Today.ToString("dd/MM/yyyy"));
+
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
+            path = Path.Combine(path, DateTime.Now.ToString("HH.mm.ss"));
+
+            if(Directory.Exists(path))
+                Directory.Delete(path, true);
+
+            Directory.CreateDirectory(path);
+
+            return path;
+        }
+
+        private static int GetCountOfExperiment(SerieData serieData)
+        {
+            int countExperiment = 0;
+
+            foreach(var experiments in serieData.Experiments.Values) 
+            {
+                countExperiment += experiments.Count;
+            }
+
+            return countExperiment;
+        }
+
+        public static void CreateSerieExcel(SerieData serieData)
+        {
+            string reportPath = CreateReportFolder(serieData);
+
             if (!checkSerieData(serieData))
+            {
+                Directory.Delete(reportPath);
+                reportPath = Directory.GetParent(reportPath).FullName;
+
+                if (Directory.GetFiles(reportPath).Length == 0)
+                    Directory.Delete(reportPath);
+
                 return;
+            }
 
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+            int step = GetCountOfExperiment(serieData);
+
+            step = step == 0 ? 1 : 100 / step;
 
             using (ExcelPackage serieExcel = new ExcelPackage())
             {
@@ -49,10 +98,20 @@ namespace Reactor_Interface.Classes.Serie
                     AddNewWorkSheetExperiments(serieExcel, serieTemplate, serieExperiments, serieData.ExperimentPath);
                 }
 
-                serieExcel.SaveAs(Path.Combine(serieData.ReportPath, "Тест.xlsx"));
+                serieExcel.SaveAs(Path.Combine(reportPath, serieData.Name + ".xlsx"));
             }
 
-            SuccesMessage.Show("Отчёт создан");
+            OpenReportFolder(reportPath);
+        }
+
+        private static void OpenReportFolder(string reportPath)
+        {
+            var result = MessageBox.Show("Отчёт создан. Хотите открыть папку с отчётом?", "Успешно", MessageBoxButtons.YesNo,
+                                        MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+            if (result != DialogResult.Yes)
+                return;
+
+            Process.Start("explorer", reportPath);
         }
 
         private static void SetupCell(ExcelRange cell, bool autofit)
@@ -117,7 +176,7 @@ namespace Reactor_Interface.Classes.Serie
                     string connectedFieldsText = firstField.Remove(firstField.LastIndexOf('д') - 1);
                     InsertValueAndAutoSizeMergedCells(connectedFieldsText, 1, column, 1, column + 1, serieWorksSheet);
                     SetupCell(serieWorksSheet.Cells[1, column, 1, column + 1], false);
-                    //TODO Сделать это
+
                     var cell = serieWorksSheet.Cells[2, column];
                     cell.Value = "до";
                     SetupCell(cell, true);
@@ -179,11 +238,12 @@ namespace Reactor_Interface.Classes.Serie
                 {
                     int column = templateFieldsCells[field.FieldName];
                     cell = serieWorkSheet.Cells[row, column];
-                    cell.Value = field.FieldValue;
-                    /* TODO
                     if (int.TryParse(field.FieldValue, out int n))
-                        cell.Style.Numberformat.Format = "0";
-                    */
+                        cell.Value = n;
+                    else if(double.TryParse(field.FieldValue, out double d))
+                        cell.Value = d;
+                    else
+                        cell.Value = field.FieldValue;
                     SetupCell(cell, true);
                 }
 

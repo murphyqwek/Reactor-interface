@@ -42,10 +42,13 @@
             this.OpenExperimentBtn = new System.Windows.Forms.Button();
             this.UpdateListViewBtn = new System.Windows.Forms.Button();
             this.UploadTemplateBtn = new System.Windows.Forms.Button();
-            this.uploadtemplatetip = new System.Windows.Forms.ToolTip(this.components);
+            this.uploadTemplateTip = new System.Windows.Forms.ToolTip(this.components);
+            this.TemplateSeireContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.AddNewExperimentBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.TemplateSeireContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -141,6 +144,7 @@
             this.DeleteExperimentBtn.Text = "Удалить эксперимент";
             this.DeleteExperimentBtn.UseVisualStyleBackColor = false;
             this.DeleteExperimentBtn.Visible = false;
+            this.DeleteExperimentBtn.Click += new System.EventHandler(this.DeleteExperimentBtn_Click);
             // 
             // OpenExperimentBtn
             // 
@@ -174,9 +178,25 @@
             this.UploadTemplateBtn.Size = new System.Drawing.Size(121, 65);
             this.UploadTemplateBtn.TabIndex = 5;
             this.UploadTemplateBtn.Text = "Добавить в базу шаблонов";
-            this.uploadtemplatetip.SetToolTip(this.UploadTemplateBtn, "Создать на основе эксперимента шаблон");
+            this.uploadTemplateTip.SetToolTip(this.UploadTemplateBtn, "Создать на основе эксперимента шаблон");
             this.UploadTemplateBtn.UseVisualStyleBackColor = false;
             this.UploadTemplateBtn.Visible = false;
+            this.UploadTemplateBtn.Click += new System.EventHandler(this.UploadTemplateBtn_Click);
+            // 
+            // TemplateSeireContextMenu
+            // 
+            this.TemplateSeireContextMenu.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.TemplateSeireContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.AddNewExperimentBtn});
+            this.TemplateSeireContextMenu.Name = "TemplateSeireContextMenu";
+            this.TemplateSeireContextMenu.Size = new System.Drawing.Size(331, 69);
+            // 
+            // AddNewExperimentBtn
+            // 
+            this.AddNewExperimentBtn.Name = "AddNewExperimentBtn";
+            this.AddNewExperimentBtn.Size = new System.Drawing.Size(330, 32);
+            this.AddNewExperimentBtn.Text = "Добавить новый эксперимент";
+            this.AddNewExperimentBtn.Click += new System.EventHandler(this.AddNewExperimentBtn_Click);
             // 
             // SerieExperimentsMenu
             // 
@@ -199,6 +219,7 @@
             this.groupBox2.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.TemplateSeireContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -218,6 +239,8 @@
         private System.Windows.Forms.Button OpenExperimentBtn;
         private System.Windows.Forms.Button UpdateListViewBtn;
         private System.Windows.Forms.Button UploadTemplateBtn;
-        private System.Windows.Forms.ToolTip uploadtemplatetip;
+        private System.Windows.Forms.ToolTip uploadTemplateTip;
+        private System.Windows.Forms.ContextMenuStrip TemplateSeireContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem AddNewExperimentBtn;
     }
 }

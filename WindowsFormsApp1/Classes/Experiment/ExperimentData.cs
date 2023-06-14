@@ -52,6 +52,24 @@ namespace Reactor_Interface.Classes.Templates
             ConnectedFields = connectedFields;
         }
 
+        public Dictionary<string, List<FieldData>> GetAllClearPages()
+        {
+            Dictionary<string, List<FieldData>> newPages = new Dictionary<string, List<FieldData>>();
+            
+            foreach (var key in Pages.Keys)
+            {
+                List<FieldData> fields = new List<FieldData>();
+                foreach (var field in Pages[key])
+                {
+                    FieldData fieldData = new FieldData(field.FieldName, field.MetaData, "", field.Row, field.Column);
+                    fields.Add(fieldData);
+                }
+                newPages.Add(key, fields);
+            }
+
+            return newPages;
+        }
+
         public List<FieldData> GetAllFields()
         {
             List<FieldData> fields = new List<FieldData>();
@@ -77,6 +95,16 @@ namespace Reactor_Interface.Classes.Templates
         public void Rename(string newExperimentName)
         {
             Name = newExperimentName;
+        }
+
+        public string GetFileName()
+        {
+            return Name + ExperimentSystem.experimentExtension; 
+        }
+
+        public void SetNewComments(string comments)
+        {
+            Comments = comments;
         }
     }
 }

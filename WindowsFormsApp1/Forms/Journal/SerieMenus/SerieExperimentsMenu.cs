@@ -8,7 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Reactor_Interface.Classes;
 using Reactor_Interface.Classes.Experiment;
+using Reactor_Interface.Classes.Message;
 using Reactor_Interface.Classes.Serie;
 using Reactor_Interface.Classes.Templates;
 
@@ -24,7 +26,7 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
 
         Action<SerieExperimentMetaData, ExperimentData, bool> _returnExperiment;
         SerieData Serie;
-
+        string currentExperimnetName;
 
         TreeNode _selectedNode;
         TreeNode SelectedExperiment
@@ -46,11 +48,12 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
             }
         }
 
-        public SerieExperimentsMenu(SerieData serieData, Action<SerieExperimentMetaData, ExperimentData, bool> returnExperimentFunc)
+        public SerieExperimentsMenu(SerieData serieData, Action<SerieExperimentMetaData, ExperimentData, bool> returnExperimentFunc, string CurrentExperimentName)
         {
             InitializeComponent();
             _returnExperiment = returnExperimentFunc;
             Serie = serieData;
+            currentExperimnetName = CurrentExperimentName;
             UpdateSerieTree();
         }
 
@@ -63,16 +66,18 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
 
             foreach(string templateKey in Serie.Experiments.Keys)
             {
-                if (Serie.Experiments[templateKey].Count == 0)
-                    continue;
-
                 string templateName = Serie.SerieTemplates[templateKey].TemplateName;
 
                 TreeNode serieNode = new TreeNode(templateName, 0, 0);
                 serieNode.Tag = templateKey;
                 serieNode.ToolTipText = TEMPLATETIPTEXT;
+                serieNode.ContextMenuStrip = TemplateSeireContextMenu;
 
                 SerieTree.Nodes.Add(serieNode);
+
+                if (Serie.Experiments[templateKey].Count == 0)
+                    continue;
+
                 AddExperimentsToSerieNode(serieNode, Serie.Experiments[templateKey]);
             }
         }
@@ -81,8 +86,11 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
             foreach(var Experiment in serieExperiments)
             {
                 string experimentPath = Path.Combine(Serie.ExperimentPath, Experiment.GetExperimentFileName());
-                if(!File.Exists(experimentPath))
+                if (!File.Exists(experimentPath))
+                {
                     AddMissingExperiment(serieNode, Experiment.ExperimentName);
+                    continue;
+                }
 
                 var expData = ExperimentSystem.UploadExperiment(experimentPath);
 
@@ -195,7 +203,80 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
 
         private void ExcelExportBtn_Click(object sender, EventArgs e)
         {
+            Cursor = Cursors.WaitCursor;
             SerieExcel.CreateSerieExcel(Serie);
+            Cursor = Cursors.Default;
+        }
+
+        private void DeleteExperimentBtn_Click(object sender, EventArgs e)
+        {
+            string templateKey = SelectedExperiment.Parent.Tag as string;
+
+            string experimentName = SelectedExperiment.Text;
+
+            if (!ConfirmMessageBox.Show("Вы точно хотите удалить эксперимент? Восстановить эксперимент после удаления невозможно"))
+                return;
+
+            SerieSystem.DeleteExperiment(Serie, templateKey, experimentName);
+
+            SuccesMessage.Show("Эксперимент был удалён");
+
+            if (experimentName == currentExperimnetName)
+                _returnExperiment(new SerieExperimentMetaData(), null, true);
+
+            SelectedExperiment = null;
+
+            UpdateSerieTree();
+        }
+
+        private void UploadTemplateBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void AddNewExperimentBtn_Click(object sender, EventArgs e)
+        {
+            string TemplateName = SerieTree.SelectedNode.Text;
+
+            if (!ConfirmMessageBox.Show("Вы уверены, что хотите добавить эксперимент в серию " + TemplateName))
+                return;
+
+            string path = ExperimentSystem.GetExperimentPath();
+
+            if (path == null)
+                return;
+
+            var Experiment = ExperimentSystem.UploadExperiment(path);
+
+            if (Experiment == null)
+            {
+                ErrorMessage.Show("Файл эксперимента удалён либо повреждён");
+                return;
+            }
+
+            SerieTemplate Template;
+
+            Serie.SerieTemplates.TryGetValue(TemplateName, out Template);
+
+            if (Template == null) return;
+
+            if (!Template.IsExperimentCapabledWithTemplate(Experiment))
+            {
+                ErrorMessage.Show("Эксперимент не подходит по шаблону");
+                return;
+            }
+
+            try
+            {
+                SerieSystem.AddExistedExperiment(Serie, Experiment, TemplateName);
+                SuccesMessage.Show("Эксперимент был добавлен в серию");
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage.Show("Произошла ошибка:\n" + ex.Message);
+            }
+
+            UpdateSerieTree();
         }
     }
 }

@@ -34,15 +34,20 @@
             this.TemplatesStatusIcons = new System.Windows.Forms.ImageList(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.ButtonsGroupBox = new System.Windows.Forms.GroupBox();
-            this.CreateExperimentBtn = new System.Windows.Forms.Button();
-            this.DeleteTemplateBtn = new System.Windows.Forms.Button();
-            this.UploadNewTemplateBtn = new System.Windows.Forms.Button();
             this.UpdateListTemplatesBtn = new System.Windows.Forms.Button();
+            this.UploadNewTemplateBtn = new System.Windows.Forms.Button();
+            this.DeleteTemplateBtn = new System.Windows.Forms.Button();
+            this.CreateExperimentBtn = new System.Windows.Forms.Button();
             this.SelectedTemplateLabel = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.CreateCopyofTemplateBtn = new System.Windows.Forms.Button();
+            this.TemplateContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.переименоватьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.RenameBtn = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.ButtonsGroupBox.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.TemplateContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // SerieTemplateListView
@@ -95,29 +100,16 @@
             this.ButtonsGroupBox.TabIndex = 2;
             this.ButtonsGroupBox.TabStop = false;
             // 
-            // CreateExperimentBtn
+            // UpdateListTemplatesBtn
             // 
-            this.CreateExperimentBtn.BackColor = System.Drawing.Color.GreenYellow;
-            this.CreateExperimentBtn.Location = new System.Drawing.Point(6, 25);
-            this.CreateExperimentBtn.Name = "CreateExperimentBtn";
-            this.CreateExperimentBtn.Size = new System.Drawing.Size(139, 52);
-            this.CreateExperimentBtn.TabIndex = 0;
-            this.CreateExperimentBtn.Text = "Создать эксперимент";
-            this.CreateExperimentBtn.UseVisualStyleBackColor = false;
-            this.CreateExperimentBtn.Visible = false;
-            this.CreateExperimentBtn.Click += new System.EventHandler(this.CreateExperimentBtn_Click);
-            // 
-            // DeleteTemplateBtn
-            // 
-            this.DeleteTemplateBtn.BackColor = System.Drawing.Color.Tomato;
-            this.DeleteTemplateBtn.Location = new System.Drawing.Point(151, 25);
-            this.DeleteTemplateBtn.Name = "DeleteTemplateBtn";
-            this.DeleteTemplateBtn.Size = new System.Drawing.Size(132, 52);
-            this.DeleteTemplateBtn.TabIndex = 1;
-            this.DeleteTemplateBtn.Text = "Удалить шаблон";
-            this.DeleteTemplateBtn.UseVisualStyleBackColor = false;
-            this.DeleteTemplateBtn.Visible = false;
-            this.DeleteTemplateBtn.Click += new System.EventHandler(this.DeleteTemplateBtn_Click);
+            this.UpdateListTemplatesBtn.BackColor = System.Drawing.SystemColors.Control;
+            this.UpdateListTemplatesBtn.Location = new System.Drawing.Point(151, 104);
+            this.UpdateListTemplatesBtn.Name = "UpdateListTemplatesBtn";
+            this.UpdateListTemplatesBtn.Size = new System.Drawing.Size(132, 52);
+            this.UpdateListTemplatesBtn.TabIndex = 3;
+            this.UpdateListTemplatesBtn.Text = "Обновить список";
+            this.UpdateListTemplatesBtn.UseVisualStyleBackColor = false;
+            this.UpdateListTemplatesBtn.Click += new System.EventHandler(this.UpdateListTemplatesBtn_Click);
             // 
             // UploadNewTemplateBtn
             // 
@@ -131,16 +123,29 @@
             this.UploadNewTemplateBtn.Visible = false;
             this.UploadNewTemplateBtn.Click += new System.EventHandler(this.UploadNewTemplateBtn_Click);
             // 
-            // UpdateListTemplatesBtn
+            // DeleteTemplateBtn
             // 
-            this.UpdateListTemplatesBtn.BackColor = System.Drawing.SystemColors.Control;
-            this.UpdateListTemplatesBtn.Location = new System.Drawing.Point(151, 104);
-            this.UpdateListTemplatesBtn.Name = "UpdateListTemplatesBtn";
-            this.UpdateListTemplatesBtn.Size = new System.Drawing.Size(132, 52);
-            this.UpdateListTemplatesBtn.TabIndex = 3;
-            this.UpdateListTemplatesBtn.Text = "Обновить список";
-            this.UpdateListTemplatesBtn.UseVisualStyleBackColor = false;
-            this.UpdateListTemplatesBtn.Click += new System.EventHandler(this.UpdateListTemplatesBtn_Click);
+            this.DeleteTemplateBtn.BackColor = System.Drawing.Color.Tomato;
+            this.DeleteTemplateBtn.Location = new System.Drawing.Point(151, 25);
+            this.DeleteTemplateBtn.Name = "DeleteTemplateBtn";
+            this.DeleteTemplateBtn.Size = new System.Drawing.Size(132, 52);
+            this.DeleteTemplateBtn.TabIndex = 1;
+            this.DeleteTemplateBtn.Text = "Удалить шаблон";
+            this.DeleteTemplateBtn.UseVisualStyleBackColor = false;
+            this.DeleteTemplateBtn.Visible = false;
+            this.DeleteTemplateBtn.Click += new System.EventHandler(this.DeleteTemplateBtn_Click);
+            // 
+            // CreateExperimentBtn
+            // 
+            this.CreateExperimentBtn.BackColor = System.Drawing.Color.GreenYellow;
+            this.CreateExperimentBtn.Location = new System.Drawing.Point(6, 25);
+            this.CreateExperimentBtn.Name = "CreateExperimentBtn";
+            this.CreateExperimentBtn.Size = new System.Drawing.Size(139, 52);
+            this.CreateExperimentBtn.TabIndex = 0;
+            this.CreateExperimentBtn.Text = "Создать эксперимент";
+            this.CreateExperimentBtn.UseVisualStyleBackColor = false;
+            this.CreateExperimentBtn.Visible = false;
+            this.CreateExperimentBtn.Click += new System.EventHandler(this.CreateExperimentBtn_Click);
             // 
             // SelectedTemplateLabel
             // 
@@ -163,11 +168,51 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Выбранный шаблон";
             // 
+            // CreateCopyofTemplateBtn
+            // 
+            this.CreateCopyofTemplateBtn.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.CreateCopyofTemplateBtn.Location = new System.Drawing.Point(422, 126);
+            this.CreateCopyofTemplateBtn.Name = "CreateCopyofTemplateBtn";
+            this.CreateCopyofTemplateBtn.Size = new System.Drawing.Size(139, 52);
+            this.CreateCopyofTemplateBtn.TabIndex = 4;
+            this.CreateCopyofTemplateBtn.Text = "Сделать копию шаблона";
+            this.CreateCopyofTemplateBtn.UseVisualStyleBackColor = false;
+            this.CreateCopyofTemplateBtn.Visible = false;
+            this.CreateCopyofTemplateBtn.Click += new System.EventHandler(this.CreateCopyofTemplateBtn_Click);
+            // 
+            // TemplateContextMenu
+            // 
+            this.TemplateContextMenu.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.TemplateContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.переименоватьToolStripMenuItem});
+            this.TemplateContextMenu.Name = "TemplateContextMenu";
+            this.TemplateContextMenu.Size = new System.Drawing.Size(215, 36);
+            // 
+            // переименоватьToolStripMenuItem
+            // 
+            this.переименоватьToolStripMenuItem.Name = "переименоватьToolStripMenuItem";
+            this.переименоватьToolStripMenuItem.Size = new System.Drawing.Size(214, 32);
+            this.переименоватьToolStripMenuItem.Text = "Переименовать";
+            // 
+            // RenameBtn
+            // 
+            this.RenameBtn.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.RenameBtn.Location = new System.Drawing.Point(567, 126);
+            this.RenameBtn.Name = "RenameBtn";
+            this.RenameBtn.Size = new System.Drawing.Size(139, 52);
+            this.RenameBtn.TabIndex = 6;
+            this.RenameBtn.Text = "Переименовать";
+            this.RenameBtn.UseVisualStyleBackColor = false;
+            this.RenameBtn.Visible = false;
+            this.RenameBtn.Click += new System.EventHandler(this.RenameBtn_Click);
+            // 
             // CreateNewSerieExperiment
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(717, 383);
+            this.Controls.Add(this.RenameBtn);
+            this.Controls.Add(this.CreateCopyofTemplateBtn);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.ButtonsGroupBox);
             this.Controls.Add(this.groupBox1);
@@ -178,6 +223,7 @@
             this.ButtonsGroupBox.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.TemplateContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -194,5 +240,9 @@
         private System.Windows.Forms.Button CreateExperimentBtn;
         private System.Windows.Forms.Label SelectedTemplateLabel;
         private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Button CreateCopyofTemplateBtn;
+        private System.Windows.Forms.ContextMenuStrip TemplateContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem переименоватьToolStripMenuItem;
+        private System.Windows.Forms.Button RenameBtn;
     }
 }

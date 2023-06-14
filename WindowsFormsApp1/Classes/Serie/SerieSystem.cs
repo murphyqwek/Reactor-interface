@@ -329,6 +329,20 @@ namespace Reactor_Interface.Classes.Serie
             SaveSerieJSON(serie);
         }
 
+        public static void AddExistedExperiment(SerieData serie, ExperimentData experiment, string templateName)
+        {
+            string experimentName = serie.Name + "_" + (serie.GetLastExpIndex() + 1).ToString();
+            experiment.Rename(experimentName);
+
+            SerieExperimentMetaData serieExperimentMetaData = new SerieExperimentMetaData()
+            {
+                ExperimentName = experimentName,
+                TemplateName = templateName
+            };
+
+            AddExperiment(serie, experiment, serieExperimentMetaData);
+        }
+
         public static void AddExperiment(SerieData serie, ExperimentData experiment, SerieExperimentMetaData experimentMetaData)
         {
             if(!Directory.Exists(serie.ExperimentPath))
@@ -385,5 +399,95 @@ namespace Reactor_Interface.Classes.Serie
 
             return experiment;
         }
+
+        public static void DeleteExperiment(SerieData serie, string templateKey, string experimentName)
+        {
+            if (!serie.Experiments.ContainsKey(templateKey))
+                return;
+
+            int experimentsCount = serie.Experiments[templateKey].Count;
+
+            bool deleted = false;
+
+            for (int i = 0; i < experimentsCount; i++)
+            {
+                var experiment = serie.Experiments[templateKey][i];
+                if(experiment.ExperimentName == experimentName)
+                {
+                    File.Delete(Path.Combine(serie.ExperimentPath, experiment.GetExperimentFileName()));
+                    serie.Experiments[templateKey].RemoveAt(i);
+
+                    int experimentNumer = experiment.GetExperimentNumer();
+
+                    if (serie.LastExperimentIndex == experimentNumer)
+                        serie.DecrementLastExperimentIndex();
+
+                    deleted = true;
+                    break;
+                }
+            }
+
+            if (deleted)
+                SaveSerieJSON(serie);
+        }
+
+        public static bool RenameTemplate(SerieData serie, string oldName) 
+        {
+            string newName;
+
+            using(InputFormMenu inputForm = new InputFormMenu("Переименование шаблона", "Введите новое название шаблона", oldName))
+            {
+                if (inputForm.ShowDialog() != DialogResult.OK)
+                    return false;
+
+                newName = inputForm.OutputValue.Trim();
+            }
+
+            string newPath = Path.Combine(serie.TemplatesPath, newName + TemplateSystem.EXTENSION);
+            string oldPath = Path.Combine(serie.TemplatesPath, oldName + TemplateSystem.EXTENSION);
+
+
+            if(newName == oldName)
+            {
+                ErrorMessage.Show("Новое название совпадает со старым");
+                return false;
+            }
+
+            if (!File.Exists(oldPath))
+            {
+                ErrorMessage.Show("Файл шаблона был удалён или перемешён");
+                return true;
+            }
+
+            if(File.Exists(newPath) || serie.Experiments.ContainsKey(newName))
+            {
+                ErrorMessage.Show("Шаблон с таким названием уже существует. Выберите другое");
+                return false;
+            }
+
+
+            File.Move(oldPath, newPath);
+
+            var template = serie.SerieTemplates[oldName];
+            template.SetTemplateName(newName);
+            serie.SerieTemplates.Remove(oldName);
+            serie.SerieTemplates.Add(newName, template);
+
+            var experiments = serie.Experiments[oldName];
+
+            for(int i = 0; i < experiments.Count; i++)
+            {
+                var experiment = experiments[i];
+                experiment.TemplateName = newName;
+                experiments[i] = experiment;
+            }
+
+            serie.Experiments.Remove(oldName);
+            serie.Experiments.Add(newName, experiments);
+            SaveSerieJSON(serie);
+
+            return true;
+        }
+
     }
 }

@@ -55,8 +55,9 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
             else
             {
                 //_journal.CreateNewSerie(template, templatePath);
-                _returnTemplateFunc(template, templatePath);
+                this.Hide();
                 this.Close();
+                _returnTemplateFunc(template, templatePath);
             }
         }
 

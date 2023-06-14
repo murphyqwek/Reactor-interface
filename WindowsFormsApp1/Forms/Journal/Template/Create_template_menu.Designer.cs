@@ -40,8 +40,8 @@
             this.unselect_weigh_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.ConnectFieldsBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.CancelConnectionBtn = new System.Windows.Forms.ToolStripMenuItem();
-            this.PairColorPallete = new System.Windows.Forms.ColorDialog();
             this.renameConnectedFieldsBtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.PairColorPallete = new System.Windows.Forms.ColorDialog();
             this.menuStrip1.SuspendLayout();
             this.template_control.SuspendLayout();
             this.context_menu.SuspendLayout();
@@ -56,7 +56,7 @@
             this.rename_page_menu_btn});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(802, 38);
+            this.menuStrip1.Size = new System.Drawing.Size(802, 36);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -64,7 +64,7 @@
             // 
             this.save_menu_btn.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.save_menu_btn.Name = "save_menu_btn";
-            this.save_menu_btn.Size = new System.Drawing.Size(203, 34);
+            this.save_menu_btn.Size = new System.Drawing.Size(203, 32);
             this.save_menu_btn.Text = "Сохранить шаблон";
             this.save_menu_btn.Click += new System.EventHandler(this.save_menu_btn_Click);
             // 
@@ -72,7 +72,7 @@
             // 
             this.rename_page_menu_btn.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.rename_page_menu_btn.Name = "rename_page_menu_btn";
-            this.rename_page_menu_btn.Size = new System.Drawing.Size(263, 34);
+            this.rename_page_menu_btn.Size = new System.Drawing.Size(263, 32);
             this.rename_page_menu_btn.Text = "Переименовать страницу";
             this.rename_page_menu_btn.Click += new System.EventHandler(this.rename_page_menu_btn_Click);
             // 
@@ -120,7 +120,7 @@
             // 
             this.unselect_weigh_btn.Name = "unselect_weigh_btn";
             this.unselect_weigh_btn.Size = new System.Drawing.Size(299, 32);
-            this.unselect_weigh_btn.Text = "Отвзяать ячейку от массы";
+            this.unselect_weigh_btn.Text = "Отвзяать ячейку от весов";
             this.unselect_weigh_btn.Click += new System.EventHandler(this.unselect_weigh_btn_Click);
             // 
             // ConnectFieldsBtn

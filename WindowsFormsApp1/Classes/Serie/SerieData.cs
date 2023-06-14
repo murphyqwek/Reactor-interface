@@ -21,6 +21,11 @@ namespace Reactor_Interface.Classes.Serie
         {
             return ExperimentName + ExperimentSystem.experimentExtension;
         }
+
+        public int GetExperimentNumer()
+        {
+            return Convert.ToInt32(ExperimentName.Split('_').Last());
+        }
     }
 
     public class SerieData
@@ -52,14 +57,16 @@ namespace Reactor_Interface.Classes.Serie
         public SerieData(ExperimentData template, string templatePath, string name, string folderPath)
         {
             SerieTemplate serieTemplate = new SerieTemplate(template.GetAllFields(), template.ConnectedFields, templatePath);
-            SerieTemplates = new Dictionary<string, SerieTemplate>()
+            SerieTemplates = new Dictionary<string, SerieTemplate>();
+            /*
             {
                 { serieTemplate.TemplateName, serieTemplate },
-            };
+            };*/
             Experiments = new Dictionary<string, List<SerieExperimentMetaData>>();
             Name = name;
             FolderPath = folderPath;
             LastExperimentIndex = 0;
+            AddNewTemplate(template, templatePath);
         }
 
         public string GetSerieFileName()
@@ -80,6 +87,7 @@ namespace Reactor_Interface.Classes.Serie
         {
             var serieTemplate = new SerieTemplate(template.GetAllFields(), template.ConnectedFields, templatePath);
             SerieTemplates.Add(serieTemplate.TemplateName, serieTemplate);
+            Experiments.Add(serieTemplate.TemplateName, new List<SerieExperimentMetaData>());
         }
 
         public int GetLastExpIndex()
@@ -117,6 +125,11 @@ namespace Reactor_Interface.Classes.Serie
         {
             experimentName = experimentName.EndsWith(ExperimentSystem.experimentExtension) ? experimentName : experimentName + ExperimentSystem.experimentExtension;
             return Path.Combine(ExperimentPath, experimentName);
+        }
+
+        public void DecrementLastExperimentIndex()
+        {
+            LastExperimentIndex--;
         }
     }
 }

@@ -142,6 +142,9 @@ namespace Reactor_Interface.Forms.Template
 
                         var textBox = add_created_textbox(column, row, template, box_type, field_name, page);
 
+                        if (textBoxes.ContainsKey(textBox.Text))
+                            textBox.Text += "1";
+
                         textBoxes.Add(textBox.Text, textBox);
                     }
                 }
@@ -367,7 +370,7 @@ namespace Reactor_Interface.Forms.Template
         {
             try
             {
-                ExperimentData changedExperiment = TemplateSystem.ChagneExperimentTemplate(template_control, _experiment, getConnectedFields());
+                ExperimentData changedExperiment = TemplateSystem.ChagneExperimentTemplate(template_control, _experiment, getConnectedFields(), _experiment.Comments);
                 _journal.UploadChangedExperiment(changedExperiment);
             }
             catch (Exception ex)
@@ -528,7 +531,7 @@ namespace Reactor_Interface.Forms.Template
                 return;
 
             textbox.BackColor = Color.White;
-            textbox.Tag = textbox.Tag.ToString().Replace(";" + weigherTag, "");
+            textbox.Tag = "";
         }
 
         public void add_delete_buttons(TabPage page)
@@ -600,7 +603,7 @@ namespace Reactor_Interface.Forms.Template
             else
             {
                 textBox.BackColor = connectingColor;
-                string textboxText = getTextFromConnectedFields(textBox);
+                string textboxText = getTextFromConnectedFields(connectingTextBox);
                 textBox.Text = textboxText + " после";
                 textBox.ReadOnly = true;
                 ConnectedFieldsTextBox conFields = new ConnectedFieldsTextBox();

@@ -53,10 +53,11 @@ namespace Reactor_Interface.Classes
             return File.Exists(get_full_path(name));
         }
 
-        static public ExperimentData ChagneExperimentTemplate(TabControl control, ExperimentData modifyingExperiment, List<ConnectedFields> connectedFields)
+        static public ExperimentData ChagneExperimentTemplate(TabControl control, ExperimentData modifyingExperiment, List<ConnectedFields> connectedFields, string comments)
         {
             ExperimentData tempExperiment = CreateTemplate(control, modifyingExperiment.Name, connectedFields);
             tempExperiment.SetNewApplianceData(modifyingExperiment.ApplianceData);
+            tempExperiment.SetNewComments(comments);
 
             var Pages = tempExperiment.Pages;
 
@@ -128,13 +129,20 @@ namespace Reactor_Interface.Classes
             Write_template_to_file(str_template, name);
         }
 
-        static private void Write_template_to_file(string template, string template_name)
+        static public void CreateTemplateBasedOnExperiment(ExperimentData experiment, string newName)
+        { 
+            ExperimentData template = new ExperimentData("Новый эксперимент", experiment.GetAllClearPages(), connectedFields: experiment.ConnectedFields);
+            string SerializedTemplate = JsonConvert.SerializeObject(template);
+            Write_template_to_file(SerializedTemplate, newName);
+        }
+
+        static private void Write_template_to_file(string SerialaizedTemplate, string template_name)
         {
             Create_folder();
             using (FileStream fstream = new FileStream(get_full_path(template_name), FileMode.Create))
             {
                 // преобразуем строку в байты
-                byte[] buffer = Encoding.Default.GetBytes(template);
+                byte[] buffer = Encoding.Default.GetBytes(SerialaizedTemplate);
                 // запись массива байтов в файл
                 fstream.Write(buffer, 0, buffer.Length);
             }

@@ -33,6 +33,7 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.experiment_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.CreateNewExperimentBtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.CreateTemplateBasedOnExperimentBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.renameExperimentBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.UploadExperimentBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.UploadExperimentComputerBtn = new System.Windows.Forms.ToolStripMenuItem();
@@ -62,6 +63,9 @@
             this.SaveOnComp_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.googleDriveToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.weigher_btn = new System.Windows.Forms.ToolStripMenuItem();
+            this.ConnectToMeBtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.sendErrorBtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.reviewBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.data_groupbox = new System.Windows.Forms.GroupBox();
             this.data_control = new System.Windows.Forms.TabControl();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
@@ -86,7 +90,8 @@
             this.SerieBtn,
             this.облачноеХранилищеToolStripMenuItem,
             this.save_menubtn,
-            this.weigher_btn});
+            this.weigher_btn,
+            this.ConnectToMeBtn});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1304, 36);
@@ -97,6 +102,7 @@
             // 
             this.experiment_btn.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.CreateNewExperimentBtn,
+            this.CreateTemplateBasedOnExperimentBtn,
             this.renameExperimentBtn,
             this.UploadExperimentBtn,
             this.SaveExperimentBtn,
@@ -112,14 +118,21 @@
             // CreateNewExperimentBtn
             // 
             this.CreateNewExperimentBtn.Name = "CreateNewExperimentBtn";
-            this.CreateNewExperimentBtn.Size = new System.Drawing.Size(497, 36);
+            this.CreateNewExperimentBtn.Size = new System.Drawing.Size(519, 36);
             this.CreateNewExperimentBtn.Text = "Создать новый эксперимент";
             this.CreateNewExperimentBtn.Click += new System.EventHandler(this.CreateNewExperimentBtn_Click);
+            // 
+            // CreateTemplateBasedOnExperimentBtn
+            // 
+            this.CreateTemplateBasedOnExperimentBtn.Name = "CreateTemplateBasedOnExperimentBtn";
+            this.CreateTemplateBasedOnExperimentBtn.Size = new System.Drawing.Size(519, 36);
+            this.CreateTemplateBasedOnExperimentBtn.Text = "Создать шаблон по текущему эксперименту";
+            this.CreateTemplateBasedOnExperimentBtn.Click += new System.EventHandler(this.CreateTemplateBasedOnExperimentBtn_Click);
             // 
             // renameExperimentBtn
             // 
             this.renameExperimentBtn.Name = "renameExperimentBtn";
-            this.renameExperimentBtn.Size = new System.Drawing.Size(497, 36);
+            this.renameExperimentBtn.Size = new System.Drawing.Size(519, 36);
             this.renameExperimentBtn.Text = "Переименовать";
             this.renameExperimentBtn.Visible = false;
             this.renameExperimentBtn.Click += new System.EventHandler(this.renameExperimentBtn_Click);
@@ -130,7 +143,7 @@
             this.UploadExperimentComputerBtn,
             this.сОблачногоХранилищаToolStripMenuItem});
             this.UploadExperimentBtn.Name = "UploadExperimentBtn";
-            this.UploadExperimentBtn.Size = new System.Drawing.Size(497, 36);
+            this.UploadExperimentBtn.Size = new System.Drawing.Size(519, 36);
             this.UploadExperimentBtn.Text = "Загрузить эксперимент";
             // 
             // UploadExperimentComputerBtn
@@ -153,7 +166,7 @@
             this.SaveOnComputerBtn,
             this.SaveOnDriveBtn});
             this.SaveExperimentBtn.Name = "SaveExperimentBtn";
-            this.SaveExperimentBtn.Size = new System.Drawing.Size(497, 36);
+            this.SaveExperimentBtn.Size = new System.Drawing.Size(519, 36);
             this.SaveExperimentBtn.Text = "Сохранить эксперимент";
             this.SaveExperimentBtn.Visible = false;
             this.SaveExperimentBtn.Click += new System.EventHandler(this.SaveExperimentBtn_Click);
@@ -180,7 +193,7 @@
             this.ClearGraphBtn,
             this.SeeGraphBtn});
             this.DataExperimentBtn.Name = "DataExperimentBtn";
-            this.DataExperimentBtn.Size = new System.Drawing.Size(497, 36);
+            this.DataExperimentBtn.Size = new System.Drawing.Size(519, 36);
             this.DataExperimentBtn.Text = "Данные с оборудования";
             this.DataExperimentBtn.Visible = false;
             this.DataExperimentBtn.DropDownOpening += new System.EventHandler(this.DataExperimentBtn_DropDownOpening);
@@ -216,14 +229,14 @@
             // changeExperimentTemplatebtn
             // 
             this.changeExperimentTemplatebtn.Name = "changeExperimentTemplatebtn";
-            this.changeExperimentTemplatebtn.Size = new System.Drawing.Size(497, 36);
+            this.changeExperimentTemplatebtn.Size = new System.Drawing.Size(519, 36);
             this.changeExperimentTemplatebtn.Text = "Изменить шаблон данного эксперимента";
             this.changeExperimentTemplatebtn.Click += new System.EventHandler(this.changeExperimentTemplatebtn_Click);
             // 
             // SaveSerieExperimentBtn
             // 
             this.SaveSerieExperimentBtn.Name = "SaveSerieExperimentBtn";
-            this.SaveSerieExperimentBtn.Size = new System.Drawing.Size(497, 36);
+            this.SaveSerieExperimentBtn.Size = new System.Drawing.Size(519, 36);
             this.SaveSerieExperimentBtn.Text = "Сохранить эксперимент";
             this.SaveSerieExperimentBtn.Visible = false;
             this.SaveSerieExperimentBtn.Click += new System.EventHandler(this.SaveSerieExperimentBtn_Click);
@@ -309,6 +322,7 @@
             this.облачноеХранилищеToolStripMenuItem.Name = "облачноеХранилищеToolStripMenuItem";
             this.облачноеХранилищеToolStripMenuItem.Size = new System.Drawing.Size(230, 32);
             this.облачноеХранилищеToolStripMenuItem.Text = "Облачное хранилище";
+            this.облачноеХранилищеToolStripMenuItem.Visible = false;
             // 
             // googleDriveToolStripMenuItem
             // 
@@ -348,6 +362,7 @@
             this.googleDriveToolStripMenuItem1.Name = "googleDriveToolStripMenuItem1";
             this.googleDriveToolStripMenuItem1.Size = new System.Drawing.Size(230, 36);
             this.googleDriveToolStripMenuItem1.Text = "Google Drive";
+            this.googleDriveToolStripMenuItem1.Visible = false;
             this.googleDriveToolStripMenuItem1.Click += new System.EventHandler(this.save_to_drive_btn_Click);
             // 
             // weigher_btn
@@ -359,13 +374,37 @@
             this.weigher_btn.DropDownOpening += new System.EventHandler(this.weigher_btn_DropDownOpening);
             this.weigher_btn.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.weigher_btn_DropDownItemClicked);
             // 
+            // ConnectToMeBtn
+            // 
+            this.ConnectToMeBtn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.ConnectToMeBtn.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sendErrorBtn,
+            this.reviewBtn});
+            this.ConnectToMeBtn.Name = "ConnectToMeBtn";
+            this.ConnectToMeBtn.Size = new System.Drawing.Size(222, 32);
+            this.ConnectToMeBtn.Text = "Связь с разработчиком";
+            // 
+            // sendErrorBtn
+            // 
+            this.sendErrorBtn.Name = "sendErrorBtn";
+            this.sendErrorBtn.Size = new System.Drawing.Size(354, 34);
+            this.sendErrorBtn.Text = "Описать проблему";
+            this.sendErrorBtn.Click += new System.EventHandler(this.sendErrorBtn_Click);
+            // 
+            // reviewBtn
+            // 
+            this.reviewBtn.Name = "reviewBtn";
+            this.reviewBtn.Size = new System.Drawing.Size(354, 34);
+            this.reviewBtn.Text = "Дать рецензию на интерфейс";
+            this.reviewBtn.Click += new System.EventHandler(this.reviewBtn_Click);
+            // 
             // data_groupbox
             // 
             this.data_groupbox.Controls.Add(this.data_control);
             this.data_groupbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.data_groupbox.Location = new System.Drawing.Point(12, 39);
             this.data_groupbox.Name = "data_groupbox";
-            this.data_groupbox.Size = new System.Drawing.Size(734, 458);
+            this.data_groupbox.Size = new System.Drawing.Size(816, 458);
             this.data_groupbox.TabIndex = 1;
             this.data_groupbox.TabStop = false;
             this.data_groupbox.Text = "Данные эксперимента";
@@ -376,7 +415,7 @@
             this.data_control.Location = new System.Drawing.Point(3, 26);
             this.data_control.Name = "data_control";
             this.data_control.SelectedIndex = 0;
-            this.data_control.Size = new System.Drawing.Size(728, 429);
+            this.data_control.Size = new System.Drawing.Size(810, 429);
             this.data_control.TabIndex = 0;
             // 
             // richTextBox1
@@ -440,6 +479,7 @@
             this.clear_btn.TabIndex = 18;
             this.clear_btn.Text = "Очистить эксперимент";
             this.clear_btn.UseVisualStyleBackColor = true;
+            this.clear_btn.Click += new System.EventHandler(this.clear_btn_Click);
             // 
             // context_menu
             // 
@@ -447,7 +487,7 @@
             this.context_menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.weigh_btn});
             this.context_menu.Name = "context_menu";
-            this.context_menu.Size = new System.Drawing.Size(286, 36);
+            this.context_menu.Size = new System.Drawing.Size(286, 69);
             // 
             // weigh_btn
             // 
@@ -470,12 +510,14 @@
             this.Controls.Add(this.data_groupbox);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Jounral_menu";
             this.Text = "Журнал";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Jounral_menu_FormClosing);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Jounral_menu_KeyDown);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.data_groupbox.ResumeLayout(false);
@@ -529,5 +571,9 @@
         private System.Windows.Forms.ToolStripMenuItem CreateExperimentSerieBtn;
         private System.Windows.Forms.ToolStripMenuItem ShowSerieExperimentsBtn;
         private System.Windows.Forms.ToolStripMenuItem SaveSerieExperimentBtn;
+        private System.Windows.Forms.ToolStripMenuItem CreateTemplateBasedOnExperimentBtn;
+        private System.Windows.Forms.ToolStripMenuItem ConnectToMeBtn;
+        private System.Windows.Forms.ToolStripMenuItem sendErrorBtn;
+        private System.Windows.Forms.ToolStripMenuItem reviewBtn;
     }
 }

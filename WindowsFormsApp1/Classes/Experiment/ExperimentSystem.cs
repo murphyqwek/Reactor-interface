@@ -112,7 +112,7 @@ namespace Reactor_Interface.Classes.Experiment
         {
             string experimentSerialized = JsonConvert.SerializeObject(experiment);
 
-            if (!filePath.EndsWith(experimentExtension))
+            if (!filePath.EndsWith(experimentExtension) && !filePath.EndsWith(TemplateSystem.EXTENSION))
                 filePath = Path.Combine(filePath, experiment.Name + experimentExtension);
 
             using (FileStream fstream = new FileStream(filePath, FileMode.Create))
@@ -244,6 +244,20 @@ namespace Reactor_Interface.Classes.Experiment
         private static string RenameExperimentOnDisk(string name, string newExperimentName, string path)
         {
             throw new NotImplementedException();
+        }
+
+        public static string GetExperimentPath()
+        {
+            using (FileDialog fileDialog = new OpenFileDialog())
+            {
+                fileDialog.Title = "Выберите эксперимент";
+                fileDialog.Filter = string.Format("Experiment (*{0})|*{0}", ExperimentSystem.experimentExtension);
+
+                if (fileDialog.ShowDialog() != DialogResult.OK)
+                    return null;
+
+                return fileDialog.FileName;
+            }
         }
 
         public static string RenameExperiment(ExperimentData experiment, string newExperimentName, string path, ExperimentStorePlace place)

@@ -26,6 +26,7 @@ namespace Reactor_Interface.Forms.Experiment
         private string[] templates_array = new string[0];
 
         private Jounral_menu jounral_menu;
+
         public Template_menu(Jounral_menu jounral_menu)
         {
             InitializeComponent();
@@ -33,6 +34,7 @@ namespace Reactor_Interface.Forms.Experiment
             template_view.Columns[0].Width = template_view.Width;
             this.jounral_menu = jounral_menu;
         }
+
         public void Load_templates(string selected_template = "")
         {
             templates_array = TemplateSystem.GetTemplatesArray();

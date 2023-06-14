@@ -39,6 +39,8 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
                     CreateExperimentBtn.Visible = false;
                     DeleteTemplateBtn.Visible = false;
                     UploadNewTemplateBtn.Visible = false;
+                    CreateCopyofTemplateBtn.Visible = false;
+                    RenameBtn.Visible = false;
                 }
 
                 _selectedItem = value;
@@ -63,10 +65,10 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
                                 MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 return;
             }
-            UploadTemplates();
+            UpdateTemplateList();
         }
 
-        private void UploadTemplates()
+        private void UpdateTemplateList()
         {
             SerieTemplateListView.Items.Clear();
 
@@ -141,6 +143,8 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
             CreateExperimentBtn.Visible = false;
             DeleteTemplateBtn.Visible = false;
             UploadNewTemplateBtn.Visible = false;
+            CreateCopyofTemplateBtn.Visible = false;
+            RenameBtn.Visible = false;
 
             if (SerieTemplateListView.SelectedItems.Count == 0)
             {
@@ -162,6 +166,8 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
                     break;
                 case -1:
                     CreateExperimentBtn.Visible = true;
+                    RenameBtn.Visible = true;
+                    CreateCopyofTemplateBtn.Visible = true;
                     break;
             }
         }
@@ -169,7 +175,7 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
         private void UpdateListTemplatesBtn_Click(object sender, EventArgs e)
         {
             this.Cursor = Cursors.WaitCursor;
-            UploadTemplates();
+            UpdateTemplateList();
             this.Cursor = Cursors.Default;
         }
 
@@ -186,7 +192,7 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
             if (!File.Exists(templatePath))
             {
                 ErrorMessage.Show("Шаблона был удалён");
-                UploadTemplates();
+                UpdateTemplateList();
                 return;
             }
 
@@ -217,7 +223,7 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
             var uploadingTemplate = ExperimentSystem.UploadExperiment(templatePath);
 
             SerieSystem.AddNewTemplateToSerie(Serie, uploadingTemplate, templatePath, newNameTemplate);
-            UploadTemplates();
+            UpdateTemplateList();
         }
 
         private void DeleteTemplateBtn_Click(object sender, EventArgs e)
@@ -231,7 +237,7 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
 
             SerieSystem.DeleteTemplate(Serie, templateKey);
             SelectedTemplate = null;
-            UploadTemplates();
+            UpdateTemplateList();
         }
 
         private void CreateExperimentBtn_Click(object sender, EventArgs e)
@@ -242,7 +248,7 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
             if(newExperiment  == null)
             {
                 ErrorMessage.Show("Не удалось создать эксперимент");
-                UploadTemplates();
+                UpdateTemplateList();
                 return;
             }
 
@@ -262,6 +268,68 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
                 return null;
 
             return ExperimentSystem.UploadExperiment(templatePath);
+        }
+
+        private void CreateCopyofTemplateBtn_Click(object sender, EventArgs e)
+        {
+            string templateName = SelectedTemplate.Text;
+            string templatePath = Path.Combine(Serie.TemplatesPath, Serie.SerieTemplates[templateName].GetTemplateFileName());
+            
+            if (!File.Exists(templatePath))
+            {
+                ErrorMessage.Show("Файл шаблона не найден");
+                UpdateTemplateList();
+                return;
+            }
+
+            string newName;
+            using (InputFormMenu inputForm = new InputFormMenu("Создание копии шаблона", "Введите новое название шаблона", templateName))
+            {
+                if (inputForm.ShowDialog() != DialogResult.OK)
+                    return;
+
+                newName = inputForm.OutputValue.Trim();
+            }
+
+            if (string.IsNullOrEmpty(newName))
+            {
+                ErrorMessage.Show("Пустое название");
+                return;
+            }
+
+            if(templateName == newName)
+            {
+                ErrorMessage.Show("Название копии совпадает с названием оригинала");
+                return;
+            }
+
+            if(Serie.SerieTemplates.ContainsKey(newName) ||
+                Serie.Experiments.ContainsKey(newName)) 
+            {
+                ErrorMessage.Show("Шаблон с таким же именем уже существует");
+                return;
+            }
+
+            var newTamplate = ExperimentSystem.UploadExperiment(templatePath);
+
+            newTamplate.Rename(newName);
+
+            templatePath = Path.Combine(Serie.TemplatesPath, newName + TemplateSystem.EXTENSION);
+
+            ExperimentSystem.SaveExperiment(newTamplate, templatePath);
+
+            Serie.AddNewTemplate(newTamplate, templatePath);
+
+            SerieSystem.SaveSerieJSON(Serie);
+
+            UpdateTemplateList();
+            SuccesMessage.Show("Копия успешно создана");
+        }
+
+        private void RenameBtn_Click(object sender, EventArgs e)
+        {
+            if (SerieSystem.RenameTemplate(Serie, SerieTemplateListView.SelectedItems[0].Text))
+                UpdateTemplateList();
         }
     }
 }

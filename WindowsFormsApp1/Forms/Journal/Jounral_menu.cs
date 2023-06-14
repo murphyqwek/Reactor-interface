@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.IO.Ports;
@@ -13,7 +14,6 @@ using System.Threading.Tasks;
 using System.Web.UI;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
-using Microsoft.VisualBasic;
 using Newtonsoft.Json.Bson;
 using Reactor_Interface.Classes;
 using Reactor_Interface.Classes.Exceptions;
@@ -30,6 +30,7 @@ using Reactor_Interface.Forms.Journal.SerieMenus;
 using Reactor_Interface.Forms.Template;
 using WindowsFormsApp1;
 using WindowsFormsApp1.Classes;
+using Buffer = Reactor_Interface.Classes.Buffer;
 
 namespace Reactor_Interface
 {
@@ -48,7 +49,7 @@ namespace Reactor_Interface
         private readonly string diskPreffix = "D_";
         private readonly string computerPreffix = "C_";
 
-        public FileData serie;
+        public FileData DiskSerie;
         public string numer = "";
 
         private string weigherPort = null;
@@ -58,6 +59,15 @@ namespace Reactor_Interface
         private List<RichTextBox> weigherListBox = new List<RichTextBox>();
 
         private bool _isSaved = true;
+
+        private Buffer buffer = new Buffer();
+
+        private Dictionary<string, RichTextBox> Fields;
+
+        private bool bufferUploading = false;
+
+        private Dictionary<string, string[,]> prevdata = new Dictionary<string, string[,]>();
+        private string prevCommentText;
 
         public bool IsSaved 
         {
@@ -84,6 +94,7 @@ namespace Reactor_Interface
             QuitSerieBtn.Visible = true;
             AddTemplatesBtn.Visible = true;
 
+            CreateTemplateBasedOnExperimentBtn.Visible = false;
             changeExperimentTemplatebtn.Visible = false;
             SaveExperimentBtn.Visible = false;
             CreateNewExperimentBtn.Visible = false;
@@ -188,6 +199,10 @@ namespace Reactor_Interface
 
         private void parseExperimentData(ExperimentData experiment)
         {
+            buffer.Clear();
+
+            Fields = new Dictionary<string, RichTextBox>();
+
             data_control.TabPages.Clear();
 
             weigherListBox.Clear();
@@ -199,6 +214,8 @@ namespace Reactor_Interface
                     Text = page_name,
                     BackColor = Control_settings.BackColor
                 };
+
+                string[,] prevdataPage = new string[4, 3];
 
                 foreach (FieldData field in experiment.Pages[page_name])
                 {
@@ -221,7 +238,10 @@ namespace Reactor_Interface
                         Multiline = false,  
                     };
 
+                    prevdataPage[field.Row, field.Column] = textBox.Text;
+
                     textBox.TextChanged += onTextChanged;
+                    //textBox.GotFocus += onGetFocus;
                     //DPI.ResizeRichTextBox(textBox
 
                     if (field.MetaData.Contains(weigherTag))
@@ -234,20 +254,40 @@ namespace Reactor_Interface
                         //textBox.MouseHover
                     }
 
+                    if (Fields.ContainsKey(field_label.Text))
+                    {
+                        IsSaved = false;
+                        field_label.Text += "1";
+                    }
+
+
+                    Fields.Add(field_label.Text, textBox);
                     page.Controls.Add(field_label);
                     page.Controls.Add(textBox);
                 }
 
                 data_control.TabPages.Add(page);
+                prevdata.Add(page_name, prevdataPage);
             }
 
             comments_txtbx.Text = experiment.Comments;
+            prevCommentText = experiment.Comments;
+        }
+
+        private void TextBox_GotFocus(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void onGetFocus(object sender, EventArgs e)
+        {
+
         }
 
         private void showToolTip(object sender, EventArgs e)
         {
             RichTextBox TB = (RichTextBox)sender;
-            int VisibleTime = 1000;  //in milliseconds
+            int VisibleTime = 1000;
 
             ToolTip tt = new ToolTip();
             tt.Show("Щёлкните два раза левой кнопкой мыши чтобы записать массу", TB, VisibleTime);
@@ -286,7 +326,7 @@ namespace Reactor_Interface
                 return;
             }
 
-            if(serie == null)
+            if(DiskSerie == null)
             {
                 ErrorMessage.Show("Не указана серия экспериментов");
                 return;
@@ -301,12 +341,12 @@ namespace Reactor_Interface
                 return;
             }
 
-            string exlname = string.Format("{0}_{1}.xlsx", serie, numer);
+            string exlname = string.Format("{0}_{1}.xlsx", DiskSerie, numer);
 
             string path = string.Format("{0}\\{1}", Google_service.GetFileTempFolderPath(), exlname);
 
             //ExperimentExl.CreateExcelExperiment(path, experiment);
-            Drive.UploadFileOnDrive(path, serie, numer);
+            Drive.UploadFileOnDrive(path, DiskSerie, numer);
             SuccesMessage.Show("Файл успешно загружен!!!");
         }
 
@@ -329,7 +369,7 @@ namespace Reactor_Interface
 
         public void set_serie(FileData serie)
         {
-            this.serie = serie;
+            this.DiskSerie = serie;
             this.Text = "Эксперимент. Серия: " + serie.Name;
             change_serie_menubtn.Text = "Выбрать серию: " + serie.Name;
         }
@@ -426,7 +466,7 @@ namespace Reactor_Interface
             if (mass == null)
                 ErrorMessage.Show("Проблема с подключением к весам. Проверьте соединение с портом");
             else
-                textBox.Text = mass + " г";
+                textBox.Text = mass;
         }
 
         private void weigh_btn_Click(object sender, EventArgs e)
@@ -473,19 +513,10 @@ namespace Reactor_Interface
             if (NeedToCancel())
                 return;
 
-            using (FileDialog fileDialog = new OpenFileDialog())
-            {
-                fileDialog.Title = "Выберите эксперимент";
-                fileDialog.Filter = string.Format("Experiment (*{0})|*{0}", ExperimentSystem.experimentExtension);
+            string path = ExperimentSystem.GetExperimentPath();
 
-                if (fileDialog.ShowDialog() != DialogResult.OK)
-                    return;
-
-                string path = fileDialog.FileName;
-
-                var experiment = ExperimentSystem.UploadExperiment(path);
-                uploadExperimentFromComputer(experiment, path, true);
-            }
+            var experiment = ExperimentSystem.UploadExperiment(path);
+            uploadExperimentFromComputer(experiment, path, true);
         }
 
         private void UploadExperimentComputerBtn_Click(object sender, EventArgs e)
@@ -496,9 +527,11 @@ namespace Reactor_Interface
         private void experiment_btn_DropDownOpening(object sender, EventArgs e)
         {
             bool isExperimentNotNull = _experiment != null;
-            bool isSerie = _serie != null;
-            SaveExperimentBtn.Visible = isExperimentNotNull & !isSerie;
-            renameExperimentBtn.Visible = isExperimentNotNull & !isSerie;
+            bool isNotSerie = _serie == null;
+            SaveExperimentBtn.Visible = isExperimentNotNull & isNotSerie;
+            renameExperimentBtn.Visible = isExperimentNotNull & isNotSerie;
+            changeExperimentTemplatebtn.Visible = isExperimentNotNull & isNotSerie;
+            CreateTemplateBasedOnExperimentBtn.Visible = isExperimentNotNull & isNotSerie;
             DataExperimentBtn.Visible = isExperimentNotNull;
         }
 
@@ -521,6 +554,7 @@ namespace Reactor_Interface
                 SetExperimentName(experimentName);
                 _experiment = FormNewExperiment(experimentName, _experiment.ApplianceData, _experiment.ConnectedFields);
                 ExperimentSystem.SaveExperimentOnComputer(_experiment, path);
+                ExperimentSystem.SetCurrentExperimentIntoRegister(path);
                 IsSaved = true;
             }
         }
@@ -529,6 +563,14 @@ namespace Reactor_Interface
         {
             if (IsSaved)
                 return;
+
+            if(_serie != null && _experiment != null)
+            {
+                _experiment = FormNewExperiment(_experiment.Name, _experiment.ApplianceData, _experiment.ConnectedFields);
+                SerieSystem.AddExperiment(_serie, _experiment, _serieExperimentMetaData);
+                IsSaved = true;
+                return;
+            }
 
             if (string.IsNullOrEmpty(LoadFrom))
             {
@@ -548,6 +590,7 @@ namespace Reactor_Interface
                 {
                     _experiment = FormNewExperiment(_experiment.Name, _experiment.ApplianceData, _experiment.ConnectedFields);
                     ExperimentSystem.SaveExperimentOnComputer(_experiment, path);
+                    ExperimentSystem.SetCurrentExperimentIntoRegister(Path.Combine(path, _experiment.GetFileName()));
                     IsSaved = true;
                 }
             }
@@ -590,7 +633,24 @@ namespace Reactor_Interface
 
         private void onTextChanged(object sender, EventArgs e)
         {
-            IsSaved = false;    
+            IsSaved = false;
+            if (!bufferUploading) {
+                RichTextBox textBox = (RichTextBox)sender;
+                string oldText;
+                if (textBox.Name == comments_txtbx.Name)
+                {
+                    oldText = prevCommentText;
+                    prevCommentText = comments_txtbx.Text;
+                }
+                else
+                {
+                    var splittedName = textBox.Name.Split('_');//BACK
+                    int row = Convert.ToInt32(splittedName[0]), column = Convert.ToInt32(splittedName[1]);
+                    oldText = prevdata[data_control.SelectedTab.Text][row, column];
+                    prevdata[data_control.SelectedTab.Text][row, column] = textBox.Text;
+                }
+                buffer.Add(textBox, oldText, data_control.SelectedTab.Text);
+            }
         }
 
         public bool NeedToCancel()
@@ -612,28 +672,40 @@ namespace Reactor_Interface
                 return true;
         }
 
-        private void Jounral_menu_FormClosing(object sender, FormClosingEventArgs e)
+        private void SaveExperiment()
         {
-            if(_serie != null)
+            if (_serie != null)
             {
-                e.Cancel = NeedToCancel();
+                _experiment = FormNewExperiment(_experiment.Name, _experiment.ApplianceData, _experiment.ConnectedFields);
+                SerieSystem.AddExperiment(_serie, _experiment, _serieExperimentMetaData);
                 return;
             }
-
-            if(_experiment == null)
-            {
-                e.Cancel = false;
-                return;
-            }
-
 
             var store = LoadFrom.Substring(0, 2) == computerPreffix ? ExperimentSystem.ExperimentStorePlace.OnComputer : ExperimentSystem.ExperimentStorePlace.OnDisk;
             string path = LoadFrom.Substring(2);
             if (IsSaved && !ExperimentSystem.IsExperimentExists(path, _experiment.Name, store))
             {
                 SaveExperimentOnComputer();
+            }
+        }
+
+        private void Jounral_menu_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (_experiment == null)
+            {
+                e.Cancel = false;
                 return;
             }
+
+            if (_serie != null && !IsSaved)
+            {
+                if (!ConfirmMessageBox.Show("Вы хотите сохранить эксперимнет?"))
+                {
+                    e.Cancel = false;
+                    return;
+                }
+            }
+
             e.Cancel = NeedToCancel();
         }
 
@@ -699,7 +771,15 @@ namespace Reactor_Interface
 
         private void renameExperimentBtn_Click(object sender, EventArgs e)
         {
-            string newExperimentName = Interaction.InputBox("Введите новое название", "Переименовать", _experiment.Name);
+            string newExperimentName;
+
+            using(InputFormMenu inputForm = new InputFormMenu("Переименовать", "Введите новое название"))
+            {
+                if (inputForm.ShowDialog() != DialogResult.OK)
+                    return;
+
+                newExperimentName = inputForm.OutputValue;
+            }
 
             newExperimentName = newExperimentName.Trim();
 
@@ -749,6 +829,7 @@ namespace Reactor_Interface
 
         private void changeExperimentTemplatebtn_Click(object sender, EventArgs e)
         {
+            _experiment = FormNewExperiment(_experiment.Name, _experiment.ApplianceData, _experiment.ConnectedFields);
             Create_template_menu template_Menu = new Create_template_menu(_experiment, this);
             template_Menu.ShowDialog();
         }
@@ -850,7 +931,7 @@ namespace Reactor_Interface
 
         private void ShowSerieExperimentsBtn_Click(object sender, EventArgs e)
         {
-            SerieExperimentsMenu serieExperimentsMenu = new SerieExperimentsMenu(_serie, UploadSerieExperiment);
+            SerieExperimentsMenu serieExperimentsMenu = new SerieExperimentsMenu(_serie, UploadSerieExperiment, _experiment?.Name);
             serieExperimentsMenu.ShowDialog();
         }
 
@@ -907,6 +988,105 @@ namespace Reactor_Interface
             {
                 ErrorMessage.Show(ex.Message);
             }
+        }
+
+        private void CreateTemplateBasedOnExperimentBtn_Click(object sender, EventArgs e)
+        {
+            string input;
+            using (InputFormMenu inputForm = new InputFormMenu("Новый шаблон", "Введите название шаблона", _experiment.Name))
+            {
+                var result = inputForm.ShowDialog();
+
+                if (result != DialogResult.OK)
+                    return;
+
+                input = inputForm.OutputValue;
+
+                input = input.Trim();
+            }
+
+            if (string.IsNullOrEmpty(input)) 
+            {
+                ErrorMessage.Show("Пустое название");
+                return;
+            }
+
+            if (TemplateSystem.IsTemplateCreated(input))
+            {
+                ErrorMessage.Show("Шаблон с таким названием уже существует. Выберите другое название");
+                return;
+            }
+
+            TemplateSystem.CreateTemplateBasedOnExperiment(_experiment, input);
+
+            SuccesMessage.Show("Шаблон создан");
+        }
+
+        private void Jounral_menu_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Control && e.KeyCode == Keys.S)
+            {
+                SaveAutomaticly();
+            }
+            else if (e.Control && e.KeyCode == Keys.Z)
+            {
+                var changedTextBox = buffer.Pop();
+                if (changedTextBox.Item1 == null)
+                    return;
+
+                bufferUploading = true;
+                if(changedTextBox.Item1.Name == comments_txtbx.Name)
+                {
+                    prevCommentText = comments_txtbx.Text;
+                }
+                else
+                {
+                    var splittedName = changedTextBox.Item1.Name.Split('_');
+                    int row = Convert.ToInt32(splittedName[0]), column = Convert.ToInt32(splittedName[1]);
+                    prevdata[changedTextBox.Item3][row, column] = changedTextBox.Item1.Text;
+                }
+
+                changedTextBox.Item1.Text = changedTextBox.Item2;
+                bufferUploading = false;
+            }
+        }
+
+        private void FeedBack(string url)
+        {
+            try
+            {
+                Process.Start(url);
+            }
+            catch (Win32Exception noBrowser)
+            {
+                if (noBrowser.ErrorCode == -2147467259)
+                    ErrorMessage.Show(noBrowser.Message);
+            }
+            catch
+            {
+                ErrorMessage.Show("Ошибка при открытии барузера");
+            }
+        }
+
+        private void sendErrorBtn_Click(object sender, EventArgs e)
+        {
+            FeedBack("https://forms.gle/zwM4ofZKikWPyGch8");
+        }
+
+        private void reviewBtn_Click(object sender, EventArgs e)
+        {
+            FeedBack("https://forms.gle/ufUjPETeZdXFXVtq6");
+        }
+
+        private void clear_btn_Click(object sender, EventArgs e)
+        {
+            if (!ConfirmMessageBox.Show("Вы уверены, что хотите очистить поля эксперимента?"))
+                return;
+
+            foreach (var field in Fields.Values)
+                field.Text = "";
+
+            comments_txtbx.Text = "";
         }
     }
 
