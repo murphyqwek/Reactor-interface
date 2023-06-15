@@ -13,6 +13,7 @@ using Reactor_Interface.Forms.Template;
 using System.Drawing;
 using System.Windows.Forms.DataVisualization.Charting;
 using Reactor_Interface.Classes.GoogleAPI;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Reactor_Interface.Classes.Experiment
 {
@@ -62,6 +63,45 @@ namespace Reactor_Interface.Classes.Experiment
             ExperimentData experiment = new ExperimentData(experimentName, experimentData, applianceDatas, comments, connectedFields);//, comments);
 
             return experiment;
+        }
+        
+        private static string getExperimentWithoutAppData(string textFromFile)
+        {
+            //Console.WriteLine(",\"" + @"\ApplianceData\" + "\"" + ":{");
+            int ind = textFromFile.IndexOf(",\"" + "ApplianceData" + "\"" +  ":{");
+            return textFromFile.Substring(0, ind) + "}";
+        }
+
+        public static ExperimentData getCompExperiment(string textOfExperiment, string experimentPath)
+        {
+            int AppDataIndex = textOfExperiment.IndexOf(",\"" + "ApplianceData" + "\"" + ":{");
+            int ConnectedFieldsIndex = textOfExperiment.IndexOf(",\"ConnectedFields\":");
+
+            if(AppDataIndex == -1)
+                return DeserializeObject(textOfExperiment);
+
+            if (ConnectedFieldsIndex > AppDataIndex && AppDataIndex != -1 && ConnectedFieldsIndex != -1)
+            {
+                var tempExperiment = DeserializeObject(textOfExperiment);
+                SaveExperiment(tempExperiment, experimentPath);
+                textOfExperiment = GetExperimentText(experimentPath);
+                AppDataIndex = textOfExperiment.IndexOf(",\"" + "ApplianceData" + "\"" + ":{");
+                ConnectedFieldsIndex = textOfExperiment.IndexOf(",\"ConnectedFields\":");
+            }
+
+            textOfExperiment = textOfExperiment.Substring(0, AppDataIndex) + "}";
+
+            return DeserializeObject(textOfExperiment);
+        }
+
+        private static string GetExperimentText(string experimentPath)
+        {
+            using (FileStream fstream = new FileStream(experimentPath, FileMode.Open))
+            {
+                byte[] buffer = new byte[fstream.Length];
+                fstream.Read(buffer, 0, buffer.Length);
+                return Encoding.Default.GetString(buffer);
+            }
         }
 
         public static void UploadApplianceDataToExperiment(ref ExperimentData experimentData, SeriesCollection series) 
@@ -135,7 +175,7 @@ namespace Reactor_Interface.Classes.Experiment
                 return null;
             }
 
-            return UploadExperiment(currentExperimentPath);
+            return UploadExperiment(currentExperimentPath, false);
         }
 
         private static bool IsExperimentExists(string fullPath)
@@ -148,28 +188,32 @@ namespace Reactor_Interface.Classes.Experiment
             Interface_settings.set_current_experiment(experimentPath);
         }
 
-        public static ExperimentData UploadExperiment(string experimentPath)
+        private static ExperimentData DeserializeObject(string json)
+        {
+            string experimentDeserializedString = JsonConvert.DeserializeObject(json).ToString();
+
+            return JsonConvert.DeserializeObject<ExperimentData>(experimentDeserializedString);
+        }
+
+        public static ExperimentData UploadExperiment(string experimentPath, bool compressed)
         {
             if (!File.Exists(experimentPath))
                 return null;
 
-            string textFromFile = "";
+            string textFromFile = GetExperimentText(experimentPath);
 
-            using (FileStream fstream = new FileStream(experimentPath, FileMode.Open))
-            {
-                byte[] buffer = new byte[fstream.Length];
-                fstream.Read(buffer, 0, buffer.Length);
-                textFromFile = Encoding.Default.GetString(buffer);
-            }
-
-            string experimentDeserializedString;
             ExperimentData experiment;
 
             try
             {
-                experimentDeserializedString = JsonConvert.DeserializeObject(textFromFile).ToString();
-
-                experiment = JsonConvert.DeserializeObject<ExperimentData>(experimentDeserializedString);
+                if (compressed)
+                {
+                    experiment = getCompExperiment(textFromFile, experimentPath);
+                }
+                else
+                {
+                    experiment = DeserializeObject(textFromFile);
+                }
             }
             catch
             {
@@ -179,7 +223,6 @@ namespace Reactor_Interface.Classes.Experiment
             if (isExperimentDamaged(experiment, experimentPath))
                 return null;
             
-            //Interface_settings.set_current_experiment(experimentPath);
             return experiment; 
         }
 

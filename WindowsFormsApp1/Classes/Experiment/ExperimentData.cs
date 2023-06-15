@@ -40,9 +40,10 @@ namespace Reactor_Interface.Classes.Templates
     {
         public string Name { get; private set; }
         public Dictionary<string, List<FieldData>> Pages { get; private set; }
-        public Dictionary<string, ApplianceData> ApplianceData { get; private set; }
         public string Comments { get; private set; }
         public List<ConnectedFields> ConnectedFields { get; private set; }
+        public Dictionary<string, ApplianceData> ApplianceData { get; private set; }
+
         public ExperimentData(string name, Dictionary<string, List<FieldData>> pages, Dictionary<string, ApplianceData> applianceData = null, string comments = null, List<ConnectedFields> connectedFields = null)
         {
             Pages = pages;

@@ -267,7 +267,7 @@ namespace Reactor_Interface
                 }
 
                 data_control.TabPages.Add(page);
-                prevdata.Add(page_name, prevdataPage);
+                //prevdata.Add(page_name, prevdataPage);
             }
 
             comments_txtbx.Text = experiment.Comments;
@@ -515,7 +515,7 @@ namespace Reactor_Interface
 
             string path = ExperimentSystem.GetExperimentPath();
 
-            var experiment = ExperimentSystem.UploadExperiment(path);
+            var experiment = ExperimentSystem.UploadExperiment(path, false);
             uploadExperimentFromComputer(experiment, path, true);
         }
 
@@ -697,6 +697,7 @@ namespace Reactor_Interface
                 return;
             }
 
+            /*
             if (_serie != null && !IsSaved)
             {
                 if (!ConfirmMessageBox.Show("Вы хотите сохранить эксперимнет?"))
@@ -705,7 +706,7 @@ namespace Reactor_Interface
                     return;
                 }
             }
-
+            */
             e.Cancel = NeedToCancel();
         }
 
@@ -852,10 +853,8 @@ namespace Reactor_Interface
             if (!ConfirmMessageBox.Show("Вы уверены, что хотите создать новую серию?"))
                 return;
 
-            if (!IsSaved && _experiment != null)
+            if (NeedToCancel())
             {
-                MessageBox.Show("Перед созданием серии сохраните текущий эксперимент", "Внимание",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
                 return;
             }
             GetTemplateMenu getTemplateMenu = new GetTemplateMenu(CreateNewSerie);
@@ -879,10 +878,8 @@ namespace Reactor_Interface
 
         private void ChooseSerieBtn_Click(object sender, EventArgs e)
         {
-            if (!IsSaved)
+            if (NeedToCancel())
             {
-                MessageBox.Show("Перед выходом сохраните текущий эксперимент", "Внимание",
-                            MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
                 return;
             }
 

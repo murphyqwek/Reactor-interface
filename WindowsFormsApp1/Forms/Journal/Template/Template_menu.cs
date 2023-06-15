@@ -20,7 +20,7 @@ namespace Reactor_Interface.Forms.Experiment
     public partial class Template_menu : Form
     {
         private string chosen_template_text = "Выбранный шаблон:\r";
-        private string using_template_text = "Используемый шаблон:\r";
+        //private string using_template_text = "Используемый шаблон:\r";
         private string template_not_chosen = "Шаблон не выбран";
 
         private string[] templates_array = new string[0];
@@ -54,7 +54,7 @@ namespace Reactor_Interface.Forms.Experiment
 
         private void Template_view_DoubleClick(object sender, EventArgs e)
         {
-            UploadTemplate();
+            //UploadTemplate();
         }
 
         public void update_chosen_lbl(string template)

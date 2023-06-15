@@ -121,7 +121,7 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
                 return;
             }
 
-            var templateOnComp = ExperimentSystem.UploadExperiment(templatePath);
+            var templateOnComp = ExperimentSystem.UploadExperiment(templatePath, true);
 
             if (templateOnComp == null) 
             {
@@ -220,7 +220,7 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
                 return;
             }
 
-            var uploadingTemplate = ExperimentSystem.UploadExperiment(templatePath);
+            var uploadingTemplate = ExperimentSystem.UploadExperiment(templatePath, true);
 
             SerieSystem.AddNewTemplateToSerie(Serie, uploadingTemplate, templatePath, newNameTemplate);
             UpdateTemplateList();
@@ -267,7 +267,7 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
             if (!File.Exists(templatePath))
                 return null;
 
-            return ExperimentSystem.UploadExperiment(templatePath);
+            return ExperimentSystem.UploadExperiment(templatePath, false);
         }
 
         private void CreateCopyofTemplateBtn_Click(object sender, EventArgs e)
@@ -310,7 +310,7 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
                 return;
             }
 
-            var newTamplate = ExperimentSystem.UploadExperiment(templatePath);
+            var newTamplate = ExperimentSystem.UploadExperiment(templatePath, false);
 
             newTamplate.Rename(newName);
 

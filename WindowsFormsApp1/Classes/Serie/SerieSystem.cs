@@ -21,7 +21,7 @@ namespace Reactor_Interface.Classes.Serie
 {
     public class SerieSystem
     {
-        private static readonly string NOTFOUND = "Not Found";
+        //private static readonly string NOTFOUND = "Not Found";
         static private string getNewSeriePath()
         {
             string seriepath = null;
@@ -387,7 +387,7 @@ namespace Reactor_Interface.Classes.Serie
                 return null;
             }
 
-            ExperimentData experiment = ExperimentSystem.UploadExperiment(experimentPath);
+            ExperimentData experiment = ExperimentSystem.UploadExperiment(experimentPath, false);
 
             var template = serie.SerieTemplates[metaData.TemplateName];
 

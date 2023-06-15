@@ -92,7 +92,7 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
                     continue;
                 }
 
-                var expData = ExperimentSystem.UploadExperiment(experimentPath);
+                var expData = ExperimentSystem.UploadExperiment(experimentPath, true);
 
                 string templateKey = Experiment.TemplateName;
 
@@ -246,7 +246,7 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
             if (path == null)
                 return;
 
-            var Experiment = ExperimentSystem.UploadExperiment(path);
+            var Experiment = ExperimentSystem.UploadExperiment(path, true);
 
             if (Experiment == null)
             {
