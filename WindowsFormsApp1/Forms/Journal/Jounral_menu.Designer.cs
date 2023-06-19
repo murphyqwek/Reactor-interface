@@ -51,9 +51,6 @@
             this.SerieBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.CreateNewSerieBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.ChooseSerieBtn = new System.Windows.Forms.ToolStripMenuItem();
-            this.SerieExperimentBtn = new System.Windows.Forms.ToolStripMenuItem();
-            this.CreateExperimentSerieBtn = new System.Windows.Forms.ToolStripMenuItem();
-            this.ShowSerieExperimentsBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.AddTemplatesBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.QuitSerieBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.облачноеХранилищеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -76,6 +73,8 @@
             this.clear_btn = new System.Windows.Forms.Button();
             this.context_menu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.weigh_btn = new System.Windows.Forms.ToolStripMenuItem();
+            this.CreateExperimentSerieBtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.ShowSerieExperimentsBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.data_groupbox.SuspendLayout();
             this.context_menu.SuspendLayout();
@@ -108,6 +107,8 @@
             this.SaveExperimentBtn,
             this.DataExperimentBtn,
             this.changeExperimentTemplatebtn,
+            this.CreateExperimentSerieBtn,
+            this.ShowSerieExperimentsBtn,
             this.SaveSerieExperimentBtn});
             this.experiment_btn.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.experiment_btn.Name = "experiment_btn";
@@ -246,7 +247,6 @@
             this.SerieBtn.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.CreateNewSerieBtn,
             this.ChooseSerieBtn,
-            this.SerieExperimentBtn,
             this.AddTemplatesBtn,
             this.QuitSerieBtn});
             this.SerieBtn.Font = new System.Drawing.Font("Segoe UI", 10F);
@@ -269,31 +269,6 @@
             this.ChooseSerieBtn.Size = new System.Drawing.Size(297, 34);
             this.ChooseSerieBtn.Text = "Выбрать серию";
             this.ChooseSerieBtn.Click += new System.EventHandler(this.ChooseSerieBtn_Click);
-            // 
-            // SerieExperimentBtn
-            // 
-            this.SerieExperimentBtn.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.CreateExperimentSerieBtn,
-            this.ShowSerieExperimentsBtn});
-            this.SerieExperimentBtn.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.SerieExperimentBtn.Name = "SerieExperimentBtn";
-            this.SerieExperimentBtn.Size = new System.Drawing.Size(297, 34);
-            this.SerieExperimentBtn.Text = "Эксперименты серии";
-            this.SerieExperimentBtn.Visible = false;
-            // 
-            // CreateExperimentSerieBtn
-            // 
-            this.CreateExperimentSerieBtn.Name = "CreateExperimentSerieBtn";
-            this.CreateExperimentSerieBtn.Size = new System.Drawing.Size(400, 34);
-            this.CreateExperimentSerieBtn.Text = "Создать новый эксперимент серии";
-            this.CreateExperimentSerieBtn.Click += new System.EventHandler(this.CreateExperimentSerieBtn_Click);
-            // 
-            // ShowSerieExperimentsBtn
-            // 
-            this.ShowSerieExperimentsBtn.Name = "ShowSerieExperimentsBtn";
-            this.ShowSerieExperimentsBtn.Size = new System.Drawing.Size(400, 34);
-            this.ShowSerieExperimentsBtn.Text = "Посмотреть эксперименты серии";
-            this.ShowSerieExperimentsBtn.Click += new System.EventHandler(this.ShowSerieExperimentsBtn_Click);
             // 
             // AddTemplatesBtn
             // 
@@ -487,7 +462,7 @@
             this.context_menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.weigh_btn});
             this.context_menu.Name = "context_menu";
-            this.context_menu.Size = new System.Drawing.Size(286, 69);
+            this.context_menu.Size = new System.Drawing.Size(286, 36);
             // 
             // weigh_btn
             // 
@@ -495,6 +470,20 @@
             this.weigh_btn.Size = new System.Drawing.Size(285, 32);
             this.weigh_btn.Text = "Произвести взешивание";
             this.weigh_btn.Click += new System.EventHandler(this.weigh_btn_Click);
+            // 
+            // CreateExperimentSerieBtn
+            // 
+            this.CreateExperimentSerieBtn.Name = "CreateExperimentSerieBtn";
+            this.CreateExperimentSerieBtn.Size = new System.Drawing.Size(519, 36);
+            this.CreateExperimentSerieBtn.Text = "Создать новый эксперимент серии";
+            this.CreateExperimentSerieBtn.Click += new System.EventHandler(this.CreateExperimentSerieBtn_Click);
+            // 
+            // ShowSerieExperimentsBtn
+            // 
+            this.ShowSerieExperimentsBtn.Name = "ShowSerieExperimentsBtn";
+            this.ShowSerieExperimentsBtn.Size = new System.Drawing.Size(519, 36);
+            this.ShowSerieExperimentsBtn.Text = "Посмотреть эксперименты серии";
+            this.ShowSerieExperimentsBtn.Click += new System.EventHandler(this.ShowSerieExperimentsBtn_Click);
             // 
             // Jounral_menu
             // 
@@ -567,13 +556,12 @@
         private System.Windows.Forms.ToolStripMenuItem ChooseSerieBtn;
         private System.Windows.Forms.ToolStripMenuItem QuitSerieBtn;
         private System.Windows.Forms.ToolStripMenuItem AddTemplatesBtn;
-        private System.Windows.Forms.ToolStripMenuItem SerieExperimentBtn;
-        private System.Windows.Forms.ToolStripMenuItem CreateExperimentSerieBtn;
-        private System.Windows.Forms.ToolStripMenuItem ShowSerieExperimentsBtn;
         private System.Windows.Forms.ToolStripMenuItem SaveSerieExperimentBtn;
         private System.Windows.Forms.ToolStripMenuItem CreateTemplateBasedOnExperimentBtn;
         private System.Windows.Forms.ToolStripMenuItem ConnectToMeBtn;
         private System.Windows.Forms.ToolStripMenuItem sendErrorBtn;
         private System.Windows.Forms.ToolStripMenuItem reviewBtn;
+        private System.Windows.Forms.ToolStripMenuItem CreateExperimentSerieBtn;
+        private System.Windows.Forms.ToolStripMenuItem ShowSerieExperimentsBtn;
     }
 }

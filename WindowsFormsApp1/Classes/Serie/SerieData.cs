@@ -19,7 +19,7 @@ namespace Reactor_Interface.Classes.Serie
 
         public string GetExperimentFileName()
         {
-            return ExperimentName + ExperimentSystem.experimentExtension;
+            return ExperimentName + ExperimentSystem.EXTENSION;
         }
 
         public int GetExperimentNumer()
@@ -58,10 +58,6 @@ namespace Reactor_Interface.Classes.Serie
         {
             SerieTemplate serieTemplate = new SerieTemplate(template.GetAllFields(), template.ConnectedFields, templatePath);
             SerieTemplates = new Dictionary<string, SerieTemplate>();
-            /*
-            {
-                { serieTemplate.TemplateName, serieTemplate },
-            };*/
             Experiments = new Dictionary<string, List<SerieExperimentMetaData>>();
             Name = name;
             FolderPath = folderPath;
@@ -123,8 +119,9 @@ namespace Reactor_Interface.Classes.Serie
 
         public string GetExperimentFilePath(string experimentName)
         {
-            experimentName = experimentName.EndsWith(ExperimentSystem.experimentExtension) ? experimentName : experimentName + ExperimentSystem.experimentExtension;
-            return Path.Combine(ExperimentPath, experimentName);
+            experimentName = experimentName.EndsWith(ExperimentSystem.EXTENSION) ? experimentName : experimentName + ExperimentSystem.EXTENSION;
+            string path = Path.Combine(ExperimentPath, experimentName.Substring(0, experimentName.Length - ExperimentSystem.EXTENSION.Length));
+            return Path.Combine(path, experimentName);
         }
 
         public void DecrementLastExperimentIndex()

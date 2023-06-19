@@ -80,7 +80,9 @@ namespace Reactor_Interface
             {
                 _isSaved = value;
 
-                experiment_btn.Text = "Эксперимент: " + _experiment.Name;
+                experiment_btn.Text = "Эксперимент: ";
+                if (_experiment != null)
+                    experiment_btn.Text += _experiment.Name;
 
                 experiment_btn.Text += _isSaved ? "" : "*";
             }
@@ -90,7 +92,6 @@ namespace Reactor_Interface
         {
             setupJournal(chart, _mainMenu);
 
-            SerieExperimentBtn.Visible = true;
             QuitSerieBtn.Visible = true;
             AddTemplatesBtn.Visible = true;
 
@@ -202,6 +203,8 @@ namespace Reactor_Interface
             buffer.Clear();
 
             Fields = new Dictionary<string, RichTextBox>();
+            prevdata = new Dictionary<string, string[,]>();
+            prevCommentText = "";
 
             data_control.TabPages.Clear();
 
@@ -267,7 +270,7 @@ namespace Reactor_Interface
                 }
 
                 data_control.TabPages.Add(page);
-                //prevdata.Add(page_name, prevdataPage);
+                prevdata.Add(page_name, prevdataPage);
             }
 
             comments_txtbx.Text = experiment.Comments;
@@ -533,30 +536,56 @@ namespace Reactor_Interface
             changeExperimentTemplatebtn.Visible = isExperimentNotNull & isNotSerie;
             CreateTemplateBasedOnExperimentBtn.Visible = isExperimentNotNull & isNotSerie;
             DataExperimentBtn.Visible = isExperimentNotNull;
+            CreateExperimentSerieBtn.Visible = !isNotSerie;
+            ShowSerieExperimentsBtn.Visible = !isNotSerie;
         }
 
         public void SaveExperimentOnComputer()
         {
-            using (SaveFileDialog fileDialog = new SaveFileDialog())
-            {
-                fileDialog.Title = "Выберите эксперимент";
-                fileDialog.Filter = string.Format("Experiment (*{0})|*{0}", ExperimentSystem.experimentExtension);
-                fileDialog.FileName = _experiment.Name;
+            string folderPath;
+            string experimentName;
 
-                if (fileDialog.ShowDialog() != DialogResult.OK)
+            using (var fbd = new FolderBrowserDialog())
+            {
+                fbd.Description = "Выберите папку эксперимента";
+
+                DialogResult result = fbd.ShowDialog();
+
+                if (result != DialogResult.OK || string.IsNullOrWhiteSpace(fbd.SelectedPath))
                     return;
 
-                string path = fileDialog.FileName;
-                string experimentName = Path.GetFileNameWithoutExtension(path);
-
-                LoadFrom = computerPreffix + Path.GetDirectoryName(path);
-
-                SetExperimentName(experimentName);
-                _experiment = FormNewExperiment(experimentName, _experiment.ApplianceData, _experiment.ConnectedFields);
-                ExperimentSystem.SaveExperimentOnComputer(_experiment, path);
-                ExperimentSystem.SetCurrentExperimentIntoRegister(path);
-                IsSaved = true;
+                folderPath = fbd.SelectedPath;
             }
+
+            using (InputFormMenu inputForm = new InputFormMenu("Создание нового эксперимента", "Введите название эксперимента"))
+            {
+                if(inputForm.ShowDialog() != DialogResult.OK)
+                    return;
+
+                experimentName = inputForm.OutputValue.Trim();
+            }
+
+            if (string.IsNullOrEmpty(experimentName))
+            {
+                ErrorMessage.Show("Пустое название");
+                return;
+            } 
+
+            folderPath = Path.Combine(folderPath, experimentName);
+
+            if (Directory.Exists(folderPath))
+            {
+                ErrorMessage.Show("Папка с таким названием уже существует");
+                return;
+            }
+
+            Directory.CreateDirectory(folderPath);
+            LoadFrom = computerPreffix + folderPath;
+            SetExperimentName(experimentName);
+            _experiment = FormNewExperiment(experimentName, _experiment.ApplianceData, _experiment.ConnectedFields);
+            ExperimentSystem.SaveExperimentOnComputer(_experiment, folderPath);
+            ExperimentSystem.SetCurrentExperimentIntoRegister(Path.Combine(folderPath, experimentName + ExperimentSystem.EXTENSION));
+            IsSaved = true;
         }
 
         private void SaveAutomaticly()
@@ -566,9 +595,7 @@ namespace Reactor_Interface
 
             if(_serie != null && _experiment != null)
             {
-                _experiment = FormNewExperiment(_experiment.Name, _experiment.ApplianceData, _experiment.ConnectedFields);
-                SerieSystem.AddExperiment(_serie, _experiment, _serieExperimentMetaData);
-                IsSaved = true;
+                SaveSerieExperiment();
                 return;
             }
 
@@ -696,17 +723,6 @@ namespace Reactor_Interface
                 e.Cancel = false;
                 return;
             }
-
-            /*
-            if (_serie != null && !IsSaved)
-            {
-                if (!ConfirmMessageBox.Show("Вы хотите сохранить эксперимнет?"))
-                {
-                    e.Cancel = false;
-                    return;
-                }
-            }
-            */
             e.Cancel = NeedToCancel();
         }
 
@@ -821,7 +837,22 @@ namespace Reactor_Interface
 
         private void UploadDataFromOtherApplianceBtn_Click(object sender, EventArgs e)
         {
-            UploadingApplicienceDataMenu dataMenu = new UploadingApplicienceDataMenu(_chart, _experiment);
+            if (LoadFrom.Length <= 2)
+            {
+                ErrorMessage.Show("Эксперимент не был сохранён на компьютер. Прежде чем загрузить данные, сохраните эксперимент");
+                return;
+            }
+
+            if (!Directory.Exists(LoadFrom.Substring(2)))
+            {
+                Directory.CreateDirectory(LoadFrom.Substring(2));
+                string filePath = Path.Combine(LoadFrom.Substring(2), _experiment.GetFileName());
+                _experiment = FormNewExperiment(_experiment.Name, _experiment.ApplianceData, _experiment.ConnectedFields);
+                ExperimentSystem.SaveExperiment(_experiment, filePath);
+                IsSaved = true;
+            }
+
+            UploadingApplicienceDataMenu dataMenu = new UploadingApplicienceDataMenu(_chart, _experiment, LoadFrom.Substring(2));
             var result = dataMenu.ShowDialog();
 
             if (result == DialogResult.Yes)
@@ -932,16 +963,21 @@ namespace Reactor_Interface
             serieExperimentsMenu.ShowDialog();
         }
 
-        public void UploadSerieExperiment(SerieExperimentMetaData serieExperiment, ExperimentData experiment, bool isSaved)
+        public void UploadSerieExperiment(SerieExperimentMetaData serieExperiment, ExperimentData experiment, bool isSaved, string loadFrom)
         {
             if(_experiment != null && !IsSaved)
             {
                 ErrorMessage.Show("Текущий эксперимент не сохранён");
                 return;
             }
-            if (experiment == null)
-                SetNullExperiment();
 
+            if (experiment == null)
+            {
+                SetNullExperiment();
+                return;
+            }
+
+            LoadFrom = computerPreffix + loadFrom;
             _experiment = experiment;
             parseExperimentData(experiment);
             SetExperimentName(experiment.Name);
@@ -960,11 +996,8 @@ namespace Reactor_Interface
             comments_txtbx.Clear();
         }
 
-        private void SaveSerieExperimentBtn_Click(object sender, EventArgs e)
+        private void SaveSerieExperiment()
         {
-            if (!ConfirmMessageBox.Show("Вы действительно хотите сохранить эксперимент?"))
-                return;
-
             try
             {
                 _experiment = FormNewExperiment(_experiment.Name, _experiment.ApplianceData, _experiment.ConnectedFields);
@@ -976,15 +1009,23 @@ namespace Reactor_Interface
                 ErrorMessage.Show(ex.Message);
                 //SetNullExperiment();
             }
-            catch(ExperimentIsNotCapableWithTemplateExcpetion ex)
+            catch (ExperimentIsNotCapableWithTemplateExcpetion ex)
             {
                 ErrorMessage.Show(ex.Message);
                 //SetNullExperiment();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ErrorMessage.Show(ex.Message);
             }
+        }
+
+        private void SaveSerieExperimentBtn_Click(object sender, EventArgs e)
+        {
+            if (!ConfirmMessageBox.Show("Вы действительно хотите сохранить эксперимент?"))
+                return;
+
+            SaveSerieExperiment();
         }
 
         private void CreateTemplateBasedOnExperimentBtn_Click(object sender, EventArgs e)

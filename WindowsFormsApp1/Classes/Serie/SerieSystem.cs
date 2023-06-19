@@ -21,16 +21,17 @@ namespace Reactor_Interface.Classes.Serie
 {
     public class SerieSystem
     {
-        //private static readonly string NOTFOUND = "Not Found";
         static private string getNewSeriePath()
         {
             string seriepath = null;
 
             using (var fbd = new FolderBrowserDialog())
             {
+                fbd.Description = "Выберите папку серии";
+
                 DialogResult result = fbd.ShowDialog();
 
-                if (result != DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                if (result != DialogResult.OK || string.IsNullOrWhiteSpace(fbd.SelectedPath))
                     return null;
 
                 seriepath = fbd.SelectedPath;
@@ -329,8 +330,10 @@ namespace Reactor_Interface.Classes.Serie
             SaveSerieJSON(serie);
         }
 
-        public static void AddExistedExperiment(SerieData serie, ExperimentData experiment, string templateName)
+        public static void AddExistedExperiment(SerieData serie, ExperimentData experiment, string templateName, string experimentPath)
         {
+            string experimentFolderPath = Directory.GetParent(experimentPath).FullName;
+            string oldExperimentName = Path.GetFileNameWithoutExtension(experimentPath);
             string experimentName = serie.Name + "_" + (serie.GetLastExpIndex() + 1).ToString();
             experiment.Rename(experimentName);
 
@@ -341,6 +344,18 @@ namespace Reactor_Interface.Classes.Serie
             };
 
             AddExperiment(serie, experiment, serieExperimentMetaData);
+
+            foreach(string file in ExperimentSystem.AppFileName.Values)
+            {
+                string oldAppFilePath = Path.Combine(experimentFolderPath, oldExperimentName + file);
+
+                if (File.Exists(oldAppFilePath))
+                {
+                    string newAppFilePath = Path.Combine(GetExperimentFolderPath(serie, serieExperimentMetaData), experimentName + file);
+                    File.Copy(oldAppFilePath, newAppFilePath);
+                }
+            }
+
         }
 
         public static void AddExperiment(SerieData serie, ExperimentData experiment, SerieExperimentMetaData experimentMetaData)
@@ -360,8 +375,36 @@ namespace Reactor_Interface.Classes.Serie
             }
 
             serie.AddExperiment(experimentMetaData);
+            if (!Directory.Exists(serie.ExperimentPath + "\\" + experimentMetaData.ExperimentName))
+                Directory.CreateDirectory(serie.ExperimentPath + "\\" + experimentMetaData.ExperimentName);
+
             ExperimentSystem.SaveExperiment(experiment, serie.GetExperimentFilePath(experimentMetaData.ExperimentName));
             SaveSerieJSON(serie);
+        }
+
+        public static string GetExperimentFolderPath(SerieData serie, SerieExperimentMetaData experimentMetaData)
+        {
+            return GetExperimentFolderPath(serie, experimentMetaData.ExperimentName);
+        }
+
+        public static string GetExperimentFolderPath(SerieData serie, string experimentName)
+        {
+            return Path.Combine(serie.ExperimentPath, experimentName);
+        }
+
+        public static string GetExperimentFilePath(SerieData serie, SerieExperimentMetaData experimentMetaData)
+        {
+            string folderPath = GetExperimentFolderPath(serie, experimentMetaData.ExperimentName);
+            string outFolderExpPath = Path.Combine(serie.ExperimentPath, experimentMetaData.GetExperimentFileName());
+            string experimentExpPath = Path.Combine(folderPath, experimentMetaData.GetExperimentFileName());
+            
+            if (!Directory.Exists(folderPath) && File.Exists(outFolderExpPath))
+            {
+                Directory.CreateDirectory(folderPath);
+                File.Move(outFolderExpPath, experimentExpPath);
+            }
+
+            return experimentExpPath;
         }
 
         public static ExperimentData UploadExperiment(SerieData serie, SerieExperimentMetaData metaData)
@@ -379,7 +422,7 @@ namespace Reactor_Interface.Classes.Serie
 
             }
 
-            string experimentPath = Path.Combine(serie.ExperimentPath, metaData.GetExperimentFileName());
+            string experimentPath = GetExperimentFilePath(serie, metaData);
 
             if(!File.Exists(experimentPath))
             {
@@ -414,7 +457,7 @@ namespace Reactor_Interface.Classes.Serie
                 var experiment = serie.Experiments[templateKey][i];
                 if(experiment.ExperimentName == experimentName)
                 {
-                    File.Delete(Path.Combine(serie.ExperimentPath, experiment.GetExperimentFileName()));
+                    File.Delete(Path.Combine(serie.ExperimentPath, experiment.ExperimentName));
                     serie.Experiments[templateKey].RemoveAt(i);
 
                     int experimentNumer = experiment.GetExperimentNumer();

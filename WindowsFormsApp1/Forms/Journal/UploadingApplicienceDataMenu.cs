@@ -13,6 +13,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using System.IO;
+using Microsoft.Office.Interop.Access.Dao;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using Reactor_Interface.Classes.Message;
+using Reactor_Interface.Classes;
 
 namespace Reactor_Interface.Forms.Journal
 {
@@ -21,32 +26,39 @@ namespace Reactor_Interface.Forms.Journal
         Chart _chart;
         ExperimentData _experiment;
         bool changed = false;
-        bool uploadingCheckState = false;
+        string experimentPath;
 
         readonly Dictionary<string, string> SerieName = new Dictionary<string, string>
         {
-            {"Термометр", "temperature"},
-            {"XRD", "xrd"}
+            {"Пирометр", "temperature"},
+            {"XRD", "xrd"},
+            {"Осциллограф", "oscillograph"}
         };
 
-        public UploadingApplicienceDataMenu(Chart chart, ExperimentData experiment)
+        readonly Dictionary<string, CheckBox> AppCheckBoxes = new Dictionary<string, CheckBox>();
+
+        public UploadingApplicienceDataMenu(Chart chart, ExperimentData experiment, string ExperimentPath)
         {
             InitializeComponent();
             _chart = chart;
             _experiment = experiment;
+            experimentPath = ExperimentPath;
+
+            AppCheckBoxes.Add("Пирометр", piroChBx);
+            AppCheckBoxes.Add("XRD", xrdChBx);
+            AppCheckBoxes.Add("Осциллограф", osciChBx);
 
             if (_experiment.ApplianceData == null)
                 return;
 
-            uploadingCheckState = true;
-            for(int i = 0; i < appDataGetList.Items.Count; i++)
+            for (int i = 0; i < AppViewList.Items.Count; i++)
             {
-                string item = appDataGetList.Items[i].ToString();
-                string dataName = SerieName[item];
+                var item = AppViewList.Items[i];
+                string dataName = SerieName[item.Text];
                 if (_experiment.ApplianceData.ContainsKey(dataName))
-                    appDataGetList.SetItemCheckState(i, CheckState.Checked);
+                    AppCheckBoxes[AppViewList.Items[i].Text].Checked = true;
             }
-            uploadingCheckState = false;
+
         }
 
         private List<GraphPoint> GetPointsFromChart(string serieName)
@@ -67,6 +79,8 @@ namespace Reactor_Interface.Forms.Journal
         private ApplianceData GetXRDData()
         {
             List<GraphPoint> xrdPoints = new List<GraphPoint>();
+            string newXRDpath = "";
+            string oldXRDpath = "";
             using (OpenFileDialog dlg = new OpenFileDialog())
             {
 
@@ -79,12 +93,25 @@ namespace Reactor_Interface.Forms.Journal
                         return null;
 
                 xrdPoints = XRDParser.ParseXRDToGraphPoints(dlg.FileName);
+                if (Directory.Exists(experimentPath))
+                {
+                    newXRDpath = _experiment.Name + ExperimentSystem.AppFileName["xrd"];
+                    oldXRDpath = dlg.FileName;
+                }
             }
 
             if (xrdPoints == null)
             {
                 MessageBox.Show("Файл повреждён", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 return null;
+            }
+
+            if (newXRDpath != "")
+            {
+                newXRDpath = Path.Combine(experimentPath, newXRDpath);
+                if (File.Exists(newXRDpath))
+                    File.Delete(newXRDpath);
+                File.Copy(oldXRDpath, newXRDpath);
             }
 
             return new ApplianceData(xrdPoints, Color.DarkCyan, "XRD", "xrd");
@@ -98,85 +125,123 @@ namespace Reactor_Interface.Forms.Journal
                 DialogResult = DialogResult.No;
         }
 
-        private void appDataGetList_ItemCheck(object sender, ItemCheckEventArgs e)
+        private void AppViewList_ItemCheck(object sender, ItemCheckEventArgs e)
         {
-            if (uploadingCheckState)
-                return;
+            
+        }
 
-            var item = e.CurrentValue;
-            string itemText = appDataGetList.Items[e.Index].ToString();
-
-            var experimentData = _experiment.ApplianceData;
-            string serieName = SerieName[itemText];
-
-            e.NewValue = CheckState.Checked;
-
-            if (experimentData == null)
-                experimentData = new Dictionary<string, ApplianceData>();
-
-            if (item == CheckState.Checked)
+        private void UploadXRDData(ListViewItem item, Dictionary<string, ApplianceData> experimentData, string serieName)
+        {
+            var data = GetXRDData();
+            if (data != null)
             {
-                DialogResult result = DialogResult.Cancel;
-
-                if (experimentData.ContainsKey(itemText))
-                {
-                    result = MessageBox.Show("Данные уже загружены. Вы хотите их презаписать?", "Внимание", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button3);
-
-                    if (result == DialogResult.Yes)
-                    {
-                        var appData = experimentData[itemText];
-                        if (itemText == "XRD")
-                        {
-                            var data = GetXRDData();
-                            if (data != null)
-                            {
-                                experimentData[serieName] = data;
-                                _experiment.SetNewApplianceData(experimentData);
-                                changed = true;
-                                UploadedMessageBoxShow();
-                            }
-                            e.NewValue = CheckState.Checked;
-                            return;
-                        }
-                        experimentData[itemText] = GetNewApplianceData(appData.SerieColor, appData.LegendText, appData.SerieName);
-                        _experiment.SetNewApplianceData(experimentData);
-                        changed = true;
-                        e.NewValue = CheckState.Checked;
-                        UploadedMessageBoxShow();
-                    }
-
-                    return;
-                }
-            }
-            else
-            {
-                if (itemText == "XRD")
-                {
-                    var data = GetXRDData();
-                    if (data != null)
-                    {
-                        experimentData.Add(serieName, data);
-                        _experiment.SetNewApplianceData(experimentData);
-                        UploadedMessageBoxShow();
-                        changed = true;
-                        e.NewValue = CheckState.Checked;
-                    }
-                    return;
-                }
-
-                experimentData[serieName] = GetNewApplianceData(_chart.Series[serieName].Color,
-                                                                _chart.Series[serieName].LegendText,
-                                                                serieName);
+                if (experimentData.ContainsKey(serieName))
+                    experimentData[serieName] = data;
+                else
+                    experimentData.Add(serieName, data);
                 _experiment.SetNewApplianceData(experimentData);
-                e.NewValue = CheckState.Checked;
                 UploadedMessageBoxShow();
                 changed = true;
+                item.Checked = true;
+                AppCheckBoxes[item.Text].Checked = true;
             }
+            else
+                item.Checked = false;
         }
 
         private void UploadedMessageBoxShow()
         {
             MessageBox.Show("Данные загружены", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+        }
+
+        private void appDataContextMenu_Opening(object sender, CancelEventArgs e)
+        {
+            if (AppViewList.SelectedIndices.Count == 0) 
+            {
+                e.Cancel = true;
+                return;
+            }
+
+            int itemIndex = AppViewList.SelectedIndices[0];
+
+            deleteDataBtn.Visible = false;
+            rewriteDataBtn.Visible = false;
+
+            if (AppCheckBoxes[AppViewList.Items[itemIndex].Text].Checked)
+            {
+                deleteDataBtn.Visible = true;
+                rewriteDataBtn.Visible = true;
+            }
+            else
+                e.Cancel = true;
+        }
+
+        private void AppViewList_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Left)
+                return;
+
+            ListViewHitTestInfo info = AppViewList.HitTest(e.X, e.Y);
+            ListViewItem item = info.Item;
+
+            if (item.Checked == true)
+                return;
+
+            uploadAppData(item);
+        }
+
+        private void uploadAppData(ListViewItem item)
+        {
+            var experimentData = _experiment.ApplianceData;
+            string serieName = SerieName[item.Text];
+
+            if (experimentData == null)
+                experimentData = new Dictionary<string, ApplianceData>();
+
+            if (serieName == "xrd")
+            {
+                UploadXRDData(item, experimentData, serieName);
+                return;
+            }
+
+            experimentData[serieName] = GetNewApplianceData(_chart.Series[serieName].Color,
+                                                            _chart.Series[serieName].LegendText,
+                                                            serieName);
+            _experiment.SetNewApplianceData(experimentData);
+            item.Checked = true;
+            AppCheckBoxes[item.Text].Checked = true;
+            UploadedMessageBoxShow();
+            changed = true;
+        }
+
+        private void deleteDataBtn_Click(object sender, EventArgs e)
+        {
+            if (!ConfirmMessageBox.Show("Вы действительно хотите удалить данные?"))
+                return;
+
+            changed = true;
+
+            if (!Directory.Exists(experimentPath))
+            {
+                ErrorMessage.Show("Папка эксперимента была удалена");
+                return;
+            }
+
+            ExperimentSystem.DeleteAppData(_experiment, experimentPath, SerieName[AppViewList.SelectedItems[0].Text]);
+
+            AppCheckBoxes[AppViewList.SelectedItems[0].Text].Checked = false;
+
+            SuccesMessage.Show("Данные были удалены");
+        }
+
+        private void rewriteDataBtn_Click(object sender, EventArgs e)
+        {
+            if (!ConfirmMessageBox.Show("Вы действительно хотите перезаписать данные?"))
+                return;
+
+            var item = AppViewList.SelectedItems[0];
+
+            uploadAppData(item);
         }
     }
 }

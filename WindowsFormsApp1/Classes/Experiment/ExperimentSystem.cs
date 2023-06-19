@@ -14,12 +14,19 @@ using System.Drawing;
 using System.Windows.Forms.DataVisualization.Charting;
 using Reactor_Interface.Classes.GoogleAPI;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Reactor_Interface.Classes.Serie;
 
 namespace Reactor_Interface.Classes.Experiment
 {
     static class ExperimentSystem
     {
-        public static readonly string experimentExtension = ".exp";
+        public static readonly string EXTENSION = ".exp";
+
+        public readonly static Dictionary<string, string> AppFileName = new Dictionary<string, string>
+        {
+            {"xrd", " (XRD).txt"},
+            //{"oscillograph", " (Осциллограф)."}
+        };
 
         public enum ExperimentStorePlace
         {
@@ -64,13 +71,6 @@ namespace Reactor_Interface.Classes.Experiment
 
             return experiment;
         }
-        
-        private static string getExperimentWithoutAppData(string textFromFile)
-        {
-            //Console.WriteLine(",\"" + @"\ApplianceData\" + "\"" + ":{");
-            int ind = textFromFile.IndexOf(",\"" + "ApplianceData" + "\"" +  ":{");
-            return textFromFile.Substring(0, ind) + "}";
-        }
 
         public static ExperimentData getCompExperiment(string textOfExperiment, string experimentPath)
         {
@@ -86,7 +86,6 @@ namespace Reactor_Interface.Classes.Experiment
                 SaveExperiment(tempExperiment, experimentPath);
                 textOfExperiment = GetExperimentText(experimentPath);
                 AppDataIndex = textOfExperiment.IndexOf(",\"" + "ApplianceData" + "\"" + ":{");
-                ConnectedFieldsIndex = textOfExperiment.IndexOf(",\"ConnectedFields\":");
             }
 
             textOfExperiment = textOfExperiment.Substring(0, AppDataIndex) + "}";
@@ -152,8 +151,8 @@ namespace Reactor_Interface.Classes.Experiment
         {
             string experimentSerialized = JsonConvert.SerializeObject(experiment);
 
-            if (!filePath.EndsWith(experimentExtension) && !filePath.EndsWith(TemplateSystem.EXTENSION))
-                filePath = Path.Combine(filePath, experiment.Name + experimentExtension);
+            if (!filePath.EndsWith(EXTENSION) && !filePath.EndsWith(TemplateSystem.EXTENSION))
+                filePath = Path.Combine(filePath, experiment.Name + EXTENSION);
 
             using (FileStream fstream = new FileStream(filePath, FileMode.Create))
             {
@@ -228,14 +227,14 @@ namespace Reactor_Interface.Classes.Experiment
 
         static private bool isExperimentExistOnComputer(string path, string fileName)
         {
-            path = Path.Combine(path, fileName + experimentExtension);
+            path = Path.Combine(path, fileName + EXTENSION);
 
             return File.Exists(path);
         }
 
         private static bool isExperimentExistOnDisk(string path, string fileName)
         {
-            fileName += experimentExtension;
+            fileName += EXTENSION;
 
             return Drive.isFileExist(fileName, path);
         }
@@ -268,19 +267,41 @@ namespace Reactor_Interface.Classes.Experiment
             throw new NotImplementedException();
         }
 
-        private static string RenameExperimentOnComputer(string experimentName, string newExperimentName, string path)
+        private static string RenameExperimentOnComputer(string oldExperimentName, string newExperimentName, string path)
         {
-            string newPath = Path.Combine(path, newExperimentName + experimentExtension);
-            string oldPath = Path.Combine(path, experimentName + experimentExtension);
+            string temp = Directory.GetParent(path).FullName;
+            temp = Path.Combine(temp, newExperimentName);
+            if (Directory.Exists(path))
+            {
+                Directory.Move(path, temp);
+                path = temp;
+            }
+
+            string newPath = Path.Combine(path, newExperimentName + EXTENSION);
+            string oldPath = Path.Combine(path, oldExperimentName + EXTENSION);
 
             if (File.Exists(oldPath))
             {
                 File.Move(oldPath, newPath);
+                RenameAllFiles(Directory.GetParent(oldPath).FullName, oldExperimentName, newExperimentName);
                 return path;
             }
             else
             {
                 return null;
+            }
+        }
+
+        private static void RenameAllFiles(string path, string oldExperimentName, string newExperimentName)
+        {
+            foreach(var file in AppFileName.Values)
+            {
+                string oldFile = Path.Combine(path, oldExperimentName + file);
+                if (File.Exists(oldFile))
+                {
+                    string newFile = Path.Combine(path, newExperimentName + file);
+                    File.Move(oldFile, newFile);
+                }
             }
         }
 
@@ -294,7 +315,7 @@ namespace Reactor_Interface.Classes.Experiment
             using (FileDialog fileDialog = new OpenFileDialog())
             {
                 fileDialog.Title = "Выберите эксперимент";
-                fileDialog.Filter = string.Format("Experiment (*{0})|*{0}", ExperimentSystem.experimentExtension);
+                fileDialog.Filter = string.Format("Experiment (*{0})|*{0}", ExperimentSystem.EXTENSION);
 
                 if (fileDialog.ShowDialog() != DialogResult.OK)
                     return null;
@@ -313,6 +334,19 @@ namespace Reactor_Interface.Classes.Experiment
 
             else
                 return RenameExperimentOnDisk(experiment.Name, newExperimentName, path);
+        }
+
+        public static void DeleteAppData(ExperimentData experiment, string experimentPath, string serieName)
+        {
+            experiment.ApplianceData.Remove(serieName);
+
+            if (!AppFileName.ContainsKey(serieName))
+                return;
+
+            string file = Path.Combine(experimentPath, experiment.Name + AppFileName[serieName]);
+
+            if(File.Exists(file))
+                File.Delete(file);
         }
     }
 }

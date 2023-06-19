@@ -221,7 +221,7 @@ namespace Reactor_Interface.Classes.Serie
 
             foreach (var experimentMetaData in serieExperiments)
             {
-                string experimentPath = Path.Combine(ExperimentsPath, experimentMetaData.GetExperimentFileName());
+                string experimentPath = Path.Combine(ExperimentsPath + "\\" + experimentMetaData.ExperimentName, experimentMetaData.GetExperimentFileName());
                 ExperimentData experiment = ExperimentSystem.UploadExperiment(experimentPath, false);
 
                 if (experiment == null)

@@ -51,9 +51,9 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
         private const string CHANGEDTIP = "Шаблон был изменён. Добавьте его в базу шаблонов серии";
         private const string DAMAGEDTIP = "Шаблон был повреждён. Невозможно создать эксперимент";
 
-        private Action<SerieExperimentMetaData, ExperimentData, bool> returnExperiment;
+        private Action<SerieExperimentMetaData, ExperimentData, bool, string> returnExperiment;
 
-        public CreateNewSerieExperiment(SerieData serie, Action<SerieExperimentMetaData, ExperimentData, bool> returnExperimentFunc)
+        public CreateNewSerieExperiment(SerieData serie, Action<SerieExperimentMetaData, ExperimentData, bool, string> returnExperimentFunc)
         {
             InitializeComponent();
             SelectedTemplateLabel.Text = "Шаблон не выбран";
@@ -257,7 +257,7 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
             newSerieExperiment.ExperimentName = Serie.Name + "_" + (Serie.GetLastExpIndex() + 1).ToString();
             newExperiment.Rename(newSerieExperiment.ExperimentName);
 
-            returnExperiment(newSerieExperiment, newExperiment, false);
+            returnExperiment(newSerieExperiment, newExperiment, false, null);
             this.Close();
         }
 

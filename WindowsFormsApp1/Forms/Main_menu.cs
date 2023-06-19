@@ -1,32 +1,19 @@
-﻿using Reactor_Interface;
+﻿#define DEBUG
+
+using Reactor_Interface;
 using Reactor_Interface.Classes;
 using Reactor_Interface.Classes.GoogleAPI;
-using Reactor_Interface.Classes.Weigher;
+using Reactor_Interface.Classes.Message;
 using Reactor_Interface.Forms;
 using System;
 using System.Collections.Concurrent;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.Globalization;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
-using System.Reflection.Emit;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Runtime.Remoting.Messaging;
-using System.Security.RightsManagement;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Timers;
 using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization.Charting;
-using System.Windows.Forms.VisualStyles;
-using System.Windows.Threading;
 using WindowsFormsApp1.Classes;
 using Label = System.Windows.Forms.Label;
 
@@ -57,7 +44,6 @@ namespace WindowsFormsApp1
         Thread IR_reading_thread;
 
         static ConcurrentQueue<string> dataQueue = new ConcurrentQueue<string>();
-        //static bool Wait = false;
 
         string pressed_button = " ";
         public Main_menu()
@@ -746,6 +732,9 @@ namespace WindowsFormsApp1
 
         private void send_experiment_btn_Click(object sender, EventArgs e)
         {
+#if DEBUG
+            WarningMessage.Show("Данная версия находитя в тестировании.\nПеред тем, как работать со старыми экспериментами или с сериями, настоятельно рекомендуется сделать их копию");
+#endif
             Jounral_menu exp = new Jounral_menu(graphic_menu.GetChart(), this);
             exp.ShowDialog();
         }

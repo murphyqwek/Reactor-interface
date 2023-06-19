@@ -100,7 +100,7 @@ namespace Reactor_Interface.Classes.Templates
 
         public string GetFileName()
         {
-            return Name + ExperimentSystem.experimentExtension; 
+            return Name + ExperimentSystem.EXTENSION; 
         }
 
         public void SetNewComments(string comments)

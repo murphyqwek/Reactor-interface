@@ -192,7 +192,6 @@
     <Compile Include="Classes\DPI.cs" />
     <Compile Include="Classes\Exceptions\ExperimentIsNotCapableWithTemplateExcpetion.cs" />
     <Compile Include="Classes\Exceptions\NullTemplateException.cs" />
-    <Compile Include="Classes\Experiment\ExperimentDataСomp.cs" />
     <Compile Include="Classes\Message\ConfirmMessageBox.cs" />
     <Compile Include="Classes\Message\ErrorMessage.cs" />
     <Compile Include="Classes\Error_message.cs" />
@@ -216,6 +215,7 @@
     <Compile Include="Classes\Message\SuccessMessage.cs" />
     <Compile Include="Classes\Interface_settings.cs" />
     <Compile Include="Classes\Internet_checker.cs" />
+    <Compile Include="Classes\Message\WarningMessage.cs" />
     <Compile Include="Classes\Port.cs" />
     <Compile Include="Classes\Experiment\ExperimentData.cs" />
     <Compile Include="Classes\Experiment\TemplateSystem.cs" />

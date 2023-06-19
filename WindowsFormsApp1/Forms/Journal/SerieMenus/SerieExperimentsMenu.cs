@@ -24,7 +24,7 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
         const string DAMAGEDTIPTEXT = "Эксперимент был повреждён";
         const string MISSINGTIPTEXT = "Эксперимент отсутсвует в папке экспериментов";
 
-        Action<SerieExperimentMetaData, ExperimentData, bool> _returnExperiment;
+        Action<SerieExperimentMetaData, ExperimentData, bool, string> _returnExperiment;
         SerieData Serie;
         string currentExperimnetName;
 
@@ -48,7 +48,7 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
             }
         }
 
-        public SerieExperimentsMenu(SerieData serieData, Action<SerieExperimentMetaData, ExperimentData, bool> returnExperimentFunc, string CurrentExperimentName)
+        public SerieExperimentsMenu(SerieData serieData, Action<SerieExperimentMetaData, ExperimentData, bool, string> returnExperimentFunc, string CurrentExperimentName)
         {
             InitializeComponent();
             _returnExperiment = returnExperimentFunc;
@@ -83,25 +83,26 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
         }
         private void AddExperimentsToSerieNode(TreeNode serieNode, List<SerieExperimentMetaData> serieExperiments)
         {
-            foreach(var Experiment in serieExperiments)
+            foreach(var ExperimentMetaData in serieExperiments)
             {
-                string experimentPath = Path.Combine(Serie.ExperimentPath, Experiment.GetExperimentFileName());
+                string experimentPath = SerieSystem.GetExperimentFilePath(Serie, ExperimentMetaData);
+
                 if (!File.Exists(experimentPath))
                 {
-                    AddMissingExperiment(serieNode, Experiment.ExperimentName);
+                    AddMissingExperiment(serieNode, ExperimentMetaData.ExperimentName);
                     continue;
                 }
 
                 var expData = ExperimentSystem.UploadExperiment(experimentPath, true);
 
-                string templateKey = Experiment.TemplateName;
+                string templateKey = ExperimentMetaData.TemplateName;
 
                 if (expData == null)
-                    AddDamagedExperiment(serieNode, Experiment.ExperimentName);
+                    AddDamagedExperiment(serieNode, ExperimentMetaData.ExperimentName);
                 else if (!Serie.SerieTemplates[templateKey].IsExperimentCapabledWithTemplate(expData))
-                    AddChangedExperiment(serieNode, Experiment.ExperimentName);
+                    AddChangedExperiment(serieNode, ExperimentMetaData.ExperimentName);
                 else
-                    AddExperiment(serieNode, Experiment.ExperimentName);
+                    AddExperiment(serieNode, ExperimentMetaData.ExperimentName);
             }
         }
 
@@ -197,7 +198,9 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
                 return;
             }
 
-            _returnExperiment(metaData, experiment, true);
+            string experimentPath = SerieSystem.GetExperimentFolderPath(Serie, metaData);
+
+            _returnExperiment(metaData, experiment, true, experimentPath);
             this.Close();
         }
 
@@ -222,7 +225,7 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
             SuccesMessage.Show("Эксперимент был удалён");
 
             if (experimentName == currentExperimnetName)
-                _returnExperiment(new SerieExperimentMetaData(), null, true);
+                _returnExperiment(new SerieExperimentMetaData(), null, true, null);
 
             SelectedExperiment = null;
 
@@ -268,7 +271,7 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
 
             try
             {
-                SerieSystem.AddExistedExperiment(Serie, Experiment, TemplateName);
+                SerieSystem.AddExistedExperiment(Serie, Experiment, TemplateName, path);
                 SuccesMessage.Show("Эксперимент был добавлен в серию");
             }
             catch (Exception ex)
