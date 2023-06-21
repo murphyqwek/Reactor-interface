@@ -428,7 +428,7 @@
             this.left_btn.BackColor = System.Drawing.Color.Silver;
             this.left_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.left_btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.left_btn.Location = new System.Drawing.Point(1083, 640);
+            this.left_btn.Location = new System.Drawing.Point(1068, 640);
             this.left_btn.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.left_btn.Name = "left_btn";
             this.left_btn.Size = new System.Drawing.Size(182, 112);
@@ -502,7 +502,7 @@
             this.reactor_box.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.reactor_box.Name = "reactor_box";
             this.reactor_box.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.reactor_box.Size = new System.Drawing.Size(936, 644);
+            this.reactor_box.Size = new System.Drawing.Size(936, 537);
             this.reactor_box.TabIndex = 15;
             this.reactor_box.TabStop = false;
             this.reactor_box.Text = "Запуск реактора";
@@ -671,8 +671,7 @@
             // 
             // Main_menu
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1664, 771);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);

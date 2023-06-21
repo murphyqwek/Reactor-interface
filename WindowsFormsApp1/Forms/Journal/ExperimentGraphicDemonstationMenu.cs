@@ -21,7 +21,8 @@ namespace Reactor_Interface.Forms.Journal
             { "Средний ток", "aver_tok" },
             { "Ток", "tok" },
             { "Шаг", "step" },
-            { "XRD", "xrd" }
+            { "XRD", "xrd" },
+            { "Осциллограф", "oscillograph" }
         };
 
         const string ExperimentChartArea = "ExperimentChartArea";
@@ -38,6 +39,8 @@ namespace Reactor_Interface.Forms.Journal
                     {
                         Graphic.Series[serie].Points.AddXY(point.X, point.Y);
                     }
+                    Graphic.Series[serie].LegendText = experiment.ApplianceData[serie].LegendText;
+                    Graphic.Series[serie].Color = experiment.ApplianceData[serie].SerieColor;
                 }
                 catch { }
             }
@@ -58,6 +61,15 @@ namespace Reactor_Interface.Forms.Journal
                 string currentSerieName = Graphic.Series[i].Name;
                 Graphic.Series[i].ChartArea = currentSerieName == serie ? ExperimentChartArea : HiddenSerieArea;
                 Graphic.Series[i].IsVisibleInLegend = (currentSerieName == serie);
+            }
+
+            if(serie == "oscillograph")
+            {
+                Graphic.Series["OSC_CH1"].ChartArea = ExperimentChartArea;
+                Graphic.Series["OSC_CH2"].ChartArea = ExperimentChartArea;
+
+                Graphic.Series["OSC_CH1"].IsVisibleInLegend = true;
+                Graphic.Series["OSC_CH2"].IsVisibleInLegend = true;
             }
 
             Graphic.ChartAreas[ExperimentChartArea].RecalculateAxesScale();

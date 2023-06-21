@@ -14,10 +14,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.IO;
-using Microsoft.Office.Interop.Access.Dao;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Reactor_Interface.Classes.Message;
 using Reactor_Interface.Classes;
+using Reactor_Interface.Classes.Oscillograph;
 
 namespace Reactor_Interface.Forms.Journal
 {
@@ -28,11 +27,19 @@ namespace Reactor_Interface.Forms.Journal
         bool changed = false;
         string experimentPath;
 
+        enum DataType
+        {
+            XRD,
+            OSC,
+            OSC_PIC
+        }
+
         readonly Dictionary<string, string> SerieName = new Dictionary<string, string>
         {
             {"Пирометр", "temperature"},
             {"XRD", "xrd"},
-            {"Осциллограф", "oscillograph"}
+            {"Осциллограф", "oscillograph"},
+            {"Осциллограф(картинка)", "oscillograph(pic)"}
         };
 
         readonly Dictionary<string, CheckBox> AppCheckBoxes = new Dictionary<string, CheckBox>();
@@ -47,6 +54,7 @@ namespace Reactor_Interface.Forms.Journal
             AppCheckBoxes.Add("Пирометр", piroChBx);
             AppCheckBoxes.Add("XRD", xrdChBx);
             AppCheckBoxes.Add("Осциллограф", osciChBx);
+            AppCheckBoxes.Add("Осциллограф(картинка)", oscPicChBx);
 
             if (_experiment.ApplianceData == null)
                 return;
@@ -58,6 +66,12 @@ namespace Reactor_Interface.Forms.Journal
                 if (_experiment.ApplianceData.ContainsKey(dataName))
                     AppCheckBoxes[AppViewList.Items[i].Text].Checked = true;
             }
+
+            if (_experiment.ApplianceData.ContainsKey("OSC_CH1"))
+                osciChBx.Checked = true;
+
+            if(ExperimentSystem.HasOSCPic(experiment, ExperimentPath))
+                oscPicChBx.Checked = true;
 
         }
 
@@ -76,29 +90,19 @@ namespace Reactor_Interface.Forms.Journal
             return new ApplianceData(GetPointsFromChart(serieName), SerieColor, legendText, serieName);
         }
 
-        private ApplianceData GetXRDData()
+        private Dictionary<string, ApplianceData> GetXRDData()
         {
-            List<GraphPoint> xrdPoints = new List<GraphPoint>();
-            string newXRDpath = "";
-            string oldXRDpath = "";
-            using (OpenFileDialog dlg = new OpenFileDialog())
-            {
+            List<GraphPoint> xrdPoints;
+            string oldXRDpath;
 
-                dlg.Title = "Выберите файл рентгена";
-                dlg.Filter = "Файл Ренгтена (*.txt)|*.txt|All files (*.*)|*.*";
-                dlg.Multiselect = false;
+            oldXRDpath = XRDParser.GetXRDFilePath();
 
-                dlg.ShowDialog();
-                if (string.IsNullOrEmpty(dlg.FileName))
-                        return null;
+            if (oldXRDpath == null)
+                return null;
 
-                xrdPoints = XRDParser.ParseXRDToGraphPoints(dlg.FileName);
-                if (Directory.Exists(experimentPath))
-                {
-                    newXRDpath = _experiment.Name + ExperimentSystem.AppFileName["xrd"];
-                    oldXRDpath = dlg.FileName;
-                }
-            }
+            xrdPoints = XRDParser.ParseXRDToGraphPoints(oldXRDpath);
+
+            string seriename = SerieName["XRD"];
 
             if (xrdPoints == null)
             {
@@ -106,15 +110,11 @@ namespace Reactor_Interface.Forms.Journal
                 return null;
             }
 
-            if (newXRDpath != "")
-            {
-                newXRDpath = Path.Combine(experimentPath, newXRDpath);
-                if (File.Exists(newXRDpath))
-                    File.Delete(newXRDpath);
-                File.Copy(oldXRDpath, newXRDpath);
-            }
+            ExperimentSystem.MoveAppFileToExperimentDirectory(experimentPath, _experiment, oldXRDpath, SerieName["XRD"]);
 
-            return new ApplianceData(xrdPoints, Color.DarkCyan, "XRD", "xrd");
+            return new Dictionary<string, ApplianceData>(){
+                {seriename, new ApplianceData(xrdPoints, Color.DarkCyan, "XRD", seriename) }
+            };
         }
 
         private void UploadingApplicienceDataMenu_FormClosing(object sender, FormClosingEventArgs e)
@@ -125,20 +125,34 @@ namespace Reactor_Interface.Forms.Journal
                 DialogResult = DialogResult.No;
         }
 
-        private void AppViewList_ItemCheck(object sender, ItemCheckEventArgs e)
+        private void UploadData(ListViewItem item, Dictionary<string, ApplianceData> experimentData, DataType dataType)
         {
-            
-        }
+            Dictionary<string, ApplianceData> data = null;
 
-        private void UploadXRDData(ListViewItem item, Dictionary<string, ApplianceData> experimentData, string serieName)
-        {
-            var data = GetXRDData();
+            switch (dataType) 
+            {
+                case DataType.XRD:
+                    data = GetXRDData();
+                break;
+
+                case DataType.OSC:
+                    data = GetOSCData();
+                break;
+
+                case DataType.OSC_PIC:
+                    GetOSCPic();
+                    return;
+            }
+
             if (data != null)
             {
-                if (experimentData.ContainsKey(serieName))
-                    experimentData[serieName] = data;
-                else
-                    experimentData.Add(serieName, data);
+                foreach (var appDataName in data.Keys)
+                {
+                    if (experimentData.ContainsKey(appDataName))
+                        experimentData[appDataName] = data[appDataName];
+                    else
+                        experimentData.Add(appDataName, data[appDataName]);
+                }
                 _experiment.SetNewApplianceData(experimentData);
                 UploadedMessageBoxShow();
                 changed = true;
@@ -147,6 +161,56 @@ namespace Reactor_Interface.Forms.Journal
             }
             else
                 item.Checked = false;
+        }
+
+        private void GetOSCPic()
+        {
+            string oldOSCPicPath = OscillographParser.GetOSCPicPath();
+
+            string seriename = SerieName["Осциллограф(картинка)"];
+
+            ExperimentSystem.MoveAppFileToExperimentDirectory(experimentPath, _experiment, oldOSCPicPath, seriename);
+            
+            oscPicChBx.Checked = true;
+            UploadedMessageBoxShow();
+        }
+
+        private Dictionary<string, ApplianceData> GetOSCData()
+        {
+            string oldOSCpath;
+
+            oldOSCpath = OscillographParser.GetOSCFilePath();
+
+            if (oldOSCpath == null)
+                return null;
+
+            var OSCSeries = OscillographParser.ParseOscillographToGraphPoints(oldOSCpath);
+
+            if (OSCSeries == null)
+            {
+                MessageBox.Show("Файл повреждён", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                return null;
+            }
+
+            string seriename = SerieName["Осциллограф"];
+
+            ExperimentSystem.MoveAppFileToExperimentDirectory(experimentPath, _experiment, oldOSCpath, seriename);
+
+            ApplianceData applianceData1 = new ApplianceData(OSCSeries[0], 
+                                                            Color.FromArgb(255, 0, 165, 165), 
+                                                            "Напряжение", seriename);
+
+            ApplianceData applianceData2 = new ApplianceData(OSCSeries[1],
+                                                            Color.FromArgb(255, 165, 165, 0),
+                                                            "Ток", seriename);
+
+
+
+            return new Dictionary<string, ApplianceData>() 
+            { 
+                { "OSC_CH1", applianceData1 },
+                { "OSC_CH2", applianceData2 },
+            };
         }
 
         private void UploadedMessageBoxShow()
@@ -200,7 +264,19 @@ namespace Reactor_Interface.Forms.Journal
 
             if (serieName == "xrd")
             {
-                UploadXRDData(item, experimentData, serieName);
+                UploadData(item, experimentData, DataType.XRD);
+                return;
+            }
+            
+            if(serieName == "oscillograph")
+            {
+                UploadData(item, experimentData, DataType.OSC);
+                return;
+            }
+
+            if(serieName == "oscillograph(pic)")
+            {
+                UploadData(item, experimentData, DataType.OSC_PIC);
                 return;
             }
 

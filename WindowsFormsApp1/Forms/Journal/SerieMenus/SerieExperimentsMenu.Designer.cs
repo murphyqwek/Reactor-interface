@@ -115,7 +115,7 @@
             this.OpenExperimentFolderBtn});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(800, 33);
+            this.menuStrip1.Size = new System.Drawing.Size(800, 36);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -123,14 +123,14 @@
             // 
             this.ExcelExportBtn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.ExcelExportBtn.Name = "ExcelExportBtn";
-            this.ExcelExportBtn.Size = new System.Drawing.Size(220, 29);
+            this.ExcelExportBtn.Size = new System.Drawing.Size(220, 32);
             this.ExcelExportBtn.Text = "Экспортировать в Excel";
             this.ExcelExportBtn.Click += new System.EventHandler(this.ExcelExportBtn_Click);
             // 
             // OpenExperimentFolderBtn
             // 
             this.OpenExperimentFolderBtn.Name = "OpenExperimentFolderBtn";
-            this.OpenExperimentFolderBtn.Size = new System.Drawing.Size(285, 29);
+            this.OpenExperimentFolderBtn.Size = new System.Drawing.Size(285, 32);
             this.OpenExperimentFolderBtn.Text = "Открыть папку экспериментов ";
             this.OpenExperimentFolderBtn.Click += new System.EventHandler(this.OpenExperimentFolderBtn_Click);
             // 
@@ -189,7 +189,7 @@
             this.TemplateSeireContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.AddNewExperimentBtn});
             this.TemplateSeireContextMenu.Name = "TemplateSeireContextMenu";
-            this.TemplateSeireContextMenu.Size = new System.Drawing.Size(331, 69);
+            this.TemplateSeireContextMenu.Size = new System.Drawing.Size(331, 36);
             // 
             // AddNewExperimentBtn
             // 
@@ -200,8 +200,8 @@
             // 
             // SerieExperimentsMenu
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.UploadTemplateBtn);
             this.Controls.Add(this.UpdateListViewBtn);

@@ -36,6 +36,8 @@
             System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExperimentGraphicDemonstationMenu));
             this.Graphic = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -45,6 +47,7 @@
             this.токToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.шагToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.XRDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.oscDataBtn = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.Graphic)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -105,11 +108,26 @@
             series5.Legend = "ExperimentLegend";
             series5.LegendText = "XRD";
             series5.Name = "xrd";
+            series6.BorderWidth = 3;
+            series6.ChartArea = "HiddenSeriesArea";
+            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series6.IsVisibleInLegend = false;
+            series6.Legend = "ExperimentLegend";
+            series6.LegendText = "Напряжение";
+            series6.Name = "OSC_CH1";
+            series7.BorderWidth = 3;
+            series7.ChartArea = "HiddenSeriesArea";
+            series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series7.IsVisibleInLegend = false;
+            series7.Legend = "ExperimentLegend";
+            series7.Name = "OSC_CH2";
             this.Graphic.Series.Add(series1);
             this.Graphic.Series.Add(series2);
             this.Graphic.Series.Add(series3);
             this.Graphic.Series.Add(series4);
             this.Graphic.Series.Add(series5);
+            this.Graphic.Series.Add(series6);
+            this.Graphic.Series.Add(series7);
             this.Graphic.Size = new System.Drawing.Size(946, 412);
             this.Graphic.TabIndex = 0;
             // 
@@ -132,7 +150,8 @@
             this.среднийТокToolStripMenuItem,
             this.токToolStripMenuItem,
             this.шагToolStripMenuItem,
-            this.XRDToolStripMenuItem});
+            this.XRDToolStripMenuItem,
+            this.oscDataBtn});
             this.DataStripMenu.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.DataStripMenu.Name = "DataStripMenu";
             this.DataStripMenu.Size = new System.Drawing.Size(114, 34);
@@ -143,36 +162,42 @@
             // 
             this.температураToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.температураToolStripMenuItem.Name = "температураToolStripMenuItem";
-            this.температураToolStripMenuItem.Size = new System.Drawing.Size(270, 36);
+            this.температураToolStripMenuItem.Size = new System.Drawing.Size(253, 38);
             this.температураToolStripMenuItem.Text = "Температура";
             // 
             // среднийТокToolStripMenuItem
             // 
             this.среднийТокToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.среднийТокToolStripMenuItem.Name = "среднийТокToolStripMenuItem";
-            this.среднийТокToolStripMenuItem.Size = new System.Drawing.Size(270, 36);
+            this.среднийТокToolStripMenuItem.Size = new System.Drawing.Size(253, 38);
             this.среднийТокToolStripMenuItem.Text = "Средний ток";
             // 
             // токToolStripMenuItem
             // 
             this.токToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.токToolStripMenuItem.Name = "токToolStripMenuItem";
-            this.токToolStripMenuItem.Size = new System.Drawing.Size(270, 36);
+            this.токToolStripMenuItem.Size = new System.Drawing.Size(253, 38);
             this.токToolStripMenuItem.Text = "Ток";
             // 
             // шагToolStripMenuItem
             // 
             this.шагToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.шагToolStripMenuItem.Name = "шагToolStripMenuItem";
-            this.шагToolStripMenuItem.Size = new System.Drawing.Size(270, 36);
+            this.шагToolStripMenuItem.Size = new System.Drawing.Size(253, 38);
             this.шагToolStripMenuItem.Text = "Шаг";
             // 
             // XRDToolStripMenuItem
             // 
             this.XRDToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.XRDToolStripMenuItem.Name = "XRDToolStripMenuItem";
-            this.XRDToolStripMenuItem.Size = new System.Drawing.Size(270, 36);
+            this.XRDToolStripMenuItem.Size = new System.Drawing.Size(253, 38);
             this.XRDToolStripMenuItem.Text = "XRD";
+            // 
+            // oscDataBtn
+            // 
+            this.oscDataBtn.Name = "oscDataBtn";
+            this.oscDataBtn.Size = new System.Drawing.Size(253, 38);
+            this.oscDataBtn.Text = "Осциллограф";
             // 
             // ExperimentGraphicDemonstationMenu
             // 
@@ -203,5 +228,6 @@
         private System.Windows.Forms.ToolStripMenuItem токToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem шагToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem XRDToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem oscDataBtn;
     }
 }

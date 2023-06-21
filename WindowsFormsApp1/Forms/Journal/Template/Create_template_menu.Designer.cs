@@ -56,7 +56,7 @@
             this.rename_page_menu_btn});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(802, 36);
+            this.menuStrip1.Size = new System.Drawing.Size(802, 38);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -106,7 +106,7 @@
             this.CancelConnectionBtn,
             this.renameConnectedFieldsBtn});
             this.context_menu.Name = "context_menu";
-            this.context_menu.Size = new System.Drawing.Size(300, 197);
+            this.context_menu.Size = new System.Drawing.Size(300, 164);
             this.context_menu.Opening += new System.ComponentModel.CancelEventHandler(this.context_menu_Opening);
             // 
             // select_weigh_btn

@@ -41,8 +41,8 @@
             this.find_btn = new System.Windows.Forms.Button();
             this.chosen_template_lbl = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.AddTemplateBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.UploadTemplateBtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.AddTemplateBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.CreateNewTemplateBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.UpdateTemplateBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.template_gorupbox.SuspendLayout();
@@ -147,6 +147,7 @@
             // 
             // menuStrip1
             // 
+            this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.UploadTemplateBtn,
@@ -155,42 +156,42 @@
             this.UpdateTemplateBtn});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(821, 33);
+            this.menuStrip1.Size = new System.Drawing.Size(821, 36);
             this.menuStrip1.TabIndex = 8;
             this.menuStrip1.Text = "menuStrip1";
-            // 
-            // AddTemplateBtn
-            // 
-            this.AddTemplateBtn.Name = "AddTemplateBtn";
-            this.AddTemplateBtn.Size = new System.Drawing.Size(174, 29);
-            this.AddTemplateBtn.Text = "Добавить шаблон";
-            this.AddTemplateBtn.Click += new System.EventHandler(this.AddTemplateBtn_Click);
             // 
             // UploadTemplateBtn
             // 
             this.UploadTemplateBtn.Name = "UploadTemplateBtn";
-            this.UploadTemplateBtn.Size = new System.Drawing.Size(202, 29);
+            this.UploadTemplateBtn.Size = new System.Drawing.Size(202, 32);
             this.UploadTemplateBtn.Text = "Создать эксперимент";
             this.UploadTemplateBtn.Click += new System.EventHandler(this.UploadTemplateBtn_Click);
+            // 
+            // AddTemplateBtn
+            // 
+            this.AddTemplateBtn.Name = "AddTemplateBtn";
+            this.AddTemplateBtn.Size = new System.Drawing.Size(174, 32);
+            this.AddTemplateBtn.Text = "Добавить шаблон";
+            this.AddTemplateBtn.Click += new System.EventHandler(this.AddTemplateBtn_Click);
             // 
             // CreateNewTemplateBtn
             // 
             this.CreateNewTemplateBtn.Name = "CreateNewTemplateBtn";
-            this.CreateNewTemplateBtn.Size = new System.Drawing.Size(220, 29);
+            this.CreateNewTemplateBtn.Size = new System.Drawing.Size(220, 32);
             this.CreateNewTemplateBtn.Text = "Создать новый шаблон";
             this.CreateNewTemplateBtn.Click += new System.EventHandler(this.CreateNewTemplateBtn_Click);
             // 
             // UpdateTemplateBtn
             // 
             this.UpdateTemplateBtn.Name = "UpdateTemplateBtn";
-            this.UpdateTemplateBtn.Size = new System.Drawing.Size(190, 29);
+            this.UpdateTemplateBtn.Size = new System.Drawing.Size(190, 32);
             this.UpdateTemplateBtn.Text = "Обновить шаблоны";
             this.UpdateTemplateBtn.Click += new System.EventHandler(this.UpdateTemplateBtn_Click);
             // 
             // Template_menu
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(821, 464);
             this.Controls.Add(this.chosen_template_lbl);
             this.Controls.Add(this.menuStrip1);

@@ -7,6 +7,7 @@ using Reactor_Interface.Forms;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,22 @@ namespace Reactor_Interface.Classes.Serie
         const int FONTSIZE = 11;
         const string FONTNAME = "Times New Roman";
         const double koef = 10.0;
+
+        private static Dictionary<string, int> AppColumns = new Dictionary<string, int>()
+        {
+            {"Данные реактора", 0},
+            {"Данные пирометра", 0},
+            {"Данные XRD", 0},
+            {"Данные осциллографа", 0}
+        };
+
+        private static readonly Dictionary<string, string> AppHeaders = new Dictionary<string, string>()
+        {
+            {"Данные реактора", "aver_tok"},
+            {"Данные пирометра", "temperature"},
+            {"Данные XRD", "xrd"},
+            {"Данные осциллографа", "OSC_CH1"}
+        };
 
         private static bool checkSerieData(SerieData serieData)
         {
@@ -44,11 +61,6 @@ namespace Reactor_Interface.Classes.Serie
 
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
-
-            path = Path.Combine(path, DateTime.Now.ToString("HH.mm.ss"));
-
-            if(Directory.Exists(path))
-                Directory.Delete(path, true);
 
             Directory.CreateDirectory(path);
 
@@ -192,7 +204,27 @@ namespace Reactor_Interface.Classes.Serie
                 column++;
             }
 
+            AddAppFields(column, serieWorksSheet);
+
             return templateFieldsCells;
+        }
+
+        private static void AddAppFields(int column, ExcelWorksheet serieWorksSheet)
+        {
+            Dictionary<string, int> NewAppColumns = new Dictionary<string, int>();
+
+            foreach (var key in AppColumns.Keys)
+            {
+                NewAppColumns.Add(key, column);
+                var cell = serieWorksSheet.Cells[1, column, 2, column];
+                serieWorksSheet.Columns[column].Width += koef;
+                cell.Merge = true;
+                cell.Value = key;
+                SetupCell(cell, false);
+                column++;
+            }
+
+            AppColumns = NewAppColumns;
         }
 
         private static void InsertValueAndAutoSizeMergedCells(string value, int fromRow, int fromColumn, int toRow, int toColumn, ExcelWorksheet serieWorksSheet)
@@ -222,7 +254,7 @@ namespace Reactor_Interface.Classes.Serie
             foreach (var experimentMetaData in serieExperiments)
             {
                 string experimentPath = Path.Combine(ExperimentsPath + "\\" + experimentMetaData.ExperimentName, experimentMetaData.GetExperimentFileName());
-                ExperimentData experiment = ExperimentSystem.UploadExperiment(experimentPath, false);
+                ExperimentData experiment = ExperimentSystem.UploadExperiment(experimentPath, true);
 
                 if (experiment == null)
                     continue;
@@ -247,7 +279,58 @@ namespace Reactor_Interface.Classes.Serie
                     SetupCell(cell, true);
                 }
 
+                PutAppData(experimentPath, row, serieWorkSheet);
+
                 row++;
+            }
+        }
+
+        private static void PutAppData(string experimentPath, int row, ExcelWorksheet serieWorkSheet)
+        {
+            string experimentText = ExperimentSystem.GetExperimentText(experimentPath);
+
+            int AppDataIndex = experimentText.IndexOf(",\"" + "ApplianceData" + "\"" + ":{");
+            int ConnectedFieldsIndex = experimentText.IndexOf(",\"ConnectedFields\":");
+
+            bool HasAppData = AppDataIndex != -1;
+
+            if (ConnectedFieldsIndex > AppDataIndex && AppDataIndex != -1 && ConnectedFieldsIndex != -1)
+            {
+                ExperimentSystem.ResaveExperiment(experimentPath);
+                experimentText = ExperimentSystem.GetExperimentText(experimentPath);
+                AppDataIndex = experimentText.IndexOf(",\"" + "ApplianceData" + "\"" + ":{");
+            }
+
+            foreach (string AppColumn in AppColumns.Keys)
+            {
+                int column = AppColumns[AppColumn];
+
+                var cell = serieWorkSheet.Cells[row, column];
+
+                SetupCell(cell, false);
+                cell.Style.Font.Bold = true;
+                cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+
+                if (!HasAppData)
+                {
+                    cell.Value = "-";
+                    cell.Style.Fill.BackgroundColor.SetColor(Color.Red);
+                    continue;
+                }
+
+                string AppSerieName = AppHeaders[AppColumn];
+                int AppHeaderIndex = experimentText.IndexOf(AppSerieName);
+
+                if (AppHeaderIndex == -1 || AppHeaderIndex < AppDataIndex)
+                {
+                    cell.Value = "-";
+                    cell.Style.Fill.BackgroundColor.SetColor(Color.Red);
+                }
+                else
+                {
+                    cell.Value = "+";
+                    cell.Style.Fill.BackgroundColor.SetColor(Color.Lime);
+                }
             }
         }
     }

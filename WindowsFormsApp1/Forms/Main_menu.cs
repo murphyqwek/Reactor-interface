@@ -49,14 +49,14 @@ namespace WindowsFormsApp1
         public Main_menu()
         {
             InitializeComponent();
-
+            Console.WriteLine(this.Size);
             graphic_menu = new Graphic_menu();
             //graphic_menu.Clear_Graphic();
 
             IntPtr intPtr = graphic_menu.Handle; //Создаётся Handle, без этой строчки данные с реактора не смогут отображаться на графике, когда окно закрыто
 
-            DPI.ResizeGroupbox(reactor_box, new Size(780, 438));
-            DPI.ResizeGroupbox(mode_settings_box, new Size(711, 153));
+            //DPI.ResizeGroupbox(reactor_box, new Size(780, 438));
+            //DPI.ResizeGroupbox(mode_settings_box, new Size(711, 153));
 
             port = Interface_settings.get_port();
             speed = Interface_settings.get_speed();
@@ -69,9 +69,11 @@ namespace WindowsFormsApp1
 
         protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
         {
-            base.ScaleControl(factor, specified);
+            Console.WriteLine(this.Size);
+            //base.ScaleControl(factor, specified);
             DPI.SetFactor(factor);
-            this.Size = new Size((int)((button2.Location.X + button2.Size.Width * 1.4) * factor.Width), (int)((stop_btn.Location.Y + stop_btn.Size.Height * 1.4) * factor.Height));
+            //this.Size = new Size((int)((button2.Location.X + button2.Size.Width * 1.4) * factor.Width), (int)((stop_btn.Location.Y + stop_btn.Size.Height * 1.4) * factor.Height));
+            Console.WriteLine(this.Size);
         }
 
         private void time_syntes_bar_Scroll(object sender, EventArgs e)
@@ -89,8 +91,8 @@ namespace WindowsFormsApp1
                 time_bar.Value = time_bar.Minimum;
                 time_bar.Maximum = 60;
 
-                DPI.ResizeGroupbox(reactor_box, new Size(780, 438));
-                DPI.ResizeGroupbox(mode_settings_box, new Size(711, 153));
+                //DPI.ResizeGroupbox(reactor_box, new Size(780, 438));
+                //DPI.ResizeGroupbox(mode_settings_box, new Size(711, 153));
 
                 iteration_label.Visible = false;
                 iteration_counter.Visible = false;
@@ -107,12 +109,12 @@ namespace WindowsFormsApp1
                 time_bar.Value = time_bar.Minimum;
                 time_bar.Maximum = 20;
 
-                DPI.ResizeGroupbox(reactor_box, new Size(780, 537));
+                //DPI.ResizeGroupbox(reactor_box, new Size(780, 537));
 
                 cold_bar.Value = cold_bar.Minimum;
                 fire_bar.Value = fire_bar.Minimum;
 
-                DPI.ResizeGroupbox(mode_settings_box, new Size(751, 252));
+                //DPI.ResizeGroupbox(mode_settings_box, new Size(751, 252));
 
                 iteration_counter.Value = 2;
                 iteration_label.Visible = true;
@@ -732,9 +734,7 @@ namespace WindowsFormsApp1
 
         private void send_experiment_btn_Click(object sender, EventArgs e)
         {
-#if DEBUG
             WarningMessage.Show("Данная версия находитя в тестировании.\nПеред тем, как работать со старыми экспериментами или с сериями, настоятельно рекомендуется сделать их копию");
-#endif
             Jounral_menu exp = new Jounral_menu(graphic_menu.GetChart(), this);
             exp.ShowDialog();
         }

@@ -25,7 +25,8 @@ namespace Reactor_Interface.Classes.Experiment
         public readonly static Dictionary<string, string> AppFileName = new Dictionary<string, string>
         {
             {"xrd", " (XRD).txt"},
-            //{"oscillograph", " (Осциллограф)."}
+            {"oscillograph", " (Осциллограф).csv"},
+            {"oscillograph(pic)", " (Осциллограф).bmp" }
         };
 
         public enum ExperimentStorePlace
@@ -93,7 +94,14 @@ namespace Reactor_Interface.Classes.Experiment
             return DeserializeObject(textOfExperiment);
         }
 
-        private static string GetExperimentText(string experimentPath)
+        public static void ResaveExperiment(string experimentPath)
+        {
+            var experiment = UploadExperiment(experimentPath, false);
+
+            SaveExperiment(experiment, experimentPath);
+        }
+
+        public static string GetExperimentText(string experimentPath)
         {
             using (FileStream fstream = new FileStream(experimentPath, FileMode.Open))
             {
@@ -340,6 +348,12 @@ namespace Reactor_Interface.Classes.Experiment
         {
             experiment.ApplianceData.Remove(serieName);
 
+            if(serieName == "oscillograph")
+            {
+                experiment.ApplianceData.Remove("OSC_CH1");
+                experiment.ApplianceData.Remove("OSC_CH2");
+            }
+
             if (!AppFileName.ContainsKey(serieName))
                 return;
 
@@ -347,6 +361,27 @@ namespace Reactor_Interface.Classes.Experiment
 
             if(File.Exists(file))
                 File.Delete(file);
+        }
+
+        public static void MoveAppFileToExperimentDirectory(string experimentPath, ExperimentData experiment, string oldFilePath, string seriename)
+        {
+            if (!Directory.Exists(experimentPath))
+                return;
+
+            string newFilePath = experiment.Name + AppFileName[seriename];
+
+            newFilePath = Path.Combine(experimentPath, newFilePath);
+            if (File.Exists(newFilePath))
+                File.Delete(newFilePath);
+            File.Copy(oldFilePath, newFilePath);
+        }
+
+        public static bool HasOSCPic(ExperimentData experiment, string experimentPath)
+        {
+            string fileName = experiment.Name + AppFileName["oscillograph(pic)"];
+            string filePath = Path.Combine(experimentPath, fileName);
+
+            return File.Exists(filePath);
         }
     }
 }

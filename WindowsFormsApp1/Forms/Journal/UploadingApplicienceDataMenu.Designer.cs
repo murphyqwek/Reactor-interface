@@ -32,6 +32,7 @@
             System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("Пирометр");
             System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("XRD");
             System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("Осциллограф");
+            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem("Осциллограф(картинка)");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UploadingApplicienceDataMenu));
             this.appDataContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.deleteDataBtn = new System.Windows.Forms.ToolStripMenuItem();
@@ -40,6 +41,7 @@
             this.piroChBx = new System.Windows.Forms.CheckBox();
             this.xrdChBx = new System.Windows.Forms.CheckBox();
             this.osciChBx = new System.Windows.Forms.CheckBox();
+            this.oscPicChBx = new System.Windows.Forms.CheckBox();
             this.appDataContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -50,7 +52,7 @@
             this.deleteDataBtn,
             this.rewriteDataBtn});
             this.appDataContextMenu.Name = "appDataContextMenu";
-            this.appDataContextMenu.Size = new System.Drawing.Size(272, 101);
+            this.appDataContextMenu.Size = new System.Drawing.Size(272, 68);
             this.appDataContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.appDataContextMenu_Opening);
             // 
             // deleteDataBtn
@@ -79,15 +81,15 @@
             this.AppViewList.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
             listViewItem1,
             listViewItem2,
-            listViewItem3});
+            listViewItem3,
+            listViewItem4});
             this.AppViewList.Location = new System.Drawing.Point(0, 0);
             this.AppViewList.MultiSelect = false;
             this.AppViewList.Name = "AppViewList";
-            this.AppViewList.Size = new System.Drawing.Size(291, 115);
+            this.AppViewList.Size = new System.Drawing.Size(291, 136);
             this.AppViewList.TabIndex = 2;
             this.AppViewList.UseCompatibleStateImageBehavior = false;
             this.AppViewList.View = System.Windows.Forms.View.List;
-            this.AppViewList.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.AppViewList_ItemCheck);
             this.AppViewList.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.AppViewList_MouseDoubleClick);
             // 
             // piroChBx
@@ -120,11 +122,22 @@
             this.osciChBx.TabIndex = 5;
             this.osciChBx.UseVisualStyleBackColor = true;
             // 
+            // oscPicChBx
+            // 
+            this.oscPicChBx.AutoCheck = false;
+            this.oscPicChBx.AutoSize = true;
+            this.oscPicChBx.Location = new System.Drawing.Point(234, 86);
+            this.oscPicChBx.Name = "oscPicChBx";
+            this.oscPicChBx.Size = new System.Drawing.Size(22, 21);
+            this.oscPicChBx.TabIndex = 6;
+            this.oscPicChBx.UseVisualStyleBackColor = true;
+            // 
             // UploadingApplicienceDataMenu
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(291, 115);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.ClientSize = new System.Drawing.Size(291, 136);
+            this.Controls.Add(this.oscPicChBx);
             this.Controls.Add(this.osciChBx);
             this.Controls.Add(this.xrdChBx);
             this.Controls.Add(this.piroChBx);
@@ -149,5 +162,6 @@
         private System.Windows.Forms.CheckBox piroChBx;
         private System.Windows.Forms.CheckBox xrdChBx;
         private System.Windows.Forms.CheckBox osciChBx;
+        private System.Windows.Forms.CheckBox oscPicChBx;
     }
 }

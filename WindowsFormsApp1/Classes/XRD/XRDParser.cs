@@ -5,7 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Reactor_Interface.Classes.Experiment;
+using Reactor_Interface.Classes.Templates;
 
 namespace Reactor_Interface.Classes.XRD
 {
@@ -51,6 +53,22 @@ namespace Reactor_Interface.Classes.XRD
             }
 
             return xrdPoints;
+        }
+
+        public static string GetXRDFilePath()
+        {
+            using (OpenFileDialog dlg = new OpenFileDialog())
+            {
+                dlg.Title = "Выберите файл рентгена";
+                dlg.Filter = "Файл Ренгтена (*.txt)|*.txt|All files (*.*)|*.*";
+                dlg.Multiselect = false;
+
+                dlg.ShowDialog();
+                if (string.IsNullOrEmpty(dlg.FileName))
+                    return null;
+
+                return dlg.FileName;
+            }
         }
 
     }
