@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using CsvHelper;
 using System.Globalization;
 
 namespace Reactor_Interface.Classes.Oscillograph
