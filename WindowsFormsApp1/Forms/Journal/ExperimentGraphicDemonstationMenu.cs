@@ -7,9 +7,11 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace Reactor_Interface.Forms.Journal
 {
@@ -56,6 +58,9 @@ namespace Reactor_Interface.Forms.Journal
 
             DataStripMenu.Text = "Данные: " + e.ClickedItem.Text;
 
+            hideDataBtn.Visible = false;
+            
+
             for(int i = 0; i < Graphic.Series.Count; i++)
             {
                 string currentSerieName = Graphic.Series[i].Name;
@@ -65,14 +70,32 @@ namespace Reactor_Interface.Forms.Journal
 
             if(serie == "oscillograph")
             {
-                Graphic.Series["OSC_CH1"].ChartArea = ExperimentChartArea;
-                Graphic.Series["OSC_CH2"].ChartArea = ExperimentChartArea;
-
-                Graphic.Series["OSC_CH1"].IsVisibleInLegend = true;
-                Graphic.Series["OSC_CH2"].IsVisibleInLegend = true;
+                ShowOSCChart();
             }
 
             Graphic.ChartAreas[ExperimentChartArea].RecalculateAxesScale();
+        }
+
+        private void ShowOSCChart()
+        {
+            hideDataBtn.Visible = true;
+
+            Graphic.Series["OSC_CH1"].ChartArea = ExperimentChartArea;
+            Graphic.Series["OSC_CH2"].ChartArea = ExperimentChartArea;
+            Graphic.Series["P"].ChartArea = ExperimentChartArea;
+
+            Graphic.Series["OSC_CH1"].IsVisibleInLegend = true;
+            Graphic.Series["OSC_CH2"].IsVisibleInLegend = true;
+            Graphic.Series["P"].IsVisibleInLegend = true;
+        }
+
+        private void hideDataBtn_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            string serieName = e.ClickedItem.Name;
+            bool state = !Graphic.Series[serieName].IsVisibleInLegend;
+
+            Graphic.Series[serieName].ChartArea = state ? ExperimentChartArea : HiddenSerieArea;
+            Graphic.Series[serieName].IsVisibleInLegend = state;
         }
     }
 }

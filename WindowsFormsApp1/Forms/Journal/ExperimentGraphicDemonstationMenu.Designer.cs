@@ -38,6 +38,7 @@
             System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExperimentGraphicDemonstationMenu));
             this.Graphic = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -48,6 +49,10 @@
             this.шагToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.XRDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.oscDataBtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.hideDataBtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.OSC_CH1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.OSC_CH2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.P = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.Graphic)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -66,7 +71,8 @@
             legend1.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
             legend1.Name = "ExperimentLegend";
             this.Graphic.Legends.Add(legend1);
-            this.Graphic.Location = new System.Drawing.Point(0, 38);
+            this.Graphic.Location = new System.Drawing.Point(0, 36);
+            this.Graphic.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Graphic.Name = "Graphic";
             series1.BorderWidth = 3;
             series1.ChartArea = "HiddenSeriesArea";
@@ -121,6 +127,12 @@
             series7.IsVisibleInLegend = false;
             series7.Legend = "ExperimentLegend";
             series7.Name = "OSC_CH2";
+            series8.BorderWidth = 3;
+            series8.ChartArea = "HiddenSeriesArea";
+            series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series8.IsVisibleInLegend = false;
+            series8.Legend = "ExperimentLegend";
+            series8.Name = "P";
             this.Graphic.Series.Add(series1);
             this.Graphic.Series.Add(series2);
             this.Graphic.Series.Add(series3);
@@ -128,7 +140,8 @@
             this.Graphic.Series.Add(series5);
             this.Graphic.Series.Add(series6);
             this.Graphic.Series.Add(series7);
-            this.Graphic.Size = new System.Drawing.Size(946, 412);
+            this.Graphic.Series.Add(series8);
+            this.Graphic.Size = new System.Drawing.Size(631, 256);
             this.Graphic.TabIndex = 0;
             // 
             // menuStrip1
@@ -136,10 +149,12 @@
             this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.DataStripMenu});
+            this.DataStripMenu,
+            this.hideDataBtn});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(946, 38);
+            this.menuStrip1.Padding = new System.Windows.Forms.Padding(4, 1, 0, 1);
+            this.menuStrip1.Size = new System.Drawing.Size(631, 36);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -199,15 +214,56 @@
             this.oscDataBtn.Size = new System.Drawing.Size(253, 38);
             this.oscDataBtn.Text = "Осциллограф";
             // 
+            // hideDataBtn
+            // 
+            this.hideDataBtn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.hideDataBtn.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.OSC_CH1,
+            this.OSC_CH2,
+            this.P});
+            this.hideDataBtn.Name = "hideDataBtn";
+            this.hideDataBtn.Size = new System.Drawing.Size(88, 34);
+            this.hideDataBtn.Text = "Скрыть";
+            this.hideDataBtn.Visible = false;
+            this.hideDataBtn.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.hideDataBtn_DropDownItemClicked);
+            // 
+            // OSC_CH1
+            // 
+            this.OSC_CH1.Checked = true;
+            this.OSC_CH1.CheckOnClick = true;
+            this.OSC_CH1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.OSC_CH1.Name = "OSC_CH1";
+            this.OSC_CH1.Size = new System.Drawing.Size(270, 34);
+            this.OSC_CH1.Text = "Напряжение";
+            // 
+            // OSC_CH2
+            // 
+            this.OSC_CH2.Checked = true;
+            this.OSC_CH2.CheckOnClick = true;
+            this.OSC_CH2.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.OSC_CH2.Name = "OSC_CH2";
+            this.OSC_CH2.Size = new System.Drawing.Size(270, 34);
+            this.OSC_CH2.Text = "Ток";
+            // 
+            // P
+            // 
+            this.P.Checked = true;
+            this.P.CheckOnClick = true;
+            this.P.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.P.Name = "P";
+            this.P.Size = new System.Drawing.Size(270, 34);
+            this.P.Text = "Мощность";
+            // 
             // ExperimentGraphicDemonstationMenu
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(946, 450);
+            this.ClientSize = new System.Drawing.Size(631, 292);
             this.Controls.Add(this.Graphic);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "ExperimentGraphicDemonstationMenu";
             this.Text = "Просмотр данных эксперимента";
             ((System.ComponentModel.ISupportInitialize)(this.Graphic)).EndInit();
@@ -229,5 +285,9 @@
         private System.Windows.Forms.ToolStripMenuItem шагToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem XRDToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem oscDataBtn;
+        private System.Windows.Forms.ToolStripMenuItem hideDataBtn;
+        private System.Windows.Forms.ToolStripMenuItem OSC_CH1;
+        private System.Windows.Forms.ToolStripMenuItem OSC_CH2;
+        private System.Windows.Forms.ToolStripMenuItem P;
     }
 }

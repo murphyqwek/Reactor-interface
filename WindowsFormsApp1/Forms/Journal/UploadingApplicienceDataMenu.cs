@@ -198,18 +198,21 @@ namespace Reactor_Interface.Forms.Journal
 
             ApplianceData applianceData1 = new ApplianceData(OSCSeries[0], 
                                                             Color.FromArgb(255, 0, 165, 165), 
-                                                            "Напряжение", seriename);
+                                                            "Напряжение, В", seriename);
 
             ApplianceData applianceData2 = new ApplianceData(OSCSeries[1],
                                                             Color.FromArgb(255, 165, 165, 0),
-                                                            "Ток", seriename);
+                                                            "Ток, А", seriename);
 
-
+            ApplianceData applianceData3 = new ApplianceData(OSCSeries[2],
+                                                            Color.FromArgb(255, 248, 111, 3),
+                                                            "Мощность, КВт", seriename);
 
             return new Dictionary<string, ApplianceData>() 
             { 
                 { "OSC_CH1", applianceData1 },
                 { "OSC_CH2", applianceData2 },
+                { "P", applianceData3 },
             };
         }
 

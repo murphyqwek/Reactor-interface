@@ -352,6 +352,7 @@ namespace Reactor_Interface.Classes.Experiment
             {
                 experiment.ApplianceData.Remove("OSC_CH1");
                 experiment.ApplianceData.Remove("OSC_CH2");
+                experiment.ApplianceData.Remove("P");
             }
 
             if (!AppFileName.ContainsKey(serieName))
