@@ -1,6 +1,4 @@
-﻿#define DEBUG
-
-using Reactor_Interface;
+﻿using Reactor_Interface;
 using Reactor_Interface.Classes;
 using Reactor_Interface.Classes.GoogleAPI;
 using Reactor_Interface.Classes.Message;
@@ -51,7 +49,6 @@ namespace WindowsFormsApp1
             InitializeComponent();
             Console.WriteLine(this.Size);
             graphic_menu = new Graphic_menu();
-            //graphic_menu.Clear_Graphic();
 
             IntPtr intPtr = graphic_menu.Handle; //Создаётся Handle, без этой строчки данные с реактора не смогут отображаться на графике, когда окно закрыто
 
@@ -274,7 +271,7 @@ namespace WindowsFormsApp1
         {
             if (!is_reactor_working && port != null)
             {
-                dataQueue = new ConcurrentQueue<string>(); //очищаем очередь
+                dataQueue = new ConcurrentQueue<string>();
                 start_stopwatch();
 
                 step = 0;
@@ -344,23 +341,15 @@ namespace WindowsFormsApp1
 
         private static void Reading_Reactor_Port(SerialPort serialPort)
         {
-            //TODO: доделать приём данных
-            try
+            while (is_reactor_working)
             {
-                while (is_reactor_working)
+                try
                 {
-                    try
-                    {
-                        string data = serialPort.ReadLine();
-                        data += " " + stopwatch.ElapsedMilliseconds.ToString();
-                        dataQueue.Enqueue(data);
-                    }
-                    catch { }
+                    string data = serialPort.ReadLine();
+                    data += " " + stopwatch.ElapsedMilliseconds.ToString();
+                    dataQueue.Enqueue(data);
                 }
-            }
-            catch (ThreadInterruptedException)
-            {
-                //int k = 0;
+                catch { }
             }
         }
 
@@ -373,8 +362,6 @@ namespace WindowsFormsApp1
                 {
                     if (dataQueue.TryDequeue(out temp))
                     {
-                        //try
-                        //{
                         string[] data = temp.Split(' ');
                         data[0] = data[0].Replace("\r", "");
 
@@ -419,11 +406,6 @@ namespace WindowsFormsApp1
                         }
                     }
                 }
-            }
-            catch (ThreadInterruptedException)
-            {
-                //int k = 0;
-
             }
             catch { }
         }
@@ -691,18 +673,16 @@ namespace WindowsFormsApp1
 
         private void button_down_anod(string command, string key)
         {
-            if (!SerialPort.IsOpen) { return; } //TODO: Не забудь поставить !
+            if (!SerialPort.IsOpen) { return; }
             if (command == "not_exist") { return; }
 
             if (pressed_button == " ")
             {
                 pressed_button = key;
                 SerialPort.WriteLine(command);
-                //tem_lbl.Text = pressed_button + " was pressed";
             }
             else if (pressed_button == key)
             {
-                //tem_lbl.Text = pressed_button + " is held down";
                 SerialPort.WriteLine(command + Data.hold_anod_command);
                 pressed_button = pressed_button + "P";
             }

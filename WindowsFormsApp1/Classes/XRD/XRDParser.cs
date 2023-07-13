@@ -43,7 +43,6 @@ namespace Reactor_Interface.Classes.XRD
                 var matches = reg.Matches(lines[i]);
                 if (matches.Count > 0)
                 {
-                    //string[] splittedMatch = matches[0].Value.Split();
 
                     double XValue = Convert.ToDouble(matches[0].Groups[1].Value.Replace('.', ','));
                     double YValue = Convert.ToDouble(matches[0].Groups[2].Value);
@@ -59,8 +58,8 @@ namespace Reactor_Interface.Classes.XRD
         {
             using (OpenFileDialog dlg = new OpenFileDialog())
             {
-                dlg.Title = "Выберите файл рентгена";
-                dlg.Filter = "Файл Ренгтена (*.txt)|*.txt|All files (*.*)|*.*";
+                dlg.Title = "Выберите файл рентгена ";
+                dlg.Filter = "Файл Рентгена  (*.txt)|*.txt|All files (*.*)|*.*";
                 dlg.Multiselect = false;
 
                 dlg.ShowDialog();

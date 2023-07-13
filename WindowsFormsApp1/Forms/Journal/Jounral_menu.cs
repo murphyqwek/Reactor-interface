@@ -417,8 +417,6 @@ namespace Reactor_Interface
                 }
 
                 ExperimentExl.CreateExcelExperiment(path, _experiment);
-
-                SuccesMessage.Show("Excel файл сохранен");
             }
         }
 

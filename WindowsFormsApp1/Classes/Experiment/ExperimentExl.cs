@@ -18,6 +18,10 @@ using OfficeOpenXml.Drawing.Chart.Style;
 using Reactor_Interface.Classes.Templates;
 using Reactor_Interface.Classes.Experiment;
 using System.ServiceProcess.Design;
+using Reactor_Interface.Classes.Message;
+using System.Windows.Forms;
+using System.Diagnostics;
+using Reactor_Interface.Classes;
 
 namespace Reactor_Interface.Classes
 {
@@ -29,7 +33,10 @@ namespace Reactor_Interface.Classes
             {"Средний ток", Color.MidnightBlue },
             {"Ток", Color.SkyBlue },
             {"Шаг", Color.SandyBrown },
-            {"XRD", Color.Indigo }
+            {"XRD", Color.Indigo },
+            {"OSC_CH1", Color.FromArgb(255, 0, 165, 165)},
+            {"OSC_CH2", Color.FromArgb(255, 165, 165, 0)},
+            {"P", Color.FromArgb(255, 248, 111, 3) },
         };
 
         static readonly Dictionary<string, string[]> AxisesLabel = new Dictionary<string, string[]>
@@ -39,10 +46,18 @@ namespace Reactor_Interface.Classes
             {"Ток", new string[] {"Время, мс", "Ток, А" } },
             {"Шаг", new string[] {"Время, мс", "Шаг" } },
             {"XRD", new string[] { "2θ градусов", "Интенсивность" } },
+            {"OSC_CH1", new string[] {"Время, мс", "Напряжение, В"} },
+            {"OSC_CH2", new string[] {"Время, мс", "Ток, А"} },
+            {"P", new string[] {"Время, мс", "Мощность, кВт"} },
         };
 
         public static void CreateExcelExperiment(string path, ExperimentData experiment)
         {
+            if (ReportFileChecker.IsReportOpen(path))
+            {
+                ErrorMessage.Show("Файл отчёта открыт. Закройте, чтобы сохранить текущий эксперимент");
+                return;
+            }
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
             using (ExcelPackage excelPackage = new ExcelPackage())
@@ -62,10 +77,13 @@ namespace Reactor_Interface.Classes
                 if(experiment.ApplianceData != null)
                 {
                     ExcelWorksheet xrdSheet = null;
+                    ExcelWorksheet oscSheet = null;
                     if (experiment.ApplianceData.ContainsKey("xrd"))
                         xrdSheet = excelPackage.Workbook.Worksheets.Add("Рентген");
+                    if (experiment.ApplianceData.ContainsKey("OSC_CH1"))
+                        oscSheet = excelPackage.Workbook.Worksheets.Add("Осциллограф");
 
-                    FillDataIntoSheets(graphicsSheet, dataSheet, xrdSheet, experiment.ApplianceData);
+                    FillDataIntoSheets(graphicsSheet, dataSheet, xrdSheet, oscSheet, experiment.ApplianceData);
                 }
 
                 //Save your file
@@ -73,6 +91,11 @@ namespace Reactor_Interface.Classes
                 excelPackage.SaveAs(fi);
             }
 
+            bool confirm = ConfirmMessageBox.Show("Файл отчёта сохранён. Открфть папку с отчётом?", "Успешно", MessageBoxIcon.Information);
+            path = Path.GetDirectoryName(path);
+
+            if(confirm)
+                Process.Start("explorer", path);
         }
 
         private static void CreateTable(ExcelWorksheet workSheet, int y0, int y)
@@ -95,7 +118,7 @@ namespace Reactor_Interface.Classes
             dataSheet.Columns[firstCellColumn + 1].AutoFit();
         }
 
-        private static void FillGraphicsSheet(ExcelWorksheet graphicsSheet, ExcelWorksheet dataSheet, int startCellColumn, int lastCellRow, int chartColumn)
+        private static void FillGraphicsSheet(ExcelWorksheet graphicsSheet, ExcelWorksheet dataSheet, int startCellColumn, int lastCellRow, int chartColumn, string serie)
         {
             string dataName = dataSheet.Cells[1, startCellColumn + 1].Value.ToString();
             var graphic = graphicsSheet.Drawings.AddLineChart(dataName, eLineChartType.Line);
@@ -110,9 +133,17 @@ namespace Reactor_Interface.Classes
             
             graphic.Series.Add(dataRange, timeRange);
 
-            string[] AxisesNames = AxisesLabel[dataName];
+            string[] AxisesNames = null;
+            if (AxisesLabel.ContainsKey(dataName))
+                AxisesNames = AxisesLabel[dataName];
+            else
+                AxisesNames = AxisesLabel[serie];
+                
+            if(name_axe_to_color.ContainsKey(dataName))
+                graphic.Series[0].Border.Fill.Color = name_axe_to_color[dataName];
+            else
+                graphic.Series[0].Border.Fill.Color = name_axe_to_color[serie];
 
-            graphic.Series[0].Border.Fill.Color = name_axe_to_color[dataName];
             graphic.XAxis.AddGridlines();
             graphic.XAxis.Title.Text = AxisesNames[0];
 
@@ -126,13 +157,14 @@ namespace Reactor_Interface.Classes
             graphic.YAxis.Crosses = 0;
         }
 
-        private static void FillDataIntoSheets(ExcelWorksheet graphicSheet, ExcelWorksheet dataSheet, ExcelWorksheet xrdSheet, Dictionary<string, ApplianceData> applianceData)
+        private static void FillDataIntoSheets(ExcelWorksheet graphicSheet, ExcelWorksheet dataSheet, ExcelWorksheet xrdSheet, ExcelWorksheet oscSheet, Dictionary<string, ApplianceData> applianceData)
         {
             int start_cell = 1;
+            int start_osc_cell = 1;
             foreach (var serie in applianceData.Keys)
             {
                 //Заполнение заголовков
-                dataSheet.Cells[1, start_cell].Value = serie == "XRD" ? "2θ градусов" : "Время";
+                dataSheet.Cells[1, start_cell].Value = serie == "xrd" ? "2θ градусов" : "Время";
                 dataSheet.Cells[1, start_cell+1].Value = applianceData[serie].LegendText;
 
                 //Заполение стоблцов данными для графиков
@@ -140,13 +172,27 @@ namespace Reactor_Interface.Classes
                 //if(i == 0)
                 if (serie == "xrd")
                 {
-                    FillGraphicsSheet(xrdSheet, dataSheet, start_cell, applianceData[serie].Data.Count, 1);
+                    FillGraphicsSheet(xrdSheet, dataSheet, start_cell, applianceData[serie].Data.Count, 1, serie);
+                    start_cell += 3;
                     continue;
                 }
 
-                FillGraphicsSheet(graphicSheet, dataSheet, start_cell, applianceData[serie].Data.Count, start_cell);
+                if(serie == "OSC_CH1" || serie == "OSC_CH2" || serie == "P")
+                {
+                    FillGraphicsSheet(oscSheet, dataSheet, start_cell, applianceData[serie].Data.Count, start_osc_cell, serie);
+                    start_osc_cell += 3;
+                    start_cell += 3;
+                    continue;
+                }
+
+                FillGraphicsSheet(graphicSheet, dataSheet, start_cell, applianceData[serie].Data.Count, start_cell, serie);
                 start_cell += 3;
             }
+        }
+
+        private static void FillOSCGraphicSheet(ExcelWorksheet oscSheet, ExcelWorksheet dataSheet, int start_cell, int count)
+        {
+
         }
 
         private static void FillMainSheet(ExcelWorksheet mainSheet, Dictionary<string, List<FieldData>> fields, string comments)

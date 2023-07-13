@@ -82,17 +82,16 @@ namespace Reactor_Interface.Classes.Serie
         public static void CreateSerieExcel(SerieData serieData)
         {
             string reportPath = CreateReportFolder(serieData);
+            reportPath = Path.Combine(reportPath, serieData.Name + ".xlsx");
 
-            if (!checkSerieData(serieData))
+            if (ReportFileChecker.IsReportOpen(reportPath))
             {
-                Directory.Delete(reportPath);
-                reportPath = Directory.GetParent(reportPath).FullName;
-
-                if (Directory.GetFiles(reportPath).Length == 0)
-                    Directory.Delete(reportPath);
-
+                ErrorMessage.Show("Файл отчёта уже открыт. Закройте его, чтобы сохранить новый отчёт");
                 return;
             }
+
+            if (!checkSerieData(serieData))
+                return;
 
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
@@ -110,7 +109,7 @@ namespace Reactor_Interface.Classes.Serie
                     AddNewWorkSheetExperiments(serieExcel, serieTemplate, serieExperiments, serieData.ExperimentPath);
                 }
 
-                serieExcel.SaveAs(Path.Combine(reportPath, serieData.Name + ".xlsx"));
+                serieExcel.SaveAs(reportPath);
             }
 
             OpenReportFolder(reportPath);
@@ -118,6 +117,7 @@ namespace Reactor_Interface.Classes.Serie
 
         private static void OpenReportFolder(string reportPath)
         {
+            reportPath = Path.GetDirectoryName(reportPath);
             var result = MessageBox.Show("Отчёт создан. Хотите открыть папку с отчётом?", "Успешно", MessageBoxButtons.YesNo,
                                         MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
             if (result != DialogResult.Yes)

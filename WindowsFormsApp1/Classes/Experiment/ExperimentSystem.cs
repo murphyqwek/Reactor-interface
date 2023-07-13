@@ -68,7 +68,7 @@ namespace Reactor_Interface.Classes.Experiment
                 experimentData.Add(pageName, fields);
             }
 
-            ExperimentData experiment = new ExperimentData(experimentName, experimentData, applianceDatas, comments, connectedFields);//, comments);
+            ExperimentData experiment = new ExperimentData(experimentName, experimentData, applianceDatas, comments, connectedFields);
 
             return experiment;
         }

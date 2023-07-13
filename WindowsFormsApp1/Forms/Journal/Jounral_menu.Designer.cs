@@ -47,6 +47,8 @@
             this.ClearGraphBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.SeeGraphBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.changeExperimentTemplatebtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.CreateExperimentSerieBtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.ShowSerieExperimentsBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveSerieExperimentBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.SerieBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.CreateNewSerieBtn = new System.Windows.Forms.ToolStripMenuItem();
@@ -73,8 +75,6 @@
             this.clear_btn = new System.Windows.Forms.Button();
             this.context_menu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.weigh_btn = new System.Windows.Forms.ToolStripMenuItem();
-            this.CreateExperimentSerieBtn = new System.Windows.Forms.ToolStripMenuItem();
-            this.ShowSerieExperimentsBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.data_groupbox.SuspendLayout();
             this.context_menu.SuspendLayout();
@@ -233,6 +233,20 @@
             this.changeExperimentTemplatebtn.Size = new System.Drawing.Size(519, 36);
             this.changeExperimentTemplatebtn.Text = "Изменить шаблон данного эксперимента";
             this.changeExperimentTemplatebtn.Click += new System.EventHandler(this.changeExperimentTemplatebtn_Click);
+            // 
+            // CreateExperimentSerieBtn
+            // 
+            this.CreateExperimentSerieBtn.Name = "CreateExperimentSerieBtn";
+            this.CreateExperimentSerieBtn.Size = new System.Drawing.Size(519, 36);
+            this.CreateExperimentSerieBtn.Text = "Создать новый эксперимент серии";
+            this.CreateExperimentSerieBtn.Click += new System.EventHandler(this.CreateExperimentSerieBtn_Click);
+            // 
+            // ShowSerieExperimentsBtn
+            // 
+            this.ShowSerieExperimentsBtn.Name = "ShowSerieExperimentsBtn";
+            this.ShowSerieExperimentsBtn.Size = new System.Drawing.Size(519, 36);
+            this.ShowSerieExperimentsBtn.Text = "Посмотреть эксперименты серии";
+            this.ShowSerieExperimentsBtn.Click += new System.EventHandler(this.ShowSerieExperimentsBtn_Click);
             // 
             // SaveSerieExperimentBtn
             // 
@@ -470,20 +484,6 @@
             this.weigh_btn.Size = new System.Drawing.Size(285, 32);
             this.weigh_btn.Text = "Произвести взешивание";
             this.weigh_btn.Click += new System.EventHandler(this.weigh_btn_Click);
-            // 
-            // CreateExperimentSerieBtn
-            // 
-            this.CreateExperimentSerieBtn.Name = "CreateExperimentSerieBtn";
-            this.CreateExperimentSerieBtn.Size = new System.Drawing.Size(519, 36);
-            this.CreateExperimentSerieBtn.Text = "Создать новый эксперимент серии";
-            this.CreateExperimentSerieBtn.Click += new System.EventHandler(this.CreateExperimentSerieBtn_Click);
-            // 
-            // ShowSerieExperimentsBtn
-            // 
-            this.ShowSerieExperimentsBtn.Name = "ShowSerieExperimentsBtn";
-            this.ShowSerieExperimentsBtn.Size = new System.Drawing.Size(519, 36);
-            this.ShowSerieExperimentsBtn.Text = "Посмотреть эксперименты серии";
-            this.ShowSerieExperimentsBtn.Click += new System.EventHandler(this.ShowSerieExperimentsBtn_Click);
             // 
             // Jounral_menu
             // 

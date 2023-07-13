@@ -71,8 +71,7 @@
             legend1.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
             legend1.Name = "ExperimentLegend";
             this.Graphic.Legends.Add(legend1);
-            this.Graphic.Location = new System.Drawing.Point(0, 36);
-            this.Graphic.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Graphic.Location = new System.Drawing.Point(0, 38);
             this.Graphic.Name = "Graphic";
             series1.BorderWidth = 3;
             series1.ChartArea = "HiddenSeriesArea";
@@ -141,20 +140,18 @@
             this.Graphic.Series.Add(series6);
             this.Graphic.Series.Add(series7);
             this.Graphic.Series.Add(series8);
-            this.Graphic.Size = new System.Drawing.Size(631, 256);
+            this.Graphic.Size = new System.Drawing.Size(946, 411);
             this.Graphic.TabIndex = 0;
             // 
             // menuStrip1
             // 
-            this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.DataStripMenu,
             this.hideDataBtn});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(4, 1, 0, 1);
-            this.menuStrip1.Size = new System.Drawing.Size(631, 36);
+            this.menuStrip1.Size = new System.Drawing.Size(946, 38);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -177,41 +174,41 @@
             // 
             this.температураToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.температураToolStripMenuItem.Name = "температураToolStripMenuItem";
-            this.температураToolStripMenuItem.Size = new System.Drawing.Size(253, 38);
+            this.температураToolStripMenuItem.Size = new System.Drawing.Size(270, 38);
             this.температураToolStripMenuItem.Text = "Температура";
             // 
             // среднийТокToolStripMenuItem
             // 
             this.среднийТокToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.среднийТокToolStripMenuItem.Name = "среднийТокToolStripMenuItem";
-            this.среднийТокToolStripMenuItem.Size = new System.Drawing.Size(253, 38);
+            this.среднийТокToolStripMenuItem.Size = new System.Drawing.Size(270, 38);
             this.среднийТокToolStripMenuItem.Text = "Средний ток";
             // 
             // токToolStripMenuItem
             // 
             this.токToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.токToolStripMenuItem.Name = "токToolStripMenuItem";
-            this.токToolStripMenuItem.Size = new System.Drawing.Size(253, 38);
+            this.токToolStripMenuItem.Size = new System.Drawing.Size(270, 38);
             this.токToolStripMenuItem.Text = "Ток";
             // 
             // шагToolStripMenuItem
             // 
             this.шагToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.шагToolStripMenuItem.Name = "шагToolStripMenuItem";
-            this.шагToolStripMenuItem.Size = new System.Drawing.Size(253, 38);
+            this.шагToolStripMenuItem.Size = new System.Drawing.Size(270, 38);
             this.шагToolStripMenuItem.Text = "Шаг";
             // 
             // XRDToolStripMenuItem
             // 
             this.XRDToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.XRDToolStripMenuItem.Name = "XRDToolStripMenuItem";
-            this.XRDToolStripMenuItem.Size = new System.Drawing.Size(253, 38);
+            this.XRDToolStripMenuItem.Size = new System.Drawing.Size(270, 38);
             this.XRDToolStripMenuItem.Text = "XRD";
             // 
             // oscDataBtn
             // 
             this.oscDataBtn.Name = "oscDataBtn";
-            this.oscDataBtn.Size = new System.Drawing.Size(253, 38);
+            this.oscDataBtn.Size = new System.Drawing.Size(270, 38);
             this.oscDataBtn.Text = "Осциллограф";
             // 
             // hideDataBtn
@@ -233,7 +230,7 @@
             this.OSC_CH1.CheckOnClick = true;
             this.OSC_CH1.CheckState = System.Windows.Forms.CheckState.Checked;
             this.OSC_CH1.Name = "OSC_CH1";
-            this.OSC_CH1.Size = new System.Drawing.Size(270, 34);
+            this.OSC_CH1.Size = new System.Drawing.Size(217, 34);
             this.OSC_CH1.Text = "Напряжение";
             // 
             // OSC_CH2
@@ -242,7 +239,7 @@
             this.OSC_CH2.CheckOnClick = true;
             this.OSC_CH2.CheckState = System.Windows.Forms.CheckState.Checked;
             this.OSC_CH2.Name = "OSC_CH2";
-            this.OSC_CH2.Size = new System.Drawing.Size(270, 34);
+            this.OSC_CH2.Size = new System.Drawing.Size(217, 34);
             this.OSC_CH2.Text = "Ток";
             // 
             // P
@@ -251,19 +248,18 @@
             this.P.CheckOnClick = true;
             this.P.CheckState = System.Windows.Forms.CheckState.Checked;
             this.P.Name = "P";
-            this.P.Size = new System.Drawing.Size(270, 34);
+            this.P.Size = new System.Drawing.Size(217, 34);
             this.P.Text = "Мощность";
             // 
             // ExperimentGraphicDemonstationMenu
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(631, 292);
+            this.ClientSize = new System.Drawing.Size(946, 449);
             this.Controls.Add(this.Graphic);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "ExperimentGraphicDemonstationMenu";
             this.Text = "Просмотр данных эксперимента";
             ((System.ComponentModel.ISupportInitialize)(this.Graphic)).EndInit();

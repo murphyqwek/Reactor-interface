@@ -23,10 +23,5 @@ namespace Reactor_Interface.Classes.Experiment
             Row = row;
             Column = column;
         }
-
-        public void ClearValue()
-        {
-
-        }
     }
 }

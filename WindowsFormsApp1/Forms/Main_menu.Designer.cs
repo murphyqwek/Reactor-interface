@@ -110,7 +110,7 @@
             this.mode_settings_box.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.mode_settings_box.Name = "mode_settings_box";
             this.mode_settings_box.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.mode_settings_box.Size = new System.Drawing.Size(751, 252);
+            this.mode_settings_box.Size = new System.Drawing.Size(751, 144);
             this.mode_settings_box.TabIndex = 1;
             this.mode_settings_box.TabStop = false;
             this.mode_settings_box.Text = "Настройки режима";
@@ -271,6 +271,7 @@
             // impulse_rdbtn
             // 
             this.impulse_rdbtn.AutoSize = true;
+            this.impulse_rdbtn.Enabled = false;
             this.impulse_rdbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.impulse_rdbtn.Location = new System.Drawing.Point(9, 120);
             this.impulse_rdbtn.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -502,7 +503,7 @@
             this.reactor_box.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.reactor_box.Name = "reactor_box";
             this.reactor_box.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.reactor_box.Size = new System.Drawing.Size(936, 537);
+            this.reactor_box.Size = new System.Drawing.Size(936, 432);
             this.reactor_box.TabIndex = 15;
             this.reactor_box.TabStop = false;
             this.reactor_box.Text = "Запуск реактора";
