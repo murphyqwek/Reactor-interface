@@ -91,7 +91,7 @@ namespace Reactor_Interface.Classes
                 excelPackage.SaveAs(fi);
             }
 
-            bool confirm = ConfirmMessageBox.Show("Файл отчёта сохранён. Открфть папку с отчётом?", "Успешно", MessageBoxIcon.Information);
+            bool confirm = ConfirmMessageBox.Show("Файл отчёта сохранён. Открыть папку с отчётом?", "Успешно", MessageBoxIcon.Information);
             path = Path.GetDirectoryName(path);
 
             if(confirm)

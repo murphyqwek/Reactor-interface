@@ -54,9 +54,9 @@
             this.speed_menu_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.IR_port_menu_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.google_drive_menu_btn = new System.Windows.Forms.ToolStripMenuItem();
-            this.debug_menu_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.graphic_menu_btn = new System.Windows.Forms.ToolStripMenuItem();
             this.send_experiment_btn = new System.Windows.Forms.ToolStripMenuItem();
+            this.KoeffMenuBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.left_btn = new System.Windows.Forms.Button();
             this.down_btn = new System.Windows.Forms.Button();
             this.right_btn = new System.Windows.Forms.Button();
@@ -65,6 +65,9 @@
             this.tok_mode_box = new System.Windows.Forms.GroupBox();
             this.tok_mode_list = new System.Windows.Forms.DomainUpDown();
             this.info_box = new System.Windows.Forms.GroupBox();
+            this.UpdatePresetListBtn = new System.Windows.Forms.Button();
+            this.presetsList = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.tem_lbl = new System.Windows.Forms.Label();
             this.state_lbl = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -75,6 +78,7 @@
             this.IR_button = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.PresetToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.mode_settings_box.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cold_bar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fire_bar)).BeginInit();
@@ -338,6 +342,7 @@
             this.tigel_rdbtn.TabStop = true;
             this.tigel_rdbtn.Text = "Тигель";
             this.tigel_rdbtn.UseVisualStyleBackColor = true;
+            this.tigel_rdbtn.CheckedChanged += new System.EventHandler(this.tigel_rdbtn_CheckedChanged);
             // 
             // menu
             // 
@@ -345,9 +350,9 @@
             this.menu.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.settings_menu_btn,
-            this.debug_menu_btn,
             this.graphic_menu_btn,
-            this.send_experiment_btn});
+            this.send_experiment_btn,
+            this.KoeffMenuBtn});
             this.menu.Location = new System.Drawing.Point(0, 0);
             this.menu.Name = "menu";
             this.menu.Size = new System.Drawing.Size(1664, 40);
@@ -397,15 +402,6 @@
             this.google_drive_menu_btn.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.google_drive_menu_btn_DropDownItemClicked);
             this.google_drive_menu_btn.Click += new System.EventHandler(this.google_drive_btn_DropDownItem);
             // 
-            // debug_menu_btn
-            // 
-            this.debug_menu_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.debug_menu_btn.Name = "debug_menu_btn";
-            this.debug_menu_btn.Size = new System.Drawing.Size(95, 36);
-            this.debug_menu_btn.Text = "Дебаг";
-            this.debug_menu_btn.Visible = false;
-            this.debug_menu_btn.Click += new System.EventHandler(this.debug_menu_btn_Click);
-            // 
             // graphic_menu_btn
             // 
             this.graphic_menu_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -422,6 +418,14 @@
             this.send_experiment_btn.Size = new System.Drawing.Size(366, 36);
             this.send_experiment_btn.Text = "Открыть электронный журнал";
             this.send_experiment_btn.Click += new System.EventHandler(this.send_experiment_btn_Click);
+            // 
+            // KoeffMenuBtn
+            // 
+            this.KoeffMenuBtn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.KoeffMenuBtn.Name = "KoeffMenuBtn";
+            this.KoeffMenuBtn.Size = new System.Drawing.Size(432, 36);
+            this.KoeffMenuBtn.Text = "Просмотр пресетов коэффициентов";
+            this.KoeffMenuBtn.Click += new System.EventHandler(this.KoefRedactorMenuShowbtn_Click);
             // 
             // left_btn
             // 
@@ -531,11 +535,15 @@
             this.tok_mode_list.Size = new System.Drawing.Size(125, 39);
             this.tok_mode_list.TabIndex = 0;
             this.tok_mode_list.Text = "200 А";
+            this.tok_mode_list.SelectedItemChanged += new System.EventHandler(this.tok_mode_list_SelectedItemChanged);
             // 
             // info_box
             // 
             this.info_box.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.info_box.BackColor = System.Drawing.SystemColors.Control;
+            this.info_box.Controls.Add(this.UpdatePresetListBtn);
+            this.info_box.Controls.Add(this.presetsList);
+            this.info_box.Controls.Add(this.label2);
             this.info_box.Controls.Add(this.tem_lbl);
             this.info_box.Controls.Add(this.state_lbl);
             this.info_box.Controls.Add(this.label1);
@@ -544,16 +552,47 @@
             this.info_box.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.info_box.Name = "info_box";
             this.info_box.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.info_box.Size = new System.Drawing.Size(563, 235);
+            this.info_box.Size = new System.Drawing.Size(563, 259);
             this.info_box.TabIndex = 16;
             this.info_box.TabStop = false;
             this.info_box.Text = "Информация о реакторе";
+            // 
+            // UpdatePresetListBtn
+            // 
+            this.UpdatePresetListBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.UpdatePresetListBtn.Location = new System.Drawing.Point(22, 196);
+            this.UpdatePresetListBtn.Name = "UpdatePresetListBtn";
+            this.UpdatePresetListBtn.Size = new System.Drawing.Size(254, 45);
+            this.UpdatePresetListBtn.TabIndex = 2;
+            this.UpdatePresetListBtn.Text = "Обновить список пресетов";
+            this.UpdatePresetListBtn.UseVisualStyleBackColor = true;
+            this.UpdatePresetListBtn.Click += new System.EventHandler(this.UpdatePresetListBtn_Click);
+            // 
+            // presetsList
+            // 
+            this.presetsList.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.presetsList.FormattingEnabled = true;
+            this.presetsList.Location = new System.Drawing.Point(381, 144);
+            this.presetsList.Name = "presetsList";
+            this.presetsList.Size = new System.Drawing.Size(175, 45);
+            this.presetsList.TabIndex = 20;
+            this.presetsList.SelectedValueChanged += new System.EventHandler(this.presetsList_SelectedValueChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F);
+            this.label2.Location = new System.Drawing.Point(15, 144);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(349, 37);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Пресет коэффициентов";
             // 
             // tem_lbl
             // 
             this.tem_lbl.AutoSize = true;
             this.tem_lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F);
-            this.tem_lbl.Location = new System.Drawing.Point(15, 152);
+            this.tem_lbl.Location = new System.Drawing.Point(320, 47);
             this.tem_lbl.Name = "tem_lbl";
             this.tem_lbl.Size = new System.Drawing.Size(227, 37);
             this.tem_lbl.TabIndex = 3;
@@ -595,7 +634,7 @@
             this.IR_box.Controls.Add(this.Interval_IR_counter);
             this.IR_box.Controls.Add(this.IR_button);
             this.IR_box.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F);
-            this.IR_box.Location = new System.Drawing.Point(1217, 309);
+            this.IR_box.Location = new System.Drawing.Point(1217, 333);
             this.IR_box.Name = "IR_box";
             this.IR_box.Size = new System.Drawing.Size(435, 100);
             this.IR_box.TabIndex = 17;
@@ -642,7 +681,7 @@
             this.button1.BackColor = System.Drawing.Color.Silver;
             this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button1.Location = new System.Drawing.Point(1479, 423);
+            this.button1.Location = new System.Drawing.Point(1479, 447);
             this.button1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(82, 55);
@@ -659,7 +698,7 @@
             this.button2.BackColor = System.Drawing.Color.Silver;
             this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button2.Location = new System.Drawing.Point(1569, 423);
+            this.button2.Location = new System.Drawing.Point(1569, 447);
             this.button2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(83, 55);
@@ -739,7 +778,7 @@
         private System.Windows.Forms.ToolStripMenuItem settings_menu_btn;
         private System.Windows.Forms.ToolStripMenuItem port_menu_btn;
         private System.Windows.Forms.ToolStripMenuItem speed_menu_btn;
-        private System.Windows.Forms.ToolStripMenuItem debug_menu_btn;
+        private System.Windows.Forms.ToolStripMenuItem KoeffMenuBtn;
         private System.Windows.Forms.Button left_btn;
         private System.Windows.Forms.Button down_btn;
         private System.Windows.Forms.Button right_btn;
@@ -766,6 +805,10 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.ToolStripMenuItem send_experiment_btn;
         private System.Windows.Forms.ToolStripMenuItem google_drive_menu_btn;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox presetsList;
+        private System.Windows.Forms.ToolTip PresetToolTip;
+        private System.Windows.Forms.Button UpdatePresetListBtn;
     }
 }
 

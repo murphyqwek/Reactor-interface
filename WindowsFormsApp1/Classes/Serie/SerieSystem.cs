@@ -40,6 +40,18 @@ namespace Reactor_Interface.Classes.Serie
             return seriepath;
         }
 
+        static public bool SetNewSerieComments(SerieData serie, string newComments)
+        {
+            if (newComments.Length > 1000)
+                return false;
+
+            serie.SetCommets(newComments);
+
+            SaveSerieJSON(serie);
+
+            return true;
+        }
+
         static private string getNewSerieName(string seriePath)
         {
             bool isSerieNameChosen = false;
@@ -457,8 +469,17 @@ namespace Reactor_Interface.Classes.Serie
                 var experiment = serie.Experiments[templateKey][i];
                 if(experiment.ExperimentName == experimentName)
                 {
-                    File.Delete(Path.Combine(serie.ExperimentPath, experiment.ExperimentName));
-                    serie.Experiments[templateKey].RemoveAt(i);
+                    try
+                    {
+                        File.Delete(Path.Combine(serie.ExperimentPath, experiment.ExperimentName));
+                        serie.Experiments[templateKey].RemoveAt(i);
+                    }
+                    catch
+                    {
+                        ErrorMessage.Show("Отказано в доступе по пути: " + serie.ExperimentPath + "\nПеренесите файлы серии в другую папку\nНе рекомендовано хранить эксперименты на рабочем столе");
+                        return;
+                    }
+
 
                     int experimentNumer = experiment.GetExperimentNumer();
 
@@ -468,6 +489,8 @@ namespace Reactor_Interface.Classes.Serie
                     deleted = true;
                     break;
                 }
+
+                SuccesMessage.Show("Эксперимент был удалён");
             }
 
             if (deleted)

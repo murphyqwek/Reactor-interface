@@ -2,14 +2,17 @@
 using Reactor_Interface.Classes;
 using Reactor_Interface.Classes.GoogleAPI;
 using Reactor_Interface.Classes.Message;
+using Reactor_Interface.Classes.Presets;
 using Reactor_Interface.Forms;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using WindowsFormsApp1.Classes;
@@ -41,6 +44,8 @@ namespace WindowsFormsApp1
         Thread Parsing_data_thread;
         Thread IR_reading_thread;
 
+        List<KoefPreset> koefPresets = new List<KoefPreset>();
+
         static ConcurrentQueue<string> dataQueue = new ConcurrentQueue<string>();
 
         string pressed_button = " ";
@@ -61,7 +66,38 @@ namespace WindowsFormsApp1
 
             port_checking.Start();
 
+            uploadPresets();
+            uploadSavedPreset();
+
             this.time_bar_max_size = time_bar.Size;
+        }
+
+        private void uploadSavedPreset()
+        {
+            string presetName = Interface_settings.getPresetName();
+
+            for(int i = 0; i < presetsList.Items.Count; i++)
+            {
+                if (presetsList.Items[i].ToString() == presetName)
+                {
+                    presetsList.SelectedIndex = i;
+                    return;
+                }
+            }
+
+            presetsList.SelectedIndex = -1;
+            presetsList.Text = "";
+            //Console.WriteLine(presetsList.SelectedItem.ToString());
+            Interface_settings.savePresetName("");
+        }
+
+        private void uploadPresets()
+        {
+            koefPresets.Clear();
+            presetsList.Items.Clear();
+            koefPresets = PresetSystem.GetKoefPresets();
+            foreach (var preset in koefPresets)
+                presetsList.Items.Add(preset.Name);
         }
 
         protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
@@ -249,11 +285,13 @@ namespace WindowsFormsApp1
 
             param += time_bar.Value.ToString() + "n";
 
-            param += Data.get_tok_mode(tok_mode_list.Text);
+            param += GetTokMode();
             if (tigel_rdbtn.Checked)
                 param += "0";
             else
                 param += "1";
+
+            param += getKoef();
 
             if (duga_rdbtn.Checked)
             {
@@ -267,8 +305,43 @@ namespace WindowsFormsApp1
             return param;
         }
 
+        private string GetTokMode()
+        {
+            return Data.get_tok_mode(tok_mode_list.Text);
+        }
+
+        private string getKoef()
+        {
+            int workMode = Convert.ToInt32(GetTokMode());
+            KoefPreset.Type type = GetReactorMode();
+            var preset = koefPresets[presetsList.SelectedIndex];
+            string koefstring = "";
+            foreach(double koef in PresetSystem.GetKoeffsFromPresets(preset, workMode, type))
+            {
+                koefstring += koef.ToString() + "n";
+            }
+
+            koefstring = koefstring.Replace(',', '.');
+
+            return koefstring;
+        }
+
+        private KoefPreset.Type GetReactorMode()
+        {
+            if (tigel_rdbtn.Checked)
+                return KoefPreset.Type.Tigel;
+            else
+                return KoefPreset.Type.Voilok;
+        }
+
         private void start_btn_Click(object sender, EventArgs e)
         {
+            if (presetsList.SelectedItem == null)
+            {
+                ErrorMessage.Show("Не выбран пресет коэффициентов");
+                return;
+            }
+
             if (!is_reactor_working && port != null)
             {
                 dataQueue = new ConcurrentQueue<string>();
@@ -337,7 +410,6 @@ namespace WindowsFormsApp1
                 Stop_reactor(state_lbl, SerialPort, false);
             }
         }
-
 
         private static void Reading_Reactor_Port(SerialPort serialPort)
         {
@@ -440,12 +512,14 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void debug_menu_btn_Click(object sender, EventArgs e)
+        private void KoefRedactorMenuShowbtn_Click(object sender, EventArgs e)
         {
             if (!is_reactor_working)
             {
-                Debug_menu debug = new Debug_menu();
-                debug.Show();
+                PresetRedactorMenu KoefRedactor = new PresetRedactorMenu();
+                KoefRedactor.ShowDialog();
+                uploadPresets();
+                uploadSavedPreset();
             }
         }
 
@@ -661,7 +735,7 @@ namespace WindowsFormsApp1
             button_down_anod(command, key);
         }
 
-        private void arrow_btn_down(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void arrow_btn_down(object sender, MouseEventArgs e)
         {
             Button btn = (Button)sender;
 
@@ -741,9 +815,76 @@ namespace WindowsFormsApp1
 
         }
 
-        internal void ShowNewJounral(Jounral_menu newJournal)
+        public void ShowNewJounral(Jounral_menu newJournal)
         {
             newJournal.ShowDialog();
+        }
+
+        private void presetsList_SelectedValueChanged(object sender, EventArgs e)
+        {
+            UpdatePresetsToolTip();
+            SaveChosenPreset();
+        }
+
+        private void SaveChosenPreset()
+        {
+            int index = presetsList.SelectedIndex;
+            if (index == -1)
+                return;
+
+            string preset = presetsList.Items[index].ToString();
+            Interface_settings.savePresetName(preset);
+        }
+
+        private void UpdatePresetsToolTip()
+        {
+            string ToolTipText;
+            if (presetsList.SelectedIndex == -1)
+            {
+                ToolTipText = "";
+            }
+            else
+            {
+                var preset = koefPresets[presetsList.SelectedIndex];
+                int WorkMode = Convert.ToInt32(GetTokMode());
+                KoefPreset.Type type = GetReactorMode();
+
+                ToolTipText = preset.getWorkModeTypeKoeff(WorkMode, type);
+            }
+            
+            this.PresetToolTip.SetToolTip(this.presetsList, ToolTipText);
+        }
+
+        private void tok_mode_list_SelectedItemChanged(object sender, EventArgs e)
+        {
+            UpdatePresetsToolTip();
+        }
+
+        private void tigel_rdbtn_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdatePresetsToolTip();
+        }
+
+        private void UpdatePresetListBtn_Click(object sender, EventArgs e)
+        {
+            int index = presetsList.SelectedIndex;
+            string ChosenPreset = "";
+            if(index != -1)
+                ChosenPreset = presetsList.Items[index].ToString();
+
+            uploadPresets();
+
+            if (index == -1)
+                return;
+
+            for(int i = 0; i < presetsList.Items.Count; i++)
+            {
+                if (presetsList.Items[i].ToString() == ChosenPreset)
+                {
+                    presetsList.SelectedIndex = i;
+                    return;
+                }
+            }
         }
     }
 }

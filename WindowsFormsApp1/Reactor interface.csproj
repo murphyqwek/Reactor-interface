@@ -201,6 +201,7 @@
     <Compile Include="Classes\DPI.cs" />
     <Compile Include="Classes\Exceptions\ExperimentIsNotCapableWithTemplateExcpetion.cs" />
     <Compile Include="Classes\Exceptions\NullTemplateException.cs" />
+    <Compile Include="Classes\Presets\KoefPreset.cs" />
     <Compile Include="Classes\Message\ConfirmMessageBox.cs" />
     <Compile Include="Classes\Message\ErrorMessage.cs" />
     <Compile Include="Classes\Error_message.cs" />
@@ -229,6 +230,7 @@
     <Compile Include="Classes\Port.cs" />
     <Compile Include="Classes\Experiment\ExperimentData.cs" />
     <Compile Include="Classes\Experiment\TemplateSystem.cs" />
+    <Compile Include="Classes\Presets\PresetSystem.cs" />
     <Compile Include="Classes\ReportFileChecker.cs" />
     <Compile Include="Classes\Serie\SerieClassChecker.cs" />
     <Compile Include="Classes\Serie\SerieData.cs" />
@@ -267,11 +269,11 @@
     <Compile Include="Forms\Commands_menu.Designer.cs">
       <DependentUpon>Commands_menu.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Debug_menu.cs">
+    <Compile Include="Forms\PresetRedactorMenu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Debug_menu.Designer.cs">
-      <DependentUpon>Debug_menu.cs</DependentUpon>
+    <Compile Include="Forms\PresetRedactorMenu.Designer.cs">
+      <DependentUpon>PresetRedactorMenu.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Drive_settings_menu.cs">
       <SubType>Form</SubType>
@@ -296,6 +298,12 @@
     </Compile>
     <Compile Include="Forms\Journal\SerieMenus\CreateNewSerieExperiment.Designer.cs">
       <DependentUpon>CreateNewSerieExperiment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Journal\SerieMenus\SerieCommentsViewMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Journal\SerieMenus\SerieCommentsViewMenu.Designer.cs">
+      <DependentUpon>SerieCommentsViewMenu.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Journal\SerieMenus\SerieExperimentsMenu.cs">
       <SubType>Form</SubType>
@@ -380,8 +388,8 @@
     <EmbeddedResource Include="Forms\Commands_menu.resx">
       <DependentUpon>Commands_menu.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Debug_menu.resx">
-      <DependentUpon>Debug_menu.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\PresetRedactorMenu.resx">
+      <DependentUpon>PresetRedactorMenu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Drive_settings_menu.resx">
       <DependentUpon>Drive_settings_menu.cs</DependentUpon>
@@ -394,6 +402,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Journal\SerieMenus\CreateNewSerieExperiment.resx">
       <DependentUpon>CreateNewSerieExperiment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Journal\SerieMenus\SerieCommentsViewMenu.resx">
+      <DependentUpon>SerieCommentsViewMenu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Journal\SerieMenus\SerieExperimentsMenu.resx">
       <DependentUpon>SerieExperimentsMenu.cs</DependentUpon>

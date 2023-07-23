@@ -94,6 +94,10 @@ namespace Reactor_Interface
 
             QuitSerieBtn.Visible = true;
             AddTemplatesBtn.Visible = true;
+            SaveSerieReportBtn.Visible = true;
+            SerieCommentsBtn.Visible = true;
+            SerieMenuSeparator1.Visible = true;
+            SerieMenuSeparator2.Visible = true;
 
             CreateTemplateBasedOnExperimentBtn.Visible = false;
             changeExperimentTemplatebtn.Visible = false;
@@ -101,11 +105,20 @@ namespace Reactor_Interface
             CreateNewExperimentBtn.Visible = false;
             renameExperimentBtn.Visible = false;
             UploadExperimentBtn.Visible = false;
+            SetExpMenuSeparatorVisible(false);
 
             _serie = serie;
 
             Text = "Журнал. Серия: " + serie.Name; 
             this.Focus();
+        }
+
+        private void SetExpMenuSeparatorVisible(bool visible)
+        {
+            ExpMenuSeparator1.Visible = visible;
+            ExpMenuSeparator2.Visible = visible;
+            ExpMenuSeparator3.Visible = visible;
+            ExpMenuSeparator4.Visible = visible;
         }
 
         public Jounral_menu(Chart chart = null, Main_menu _mainMenu = null)
@@ -177,8 +190,12 @@ namespace Reactor_Interface
             string expPath = ExperimentSystem.GetCurrentExperimentPath();
 
             if (currentExperiment == null)
+            {
+                SetExpMenuSeparatorVisible(false);
                 return;
+            }
 
+            SetExpMenuSeparatorVisible(true);
             uploadExperimentFromComputer(currentExperiment, expPath, false);
         }
 
@@ -192,6 +209,7 @@ namespace Reactor_Interface
                 _experiment = experiment;
                 parseExperimentData(_experiment);
                 SetExperimentName(_experiment.Name);
+                SetExpMenuSeparatorVisible(true);
                 IsSaved = true;
                 if (SaveIntoRegister)
                     ExperimentSystem.SetCurrentExperimentIntoRegister(loadFromPath);
@@ -979,6 +997,7 @@ namespace Reactor_Interface
             _experiment = experiment;
             parseExperimentData(experiment);
             SetExperimentName(experiment.Name);
+            ExpMenuSeparator4.Visible = true;
 
             _serieExperimentMetaData = serieExperiment;
             IsSaved = isSaved;
@@ -987,6 +1006,7 @@ namespace Reactor_Interface
 
         private void SetNullExperiment()
         {
+            SetExpMenuSeparatorVisible(false);
             SaveSerieExperimentBtn.Visible = false;
             _experiment = null;
             IsSaved = true;
@@ -1123,6 +1143,19 @@ namespace Reactor_Interface
                 field.Text = "";
 
             comments_txtbx.Text = "";
+        }
+
+        private void SaveSerieReportBtn_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            SerieExcel.CreateSerieExcel(_serie);
+            Cursor = Cursors.Default;
+        }
+
+        private void SerieCommentsBtn_Click(object sender, EventArgs e)
+        {
+            SerieCommentsViewMenu serieComments = new SerieCommentsViewMenu(_serie);
+            serieComments.ShowDialog();
         }
     }
 

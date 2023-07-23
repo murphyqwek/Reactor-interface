@@ -222,8 +222,6 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
 
             SerieSystem.DeleteExperiment(Serie, templateKey, experimentName);
 
-            SuccesMessage.Show("Эксперимент был удалён");
-
             if (experimentName == currentExperimnetName)
                 _returnExperiment(new SerieExperimentMetaData(), null, true, null);
 

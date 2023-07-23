@@ -109,10 +109,29 @@ namespace Reactor_Interface.Classes.Serie
                     AddNewWorkSheetExperiments(serieExcel, serieTemplate, serieExperiments, serieData.ExperimentPath);
                 }
 
+                if (!string.IsNullOrWhiteSpace(serieData.SerieComments))
+                    CreateCommentSheet(serieData.SerieComments, serieExcel);
+
                 serieExcel.SaveAs(reportPath);
             }
 
             OpenReportFolder(reportPath);
+        }
+
+        private static void CreateCommentSheet(string serieComments, ExcelPackage serieExcel)
+        {
+            var CommentSheet = serieExcel.Workbook.Worksheets.Add("Комментарии к серии");
+
+            var cell = CommentSheet.Cells["A1:J14"];
+
+            cell.Merge = true;
+
+            cell.Style.VerticalAlignment = ExcelVerticalAlignment.Top;
+            cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+
+            cell.Value = serieComments;
+            cell.Style.WrapText = true;
+            cell.Style.Border.BorderAround(ExcelBorderStyle.Medium);
         }
 
         private static void OpenReportFolder(string reportPath)

@@ -43,14 +43,16 @@ namespace Reactor_Interface.Classes.Serie
         public string ExperimentPath { get { return Path.Combine(FolderPath, "Эксперименты"); } }
         public string ReportPath { get { return Path.Combine(FolderPath, "Отчёты"); } }
         public string TemplatesPath { get { return Path.Combine(FolderPath, "Шаблоны"); } }
+        public string SerieComments { get; private set; }
 
         [JsonConstructor]
-        public SerieData(Dictionary<string, SerieTemplate> serieTemplates, Dictionary<string, List<SerieExperimentMetaData>> experiments, string name, string seriePath, int lastExperimentIndex)
+        public SerieData(Dictionary<string, SerieTemplate> serieTemplates, Dictionary<string, List<SerieExperimentMetaData>> experiments, string name, string seriePath, int lastExperimentIndex, string serieComments)
         {
             SerieTemplates = serieTemplates ?? new Dictionary<string, SerieTemplate>();
             Experiments = experiments ?? new Dictionary<string, List<SerieExperimentMetaData>>();
             Name = name;
             FolderPath = seriePath;
+            SerieComments = serieComments == null ? "" : serieComments;
             LastExperimentIndex = lastExperimentIndex;
         }
 
@@ -77,6 +79,11 @@ namespace Reactor_Interface.Classes.Serie
 
 
             FolderPath = Path.GetDirectoryName(seriePath);
+        }
+
+        public void SetCommets(string comments)
+        {
+            SerieComments = comments;
         }
 
         public void AddNewTemplate(ExperimentData template, string templatePath)

@@ -30,6 +30,25 @@ namespace WindowsFormsApp1.Classes
             }
         }
 
+        static public string getPresetName()
+        {
+            string preset;
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Reactor Interface TPU"))
+            {
+                preset = key?.GetValue("Coefficient preset")?.ToString();
+            }
+
+            return preset;
+        }
+
+        static public void savePresetName(string presetName)
+        {
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Reactor Interface TPU"))
+            {
+                key.SetValue("Coefficient preset", presetName);
+            }
+        }
+
         static public string get_port()
         {
             string port;
