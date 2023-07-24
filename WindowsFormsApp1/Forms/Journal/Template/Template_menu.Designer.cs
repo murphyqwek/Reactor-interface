@@ -41,10 +41,11 @@
             this.find_btn = new System.Windows.Forms.Button();
             this.chosen_template_lbl = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.UploadTemplateBtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.OpenTemplateFolderBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.AddTemplateBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.CreateNewTemplateBtn = new System.Windows.Forms.ToolStripMenuItem();
-            this.UpdateTemplateBtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.CreateNewExperimentBtn = new System.Windows.Forms.Button();
+            this.UpdateTemplatesViewBtn = new System.Windows.Forms.Button();
             this.template_gorupbox.SuspendLayout();
             this.template_contextmenu.SuspendLayout();
             this.find_groupbx.SuspendLayout();
@@ -150,49 +151,66 @@
             this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.UploadTemplateBtn,
+            this.OpenTemplateFolderBtn,
             this.AddTemplateBtn,
-            this.CreateNewTemplateBtn,
-            this.UpdateTemplateBtn});
+            this.CreateNewTemplateBtn});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(821, 36);
+            this.menuStrip1.Size = new System.Drawing.Size(821, 33);
             this.menuStrip1.TabIndex = 8;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // UploadTemplateBtn
+            // OpenTemplateFolderBtn
             // 
-            this.UploadTemplateBtn.Name = "UploadTemplateBtn";
-            this.UploadTemplateBtn.Size = new System.Drawing.Size(202, 32);
-            this.UploadTemplateBtn.Text = "Создать эксперимент";
-            this.UploadTemplateBtn.Click += new System.EventHandler(this.UploadTemplateBtn_Click);
+            this.OpenTemplateFolderBtn.Name = "OpenTemplateFolderBtn";
+            this.OpenTemplateFolderBtn.Size = new System.Drawing.Size(239, 29);
+            this.OpenTemplateFolderBtn.Text = "Открыть папку шаблонов";
+            this.OpenTemplateFolderBtn.Click += new System.EventHandler(this.UploadTemplateBtn_Click);
             // 
             // AddTemplateBtn
             // 
             this.AddTemplateBtn.Name = "AddTemplateBtn";
-            this.AddTemplateBtn.Size = new System.Drawing.Size(174, 32);
+            this.AddTemplateBtn.Size = new System.Drawing.Size(174, 29);
             this.AddTemplateBtn.Text = "Добавить шаблон";
             this.AddTemplateBtn.Click += new System.EventHandler(this.AddTemplateBtn_Click);
             // 
             // CreateNewTemplateBtn
             // 
             this.CreateNewTemplateBtn.Name = "CreateNewTemplateBtn";
-            this.CreateNewTemplateBtn.Size = new System.Drawing.Size(220, 32);
+            this.CreateNewTemplateBtn.Size = new System.Drawing.Size(220, 29);
             this.CreateNewTemplateBtn.Text = "Создать новый шаблон";
             this.CreateNewTemplateBtn.Click += new System.EventHandler(this.CreateNewTemplateBtn_Click);
             // 
-            // UpdateTemplateBtn
+            // CreateNewExperimentBtn
             // 
-            this.UpdateTemplateBtn.Name = "UpdateTemplateBtn";
-            this.UpdateTemplateBtn.Size = new System.Drawing.Size(190, 32);
-            this.UpdateTemplateBtn.Text = "Обновить шаблоны";
-            this.UpdateTemplateBtn.Click += new System.EventHandler(this.UpdateTemplateBtn_Click);
+            this.CreateNewExperimentBtn.BackColor = System.Drawing.Color.YellowGreen;
+            this.CreateNewExperimentBtn.Location = new System.Drawing.Point(450, 400);
+            this.CreateNewExperimentBtn.Name = "CreateNewExperimentBtn";
+            this.CreateNewExperimentBtn.Size = new System.Drawing.Size(177, 52);
+            this.CreateNewExperimentBtn.TabIndex = 9;
+            this.CreateNewExperimentBtn.Text = "Создать эксперимент";
+            this.CreateNewExperimentBtn.UseVisualStyleBackColor = false;
+            this.CreateNewExperimentBtn.Visible = false;
+            this.CreateNewExperimentBtn.Click += new System.EventHandler(this.CreateNewExperimentBtn_Click);
+            // 
+            // UpdateTemplatesViewBtn
+            // 
+            this.UpdateTemplatesViewBtn.BackColor = System.Drawing.Color.White;
+            this.UpdateTemplatesViewBtn.Location = new System.Drawing.Point(633, 400);
+            this.UpdateTemplatesViewBtn.Name = "UpdateTemplatesViewBtn";
+            this.UpdateTemplatesViewBtn.Size = new System.Drawing.Size(177, 52);
+            this.UpdateTemplatesViewBtn.TabIndex = 10;
+            this.UpdateTemplatesViewBtn.Text = "Обновить список шаблонов";
+            this.UpdateTemplatesViewBtn.UseVisualStyleBackColor = false;
+            this.UpdateTemplatesViewBtn.Click += new System.EventHandler(this.UpdateTemplatesViewBtn_Click);
             // 
             // Template_menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(821, 464);
+            this.Controls.Add(this.UpdateTemplatesViewBtn);
+            this.Controls.Add(this.CreateNewExperimentBtn);
             this.Controls.Add(this.chosen_template_lbl);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.find_groupbx);
@@ -224,8 +242,9 @@
         private System.Windows.Forms.Label chosen_template_lbl;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem AddTemplateBtn;
-        private System.Windows.Forms.ToolStripMenuItem UploadTemplateBtn;
+        private System.Windows.Forms.ToolStripMenuItem OpenTemplateFolderBtn;
         private System.Windows.Forms.ToolStripMenuItem CreateNewTemplateBtn;
-        private System.Windows.Forms.ToolStripMenuItem UpdateTemplateBtn;
+        private System.Windows.Forms.Button CreateNewExperimentBtn;
+        private System.Windows.Forms.Button UpdateTemplatesViewBtn;
     }
 }

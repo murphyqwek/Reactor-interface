@@ -85,6 +85,24 @@
             this.PresetContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.RenamePresetBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.DeletePresetContextMenuBtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.TextBox75A3 = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.TextBox75A4 = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.TextBox75A2 = new System.Windows.Forms.TextBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.TextBox75A1 = new System.Windows.Forms.TextBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.TextBox25A3 = new System.Windows.Forms.TextBox();
+            this.label20 = new System.Windows.Forms.Label();
+            this.TextBox25A4 = new System.Windows.Forms.TextBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.TextBox25A2 = new System.Windows.Forms.TextBox();
+            this.label22 = new System.Windows.Forms.Label();
+            this.TextBox25A1 = new System.Windows.Forms.TextBox();
+            this.label23 = new System.Windows.Forms.Label();
             this.KoeffGroupbox.SuspendLayout();
             this.KoeffTabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -94,6 +112,8 @@
             this.PresetGroupBox.SuspendLayout();
             this.PresetMenuStrip.SuspendLayout();
             this.PresetContextMenuStrip.SuspendLayout();
+            this.tabPage5.SuspendLayout();
+            this.tabPage6.SuspendLayout();
             this.SuspendLayout();
             // 
             // KoeffGroupbox
@@ -143,7 +163,9 @@
             // 
             // KoeffTabControl
             // 
+            this.KoeffTabControl.Controls.Add(this.tabPage5);
             this.KoeffTabControl.Controls.Add(this.tabPage1);
+            this.KoeffTabControl.Controls.Add(this.tabPage6);
             this.KoeffTabControl.Controls.Add(this.tabPage2);
             this.KoeffTabControl.Controls.Add(this.tabPage3);
             this.KoeffTabControl.Controls.Add(this.tabPage4);
@@ -630,21 +652,21 @@
             this.OpenPresetsFolderBtn});
             this.PresetMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.PresetMenuStrip.Name = "PresetMenuStrip";
-            this.PresetMenuStrip.Size = new System.Drawing.Size(800, 33);
+            this.PresetMenuStrip.Size = new System.Drawing.Size(800, 36);
             this.PresetMenuStrip.TabIndex = 11;
             this.PresetMenuStrip.Text = "menuStrip1";
             // 
             // ImportPresetBtn
             // 
             this.ImportPresetBtn.Name = "ImportPresetBtn";
-            this.ImportPresetBtn.Size = new System.Drawing.Size(219, 29);
+            this.ImportPresetBtn.Size = new System.Drawing.Size(219, 30);
             this.ImportPresetBtn.Text = "Импортировать пресет";
             this.ImportPresetBtn.Click += new System.EventHandler(this.ImportPresetBtn_Click);
             // 
             // OpenPresetsFolderBtn
             // 
             this.OpenPresetsFolderBtn.Name = "OpenPresetsFolderBtn";
-            this.OpenPresetsFolderBtn.Size = new System.Drawing.Size(230, 29);
+            this.OpenPresetsFolderBtn.Size = new System.Drawing.Size(230, 30);
             this.OpenPresetsFolderBtn.Text = "Открыть папку пресетов";
             this.OpenPresetsFolderBtn.Click += new System.EventHandler(this.OpenPresetsFolderBtn_Click);
             // 
@@ -671,6 +693,193 @@
             this.DeletePresetContextMenuBtn.Text = "Удалить пресет";
             this.DeletePresetContextMenuBtn.Click += new System.EventHandler(this.DeletePresetBtn_Click);
             // 
+            // tabPage5
+            // 
+            this.tabPage5.Controls.Add(this.TextBox25A3);
+            this.tabPage5.Controls.Add(this.label20);
+            this.tabPage5.Controls.Add(this.TextBox25A4);
+            this.tabPage5.Controls.Add(this.label21);
+            this.tabPage5.Controls.Add(this.TextBox25A2);
+            this.tabPage5.Controls.Add(this.label22);
+            this.tabPage5.Controls.Add(this.TextBox25A1);
+            this.tabPage5.Controls.Add(this.label23);
+            this.tabPage5.Location = new System.Drawing.Point(4, 29);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Size = new System.Drawing.Size(418, 143);
+            this.tabPage5.TabIndex = 4;
+            this.tabPage5.Text = "25A";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // tabPage6
+            // 
+            this.tabPage6.Controls.Add(this.TextBox75A3);
+            this.tabPage6.Controls.Add(this.label4);
+            this.tabPage6.Controls.Add(this.TextBox75A4);
+            this.tabPage6.Controls.Add(this.label17);
+            this.tabPage6.Controls.Add(this.TextBox75A2);
+            this.tabPage6.Controls.Add(this.label18);
+            this.tabPage6.Controls.Add(this.TextBox75A1);
+            this.tabPage6.Controls.Add(this.label19);
+            this.tabPage6.Location = new System.Drawing.Point(4, 29);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Size = new System.Drawing.Size(418, 143);
+            this.tabPage6.TabIndex = 5;
+            this.tabPage6.Text = "75A";
+            this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // TextBox75A3
+            // 
+            this.TextBox75A3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.TextBox75A3.Location = new System.Drawing.Point(227, 109);
+            this.TextBox75A3.Name = "TextBox75A3";
+            this.TextBox75A3.Size = new System.Drawing.Size(185, 26);
+            this.TextBox75A3.TabIndex = 31;
+            this.TextBox75A3.TextChanged += new System.EventHandler(this.FieldTextChangedEvent);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.label4.Location = new System.Drawing.Point(222, 81);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(107, 25);
+            this.label4.TabIndex = 30;
+            this.label4.Text = "Анод вниз";
+            // 
+            // TextBox75A4
+            // 
+            this.TextBox75A4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.TextBox75A4.Location = new System.Drawing.Point(6, 109);
+            this.TextBox75A4.Name = "TextBox75A4";
+            this.TextBox75A4.Size = new System.Drawing.Size(185, 26);
+            this.TextBox75A4.TabIndex = 29;
+            this.TextBox75A4.TextChanged += new System.EventHandler(this.FieldTextChangedEvent);
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.label17.Location = new System.Drawing.Point(6, 81);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(74, 25);
+            this.label17.TabIndex = 28;
+            this.label17.Text = "Время";
+            // 
+            // TextBox75A2
+            // 
+            this.TextBox75A2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.TextBox75A2.Location = new System.Drawing.Point(227, 36);
+            this.TextBox75A2.Name = "TextBox75A2";
+            this.TextBox75A2.Size = new System.Drawing.Size(185, 26);
+            this.TextBox75A2.TabIndex = 27;
+            this.TextBox75A2.TextChanged += new System.EventHandler(this.FieldTextChangedEvent);
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.label18.Location = new System.Drawing.Point(222, 8);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(116, 25);
+            this.label18.TabIndex = 26;
+            this.label18.Text = "Анод вверх";
+            // 
+            // TextBox75A1
+            // 
+            this.TextBox75A1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.TextBox75A1.Location = new System.Drawing.Point(6, 36);
+            this.TextBox75A1.Name = "TextBox75A1";
+            this.TextBox75A1.Size = new System.Drawing.Size(185, 26);
+            this.TextBox75A1.TabIndex = 25;
+            this.TextBox75A1.TextChanged += new System.EventHandler(this.FieldTextChangedEvent);
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.label19.Location = new System.Drawing.Point(6, 8);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(90, 25);
+            this.label19.TabIndex = 24;
+            this.label19.Text = "Контакт";
+            // 
+            // TextBox25A3
+            // 
+            this.TextBox25A3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.TextBox25A3.Location = new System.Drawing.Point(227, 109);
+            this.TextBox25A3.Name = "TextBox25A3";
+            this.TextBox25A3.Size = new System.Drawing.Size(185, 26);
+            this.TextBox25A3.TabIndex = 31;
+            this.TextBox25A3.TextChanged += new System.EventHandler(this.FieldTextChangedEvent);
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.label20.Location = new System.Drawing.Point(222, 81);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(107, 25);
+            this.label20.TabIndex = 30;
+            this.label20.Text = "Анод вниз";
+            // 
+            // TextBox25A4
+            // 
+            this.TextBox25A4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.TextBox25A4.Location = new System.Drawing.Point(6, 109);
+            this.TextBox25A4.Name = "TextBox25A4";
+            this.TextBox25A4.Size = new System.Drawing.Size(185, 26);
+            this.TextBox25A4.TabIndex = 29;
+            this.TextBox25A4.TextChanged += new System.EventHandler(this.FieldTextChangedEvent);
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.label21.Location = new System.Drawing.Point(6, 81);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(74, 25);
+            this.label21.TabIndex = 28;
+            this.label21.Text = "Время";
+            // 
+            // TextBox25A2
+            // 
+            this.TextBox25A2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.TextBox25A2.Location = new System.Drawing.Point(227, 36);
+            this.TextBox25A2.Name = "TextBox25A2";
+            this.TextBox25A2.Size = new System.Drawing.Size(185, 26);
+            this.TextBox25A2.TabIndex = 27;
+            this.TextBox25A2.TextChanged += new System.EventHandler(this.FieldTextChangedEvent);
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.label22.Location = new System.Drawing.Point(222, 8);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(116, 25);
+            this.label22.TabIndex = 26;
+            this.label22.Text = "Анод вверх";
+            // 
+            // TextBox25A1
+            // 
+            this.TextBox25A1.BackColor = System.Drawing.Color.White;
+            this.TextBox25A1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.TextBox25A1.Location = new System.Drawing.Point(6, 36);
+            this.TextBox25A1.Name = "TextBox25A1";
+            this.TextBox25A1.Size = new System.Drawing.Size(185, 26);
+            this.TextBox25A1.TabIndex = 25;
+            this.TextBox25A1.TextChanged += new System.EventHandler(this.FieldTextChangedEvent);
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.label23.Location = new System.Drawing.Point(6, 8);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(90, 25);
+            this.label23.TabIndex = 24;
+            this.label23.Text = "Контакт";
+            // 
             // PresetRedactorMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -688,6 +897,7 @@
             this.MaximizeBox = false;
             this.Name = "PresetRedactorMenu";
             this.Text = "Редактирование пресета коэффициентов";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PresetRedactorMenu_FormClosing);
             this.KoeffGroupbox.ResumeLayout(false);
             this.KoeffGroupbox.PerformLayout();
             this.KoeffTabControl.ResumeLayout(false);
@@ -703,6 +913,10 @@
             this.PresetMenuStrip.ResumeLayout(false);
             this.PresetMenuStrip.PerformLayout();
             this.PresetContextMenuStrip.ResumeLayout(false);
+            this.tabPage5.ResumeLayout(false);
+            this.tabPage5.PerformLayout();
+            this.tabPage6.ResumeLayout(false);
+            this.tabPage6.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -764,5 +978,23 @@
         private System.Windows.Forms.ContextMenuStrip PresetContextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem RenamePresetBtn;
         private System.Windows.Forms.ToolStripMenuItem DeletePresetContextMenuBtn;
+        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.TextBox TextBox25A3;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.TextBox TextBox25A4;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.TextBox TextBox25A2;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.TextBox TextBox25A1;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.TabPage tabPage6;
+        private System.Windows.Forms.TextBox TextBox75A3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox TextBox75A4;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.TextBox TextBox75A2;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.TextBox TextBox75A1;
+        private System.Windows.Forms.Label label19;
     }
 }

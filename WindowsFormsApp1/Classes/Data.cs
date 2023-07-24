@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Management;
 using System.Windows.Forms;
 
 namespace WindowsFormsApp1.Classes
@@ -84,20 +85,24 @@ namespace WindowsFormsApp1.Classes
             else return "-1";
         }
 
-        public static string get_tok_mode(string mode)
+        public static int get_tok_mode(string mode)
         {
             switch (mode)
             {
+                case "25 А":
+                    return 0;
                 case "50 А":
-                    return "0";
+                    return 1;
+                case "75 А":
+                    return 2;
                 case "100 А":
-                    return "1";
+                    return 3;
                 case "150 А":;
-                    return "2";
+                    return 4;
                 case "200 А":
-                    return "3";
+                    return 5;
 
-                default: return "0";
+                default: return 0;
             }
         }
 

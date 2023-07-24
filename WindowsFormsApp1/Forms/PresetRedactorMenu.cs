@@ -53,7 +53,7 @@ namespace WindowsFormsApp1
         {
             tempList = new List<string[]>();
 
-            for(int i = 0; i < 4; i++)
+            for(int i = 0; i < PresetSystem.TOKMODECOUNT; i++)
             {
                 string[] mode = new string[4];
                 for(int j = 0; j < 4; j++)
@@ -158,6 +158,9 @@ namespace WindowsFormsApp1
 
         private void ClearFieldsBtn_Click(object sender, EventArgs e)
         {
+            if (!ConfirmMessageBox.Show("Вы точно хотите очистить вкалдку? Обратное дейтсвие невозможно"))
+                return;
+
             int index = KoeffTabControl.SelectedIndex;
             ClearTab(index);
         }
@@ -268,8 +271,13 @@ namespace WindowsFormsApp1
 
         private void SaveBtn_Click(object sender, EventArgs e)
         {
+            SavePreset();
+        }
+
+        private bool SavePreset()
+        {
             if (IsSaved)
-                return;
+                return true;
 
             if (TigelKoefRadioButton.Checked)
                 SaveTempValues(ref TigelTempKoeff);
@@ -279,32 +287,35 @@ namespace WindowsFormsApp1
             List<double[]> newTigelKoeffs = ConvertToDouble(TigelTempKoeff);
             List<double[]> newVoilokKoeffs = ConvertToDouble(VoilokTempKoeff);
 
-            if(newTigelKoeffs == null || newVoilokKoeffs == null)
+            if (newTigelKoeffs == null || newVoilokKoeffs == null)
             {
                 ErrorMessage.Show("Одно или несколько полей было не заполнено");
-                return;
+                return false;
             }
             string newName = NameTextBox.Text;
 
             if (string.IsNullOrWhiteSpace(newName))
             {
                 ErrorMessage.Show("Введите название пресета");
-                return;
+                return false;
             }
 
             KoefPreset newPreset = new KoefPreset(newTigelKoeffs, newVoilokKoeffs, newName);
 
-            if (PresetSystem.isPresetAlreadyExisting(newPreset.Name) && preset == null)
+            if (PresetSystem.isPresetAlreadyExisting(newPreset.Name) && preset == null ||
+                PresetSystem.isPresetAlreadyExisting(newPreset.Name) && preset?.Name != newPreset.Name)
             {
                 ErrorMessage.Show("Пресет с таким названием уже существует. Выберите другое название");
                 LoadPresets();
-                return;
+                return false;
             }
 
             if (preset != null)
-                SaveExistingPreset(newPreset);
+                return SaveExistingPreset(newPreset);
             else
                 SaveNewPreset(newPreset);
+
+            return true;
         }
 
         private void SaveNewPreset(KoefPreset newPreset)
@@ -317,22 +328,41 @@ namespace WindowsFormsApp1
             LoadPresets();
         }
 
-        private void SaveExistingPreset(KoefPreset modifyingPreset)
+        private bool SaveExistingPreset(KoefPreset modifyingPreset)
         {
-            if(Interface_settings.getPresetName() == preset.Name)
-                Interface_settings.savePresetName(modifyingPreset.Name);
+            if(preset.Name != modifyingPreset.Name) 
+            {
+                if (MessageBox.Show("Сохранить как новый шаблон?", "Внимание", MessageBoxButtons.YesNo,
+                                    MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+                {
+                    if (PresetSystem.isPresetAlreadyExisting(modifyingPreset.Name))
+                    {
+                        ErrorMessage.Show("Пресет с таким названием уже существует. Выберите другое название");
+                        return false;
+                    }
+                    if (Interface_settings.getPresetName() == preset.Name)
+                        Interface_settings.savePresetName(modifyingPreset.Name);
 
-            PresetSystem.SavePreset(modifyingPreset, preset.Name);
+                    PresetSystem.SavePreset(modifyingPreset);
+                }
+                else
+                    PresetSystem.SavePreset(modifyingPreset, preset.Name);
+            }
+            else
+                PresetSystem.SavePreset(modifyingPreset, preset.Name);
+
+            //PresetSystem.SavePreset(modifyingPreset, preset.Name);
             preset = modifyingPreset;
             IsSaved = true;
             SuccesMessage.Show("Изменения успешно сохранены");
             LoadPresets();
+            return true;
         }
 
         private List<double[]> ConvertToDouble(List<string[]> tempListString)
         {
             List<double[]> output = new List<double[]>();
-            for(int i = 0; i < 4; i++)
+            for(int i = 0; i < PresetSystem.TOKMODECOUNT; i++)
             {
                 double[] row = new double[4];
                 for(int j = 0; j < 4; j++)
@@ -420,6 +450,23 @@ namespace WindowsFormsApp1
 
             LoadPresets();
             SuccesMessage.Show("Пресет успешено переименован");
+        }
+
+        private void PresetRedactorMenu_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (IsSaved)
+            {
+                e.Cancel = false;
+                return;
+            }
+
+            if(!ConfirmMessageBox.Show("Текущий пресет не сохранён. Вы хотите его сохранить?"))
+            {
+                e.Cancel = false;
+                return;
+            }
+
+            e.Cancel = !SavePreset();
         }
     }
 }

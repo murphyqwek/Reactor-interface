@@ -181,6 +181,11 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
 
         private void OpenExperimentBtn_Click(object sender, EventArgs e)
         {
+            OpenExperiment();
+        }
+
+        private void OpenExperiment()
+        {
             string tamplateKey = SelectedExperiment.Parent.Tag.ToString();
             string experimentName = SelectedExperiment.Text;
 
@@ -194,6 +199,7 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
 
             if (experiment == null)
             {
+                ErrorMessage.Show("Эксперимент " + experimentName + " был удалён либо повреждён.\nНевозможно загрузить");
                 UpdateSerieTree();
                 return;
             }
@@ -278,6 +284,11 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
             }
 
             UpdateSerieTree();
+        }
+
+        private void SerieTree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            OpenExperiment();
         }
     }
 }

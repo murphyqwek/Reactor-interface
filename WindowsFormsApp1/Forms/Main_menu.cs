@@ -285,11 +285,13 @@ namespace WindowsFormsApp1
 
             param += time_bar.Value.ToString() + "n";
 
-            param += GetTokMode();
+            //param += GetTokMode();
+            /*
             if (tigel_rdbtn.Checked)
                 param += "0";
             else
                 param += "1";
+            */
 
             param += getKoef();
 
@@ -305,14 +307,14 @@ namespace WindowsFormsApp1
             return param;
         }
 
-        private string GetTokMode()
+        private int GetTokMode()
         {
             return Data.get_tok_mode(tok_mode_list.Text);
         }
 
         private string getKoef()
         {
-            int workMode = Convert.ToInt32(GetTokMode());
+            int workMode = GetTokMode();
             KoefPreset.Type type = GetReactorMode();
             var preset = koefPresets[presetsList.SelectedIndex];
             string koefstring = "";
@@ -336,6 +338,8 @@ namespace WindowsFormsApp1
 
         private void start_btn_Click(object sender, EventArgs e)
         {
+            Console.WriteLine(get_params());
+
             if (presetsList.SelectedItem == null)
             {
                 ErrorMessage.Show("Не выбран пресет коэффициентов");
@@ -846,7 +850,7 @@ namespace WindowsFormsApp1
             else
             {
                 var preset = koefPresets[presetsList.SelectedIndex];
-                int WorkMode = Convert.ToInt32(GetTokMode());
+                int WorkMode = GetTokMode();
                 KoefPreset.Type type = GetReactorMode();
 
                 ToolTipText = preset.getWorkModeTypeKoeff(WorkMode, type);

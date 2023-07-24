@@ -14,6 +14,7 @@ using Reactor_Interface.Forms.Template;
 using Reactor_Interface.Classes.Templates;
 using Reactor_Interface.Classes.GoogleAPI;
 using System.IO;
+using System.Diagnostics;
 
 namespace Reactor_Interface.Forms.Experiment
 {
@@ -49,6 +50,11 @@ namespace Reactor_Interface.Forms.Experiment
             {
                 if (templates_array.Contains(selected_template))
                     update_chosen_lbl(selected_template);
+                else
+                {
+                    update_chosen_lbl(template_not_chosen);
+                    CreateNewExperimentBtn.Visible = false;
+                }
             }
         }
 
@@ -70,7 +76,15 @@ namespace Reactor_Interface.Forms.Experiment
         private void template_view_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (template_view.SelectedItems.Count > 0)
+            {
                 update_chosen_lbl(template_view.SelectedItems[0].Text);
+                CreateNewExperimentBtn.Visible = true;
+            }
+            else
+            {
+                update_chosen_lbl(template_not_chosen);
+                CreateNewExperimentBtn.Visible = false;
+            }
         }
 
         private string get_chosen_template()
@@ -146,7 +160,7 @@ namespace Reactor_Interface.Forms.Experiment
 
         private void UploadTemplateBtn_Click(object sender, EventArgs e)
         {
-            UploadTemplate();
+            TemplateSystem.OpenTemplateFolder();
         }
 
         private void CreateNewTemplateBtn_Click(object sender, EventArgs e)
@@ -175,9 +189,14 @@ namespace Reactor_Interface.Forms.Experiment
             }
         }
 
-        private void UpdateTemplateBtn_Click(object sender, EventArgs e)
+        private void CreateNewExperimentBtn_Click(object sender, EventArgs e)
         {
-            Load_templates();
+            UploadTemplate();
+        }
+
+        private void UpdateTemplatesViewBtn_Click(object sender, EventArgs e)
+        {
+            Load_templates(get_chosen_template());
         }
     }
 }

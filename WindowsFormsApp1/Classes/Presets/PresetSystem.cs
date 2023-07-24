@@ -16,6 +16,7 @@ namespace Reactor_Interface.Classes.Presets
     {
         private static readonly string PRESETSPATH = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Reactor TPU Koef Presets";
         private static readonly string PRESETEXTENSION = ".preset";
+        public static readonly int TOKMODECOUNT = 6;
 
         private static void CreateFolder()
         {
@@ -51,7 +52,7 @@ namespace Reactor_Interface.Classes.Presets
             string name = Path.GetFileNameWithoutExtension(presetPath);
             foreach(string line in File.ReadLines(presetPath))
             {
-                if (i == 32)
+                if (i == TOKMODECOUNT * 8)
                     break;
 
                 if (!Double.TryParse(line, out koeff[i % 4]))
@@ -61,14 +62,14 @@ namespace Reactor_Interface.Classes.Presets
 
                 if (i % 4 == 0)
                 {
-                    if(i <= 16)
+                    if(i <= TOKMODECOUNT * 4)
                         TigelParams.Add(koeff);
                     else
                         VoilokParams.Add(koeff);
                     koeff = new double[4];
                 }
             }
-            if (TigelParams.Count != 4 || VoilokParams.Count != 4)
+            if (TigelParams.Count != TOKMODECOUNT || VoilokParams.Count != TOKMODECOUNT)
                 return null;
 
             return new KoefPreset(TigelParams, VoilokParams, name);

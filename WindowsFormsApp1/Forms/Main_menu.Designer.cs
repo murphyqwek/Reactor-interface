@@ -528,7 +528,9 @@
             this.tok_mode_list.Items.Add("200 А");
             this.tok_mode_list.Items.Add("150 А");
             this.tok_mode_list.Items.Add("100 А");
+            this.tok_mode_list.Items.Add("75 А");
             this.tok_mode_list.Items.Add("50 А");
+            this.tok_mode_list.Items.Add("25 А");
             this.tok_mode_list.Location = new System.Drawing.Point(101, 50);
             this.tok_mode_list.Name = "tok_mode_list";
             this.tok_mode_list.ReadOnly = true;
@@ -570,11 +572,11 @@
             // 
             // presetsList
             // 
-            this.presetsList.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.presetsList.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.presetsList.FormattingEnabled = true;
             this.presetsList.Location = new System.Drawing.Point(381, 144);
             this.presetsList.Name = "presetsList";
-            this.presetsList.Size = new System.Drawing.Size(175, 45);
+            this.presetsList.Size = new System.Drawing.Size(175, 37);
             this.presetsList.TabIndex = 20;
             this.presetsList.SelectedValueChanged += new System.EventHandler(this.presetsList_SelectedValueChanged);
             // 

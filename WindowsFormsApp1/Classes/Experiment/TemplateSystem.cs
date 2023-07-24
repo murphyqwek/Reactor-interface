@@ -15,6 +15,7 @@ using System.Web.UI;
 using Reactor_Interface.Classes.Experiment;
 using Reactor_Interface.Classes.GoogleAPI;
 using Reactor_Interface.Classes.Exceptions;
+using System.Diagnostics;
 
 namespace Reactor_Interface.Classes
 {
@@ -255,5 +256,9 @@ namespace Reactor_Interface.Classes
             File.Delete(get_full_path(template_name));
         }
 
+        static public void OpenTemplateFolder()
+        {
+            Process.Start("explorer", templates_folder);
+        }
     }
 }

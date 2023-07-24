@@ -41,6 +41,7 @@ namespace Reactor_Interface.Classes
                                                                           koeffs[workMode][2], koeffs[workMode][3]);
         }
 
+        /*
         public string getPresetToolTipText()
         {
             string text = "";
@@ -53,7 +54,7 @@ namespace Reactor_Interface.Classes
             }
             return text;
         }
-
+        */
         public void ChangeKoeffsList(List<double[]> newKoeffs, Type type)
         {
             if (type == Type.Tigel)

@@ -74,6 +74,7 @@
             this.SerieTree.Size = new System.Drawing.Size(423, 375);
             this.SerieTree.TabIndex = 0;
             this.SerieTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.SerieTree_AfterSelect);
+            this.SerieTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.SerieTree_NodeMouseDoubleClick);
             // 
             // IconList
             // 
@@ -115,7 +116,7 @@
             this.OpenExperimentFolderBtn});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(800, 36);
+            this.menuStrip1.Size = new System.Drawing.Size(800, 33);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -123,23 +124,23 @@
             // 
             this.ExcelExportBtn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.ExcelExportBtn.Name = "ExcelExportBtn";
-            this.ExcelExportBtn.Size = new System.Drawing.Size(220, 32);
+            this.ExcelExportBtn.Size = new System.Drawing.Size(220, 29);
             this.ExcelExportBtn.Text = "Экспортировать в Excel";
             this.ExcelExportBtn.Click += new System.EventHandler(this.ExcelExportBtn_Click);
             // 
             // OpenExperimentFolderBtn
             // 
             this.OpenExperimentFolderBtn.Name = "OpenExperimentFolderBtn";
-            this.OpenExperimentFolderBtn.Size = new System.Drawing.Size(285, 32);
+            this.OpenExperimentFolderBtn.Size = new System.Drawing.Size(285, 29);
             this.OpenExperimentFolderBtn.Text = "Открыть папку экспериментов ";
             this.OpenExperimentFolderBtn.Click += new System.EventHandler(this.OpenExperimentFolderBtn_Click);
             // 
             // DeleteExperimentBtn
             // 
             this.DeleteExperimentBtn.BackColor = System.Drawing.Color.Tomato;
-            this.DeleteExperimentBtn.Location = new System.Drawing.Point(667, 298);
+            this.DeleteExperimentBtn.Location = new System.Drawing.Point(638, 298);
             this.DeleteExperimentBtn.Name = "DeleteExperimentBtn";
-            this.DeleteExperimentBtn.Size = new System.Drawing.Size(121, 65);
+            this.DeleteExperimentBtn.Size = new System.Drawing.Size(150, 65);
             this.DeleteExperimentBtn.TabIndex = 0;
             this.DeleteExperimentBtn.Text = "Удалить эксперимент";
             this.DeleteExperimentBtn.UseVisualStyleBackColor = false;
@@ -151,7 +152,7 @@
             this.OpenExperimentBtn.BackColor = System.Drawing.Color.GreenYellow;
             this.OpenExperimentBtn.Location = new System.Drawing.Point(458, 298);
             this.OpenExperimentBtn.Name = "OpenExperimentBtn";
-            this.OpenExperimentBtn.Size = new System.Drawing.Size(121, 65);
+            this.OpenExperimentBtn.Size = new System.Drawing.Size(150, 65);
             this.OpenExperimentBtn.TabIndex = 3;
             this.OpenExperimentBtn.Text = "Открыть эксперимент";
             this.OpenExperimentBtn.UseVisualStyleBackColor = false;
@@ -161,9 +162,9 @@
             // UpdateListViewBtn
             // 
             this.UpdateListViewBtn.BackColor = System.Drawing.SystemColors.Control;
-            this.UpdateListViewBtn.Location = new System.Drawing.Point(667, 373);
+            this.UpdateListViewBtn.Location = new System.Drawing.Point(638, 373);
             this.UpdateListViewBtn.Name = "UpdateListViewBtn";
-            this.UpdateListViewBtn.Size = new System.Drawing.Size(121, 65);
+            this.UpdateListViewBtn.Size = new System.Drawing.Size(150, 65);
             this.UpdateListViewBtn.TabIndex = 4;
             this.UpdateListViewBtn.Text = "Обновить список";
             this.UpdateListViewBtn.UseVisualStyleBackColor = false;
@@ -172,10 +173,10 @@
             // UploadTemplateBtn
             // 
             this.UploadTemplateBtn.BackColor = System.Drawing.Color.Gold;
-            this.UploadTemplateBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.UploadTemplateBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.UploadTemplateBtn.Location = new System.Drawing.Point(458, 373);
             this.UploadTemplateBtn.Name = "UploadTemplateBtn";
-            this.UploadTemplateBtn.Size = new System.Drawing.Size(121, 65);
+            this.UploadTemplateBtn.Size = new System.Drawing.Size(150, 65);
             this.UploadTemplateBtn.TabIndex = 5;
             this.UploadTemplateBtn.Text = "Добавить в базу шаблонов";
             this.uploadTemplateTip.SetToolTip(this.UploadTemplateBtn, "Создать на основе эксперимента шаблон");
