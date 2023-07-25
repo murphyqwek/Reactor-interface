@@ -43,22 +43,23 @@ namespace Reactor_Interface.Classes.Weigher
                 _weigherSerialPort.DiscardInBuffer();
                 text_bytes = Encoding.UTF8.GetBytes(text);
 
-                string j = "";
+                string rawData = "";
                 for (int i = 0; i < text_bytes.Length; i++)
                 {
-                    j += text_bytes[i].ToString();
+                    rawData += text_bytes[i].ToString();
                 }
 
-                j = j.Remove(7, j.Length - 7);
+                rawData = rawData.Remove(7, rawData.Length - 7); //Удаляем лишние символы?
 
-                char[] jchars = j.ToCharArray();
-                Array.Reverse(jchars);
-                j = new string(jchars);
+                char[] rawDataChars = rawData.ToCharArray();
+                Array.Reverse(rawDataChars);
+                rawData = new string(rawDataChars); //Получаем наше число без разделительного знака
 
-                string int_part = j.Substring(0, 3).TrimStart('0');
+                string int_part = rawData.Substring(0, 3).TrimStart('0'); 
                 int_part = (int_part == "") ? "0" : int_part;
+                string fraction = rawData.Substring(3, rawData.Length - 3);
 
-                string mass = int_part + "." + j.Substring(3, j.Length - 3);
+                string mass = int_part + "." + fraction;
 
                 _weigherSerialPort.Close();
 

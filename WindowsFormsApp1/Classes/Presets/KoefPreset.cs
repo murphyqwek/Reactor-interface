@@ -37,7 +37,7 @@ namespace Reactor_Interface.Classes
         {
             List<double[]> koeffs = type == Type.Tigel ? TigelKoeffs : VoilokKoeffs;
 
-            return string.Format("Контакт: {0}, Анод вверх: {1}\nВремя: {2}, Анод вниз {3}", koeffs[workMode][0], koeffs[workMode][1],
+            return string.Format("Контакт: {0}, Анод вверх: {1}\nВремя: {3}, Анод вниз {2}", koeffs[workMode][0], koeffs[workMode][1],
                                                                           koeffs[workMode][2], koeffs[workMode][3]);
         }
 
