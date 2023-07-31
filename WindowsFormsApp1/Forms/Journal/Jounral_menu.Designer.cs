@@ -40,6 +40,8 @@
             this.UploadExperimentBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.UploadExperimentComputerBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.сОблачногоХранилищаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.OpenRecentFilesBtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.Separator = new System.Windows.Forms.ToolStripSeparator();
             this.SaveExperimentBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveOnComputerBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveOnDriveBtn = new System.Windows.Forms.ToolStripMenuItem();
@@ -114,6 +116,7 @@
             this.renameExperimentBtn,
             this.ExpMenuSeparator2,
             this.UploadExperimentBtn,
+            this.OpenRecentFilesBtn,
             this.SaveExperimentBtn,
             this.ExpMenuSeparator3,
             this.changeExperimentTemplatebtn,
@@ -186,6 +189,21 @@
             this.сОблачногоХранилищаToolStripMenuItem.Size = new System.Drawing.Size(314, 34);
             this.сОблачногоХранилищаToolStripMenuItem.Text = "С облачного хранилища";
             this.сОблачногоХранилищаToolStripMenuItem.Visible = false;
+            // 
+            // OpenRecentFilesBtn
+            // 
+            this.OpenRecentFilesBtn.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.Separator});
+            this.OpenRecentFilesBtn.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.OpenRecentFilesBtn.Name = "OpenRecentFilesBtn";
+            this.OpenRecentFilesBtn.Size = new System.Drawing.Size(476, 34);
+            this.OpenRecentFilesBtn.Text = "Открыть недавние эксперименты:";
+            this.OpenRecentFilesBtn.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.OpenRecentFilesBtn_DropDownItemClicked);
+            // 
+            // Separator
+            // 
+            this.Separator.Name = "Separator";
+            this.Separator.Size = new System.Drawing.Size(267, 6);
             // 
             // SaveExperimentBtn
             // 
@@ -382,14 +400,14 @@
             // googleDriveToolStripMenuItem
             // 
             this.googleDriveToolStripMenuItem.Name = "googleDriveToolStripMenuItem";
-            this.googleDriveToolStripMenuItem.Size = new System.Drawing.Size(270, 36);
+            this.googleDriveToolStripMenuItem.Size = new System.Drawing.Size(259, 36);
             this.googleDriveToolStripMenuItem.Text = "Google Drive:";
             this.googleDriveToolStripMenuItem.Click += new System.EventHandler(this.googleDriveToolStripMenuItem_DropDownItemClicked);
             // 
             // change_serie_menubtn
             // 
             this.change_serie_menubtn.Name = "change_serie_menubtn";
-            this.change_serie_menubtn.Size = new System.Drawing.Size(270, 36);
+            this.change_serie_menubtn.Size = new System.Drawing.Size(259, 36);
             this.change_serie_menubtn.Text = "Выбрать серию:";
             this.change_serie_menubtn.Click += new System.EventHandler(this.change_serie_menubtn_Click);
             // 
@@ -652,5 +670,7 @@
         private System.Windows.Forms.ToolStripSeparator SerieMenuSeparator1;
         private System.Windows.Forms.ToolStripSeparator SerieMenuSeparator2;
         private System.Windows.Forms.ToolStripSeparator ExpMenuSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem OpenRecentFilesBtn;
+        private System.Windows.Forms.ToolStripSeparator Separator;
     }
 }

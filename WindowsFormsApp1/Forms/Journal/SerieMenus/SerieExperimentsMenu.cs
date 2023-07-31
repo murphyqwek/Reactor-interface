@@ -288,6 +288,9 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
 
         private void SerieTree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
+            if (SerieTree.SelectedNode.ImageIndex <= 0)
+                return;
+
             OpenExperiment();
         }
     }

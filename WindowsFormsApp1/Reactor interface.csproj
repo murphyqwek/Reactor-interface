@@ -231,6 +231,7 @@
     <Compile Include="Classes\Experiment\ExperimentData.cs" />
     <Compile Include="Classes\Experiment\TemplateSystem.cs" />
     <Compile Include="Classes\Presets\PresetSystem.cs" />
+    <Compile Include="Classes\RecentFiles.cs" />
     <Compile Include="Classes\ReportFileChecker.cs" />
     <Compile Include="Classes\Serie\SerieClassChecker.cs" />
     <Compile Include="Classes\Serie\SerieData.cs" />

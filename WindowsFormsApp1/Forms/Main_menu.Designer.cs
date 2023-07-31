@@ -79,6 +79,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.PresetToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.ComandLabel = new System.Windows.Forms.Label();
             this.mode_settings_box.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cold_bar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fire_bar)).BeginInit();
@@ -319,7 +320,7 @@
             // 
             this.voilok_rdbtn.AutoSize = true;
             this.voilok_rdbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.voilok_rdbtn.Location = new System.Drawing.Point(106, 112);
+            this.voilok_rdbtn.Location = new System.Drawing.Point(100, 112);
             this.voilok_rdbtn.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.voilok_rdbtn.Name = "voilok_rdbtn";
             this.voilok_rdbtn.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -333,7 +334,7 @@
             this.tigel_rdbtn.AutoSize = true;
             this.tigel_rdbtn.Checked = true;
             this.tigel_rdbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tigel_rdbtn.Location = new System.Drawing.Point(110, 52);
+            this.tigel_rdbtn.Location = new System.Drawing.Point(106, 52);
             this.tigel_rdbtn.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tigel_rdbtn.Name = "tigel_rdbtn";
             this.tigel_rdbtn.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -355,7 +356,7 @@
             this.KoeffMenuBtn});
             this.menu.Location = new System.Drawing.Point(0, 0);
             this.menu.Name = "menu";
-            this.menu.Size = new System.Drawing.Size(1664, 40);
+            this.menu.Size = new System.Drawing.Size(1664, 42);
             this.menu.TabIndex = 7;
             this.menu.Text = "menu";
             // 
@@ -368,7 +369,7 @@
             this.google_drive_menu_btn});
             this.settings_menu_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.settings_menu_btn.Name = "settings_menu_btn";
-            this.settings_menu_btn.Size = new System.Drawing.Size(148, 36);
+            this.settings_menu_btn.Size = new System.Drawing.Size(148, 38);
             this.settings_menu_btn.Text = "Настройки";
             this.settings_menu_btn.DropDownOpened += new System.EventHandler(this.settings_menu_btn_DropDownOpened);
             this.settings_menu_btn.Click += new System.EventHandler(this.settings_menu_btn_Click);
@@ -406,7 +407,7 @@
             // 
             this.graphic_menu_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.graphic_menu_btn.Name = "graphic_menu_btn";
-            this.graphic_menu_btn.Size = new System.Drawing.Size(109, 36);
+            this.graphic_menu_btn.Size = new System.Drawing.Size(109, 38);
             this.graphic_menu_btn.Text = "График";
             this.graphic_menu_btn.Click += new System.EventHandler(this.graphic_menu_btn_Click);
             // 
@@ -415,7 +416,7 @@
             this.send_experiment_btn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.send_experiment_btn.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.send_experiment_btn.Name = "send_experiment_btn";
-            this.send_experiment_btn.Size = new System.Drawing.Size(366, 36);
+            this.send_experiment_btn.Size = new System.Drawing.Size(366, 38);
             this.send_experiment_btn.Text = "Открыть электронный журнал";
             this.send_experiment_btn.Click += new System.EventHandler(this.send_experiment_btn_Click);
             // 
@@ -423,7 +424,7 @@
             // 
             this.KoeffMenuBtn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.KoeffMenuBtn.Name = "KoeffMenuBtn";
-            this.KoeffMenuBtn.Size = new System.Drawing.Size(432, 36);
+            this.KoeffMenuBtn.Size = new System.Drawing.Size(432, 38);
             this.KoeffMenuBtn.Text = "Просмотр пресетов коэффициентов";
             this.KoeffMenuBtn.Click += new System.EventHandler(this.KoefRedactorMenuShowbtn_Click);
             // 
@@ -543,10 +544,10 @@
             // 
             this.info_box.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.info_box.BackColor = System.Drawing.SystemColors.Control;
+            this.info_box.Controls.Add(this.ComandLabel);
             this.info_box.Controls.Add(this.UpdatePresetListBtn);
             this.info_box.Controls.Add(this.presetsList);
             this.info_box.Controls.Add(this.label2);
-            this.info_box.Controls.Add(this.tem_lbl);
             this.info_box.Controls.Add(this.state_lbl);
             this.info_box.Controls.Add(this.label1);
             this.info_box.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -594,7 +595,7 @@
             // 
             this.tem_lbl.AutoSize = true;
             this.tem_lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F);
-            this.tem_lbl.Location = new System.Drawing.Point(320, 47);
+            this.tem_lbl.Location = new System.Drawing.Point(955, 330);
             this.tem_lbl.Name = "tem_lbl";
             this.tem_lbl.Size = new System.Drawing.Size(227, 37);
             this.tem_lbl.TabIndex = 3;
@@ -711,6 +712,16 @@
             this.button2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.arrow_btn_down);
             this.button2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.arrow_btn_up);
             // 
+            // ComandLabel
+            // 
+            this.ComandLabel.AutoSize = true;
+            this.ComandLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.ComandLabel.Location = new System.Drawing.Point(17, 55);
+            this.ComandLabel.Name = "ComandLabel";
+            this.ComandLabel.Size = new System.Drawing.Size(122, 29);
+            this.ComandLabel.TabIndex = 21;
+            this.ComandLabel.Text = "Команда:";
+            // 
             // Main_menu
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -718,6 +729,7 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.IR_box);
+            this.Controls.Add(this.tem_lbl);
             this.Controls.Add(this.info_box);
             this.Controls.Add(this.reactor_box);
             this.Controls.Add(this.up_btn);
@@ -811,6 +823,7 @@
         private System.Windows.Forms.ComboBox presetsList;
         private System.Windows.Forms.ToolTip PresetToolTip;
         private System.Windows.Forms.Button UpdatePresetListBtn;
+        private System.Windows.Forms.Label ComandLabel;
     }
 }
 

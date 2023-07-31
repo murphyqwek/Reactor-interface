@@ -338,7 +338,7 @@ namespace WindowsFormsApp1
 
         private void start_btn_Click(object sender, EventArgs e)
         {
-            Console.WriteLine(get_params());
+            //Console.WriteLine(get_params());
 
             if (presetsList.SelectedItem == null)
             {
@@ -356,12 +356,11 @@ namespace WindowsFormsApp1
                 is_reactor_working = true;
 
                 string param = get_params();
-
+                ComandLabel.Text = "Команда: " + param;
                 SerialPort.PortName = port.Split(' ')[0];
                 SerialPort.BaudRate = speed;
                 try
                 {
-                    
                     graphic_menu.Clear_Graphic();
                     graphic_menu.is_drawing = true;
 
@@ -373,7 +372,7 @@ namespace WindowsFormsApp1
 
                     SerialPort.Open();
                     SerialPort.Write(param);
-                    
+
                     state_lbl.ForeColor = Color.Green;
                     state_lbl.Text = "Работает";
 
@@ -793,7 +792,7 @@ namespace WindowsFormsApp1
         private void send_experiment_btn_Click(object sender, EventArgs e)
         {
             WarningMessage.Show("Данная версия находитя в тестировании.\nПеред тем, как работать со старыми экспериментами или с сериями, настоятельно рекомендуется сделать их копию");
-            Jounral_menu exp = new Jounral_menu(graphic_menu.GetChart(), this);
+            Jounral_menu exp = new Jounral_menu(this, graphic_menu.GetChart());
             exp.ShowDialog();
         }
 

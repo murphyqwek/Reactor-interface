@@ -280,6 +280,9 @@ namespace Reactor_Interface.Classes.Serie
         
         private static string ReadSerieFile(string seriePath)
         {
+            if(!File.Exists(seriePath))
+                return null;
+
             string JSONserie;
             using (FileStream fstream = new FileStream(seriePath, FileMode.Open))
             {
@@ -296,6 +299,9 @@ namespace Reactor_Interface.Classes.Serie
 
         public static SerieData UploadSerie(string seriePath)
         {
+            if (string.IsNullOrEmpty(seriePath))
+                return null;
+
             string JSONserie = ReadSerieFile(seriePath);
             SerieData serieData;
             try
@@ -304,6 +310,7 @@ namespace Reactor_Interface.Classes.Serie
             }
             catch
             {
+                RecentFiles.DeleteRecentFile(seriePath, false);
                 return null;
             }
 

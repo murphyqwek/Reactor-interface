@@ -97,6 +97,22 @@ namespace Reactor_Interface.Classes.Serie
         {
             return LastExperimentIndex;
         }
+        
+        public SerieExperimentMetaData GetExperimentMetaDataByExperimentPath(string experimentPath)
+        {
+            string experimentName = Path.GetFileNameWithoutExtension(experimentPath);
+
+            foreach(var metadataList in Experiments.Values)
+            {
+                foreach(var metadata in metadataList)
+                {
+                    if (metadata.ExperimentName == experimentName)
+                        return metadata;
+                }
+            }
+
+            return new SerieExperimentMetaData();
+        }
 
         public void AddExperiment(SerieExperimentMetaData metaData)
         {

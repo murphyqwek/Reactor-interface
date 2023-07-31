@@ -4,11 +4,64 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Win32;
+using Reactor_Interface.Classes;
 
 namespace WindowsFormsApp1.Classes
 {
     static class Interface_settings
     {
+        static public string[] getRecentSeries()
+        {
+            string[] recentExperiments = new string[RecentFiles.MAXRECNETFILESCOUNT];
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Reactor Interface TPU\Recent Files\Serie"))
+            {
+                for (int i = 0; i < RecentFiles.MAXRECNETFILESCOUNT; i++)
+                {
+                    recentExperiments[i] = key?.GetValue("RecentSerie " + i.ToString())?.ToString();
+                }
+            }
+
+            return recentExperiments;
+        }
+
+        static public void saveRecentSeries(string[] recentSeries)
+        {
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Reactor Interface TPU\Recent Files\Serie"))
+            {
+                for (int i = 0; i < recentSeries.Length; i++)
+                {
+                    string recentSerie = recentSeries[i] == null ? "" : recentSeries[i];
+                    key.SetValue("RecentSerie " + i.ToString(), recentSerie);
+                }
+            }
+        }
+
+        static public string[] getRecentExperiments()
+        {
+            string[] recentExperiments = new string[RecentFiles.MAXRECNETFILESCOUNT];
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Reactor Interface TPU\Recent Files\Experiment"))
+            {
+                for (int i = 0; i < RecentFiles.MAXRECNETFILESCOUNT; i++)
+                {
+                    recentExperiments[i] = key?.GetValue("RecentExperiment " + i.ToString())?.ToString();
+                }
+            }
+
+            return recentExperiments;
+        }
+
+        static public void saveRecentExperiments(string[] recentExperiments)
+        {
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Reactor Interface TPU\Recent Files\Experiment"))
+            {
+                for (int i = 0; i < recentExperiments.Length; i++)
+                {
+                    string recentExperiment = recentExperiments[i] == null ? "" : recentExperiments[i];
+                    key.SetValue("RecentExperiment " + i.ToString(), recentExperiment);
+                }
+            }
+        }
+
         static public string get_weigher_port()
         {
             string port;
@@ -186,21 +239,41 @@ namespace WindowsFormsApp1.Classes
             }
         }
 
-        public static string get_current_experiment()
+        public static string GetLastSerie()
         {
-            string currentExperiment;
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Reactor Interface TPU"))
+            string lastSerie;
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Reactor Interface TPU\Last Files"))
             {
-                currentExperiment = key?.GetValue("Current Experiment")?.ToString();
+                lastSerie = key?.GetValue("Last Serie")?.ToString();
             }
-            return currentExperiment;
+            return lastSerie;
         }
 
-        public static void set_current_experiment(string experimentPath)
+        public static void SaveLastSerie(string seriePath, string experimentPath = "")
         {
-            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Reactor Interface TPU"))
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Reactor Interface TPU\Last Files"))
             {
-                key.SetValue("Current Experiment", experimentPath);
+                key.SetValue("Last Experiment", experimentPath);
+                key.SetValue("Last Serie", seriePath);
+            }
+        }
+
+        public static string GetLastExperiment()
+        {
+            string lastExperiment;
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Reactor Interface TPU\Last Files"))
+            {
+                lastExperiment = key?.GetValue("Last Experiment")?.ToString();
+            }
+            return lastExperiment;
+        }
+
+        public static void SaveLastExperiment(string experimentPath)
+        {
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Reactor Interface TPU\Last Files"))
+            {
+                key.SetValue("Last Experiment", experimentPath);
+                key.SetValue("Last Serie", "");
             }
         }
     }

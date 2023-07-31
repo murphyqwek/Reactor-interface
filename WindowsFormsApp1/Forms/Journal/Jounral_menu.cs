@@ -88,7 +88,34 @@ namespace Reactor_Interface
             }
         }
 
-        public Jounral_menu(SerieData serie, Chart chart = null, Main_menu _mainMenu = null)
+        public Jounral_menu(Main_menu _mainMenu, Chart chart = null)
+        {
+            string lastSeriePath = Interface_settings.GetLastSerie();
+            string lastExperimentPath = Interface_settings.GetLastExperiment();
+
+            SerieData serieData = SerieSystem.UploadSerie(lastSeriePath);
+            ExperimentData experimentData = ExperimentSystem.UploadExperiment(lastExperimentPath, false);
+
+            if(serieData != null)
+            {
+                SetupSerieJournal(serieData, chart, _mainMenu);
+                var metadata = serieData.GetExperimentMetaDataByExperimentPath(lastExperimentPath);
+                if (experimentData != null && metadata.ExperimentName != null && metadata.TemplateName != null) 
+                {
+                    UploadSerieExperiment(metadata, experimentData, true, Path.GetDirectoryName(lastExperimentPath));
+                }
+                else
+                    Interface_settings.SaveLastSerie(lastSeriePath, "");
+            }
+            else
+            {
+                SetupExperimentJounral(chart, _mainMenu, experimentData, lastExperimentPath);
+                if (experimentData == null)
+                    Interface_settings.SaveLastExperiment("");
+            }
+        }
+
+        private void SetupSerieJournal(SerieData serie, Chart chart = null, Main_menu _mainMenu = null)
         {
             setupJournal(chart, _mainMenu);
 
@@ -109,8 +136,14 @@ namespace Reactor_Interface
 
             _serie = serie;
 
-            Text = "Журнал. Серия: " + serie.Name; 
+            Text = "Журнал. Серия: " + serie.Name;
             this.Focus();
+        }
+
+
+        public Jounral_menu(SerieData serie, Chart chart = null, Main_menu _mainMenu = null)
+        {
+            SetupSerieJournal(serie, chart, _mainMenu);
         }
 
         private void SetExpMenuSeparatorVisible(bool visible)
@@ -121,10 +154,24 @@ namespace Reactor_Interface
             ExpMenuSeparator4.Visible = visible;
         }
 
-        public Jounral_menu(Chart chart = null, Main_menu _mainMenu = null)
+        public Jounral_menu(Chart chart = null, Main_menu _mainMenu = null, ExperimentData experiment = null, string expPath = null)
+        {
+            SetupExperimentJounral(chart, _mainMenu, experiment, expPath);
+        }
+
+        private void SetupExperimentJounral(Chart chart, Main_menu _mainMenu, ExperimentData experiment, string expPath)
         {
             setupJournal(chart, _mainMenu);
-            uploadCurrentExperiment();
+
+            if (experiment == null)
+            {
+                uploadCurrentExperiment();
+            }
+            else
+            {
+                SetExpMenuSeparatorVisible(true);
+                uploadExperimentFromComputer(experiment, expPath, false);
+            }
         }
 
         private void setupJournal(Chart chart, Main_menu _mainMenu)
@@ -143,6 +190,7 @@ namespace Reactor_Interface
             googleDriveToolStripMenuItem.Text = "Google Drive: " + Drive.name;
             upload_ports();
             upload_drives();
+            RecentFiles.SetRecentFiles(ref OpenRecentFilesBtn, ref Separator);
         }
 
         private void upload_ports()
@@ -202,18 +250,23 @@ namespace Reactor_Interface
         private void uploadExperimentFromComputer(ExperimentData experiment, string loadFromPath, bool SaveIntoRegister)
         {
             if (experiment == null)
-                ErrorMessage.Show("Шаблон был повреждён. Невозможно загрузить.");
-            else
             {
-                LoadFrom = computerPreffix + Path.GetDirectoryName(loadFromPath);
-                _experiment = experiment;
-                parseExperimentData(_experiment);
-                SetExperimentName(_experiment.Name);
-                SetExpMenuSeparatorVisible(true);
-                IsSaved = true;
-                if (SaveIntoRegister)
-                    ExperimentSystem.SetCurrentExperimentIntoRegister(loadFromPath);
+                RecentFiles.DeleteRecentFile(loadFromPath, true);
+                RecentFiles.SetRecentFiles(ref OpenRecentFilesBtn, ref Separator);
+                ErrorMessage.Show("Шаблон был повреждён. Невозможно загрузить");
+                return;
             }
+
+            LoadFrom = computerPreffix + Path.GetDirectoryName(loadFromPath);
+            _experiment = experiment;
+            parseExperimentData(_experiment);
+            SetExperimentName(_experiment.Name);
+            SetExpMenuSeparatorVisible(true);
+            IsSaved = true;
+            if (SaveIntoRegister)
+                ExperimentSystem.SetCurrentExperimentIntoRegister(loadFromPath);
+
+            RecentFiles.UpdateRecentFiles(ref OpenRecentFilesBtn, ref Separator, loadFromPath, true);
         }
 
         private void parseExperimentData(ExperimentData experiment)
@@ -534,6 +587,8 @@ namespace Reactor_Interface
 
             string path = ExperimentSystem.GetExperimentPath();
 
+            if(path == null) return;
+
             var experiment = ExperimentSystem.UploadExperiment(path, false);
             uploadExperimentFromComputer(experiment, path, true);
         }
@@ -601,6 +656,8 @@ namespace Reactor_Interface
             _experiment = FormNewExperiment(experimentName, _experiment.ApplianceData, _experiment.ConnectedFields);
             ExperimentSystem.SaveExperimentOnComputer(_experiment, folderPath);
             ExperimentSystem.SetCurrentExperimentIntoRegister(Path.Combine(folderPath, experimentName + ExperimentSystem.EXTENSION));
+            string experimentPath = Path.Combine(folderPath, _experiment.GetFileName());
+            RecentFiles.UpdateRecentFiles(ref OpenRecentFilesBtn, ref Separator, experimentPath, true);
             IsSaved = true;
         }
 
@@ -889,6 +946,8 @@ namespace Reactor_Interface
             if(serie  == null) return;
 
             this.Close();
+            Interface_settings.SaveLastSerie(serie.SerieFilePath);
+            RecentFiles.UpdateRecentFiles(ref OpenRecentFilesBtn, ref Separator, serie.SerieFilePath, false);
             OpenNewJounral(serie);
             //jounralSerie.Focus();
             //jounralSerie.
@@ -934,18 +993,25 @@ namespace Reactor_Interface
             SerieData newSerie = SerieSystem.GetSerie();
 
             if (newSerie == null)
+            {
+                RecentFiles.SetRecentFiles(ref OpenRecentFilesBtn, ref Separator);
                 return;
+            }
 
             this.Close();
+            Interface_settings.SaveLastSerie(newSerie.SerieFilePath);
+            RecentFiles.UpdateRecentFiles(ref OpenRecentFilesBtn, ref Separator, newSerie.SerieFilePath, false);
             OpenNewJounral(newSerie);
         }
 
-        private void OpenNewJounral(SerieData Serie = null)
+        private void OpenNewJounral(SerieData Serie = null, ExperimentData experiment = null, string expPath = null)
         {
-            Jounral_menu newJournal = new Jounral_menu(_chart, _mainMenu);
+            Jounral_menu newJournal;
 
             if (Serie != null)
                 newJournal = new Jounral_menu(Serie, _chart, _mainMenu);
+            else
+                newJournal = new Jounral_menu(_chart, _mainMenu, experiment, expPath);
 
             this.Hide();
             if (_mainMenu != null)
@@ -983,8 +1049,12 @@ namespace Reactor_Interface
         {
             if(_experiment != null && !IsSaved)
             {
-                ErrorMessage.Show("Текущий эксперимент не сохранён");
-                return;
+                var result = MessageBox.Show("Текущий эксперимент не сохранён. Сохранить?", "Внимание",
+                                              MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button3);
+                if(result == DialogResult.Yes)
+                    SaveSerieExperiment();
+                if(result == DialogResult.Cancel)
+                    return;
             }
 
             if (experiment == null)
@@ -1002,6 +1072,9 @@ namespace Reactor_Interface
             _serieExperimentMetaData = serieExperiment;
             IsSaved = isSaved;
             SaveSerieExperimentBtn.Visible = true;
+            if (isSaved)
+                Interface_settings.SaveLastSerie(_serie.SerieFilePath, 
+                                                Path.Combine(loadFrom, experiment.GetFileName()));
         }
 
         private void SetNullExperiment()
@@ -1012,6 +1085,11 @@ namespace Reactor_Interface
             IsSaved = true;
             data_control.TabPages.Clear();
             comments_txtbx.Clear();
+
+            if (_serie != null)
+                Interface_settings.SaveLastSerie(_serie.SerieFilePath);
+            else
+                Interface_settings.SaveLastExperiment("");
         }
 
         private void SaveSerieExperiment()
@@ -1020,6 +1098,7 @@ namespace Reactor_Interface
             {
                 _experiment = FormNewExperiment(_experiment.Name, _experiment.ApplianceData, _experiment.ConnectedFields);
                 SerieSystem.AddExperiment(_serie, _experiment, _serieExperimentMetaData);
+                Interface_settings.SaveLastSerie(_serie.SerieFilePath, _serie.GetExperimentFilePath(_experiment.Name));
                 IsSaved = true;
             }
             catch (NullTemplateException ex)
@@ -1156,6 +1235,71 @@ namespace Reactor_Interface
         {
             SerieCommentsViewMenu serieComments = new SerieCommentsViewMenu(_serie);
             serieComments.ShowDialog();
+        }
+
+        private void OpenRecentFilesBtn_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            OpenRecentFilesBtn.HideDropDown();
+            var item = e.ClickedItem;
+            string filePath = item.Tag.ToString();
+
+            if (string.IsNullOrEmpty(filePath))
+                return;
+
+            if (NeedToCancel())
+                return;
+
+            if (filePath.EndsWith(ExperimentSystem.EXTENSION))
+                UploadExperiment(filePath);
+            else if (filePath.EndsWith(SerieData.EXTENSION))
+                UploadSerie(filePath);
+        }
+
+        private void UploadSerie(string filePath)
+        {
+            //if (NeedToCancel())
+                //return;
+
+            SerieData serie = SerieSystem.UploadSerie(filePath);
+
+            if (serie == null)
+            {
+                ErrorMessage.Show("Серия была повреждена либо удалена");
+                RecentFiles.DeleteRecentFile(filePath, false);
+                RecentFiles.SetRecentFiles(ref OpenRecentFilesBtn, ref Separator);
+                return;
+            }
+
+            Interface_settings.SaveLastSerie(filePath);
+            RecentFiles.UpdateRecentFiles(ref OpenRecentFilesBtn, ref Separator, filePath, false);
+            OpenNewJounral(Serie: serie);
+        }
+
+        private void UploadExperiment(string filePath)
+        {
+            //if (NeedToCancel())
+                //return;
+
+            ExperimentData experiment = ExperimentSystem.UploadExperiment(filePath, false);
+
+            if(experiment == null)
+            {
+                ErrorMessage.Show("Эксперимент был повреждён либо удалён");
+                RecentFiles.DeleteRecentFile(filePath, true);
+                RecentFiles.SetRecentFiles(ref OpenRecentFilesBtn, ref Separator);
+                return;
+            }
+
+            Interface_settings.SaveLastExperiment(filePath);
+            RecentFiles.UpdateRecentFiles(ref OpenRecentFilesBtn, ref Separator, filePath, true);
+            if(_serie != null)
+            {
+                OpenNewJounral(null, experiment, filePath);
+            }
+            else
+            {
+                uploadExperimentFromComputer(experiment, filePath, false);
+            }
         }
     }
 

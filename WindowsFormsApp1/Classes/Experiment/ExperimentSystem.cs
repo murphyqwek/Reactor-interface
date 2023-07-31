@@ -145,14 +145,14 @@ namespace Reactor_Interface.Classes.Experiment
 
         public static string GetCurrentExperimentPath()
         {
-            return Interface_settings.get_current_experiment();
+            return Interface_settings.GetLastExperiment();
         }
 
         public static void SaveExperimentOnComputer(ExperimentData experiment, string filePath)
         {
             SaveExperiment(experiment, filePath);
 
-            Interface_settings.set_current_experiment(filePath);
+            Interface_settings.SaveLastExperiment(filePath);
         }
 
         public static void SaveExperiment(ExperimentData experiment, string filePath)
@@ -171,14 +171,14 @@ namespace Reactor_Interface.Classes.Experiment
 
         public static ExperimentData UploadCurrentExperiment()
         {
-            string currentExperimentPath = Interface_settings.get_current_experiment();
+            string currentExperimentPath = Interface_settings.GetLastExperiment();
 
             if (string.IsNullOrEmpty(currentExperimentPath))
                 return null;
 
             if (!IsExperimentExists(currentExperimentPath))
             {
-                Interface_settings.set_current_experiment("");
+                Interface_settings.SaveLastExperiment("");
                 return null;
             }
 
@@ -192,7 +192,7 @@ namespace Reactor_Interface.Classes.Experiment
 
         public static void SetCurrentExperimentIntoRegister(string experimentPath)
         {
-            Interface_settings.set_current_experiment(experimentPath);
+            Interface_settings.SaveLastExperiment(experimentPath);
         }
 
         private static ExperimentData DeserializeObject(string json)
@@ -260,10 +260,10 @@ namespace Reactor_Interface.Classes.Experiment
         {
             if (experiment == null)
             {
-                string currentExperiment = Interface_settings.get_current_experiment();
+                string currentExperiment = Interface_settings.GetLastExperiment();
 
                 if (currentExperiment == experimentPath && !string.IsNullOrEmpty(currentExperiment))
-                    Interface_settings.set_current_experiment("");
+                    Interface_settings.SaveLastExperiment("");
 
                 return true;
             }
