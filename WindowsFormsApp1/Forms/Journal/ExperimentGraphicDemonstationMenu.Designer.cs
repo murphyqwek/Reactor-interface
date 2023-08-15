@@ -49,10 +49,16 @@
             this.шагToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.XRDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.oscDataBtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.CheckSerie = new System.Windows.Forms.ToolStripMenuItem();
+            this.коэффToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hideDataBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.OSC_CH1 = new System.Windows.Forms.ToolStripMenuItem();
             this.OSC_CH2 = new System.Windows.Forms.ToolStripMenuItem();
             this.P = new System.Windows.Forms.ToolStripMenuItem();
+            this.FindPeaksBtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.показатьспрятатьXRDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.winowSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.orderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.Graphic)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -145,10 +151,15 @@
             // 
             // menuStrip1
             // 
+            this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.DataStripMenu,
-            this.hideDataBtn});
+            this.hideDataBtn,
+            this.FindPeaksBtn,
+            this.показатьспрятатьXRDToolStripMenuItem,
+            this.winowSizeToolStripMenuItem,
+            this.orderToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(946, 38);
@@ -163,7 +174,9 @@
             this.токToolStripMenuItem,
             this.шагToolStripMenuItem,
             this.XRDToolStripMenuItem,
-            this.oscDataBtn});
+            this.oscDataBtn,
+            this.CheckSerie,
+            this.коэффToolStripMenuItem});
             this.DataStripMenu.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.DataStripMenu.Name = "DataStripMenu";
             this.DataStripMenu.Size = new System.Drawing.Size(114, 34);
@@ -211,6 +224,20 @@
             this.oscDataBtn.Size = new System.Drawing.Size(270, 38);
             this.oscDataBtn.Text = "Осциллограф";
             // 
+            // CheckSerie
+            // 
+            this.CheckSerie.Name = "CheckSerie";
+            this.CheckSerie.Size = new System.Drawing.Size(270, 38);
+            this.CheckSerie.Text = "Сделать серию";
+            this.CheckSerie.Click += new System.EventHandler(this.CheckSerie_Click);
+            // 
+            // коэффToolStripMenuItem
+            // 
+            this.коэффToolStripMenuItem.Name = "коэффToolStripMenuItem";
+            this.коэффToolStripMenuItem.Size = new System.Drawing.Size(270, 38);
+            this.коэффToolStripMenuItem.Text = "Коэфф";
+            this.коэффToolStripMenuItem.Click += new System.EventHandler(this.коэффToolStripMenuItem_Click);
+            // 
             // hideDataBtn
             // 
             this.hideDataBtn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
@@ -251,6 +278,34 @@
             this.P.Size = new System.Drawing.Size(217, 34);
             this.P.Text = "Мощность";
             // 
+            // FindPeaksBtn
+            // 
+            this.FindPeaksBtn.Name = "FindPeaksBtn";
+            this.FindPeaksBtn.Size = new System.Drawing.Size(121, 34);
+            this.FindPeaksBtn.Text = "Найти пики";
+            this.FindPeaksBtn.Click += new System.EventHandler(this.FindPeaksBtn_Click);
+            // 
+            // показатьспрятатьXRDToolStripMenuItem
+            // 
+            this.показатьспрятатьXRDToolStripMenuItem.Name = "показатьспрятатьXRDToolStripMenuItem";
+            this.показатьспрятатьXRDToolStripMenuItem.Size = new System.Drawing.Size(220, 34);
+            this.показатьспрятатьXRDToolStripMenuItem.Text = "Показать/спрятать XRD";
+            this.показатьспрятатьXRDToolStripMenuItem.Click += new System.EventHandler(this.показатьспрятатьXRDToolStripMenuItem_Click);
+            // 
+            // winowSizeToolStripMenuItem
+            // 
+            this.winowSizeToolStripMenuItem.Name = "winowSizeToolStripMenuItem";
+            this.winowSizeToolStripMenuItem.Size = new System.Drawing.Size(143, 34);
+            this.winowSizeToolStripMenuItem.Text = "WinowSize: 35";
+            this.winowSizeToolStripMenuItem.Click += new System.EventHandler(this.winowSizeToolStripMenuItem_Click);
+            // 
+            // orderToolStripMenuItem
+            // 
+            this.orderToolStripMenuItem.Name = "orderToolStripMenuItem";
+            this.orderToolStripMenuItem.Size = new System.Drawing.Size(93, 34);
+            this.orderToolStripMenuItem.Text = "Order: 3";
+            this.orderToolStripMenuItem.Click += new System.EventHandler(this.orderToolStripMenuItem_Click);
+            // 
             // ExperimentGraphicDemonstationMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -285,5 +340,11 @@
         private System.Windows.Forms.ToolStripMenuItem OSC_CH1;
         private System.Windows.Forms.ToolStripMenuItem OSC_CH2;
         private System.Windows.Forms.ToolStripMenuItem P;
+        private System.Windows.Forms.ToolStripMenuItem FindPeaksBtn;
+        private System.Windows.Forms.ToolStripMenuItem показатьспрятатьXRDToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem winowSizeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem orderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem CheckSerie;
+        private System.Windows.Forms.ToolStripMenuItem коэффToolStripMenuItem;
     }
 }

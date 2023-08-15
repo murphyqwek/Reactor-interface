@@ -65,12 +65,13 @@
             this.tok_mode_box = new System.Windows.Forms.GroupBox();
             this.tok_mode_list = new System.Windows.Forms.DomainUpDown();
             this.info_box = new System.Windows.Forms.GroupBox();
+            this.ComandLabel = new System.Windows.Forms.Label();
             this.UpdatePresetListBtn = new System.Windows.Forms.Button();
             this.presetsList = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.tem_lbl = new System.Windows.Forms.Label();
             this.state_lbl = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.tem_lbl = new System.Windows.Forms.Label();
             this.port_checking = new System.Windows.Forms.Timer(this.components);
             this.IR_Serial_Port = new System.IO.Ports.SerialPort(this.components);
             this.IR_box = new System.Windows.Forms.GroupBox();
@@ -79,7 +80,6 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.PresetToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.ComandLabel = new System.Windows.Forms.Label();
             this.mode_settings_box.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cold_bar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fire_bar)).BeginInit();
@@ -221,7 +221,7 @@
             this.time_bar.AllowDrop = true;
             this.time_bar.Location = new System.Drawing.Point(8, 93);
             this.time_bar.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.time_bar.Maximum = 60;
+            this.time_bar.Maximum = 120;
             this.time_bar.Minimum = 5;
             this.time_bar.Name = "time_bar";
             this.time_bar.Size = new System.Drawing.Size(692, 69);
@@ -356,7 +356,7 @@
             this.KoeffMenuBtn});
             this.menu.Location = new System.Drawing.Point(0, 0);
             this.menu.Name = "menu";
-            this.menu.Size = new System.Drawing.Size(1664, 42);
+            this.menu.Size = new System.Drawing.Size(1664, 40);
             this.menu.TabIndex = 7;
             this.menu.Text = "menu";
             // 
@@ -369,7 +369,7 @@
             this.google_drive_menu_btn});
             this.settings_menu_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.settings_menu_btn.Name = "settings_menu_btn";
-            this.settings_menu_btn.Size = new System.Drawing.Size(148, 38);
+            this.settings_menu_btn.Size = new System.Drawing.Size(148, 36);
             this.settings_menu_btn.Text = "Настройки";
             this.settings_menu_btn.DropDownOpened += new System.EventHandler(this.settings_menu_btn_DropDownOpened);
             this.settings_menu_btn.Click += new System.EventHandler(this.settings_menu_btn_Click);
@@ -407,7 +407,7 @@
             // 
             this.graphic_menu_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.graphic_menu_btn.Name = "graphic_menu_btn";
-            this.graphic_menu_btn.Size = new System.Drawing.Size(109, 38);
+            this.graphic_menu_btn.Size = new System.Drawing.Size(109, 36);
             this.graphic_menu_btn.Text = "График";
             this.graphic_menu_btn.Click += new System.EventHandler(this.graphic_menu_btn_Click);
             // 
@@ -416,7 +416,7 @@
             this.send_experiment_btn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.send_experiment_btn.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.send_experiment_btn.Name = "send_experiment_btn";
-            this.send_experiment_btn.Size = new System.Drawing.Size(366, 38);
+            this.send_experiment_btn.Size = new System.Drawing.Size(366, 36);
             this.send_experiment_btn.Text = "Открыть электронный журнал";
             this.send_experiment_btn.Click += new System.EventHandler(this.send_experiment_btn_Click);
             // 
@@ -424,7 +424,7 @@
             // 
             this.KoeffMenuBtn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.KoeffMenuBtn.Name = "KoeffMenuBtn";
-            this.KoeffMenuBtn.Size = new System.Drawing.Size(432, 38);
+            this.KoeffMenuBtn.Size = new System.Drawing.Size(432, 36);
             this.KoeffMenuBtn.Text = "Просмотр пресетов коэффициентов";
             this.KoeffMenuBtn.Click += new System.EventHandler(this.KoefRedactorMenuShowbtn_Click);
             // 
@@ -560,6 +560,16 @@
             this.info_box.TabStop = false;
             this.info_box.Text = "Информация о реакторе";
             // 
+            // ComandLabel
+            // 
+            this.ComandLabel.AutoSize = true;
+            this.ComandLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.ComandLabel.Location = new System.Drawing.Point(17, 55);
+            this.ComandLabel.Name = "ComandLabel";
+            this.ComandLabel.Size = new System.Drawing.Size(122, 29);
+            this.ComandLabel.TabIndex = 21;
+            this.ComandLabel.Text = "Команда:";
+            // 
             // UpdatePresetListBtn
             // 
             this.UpdatePresetListBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -591,17 +601,6 @@
             this.label2.TabIndex = 4;
             this.label2.Text = "Пресет коэффициентов";
             // 
-            // tem_lbl
-            // 
-            this.tem_lbl.AutoSize = true;
-            this.tem_lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F);
-            this.tem_lbl.Location = new System.Drawing.Point(955, 330);
-            this.tem_lbl.Name = "tem_lbl";
-            this.tem_lbl.Size = new System.Drawing.Size(227, 37);
-            this.tem_lbl.TabIndex = 3;
-            this.tem_lbl.Text = "Температура: ";
-            this.tem_lbl.Visible = false;
-            // 
             // state_lbl
             // 
             this.state_lbl.AutoSize = true;
@@ -622,6 +621,17 @@
             this.label1.Size = new System.Drawing.Size(178, 37);
             this.label1.TabIndex = 0;
             this.label1.Text = "Состояние:";
+            // 
+            // tem_lbl
+            // 
+            this.tem_lbl.AutoSize = true;
+            this.tem_lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F);
+            this.tem_lbl.Location = new System.Drawing.Point(955, 330);
+            this.tem_lbl.Name = "tem_lbl";
+            this.tem_lbl.Size = new System.Drawing.Size(227, 37);
+            this.tem_lbl.TabIndex = 3;
+            this.tem_lbl.Text = "Температура: ";
+            this.tem_lbl.Visible = false;
             // 
             // port_checking
             // 
@@ -711,16 +721,6 @@
             this.button2.UseVisualStyleBackColor = false;
             this.button2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.arrow_btn_down);
             this.button2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.arrow_btn_up);
-            // 
-            // ComandLabel
-            // 
-            this.ComandLabel.AutoSize = true;
-            this.ComandLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.ComandLabel.Location = new System.Drawing.Point(17, 55);
-            this.ComandLabel.Name = "ComandLabel";
-            this.ComandLabel.Size = new System.Drawing.Size(122, 29);
-            this.ComandLabel.TabIndex = 21;
-            this.ComandLabel.Text = "Команда:";
             // 
             // Main_menu
             // 
