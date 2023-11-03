@@ -1,5 +1,4 @@
-﻿using CenterSpace.NMath.Core;
-using MathNet.Numerics.Interpolation;
+﻿using MathNet.Numerics.Interpolation;
 using MathNet.Numerics.LinearAlgebra;
 using System;
 using System.Collections.Generic;
@@ -9,12 +8,35 @@ using System.Threading.Tasks;
 
 namespace Reactor_Interface.Classes.XRD
 {
+    using Reactor_Interface.Classes.Experiment;
+
     /// </summary>
     using System;
     using System.Linq;
 
     public class SavitzkyGolayFilter
     {
+        public static List<GraphPoint> Filter(List<GraphPoint> points, int windowSize, int polynomialOrder)
+        {
+            double[] rawData = new double[points.Count];
+            for(int i = 0; i < points.Count; i++)
+            {
+                rawData[i] = points[i].Y;
+            }
+
+            rawData = Filter(rawData, windowSize, polynomialOrder);
+
+            List<GraphPoint> filteredPoints = new List<GraphPoint>();
+
+            for(int i = 0; i < points.Count; i++)
+            {
+                filteredPoints.Add(new GraphPoint(points[i].X, rawData[i]));
+            }
+
+            return filteredPoints;
+        }
+
+
         public static double[] Filter(double[] data, int windowSize, int polynomialOrder)
         {
             int halfWindowSize = windowSize / 2;

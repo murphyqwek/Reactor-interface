@@ -48,6 +48,16 @@ namespace WindowsFormsApp1
 
         static ConcurrentQueue<string> dataQueue = new ConcurrentQueue<string>();
 
+        int[] MaxTimeForDiffrentTokModes = new int[]
+        {
+            60, // 200 А
+            60, // 150 А
+            180, // 100 А
+            180, // 75 А
+            180, // 50 А
+            180, // 25 А  
+        };
+
         string pressed_button = " ";
         public Main_menu()
         {
@@ -861,6 +871,14 @@ namespace WindowsFormsApp1
         private void tok_mode_list_SelectedItemChanged(object sender, EventArgs e)
         {
             UpdatePresetsToolTip();
+            int currentTime = time_bar.Value;
+            int tokModeIndex = tok_mode_list.SelectedIndex;
+            time_bar.Maximum = MaxTimeForDiffrentTokModes[tokModeIndex];
+            if (MaxTimeForDiffrentTokModes[tokModeIndex] < currentTime)
+            {
+                time_bar.Value = MaxTimeForDiffrentTokModes[tokModeIndex];
+                time_syntes_lable.Text = "Время синтеза: " + time_bar.Value.ToString() + " c.";
+            }
         }
 
         private void tigel_rdbtn_CheckedChanged(object sender, EventArgs e)

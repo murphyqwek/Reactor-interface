@@ -12,33 +12,40 @@ namespace Reactor_Interface.Forms.Journal
 {
     public partial class XRDKoeffMenu : Form
     {
-        public int windowSizeLocal, orderLocal;
-        public int minPeakSize, procent;
+        public int windowSizeTok, orderTok;
+        public int windowsSizeVolt, orderVolt;
         public bool finished = true;
 
-        private void XRDKoeffMenu_FormClosing(object sender, FormClosingEventArgs e)
+        private void ContinueButton_Click(object sender, EventArgs e)
         {
-            if (!Int32.TryParse(PorogMaxTxtBx.Text, out windowSizeLocal))
+            if (!Int32.TryParse(windowSizeTokTxtBx.Text, out windowSizeTok))
                 finished = false;
-            if (!Int32.TryParse(PorogMinTxtBx.Text, out orderLocal))
+            if (!Int32.TryParse(orderTokTxtBx.Text, out orderTok))
                 finished = false;
-            if (!Int32.TryParse(minPeakSizeTxtBx.Text, out minPeakSize))
+            if (!Int32.TryParse(windowSizeVoltTxtBx.Text, out windowsSizeVolt))
                 finished = false;
-            if (!Int32.TryParse(procentTxtBx.Text, out procent))
+            if (!Int32.TryParse(orderVoltTxtBx.Text, out orderVolt))
                 finished = false;
+
+            this.Close();
         }
 
-        public XRDKoeffMenu(int windowSizeLocal, int orderLocal, int minPeakSize, int procent)
+        private void CancelButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        public XRDKoeffMenu(int windowSizeTok, int orderTok, int windowSizeVolt, int orderVolt)
         {
             InitializeComponent();
-            this.windowSizeLocal = windowSizeLocal;
-            this.orderLocal = orderLocal;
-            this.minPeakSize = minPeakSize;
-            this.procent = procent;
-            PorogMaxTxtBx.Text = windowSizeLocal.ToString();
-            PorogMinTxtBx.Text = orderLocal.ToString();
-            minPeakSizeTxtBx.Text = minPeakSize.ToString();
-            procentTxtBx.Text = procent.ToString();
+            this.windowSizeTok = windowSizeTok;
+            this.orderTok = orderTok;
+            this.windowsSizeVolt = windowSizeVolt;
+            this.orderVolt = orderVolt;
+            windowSizeTokTxtBx.Text = windowSizeTok.ToString();
+            orderTokTxtBx.Text = orderTok.ToString();
+            windowSizeVoltTxtBx.Text = windowSizeVolt.ToString();
+            orderVoltTxtBx.Text = orderVolt.ToString();
         }
     }
 }

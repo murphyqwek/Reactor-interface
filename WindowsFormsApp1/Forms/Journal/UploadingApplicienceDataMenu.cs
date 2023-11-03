@@ -34,7 +34,7 @@ namespace Reactor_Interface.Forms.Journal
             OSC_PIC
         }
 
-        readonly Dictionary<string, string> SerieName = new Dictionary<string, string>
+        static readonly Dictionary<string, string> SerieName = new Dictionary<string, string>
         {
             {"Пирометр", "temperature"},
             {"XRD", "xrd"},
@@ -136,7 +136,7 @@ namespace Reactor_Interface.Forms.Journal
                 break;
 
                 case DataType.OSC:
-                    data = GetOSCData();
+                    data = GetOSCData(experimentPath, _experiment, true, null);
                 break;
 
                 case DataType.OSC_PIC:
@@ -175,26 +175,29 @@ namespace Reactor_Interface.Forms.Journal
             UploadedMessageBoxShow();
         }
 
-        private Dictionary<string, ApplianceData> GetOSCData()
+        public static Dictionary<string, ApplianceData> GetOSCData(string experimentPath, ExperimentData experiment, bool isFiltred, string path = null)
         {
             string oldOSCpath;
 
-            oldOSCpath = OscillographParser.GetOSCFilePath();
+            if (path == null)
+                oldOSCpath = OscillographParser.GetOSCFilePath();
+            else
+                oldOSCpath = path;
 
             if (oldOSCpath == null)
                 return null;
 
-            var OSCSeries = OscillographParser.ParseOscillographToGraphPoints(oldOSCpath);
+            var OSCSeries = OscillographParser.ParseOscillographToGraphPoints(oldOSCpath, isFiltred);
 
             if (OSCSeries == null)
             {
-                MessageBox.Show("Файл повреждён", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                ErrorMessage.Show("Файл повреждён");
                 return null;
             }
 
             string seriename = SerieName["Осциллограф"];
 
-            ExperimentSystem.MoveAppFileToExperimentDirectory(experimentPath, _experiment, oldOSCpath, seriename);
+            ExperimentSystem.MoveAppFileToExperimentDirectory(experimentPath, experiment, oldOSCpath, seriename);
 
             ApplianceData applianceData1 = new ApplianceData(OSCSeries[0], 
                                                             Color.FromArgb(255, 0, 165, 165), 
@@ -206,13 +209,18 @@ namespace Reactor_Interface.Forms.Journal
 
             ApplianceData applianceData3 = new ApplianceData(OSCSeries[2],
                                                             Color.FromArgb(255, 248, 111, 3),
-                                                            "Мощность, КВт", seriename);
+                                                            "Мощность, кВт", seriename);
+
+            ApplianceData applianceData4 = new ApplianceData(OSCSeries[3],
+                                                             Color.FromArgb(0, 255, 157),
+                                                             "Потребление энергии, кВт*ч", seriename);
 
             return new Dictionary<string, ApplianceData>() 
             { 
                 { "OSC_CH1", applianceData1 },
                 { "OSC_CH2", applianceData2 },
                 { "P", applianceData3 },
+                { "kVtH", applianceData4 }
             };
         }
 

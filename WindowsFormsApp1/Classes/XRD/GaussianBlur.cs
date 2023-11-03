@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Reactor_Interface.Classes.Experiment;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,26 @@ namespace Reactor_Interface.Classes.XRD
 {
     public static class GaussianBlur
     {
+        public static List<GraphPoint> Apply(List<GraphPoint> points, double standardDeviation) 
+        { 
+            List<GraphPoint> result = new List<GraphPoint>();
+
+            double[] y = new double[points.Count];
+            
+            for(int i = 0; i < points.Count; i++)
+            {
+                y[i] = points[i].Y;
+            }
+
+            y = Apply(y, standardDeviation);
+
+            for(int i = 0; i < points.Count; i++)
+            {
+                result.Add(new GraphPoint(points[i].X, y[i]));
+            }
+            return result;
+        }
+
         public static double[] Apply(double[] inputSignal, double standardDeviation)
         {
             int signalLength = inputSignal.Length;

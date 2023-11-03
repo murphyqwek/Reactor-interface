@@ -519,7 +519,7 @@ namespace Reactor_Interface.Forms.Template
             if (textbox == null)
                 return;
 
-            textbox.BackColor = Color.LightGray;
+            textbox.BackColor = textbox.BackColor == Color.White ? Color.LightGray : textbox.BackColor;
             textbox.Tag += ";" + weigherTag;
         }
 
@@ -530,7 +530,7 @@ namespace Reactor_Interface.Forms.Template
             if (textbox == null)
                 return;
 
-            textbox.BackColor = Color.White;
+            textbox.BackColor = textbox.BackColor == Color.LightGray ? Color.White : textbox.BackColor;
             textbox.Tag = "";
         }
 
@@ -592,6 +592,23 @@ namespace Reactor_Interface.Forms.Template
                 }
 
                 usedColors.Add(color);
+
+                if (string.IsNullOrWhiteSpace(textBox.Text))
+                {
+                    using (InputFormMenu inputFormMenu = new InputFormMenu("Связывание ячеек", "Введите название поля"))
+                    {
+                        var result = inputFormMenu.ShowDialog();
+                        if(result != DialogResult.OK)
+                            return;
+                        if (string.IsNullOrWhiteSpace(inputFormMenu.OutputValue))
+                        {
+                            ErrorMessage.Show("Введенно пустое название");
+                            return;
+                        }
+
+                        textBox.Text += inputFormMenu.OutputValue;
+                    }
+                }
 
                 connectingTextBox = textBox;
                 connectingColor = color;

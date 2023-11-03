@@ -64,6 +64,7 @@ namespace Reactor_Interface.Classes.Serie
             Name = name;
             FolderPath = folderPath;
             LastExperimentIndex = 0;
+            SerieComments = "";
             AddNewTemplate(template, templatePath);
         }
 

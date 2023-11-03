@@ -118,6 +118,18 @@ namespace Reactor_Interface.Classes.Experiment
             experimentData.SetNewApplianceData(appData);
         }
 
+        public static void UploadApplianceData(List<GraphPoint> Data, Color SerieColor, string LegendText, string SerieName, string AppDataName, ref ExperimentData experiment)
+        {
+            ApplianceData appData = new ApplianceData(Data, SerieColor, LegendText, SerieName);
+            var ExperimentAppData = experiment.ApplianceData;
+            if (ExperimentAppData.ContainsKey(AppDataName))
+                ExperimentAppData[AppDataName] = appData;
+            else
+                ExperimentAppData.Add(AppDataName, appData);
+
+            experiment.SetNewApplianceData(ExperimentAppData);
+        }
+
         private static Dictionary<string, ApplianceData> UploadApplianceData(SeriesCollection series)
         {
             Dictionary<string, ApplianceData> appData = new Dictionary<string, ApplianceData>();
@@ -372,6 +384,8 @@ namespace Reactor_Interface.Classes.Experiment
             string newFilePath = experiment.Name + AppFileName[seriename];
 
             newFilePath = Path.Combine(experimentPath, newFilePath);
+            if (newFilePath == oldFilePath)
+                return;
             if (File.Exists(newFilePath))
                 File.Delete(newFilePath);
             File.Copy(oldFilePath, newFilePath);

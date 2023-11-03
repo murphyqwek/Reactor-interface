@@ -37,6 +37,7 @@ namespace Reactor_Interface.Classes
             {"OSC_CH1", Color.FromArgb(255, 0, 165, 165)},
             {"OSC_CH2", Color.FromArgb(255, 165, 165, 0)},
             {"P", Color.FromArgb(255, 248, 111, 3) },
+            {"kVtH", Color.FromArgb(0, 255, 157) },
         };
 
         static readonly Dictionary<string, string[]> AxisesLabel = new Dictionary<string, string[]>
@@ -46,9 +47,10 @@ namespace Reactor_Interface.Classes
             {"Ток", new string[] {"Время, мс", "Ток, А" } },
             {"Шаг", new string[] {"Время, мс", "Шаг" } },
             {"XRD", new string[] { "2θ градусов", "Интенсивность" } },
-            {"OSC_CH1", new string[] {"Время, мс", "Напряжение, В"} },
-            {"OSC_CH2", new string[] {"Время, мс", "Ток, А"} },
-            {"P", new string[] {"Время, мс", "Мощность, кВт"} },
+            {"OSC_CH1", new string[] {"Время, с", "Напряжение, В"} },
+            {"OSC_CH2", new string[] {"Время, с", "Ток, А"} },
+            {"P", new string[] {"Время, с", "Мощность, кВт"} },
+            {"kVtH", new string[] {"Время, с", "Потребление тока, кВт*ч"}  }
         };
 
         public static void CreateExcelExperiment(string path, ExperimentData experiment)
@@ -124,7 +126,7 @@ namespace Reactor_Interface.Classes
             var graphic = graphicsSheet.Drawings.AddLineChart(dataName, eLineChartType.Line);
             graphic.SetSize(900, 450);
             graphic.SetPosition(chartColumn / 3 * 450, 0);
-
+            graphic.XAxis.DisplayUnit = 20;
             graphic.StyleManager.SetChartStyle(ePresetChartStyle.LineChartStyle1, ePresetChartColors.ColorfulPalette1);
 
             ExcelRange timeRange = dataSheet.Cells[2, startCellColumn, lastCellRow + 1, startCellColumn];
@@ -177,7 +179,7 @@ namespace Reactor_Interface.Classes
                     continue;
                 }
 
-                if(serie == "OSC_CH1" || serie == "OSC_CH2" || serie == "P")
+                if(serie == "OSC_CH1" || serie == "OSC_CH2" || serie == "P" || serie == "kVtH")
                 {
                     FillGraphicsSheet(oscSheet, dataSheet, start_cell, applianceData[serie].Data.Count, start_osc_cell, serie);
                     start_osc_cell += 3;

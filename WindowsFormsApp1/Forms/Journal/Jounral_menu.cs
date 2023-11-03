@@ -849,7 +849,8 @@ namespace Reactor_Interface
 
         private void SeeGraphBtn_Click(object sender, EventArgs e)
         {
-            ExperimentGraphicDemonstationMenu graphicMenu = new ExperimentGraphicDemonstationMenu(_experiment);
+            string path = LoadFrom.Substring(2);
+            ExperimentGraphicDemonstationMenu graphicMenu = new ExperimentGraphicDemonstationMenu(_experiment, path);
             graphicMenu.ShowDialog();
         }
 

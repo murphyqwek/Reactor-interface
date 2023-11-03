@@ -15,6 +15,14 @@ namespace Reactor_Interface.Classes.XRD
 {
     public static class XRDParser
     {
+        /*Рекомендуемые параметры:
+         * windowSize = 35
+         * order = 3
+         * minHeightDrop = 5
+         * minDepthDrop = -5
+         * smoothFactor(Gaussian) = 6
+         */
+
         struct xrdDiffPonit
         {
             public double x;
@@ -59,7 +67,6 @@ namespace Reactor_Interface.Classes.XRD
                     xrdPoints.Add(new GraphPoint(XValue, YValue));
                 }
             }
-
             return xrdPoints;
         }
 
@@ -120,23 +127,23 @@ namespace Reactor_Interface.Classes.XRD
             return graphPoints;
         }
 
-        private static List<xrdDiffPonit> GetDropCoords(double[] yCoords, double[] xCoords, int windowSize, int order, int minDropHeight, int minDropDepth, Chart chart = null, bool isPolynom = false)
+        private static List<xrdDiffPonit> GetDropCoords(double[] yCoords, double[] xCoords, int windowSize, int order, int minDropHeight, int minDropDepth, Chart chart = null, bool isGaussian = false)
         {
-            if (!isPolynom) {
-                yCoords = SavitzkyGolayFilter.Filter(yCoords, windowSize, order);
-            }
-            if(isPolynom)
+            if(isGaussian)
             {
                 yCoords = GaussianBlur.Apply(yCoords, 6);
                 for (int i = 0; i < yCoords.Length && chart != null; i++)
                 {
-                    chart.Series["XRD Smooth"].Points.AddXY(xCoords[i], yCoords[i]);
+                    //chart.Series["XRD Smooth"].Points.AddXY(xCoords[i], yCoords[i]);
                 }
+                //chart.Series["XRDSmooth"]
                 return ParseGaussian(yCoords, xCoords);
             }
+
+            yCoords = SavitzkyGolayFilter.Filter(yCoords, windowSize, order);
             for (int i = 0; i < yCoords.Length && chart != null; i++)
             {
-                chart.Series["XRD Smooth"].Points.AddXY(xCoords[i], yCoords[i]);
+                //chart.Series["XRD Smooth"].Points.AddXY(xCoords[i], yCoords[i]);
             }
 
             double[] diffYCoords = new double[yCoords.Length];
@@ -146,8 +153,7 @@ namespace Reactor_Interface.Classes.XRD
                 diffYCoords[i] = (yCoords[i] - yCoords[i - 1]) * 10;
             }
 
-            if(!isPolynom)
-                diffYCoords = SavitzkyGolayFilter.Filter(diffYCoords, windowSize, order);
+            diffYCoords = SavitzkyGolayFilter.Filter(diffYCoords, windowSize, order);
 
             for (int i = 0; i < diffYCoords.Length && chart != null; i++)
             {
@@ -156,7 +162,7 @@ namespace Reactor_Interface.Classes.XRD
 
             List<xrdDiffPonit> xrdDiffs = new List<xrdDiffPonit>();
 
-            for (int i = 1; i < diffYCoords.Length - 1; i++)
+            for (int i = 1; i < diffYCoords.Length; i++)
             {
                 if (diffYCoords[i] < minDropHeight)
                     continue;
@@ -168,11 +174,6 @@ namespace Reactor_Interface.Classes.XRD
 
                 xrdDiffs.Add(new xrdDiffPonit { x = xCoords[maxIndex], y = diffYCoords[maxIndex], index = maxIndex });
                 xrdDiffs.Add(new xrdDiffPonit { x = xCoords[minIndex], y = diffYCoords[minIndex], index = minIndex });
-
-                //chart.Series["XRD Peaks"].Points.AddXY(x[maxIndex], z[maxIndex]);
-                //chart.Series["XRD Peaks"].Points.AddXY(x[minIndex], z[minIndex]);
-                //chart.Series["XRD Peaks"].Points.AddXY(differList[maxIndex].X, z[maxIndex]);
-                //int SourceArrayMaxPeakIndex = FindPeakBasedOnDifferArray(mimIndex, mimIndex, z, xrdPoints);
                 i = minIndex;
             }
             return xrdDiffs;
@@ -180,7 +181,6 @@ namespace Reactor_Interface.Classes.XRD
 
         private static List<xrdDiffPonit> ParseGaussian(double[] yCoords, double[] xCoords)
         {
-            //throw new NotImplementedException();
             List<xrdDiffPonit> peaks = new List<xrdDiffPonit>();
             string peaksString = "";
             for(int i = 1; i < yCoords.Length; i++)
@@ -189,7 +189,6 @@ namespace Reactor_Interface.Classes.XRD
             }
 
             bool peakStart = false;
-            int iD = 0;
             bool CountingD = false;
             for(int i = 0; i < peaksString.Length; i++)
             {
@@ -207,7 +206,6 @@ namespace Reactor_Interface.Classes.XRD
                 if (peaksString[i] == 'd' && peakStart)
                 {
                     CountingD = true;
-                    iD = i;
                     //peaks.Add(new xrdDiffPonit { x = xCoords[i], y = yCoords[i], index = i + 4 });
                     peakStart = false;
                 }
@@ -228,7 +226,7 @@ namespace Reactor_Interface.Classes.XRD
             }
         }
 
-        private static List<GraphPoint> MergeNearPeaks(int startIndex, int finishIndex, List<GraphPoint> xrdPoints, int windowSize, int order, int minDropHeight, int minDropDepth, Chart chart = null)
+        private static List<GraphPoint> GaussianPeaks(int startIndex, int finishIndex, List<GraphPoint> xrdPoints, Chart chart = null)
         {
             int size = finishIndex - startIndex;//xrdDiffs[i + 1].index - xrdDiffs[i].index;
             double[] yCheck = new double[size];
@@ -242,7 +240,7 @@ namespace Reactor_Interface.Classes.XRD
                 originalArrayIndex++;
             }
             List<GraphPoint> output = new List<GraphPoint>();
-            var diffPoints = GetDropCoords(yCheck, xCheck, windowSize, order, minDropHeight, minDropDepth, null, true);
+            var diffPoints = GetDropCoords(yCheck, xCheck, 0, 0, 0, 0, chart, true);
             for(int i = 0; i < diffPoints.Count; i+=2)
             {
                 output.Add(FindMaxPeak(diffPoints[i].index + startIndex, diffPoints[i + 1].index + startIndex, xrdPoints));
@@ -259,7 +257,7 @@ namespace Reactor_Interface.Classes.XRD
 
             double[] x = new double[xrdPoints.Count];
             double[] y = new double[xrdPoints.Count];
-            double[] z = new double[xrdPoints.Count];
+            double[] diffArray = new double[xrdPoints.Count];
             for (int i = 0; i < xrdPoints.Count; i++)
             {
                 x[i] = xrdPoints[i].X;
@@ -267,77 +265,81 @@ namespace Reactor_Interface.Classes.XRD
             }
 
             //y = SavitzkyGolayFilter.Filter(y, 10, 3);
-            List<xrdDiffPonit> xrdDiffs = GetDropCoords(y, x, windowSize, order, minDropHeight, minDropDepth, chart);
-            
+            List<xrdDiffPonit> extremumArray = GetDropCoords(y, x, windowSize, order, minDropHeight, minDropDepth, chart);
+
             y = SavitzkyGolayFilter.Filter(y, windowSize, order);
-            z[0] = 0;
+            diffArray[0] = 0;
             for (int i = 1; i < y.Length; i++)
             {
-                z[i] = (y[i] - y[i - 1]) * 10;
+                diffArray[i] = (y[i] - y[i - 1]) * 10;
             }
-            z = SavitzkyGolayFilter.Filter(z, windowSize, order);
+            diffArray = SavitzkyGolayFilter.Filter(diffArray, windowSize, order);
 
             List<GraphPoint> peaks = new List<GraphPoint>();
 
-            if (xrdDiffs.Count == 2)
+            if (extremumArray.Count == 2)
             {
-                FindMaxPeak(xrdDiffs[0].index, xrdDiffs[1].index, xrdPoints);
+                FindMaxPeak(extremumArray[0].index, extremumArray[1].index, xrdPoints);
                 return;
             }
 
-            for (int i = 2; i < xrdDiffs.Count; i += 2)
+            for (int i = 2; i < extremumArray.Count; i += 2)
             {
                 List<GraphPoint> localPeaks = new List<GraphPoint>();
-                int maxIndex = xrdDiffs[i].index - 1;
-                while (z[maxIndex] < z[maxIndex + 1] && maxIndex > 0 && maxIndex < z.Length - 1)
-                    maxIndex--;
+                int localMaximumIndex = extremumArray[i].index - 1;
+                while (diffArray[localMaximumIndex] < diffArray[localMaximumIndex + 1] && localMaximumIndex > 0 && localMaximumIndex < diffArray.Length - 1)
+                    localMaximumIndex--;
 
-                int minIndex = xrdDiffs[i + 1].index + 1;
-                while (z[minIndex] > z[minIndex - 1] && minIndex > 0 && minIndex < z.Length - 1)
-                    minIndex++;
+                int localMinimumIndex = extremumArray[i + 1].index + 1;
+                while (diffArray[localMinimumIndex] > diffArray[localMinimumIndex - 1] && localMinimumIndex > 0 && localMinimumIndex < diffArray.Length - 1)
+                    localMinimumIndex++;
 
-                minIndex--;
-                maxIndex++;
+                localMinimumIndex--;
+                localMaximumIndex++;
                 
-                if (maxIndex == xrdDiffs[i - 1].index)
+                if (localMaximumIndex == extremumArray[i - 1].index)
                 {
-                    if (i == xrdDiffs.Count - 2)
+                    if (i == extremumArray.Count - 2)
                     {
-                        Concat(ref localPeaks, MergeNearPeaks(xrdDiffs[i - 2].index, xrdDiffs[i + 1].index, xrdPoints, windowSize, order, minDropHeight, minDropDepth));
+                        Concat(ref localPeaks, GaussianPeaks(extremumArray[i - 2].index, extremumArray[i + 1].index, xrdPoints, chart));
                     }
-                    else if (i < xrdDiffs.Count && minIndex == xrdDiffs[i + 2].index)
+                    else if (i < extremumArray.Count && localMinimumIndex == extremumArray[i + 2].index)
                     {
-                        Concat(ref localPeaks, MergeNearPeaks(xrdDiffs[i - 2].index, xrdDiffs[i + 3].index, xrdPoints, windowSize, order, minDropHeight, minDropDepth));
+                        Concat(ref localPeaks, GaussianPeaks(extremumArray[i - 2].index, extremumArray[i + 3].index, xrdPoints, chart));
                         //Concat(ref localPeaks, MergeNearPeaks(xrdDiffs[i].index, xrdDiffs[i + 3].index, xrdPoints, windowSize, order, minDropHeight, minDropDepth, chart));
                     }
-                    else if (i < xrdDiffs.Count && minIndex != xrdDiffs[i + 2].index)
+                    else if (i < extremumArray.Count && localMinimumIndex != extremumArray[i + 2].index)
                     {
-                        Concat(ref localPeaks, MergeNearPeaks(xrdDiffs[i - 2].index, xrdDiffs[i + 1].index, xrdPoints, windowSize, order, minDropHeight, minDropDepth));
-                        localPeaks.Add(FindMaxPeak(xrdDiffs[i + 2].index, xrdDiffs[i + 3].index, xrdPoints));
+                        Concat(ref localPeaks, GaussianPeaks(extremumArray[i - 2].index, extremumArray[i + 1].index, xrdPoints, chart));
+                        localPeaks.Add(FindMaxPeak(extremumArray[i + 2].index, extremumArray[i + 3].index, xrdPoints));
                     }
                 }
                 else
                 {
-                    var k = FindMaxPeak(xrdDiffs[i - 2].index, xrdDiffs[i - 1].index, xrdPoints);
-                    if (peaks.Count == 0)
-                        localPeaks.Add(k);
-                    else if (peaks[peaks.Count - 1].X == k.X && peaks[peaks.Count - 1].Y == k.Y)
-                        localPeaks.Add(k);
 
-                    if (i == xrdDiffs.Count - 2)
+                    if (peaks.Count == 0)
                     {
-                        localPeaks.Add(FindMaxPeak(xrdDiffs[i].index, xrdDiffs[i + 1].index, xrdPoints));
+                        var k = FindMaxPeak(extremumArray[i - 2].index, extremumArray[i - 1].index, xrdPoints);
+                        localPeaks.Add(k);
+                    }
+                    /*
+                    else if (peaks[peaks.Count - 1].X == k.X && peaks[peaks.Count - 1].Y == k.Y)
+                        localPeaks.Add(k);*/
+
+                    if (i == extremumArray.Count - 2)
+                    {
+                        localPeaks.Add(FindMaxPeak(extremumArray[i].index, extremumArray[i + 1].index, xrdPoints));
                     }
                     else
                     {
-                        if (minIndex == xrdDiffs[i + 2].index)
+                        if (localMinimumIndex == extremumArray[i + 2].index)
                         {
-                            Concat(ref localPeaks, MergeNearPeaks(xrdDiffs[i].index, xrdDiffs[i + 3].index, xrdPoints, windowSize, order, minDropHeight, minDropDepth, chart));
+                            Concat(ref localPeaks, GaussianPeaks(extremumArray[i].index, extremumArray[i + 3].index, xrdPoints, chart));
                         }
                         else
                         {
-                            localPeaks.Add(FindMaxPeak(xrdDiffs[i].index, xrdDiffs[i + 1].index, xrdPoints));
-                            localPeaks.Add(FindMaxPeak(xrdDiffs[i + 2].index, xrdDiffs[i + 3].index, xrdPoints));
+                            localPeaks.Add(FindMaxPeak(extremumArray[i].index, extremumArray[i + 1].index, xrdPoints));
+                            localPeaks.Add(FindMaxPeak(extremumArray[i + 2].index, extremumArray[i + 3].index, xrdPoints));
                         }
                     }
                 }
@@ -363,8 +365,7 @@ namespace Reactor_Interface.Classes.XRD
 
             foreach(var point in peaks)
             {
-                if(point != null)
-                    chart.Series["XRD Peaks"].Points.AddXY(point.X, point.Y);
+                chart.Series["XRD Peaks"].Points.AddXY(point.X, point.Y);
             }
 
             //Console.WriteLine(chart.Series["XRD Peaks"].Points.Count);
@@ -374,7 +375,6 @@ namespace Reactor_Interface.Classes.XRD
         {
             double max_y = Double.MinValue;
             double max_x = 0;
-
 
             for (; start < finish; start++)
             {
@@ -423,14 +423,6 @@ namespace Reactor_Interface.Classes.XRD
                 i++;
 
             return i;
-        }
-
-        private static int FindPeakBasedOnDifferArray(int maxIndex, int minIndex, double[] differPointsArray, List<GraphPoint> xrdPoints)
-        {
-            //int leftEdge = FindPeakEgde(maxIndex, -1, differPointsArray);
-            //int rightEdge = FindPeakEgde(minIndex, 1, differPointsArray);
-            throw new NotImplementedException();
-            //return -1;
         }
 
         private static int FinMinIndex(int maxIndex, double[] smoothedDifferY)

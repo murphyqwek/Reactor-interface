@@ -1,5 +1,4 @@
-﻿using CenterSpace.NMath.Core;
-using Reactor_Interface.Classes.Experiment;
+﻿using Reactor_Interface.Classes.Experiment;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,14 +12,14 @@ namespace Reactor_Interface.Classes.XRD
     {
         public static double[] FitPolynomial(double[] x, double[] y, int degree)
         {
-            List<GraphPoint> graphPoints = new List<GraphPoint>();
+            var koeffs = MathNet.Numerics.Polynomial.Fit(x, y, degree).Coefficients;
 
-            for(int i = 0; i < x.Length; i++)
+            for(int i = 0; i < y.Length; i++)
             {
-                graphPoints.Add(new GraphPoint(x[i], y[i]));
+                y[i] = MathNet.Numerics.Polynomial.Evaluate(x[i], koeffs);
             }
 
-            return FitPolynomial(graphPoints, degree);
+            return y;
         }
 
         public static double[] FitPolynomial(List<GraphPoint> xrdPoints, int degree)

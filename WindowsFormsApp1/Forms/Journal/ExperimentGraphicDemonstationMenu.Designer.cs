@@ -39,6 +39,7 @@
             System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExperimentGraphicDemonstationMenu));
             this.Graphic = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -49,22 +50,34 @@
             this.шагToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.XRDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.oscDataBtn = new System.Windows.Forms.ToolStripMenuItem();
-            this.CheckSerie = new System.Windows.Forms.ToolStripMenuItem();
+            this.SaveGraphicImageButton = new System.Windows.Forms.ToolStripMenuItem();
             this.коэффToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hideDataBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.OSC_CH1 = new System.Windows.Forms.ToolStripMenuItem();
             this.OSC_CH2 = new System.Windows.Forms.ToolStripMenuItem();
             this.P = new System.Windows.Forms.ToolStripMenuItem();
+            this.kVtH = new System.Windows.Forms.ToolStripMenuItem();
             this.FindPeaksBtn = new System.Windows.Forms.ToolStripMenuItem();
-            this.показатьспрятатьXRDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.winowSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.orderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SmoothOSC = new System.Windows.Forms.ToolStripMenuItem();
+            this.UploadOriginalOSCButton = new System.Windows.Forms.ToolStripMenuItem();
+            this.SaveOSCGraphic = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.Graphic)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // Graphic
             // 
+            chartArea1.AxisX.IsLabelAutoFit = false;
+            chartArea1.AxisX.LabelAutoFitMaxFontSize = 16;
+            chartArea1.AxisX.LabelAutoFitMinFontSize = 16;
+            chartArea1.AxisX.LabelStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            chartArea1.AxisX.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            chartArea1.AxisY.IsLabelAutoFit = false;
+            chartArea1.AxisY.LabelAutoFitMaxFontSize = 16;
+            chartArea1.AxisY.LabelAutoFitMinFontSize = 16;
+            chartArea1.AxisY.LabelStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            chartArea1.AxisY.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            chartArea1.AxisY2.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             chartArea1.CursorX.IsUserSelectionEnabled = true;
             chartArea1.CursorY.IsUserSelectionEnabled = true;
             chartArea1.Name = "ExperimentChartArea";
@@ -74,8 +87,13 @@
             this.Graphic.ChartAreas.Add(chartArea2);
             this.Graphic.Dock = System.Windows.Forms.DockStyle.Fill;
             legend1.Alignment = System.Drawing.StringAlignment.Center;
+            legend1.DockedToChartArea = "ExperimentChartArea";
             legend1.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
+            legend1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            legend1.IsTextAutoFit = false;
             legend1.Name = "ExperimentLegend";
+            legend1.TableStyle = System.Windows.Forms.DataVisualization.Charting.LegendTableStyle.Wide;
+            legend1.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Graphic.Legends.Add(legend1);
             this.Graphic.Location = new System.Drawing.Point(0, 38);
             this.Graphic.Name = "Graphic";
@@ -138,6 +156,12 @@
             series8.IsVisibleInLegend = false;
             series8.Legend = "ExperimentLegend";
             series8.Name = "P";
+            series9.BorderWidth = 3;
+            series9.ChartArea = "HiddenSeriesArea";
+            series9.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series9.IsVisibleInLegend = false;
+            series9.Legend = "ExperimentLegend";
+            series9.Name = "kVtH";
             this.Graphic.Series.Add(series1);
             this.Graphic.Series.Add(series2);
             this.Graphic.Series.Add(series3);
@@ -146,8 +170,10 @@
             this.Graphic.Series.Add(series6);
             this.Graphic.Series.Add(series7);
             this.Graphic.Series.Add(series8);
-            this.Graphic.Size = new System.Drawing.Size(946, 411);
+            this.Graphic.Series.Add(series9);
+            this.Graphic.Size = new System.Drawing.Size(1060, 411);
             this.Graphic.TabIndex = 0;
+            this.Graphic.AxisViewChanged += new System.EventHandler<System.Windows.Forms.DataVisualization.Charting.ViewEventArgs>(this.Graphic_AxisViewChanged);
             // 
             // menuStrip1
             // 
@@ -157,12 +183,12 @@
             this.DataStripMenu,
             this.hideDataBtn,
             this.FindPeaksBtn,
-            this.показатьспрятатьXRDToolStripMenuItem,
-            this.winowSizeToolStripMenuItem,
-            this.orderToolStripMenuItem});
+            this.SmoothOSC,
+            this.UploadOriginalOSCButton,
+            this.SaveOSCGraphic});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(946, 38);
+            this.menuStrip1.Size = new System.Drawing.Size(1060, 38);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -175,7 +201,7 @@
             this.шагToolStripMenuItem,
             this.XRDToolStripMenuItem,
             this.oscDataBtn,
-            this.CheckSerie,
+            this.SaveGraphicImageButton,
             this.коэффToolStripMenuItem});
             this.DataStripMenu.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.DataStripMenu.Name = "DataStripMenu";
@@ -187,55 +213,55 @@
             // 
             this.температураToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.температураToolStripMenuItem.Name = "температураToolStripMenuItem";
-            this.температураToolStripMenuItem.Size = new System.Drawing.Size(270, 38);
+            this.температураToolStripMenuItem.Size = new System.Drawing.Size(391, 38);
             this.температураToolStripMenuItem.Text = "Температура";
             // 
             // среднийТокToolStripMenuItem
             // 
             this.среднийТокToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.среднийТокToolStripMenuItem.Name = "среднийТокToolStripMenuItem";
-            this.среднийТокToolStripMenuItem.Size = new System.Drawing.Size(270, 38);
+            this.среднийТокToolStripMenuItem.Size = new System.Drawing.Size(391, 38);
             this.среднийТокToolStripMenuItem.Text = "Средний ток";
             // 
             // токToolStripMenuItem
             // 
             this.токToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.токToolStripMenuItem.Name = "токToolStripMenuItem";
-            this.токToolStripMenuItem.Size = new System.Drawing.Size(270, 38);
+            this.токToolStripMenuItem.Size = new System.Drawing.Size(391, 38);
             this.токToolStripMenuItem.Text = "Ток";
             // 
             // шагToolStripMenuItem
             // 
             this.шагToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.шагToolStripMenuItem.Name = "шагToolStripMenuItem";
-            this.шагToolStripMenuItem.Size = new System.Drawing.Size(270, 38);
+            this.шагToolStripMenuItem.Size = new System.Drawing.Size(391, 38);
             this.шагToolStripMenuItem.Text = "Шаг";
             // 
             // XRDToolStripMenuItem
             // 
             this.XRDToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.XRDToolStripMenuItem.Name = "XRDToolStripMenuItem";
-            this.XRDToolStripMenuItem.Size = new System.Drawing.Size(270, 38);
+            this.XRDToolStripMenuItem.Size = new System.Drawing.Size(391, 38);
             this.XRDToolStripMenuItem.Text = "XRD";
             // 
             // oscDataBtn
             // 
             this.oscDataBtn.Name = "oscDataBtn";
-            this.oscDataBtn.Size = new System.Drawing.Size(270, 38);
+            this.oscDataBtn.Size = new System.Drawing.Size(391, 38);
             this.oscDataBtn.Text = "Осциллограф";
             // 
-            // CheckSerie
+            // SaveGraphicImageButton
             // 
-            this.CheckSerie.Name = "CheckSerie";
-            this.CheckSerie.Size = new System.Drawing.Size(270, 38);
-            this.CheckSerie.Text = "Сделать серию";
-            this.CheckSerie.Click += new System.EventHandler(this.CheckSerie_Click);
+            this.SaveGraphicImageButton.Name = "SaveGraphicImageButton";
+            this.SaveGraphicImageButton.Size = new System.Drawing.Size(391, 38);
+            this.SaveGraphicImageButton.Text = "Сделать скриншот графика";
             // 
             // коэффToolStripMenuItem
             // 
             this.коэффToolStripMenuItem.Name = "коэффToolStripMenuItem";
-            this.коэффToolStripMenuItem.Size = new System.Drawing.Size(270, 38);
+            this.коэффToolStripMenuItem.Size = new System.Drawing.Size(391, 38);
             this.коэффToolStripMenuItem.Text = "Коэфф";
+            this.коэффToolStripMenuItem.Visible = false;
             this.коэффToolStripMenuItem.Click += new System.EventHandler(this.коэффToolStripMenuItem_Click);
             // 
             // hideDataBtn
@@ -244,7 +270,8 @@
             this.hideDataBtn.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.OSC_CH1,
             this.OSC_CH2,
-            this.P});
+            this.P,
+            this.kVtH});
             this.hideDataBtn.Name = "hideDataBtn";
             this.hideDataBtn.Size = new System.Drawing.Size(88, 34);
             this.hideDataBtn.Text = "Скрыть";
@@ -257,7 +284,7 @@
             this.OSC_CH1.CheckOnClick = true;
             this.OSC_CH1.CheckState = System.Windows.Forms.CheckState.Checked;
             this.OSC_CH1.Name = "OSC_CH1";
-            this.OSC_CH1.Size = new System.Drawing.Size(217, 34);
+            this.OSC_CH1.Size = new System.Drawing.Size(263, 34);
             this.OSC_CH1.Text = "Напряжение";
             // 
             // OSC_CH2
@@ -266,7 +293,7 @@
             this.OSC_CH2.CheckOnClick = true;
             this.OSC_CH2.CheckState = System.Windows.Forms.CheckState.Checked;
             this.OSC_CH2.Name = "OSC_CH2";
-            this.OSC_CH2.Size = new System.Drawing.Size(217, 34);
+            this.OSC_CH2.Size = new System.Drawing.Size(263, 34);
             this.OSC_CH2.Text = "Ток";
             // 
             // P
@@ -275,42 +302,57 @@
             this.P.CheckOnClick = true;
             this.P.CheckState = System.Windows.Forms.CheckState.Checked;
             this.P.Name = "P";
-            this.P.Size = new System.Drawing.Size(217, 34);
+            this.P.Size = new System.Drawing.Size(263, 34);
             this.P.Text = "Мощность";
+            // 
+            // kVtH
+            // 
+            this.kVtH.Checked = true;
+            this.kVtH.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.kVtH.Name = "kVtH";
+            this.kVtH.Size = new System.Drawing.Size(263, 34);
+            this.kVtH.Text = "Потребление тока";
             // 
             // FindPeaksBtn
             // 
             this.FindPeaksBtn.Name = "FindPeaksBtn";
             this.FindPeaksBtn.Size = new System.Drawing.Size(121, 34);
             this.FindPeaksBtn.Text = "Найти пики";
+            this.FindPeaksBtn.Visible = false;
             this.FindPeaksBtn.Click += new System.EventHandler(this.FindPeaksBtn_Click);
             // 
-            // показатьспрятатьXRDToolStripMenuItem
+            // SmoothOSC
             // 
-            this.показатьспрятатьXRDToolStripMenuItem.Name = "показатьспрятатьXRDToolStripMenuItem";
-            this.показатьспрятатьXRDToolStripMenuItem.Size = new System.Drawing.Size(220, 34);
-            this.показатьспрятатьXRDToolStripMenuItem.Text = "Показать/спрятать XRD";
-            this.показатьспрятатьXRDToolStripMenuItem.Click += new System.EventHandler(this.показатьспрятатьXRDToolStripMenuItem_Click);
+            this.SmoothOSC.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.SmoothOSC.Name = "SmoothOSC";
+            this.SmoothOSC.Size = new System.Drawing.Size(196, 34);
+            this.SmoothOSC.Text = "Сгладить график";
+            this.SmoothOSC.Visible = false;
+            this.SmoothOSC.Click += new System.EventHandler(this.SmoothOSC_Click);
             // 
-            // winowSizeToolStripMenuItem
+            // UploadOriginalOSCButton
             // 
-            this.winowSizeToolStripMenuItem.Name = "winowSizeToolStripMenuItem";
-            this.winowSizeToolStripMenuItem.Size = new System.Drawing.Size(143, 34);
-            this.winowSizeToolStripMenuItem.Text = "WinowSize: 35";
-            this.winowSizeToolStripMenuItem.Click += new System.EventHandler(this.winowSizeToolStripMenuItem_Click);
+            this.UploadOriginalOSCButton.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.UploadOriginalOSCButton.Name = "UploadOriginalOSCButton";
+            this.UploadOriginalOSCButton.Size = new System.Drawing.Size(315, 34);
+            this.UploadOriginalOSCButton.Text = "Загрузить исходные данные";
+            this.UploadOriginalOSCButton.Visible = false;
+            this.UploadOriginalOSCButton.Click += new System.EventHandler(this.UploadOriginalOSCButton_Click);
             // 
-            // orderToolStripMenuItem
+            // SaveOSCGraphic
             // 
-            this.orderToolStripMenuItem.Name = "orderToolStripMenuItem";
-            this.orderToolStripMenuItem.Size = new System.Drawing.Size(93, 34);
-            this.orderToolStripMenuItem.Text = "Order: 3";
-            this.orderToolStripMenuItem.Click += new System.EventHandler(this.orderToolStripMenuItem_Click);
+            this.SaveOSCGraphic.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.SaveOSCGraphic.Name = "SaveOSCGraphic";
+            this.SaveOSCGraphic.Size = new System.Drawing.Size(213, 34);
+            this.SaveOSCGraphic.Text = "Сохранить график";
+            this.SaveOSCGraphic.Visible = false;
+            this.SaveOSCGraphic.Click += new System.EventHandler(this.SaveOSCGraphic_Click);
             // 
             // ExperimentGraphicDemonstationMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(946, 449);
+            this.ClientSize = new System.Drawing.Size(1060, 449);
             this.Controls.Add(this.Graphic);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -341,10 +383,11 @@
         private System.Windows.Forms.ToolStripMenuItem OSC_CH2;
         private System.Windows.Forms.ToolStripMenuItem P;
         private System.Windows.Forms.ToolStripMenuItem FindPeaksBtn;
-        private System.Windows.Forms.ToolStripMenuItem показатьспрятатьXRDToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem winowSizeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem orderToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem CheckSerie;
+        private System.Windows.Forms.ToolStripMenuItem SaveGraphicImageButton;
         private System.Windows.Forms.ToolStripMenuItem коэффToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem kVtH;
+        private System.Windows.Forms.ToolStripMenuItem SmoothOSC;
+        private System.Windows.Forms.ToolStripMenuItem UploadOriginalOSCButton;
+        private System.Windows.Forms.ToolStripMenuItem SaveOSCGraphic;
     }
 }

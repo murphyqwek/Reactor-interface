@@ -221,7 +221,7 @@
             this.time_bar.AllowDrop = true;
             this.time_bar.Location = new System.Drawing.Point(8, 93);
             this.time_bar.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.time_bar.Maximum = 120;
+            this.time_bar.Maximum = 60;
             this.time_bar.Minimum = 5;
             this.time_bar.Name = "time_bar";
             this.time_bar.Size = new System.Drawing.Size(692, 69);
