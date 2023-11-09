@@ -1,5 +1,6 @@
 ﻿using Reactor_Interface.Classes;
 using Reactor_Interface.Classes.Experiment;
+using Reactor_Interface.Classes.Message;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -97,15 +98,18 @@ namespace Reactor_Interface
 
         public void Clear_Graphic()
         {
-            if (!is_drawing)
+            if (is_drawing)
+                return;
+
+            if (!ConfirmMessageBox.Show("Вы уверены, что хотите очистить график?"))
+                return;
+
+            foreach (var series in Graph.Series)
             {
-                foreach (var series in Graph.Series)
-                {
-                    series.Points.Clear();
-                }
-                Graph.Series["step"].Points.Add(new DataPoint { IsEmpty = true });
-                Graph.Series["tok"].Points.Add(new DataPoint { IsEmpty = true });
+                series.Points.Clear();
             }
+            Graph.Series["step"].Points.Add(new DataPoint { IsEmpty = true });
+            Graph.Series["tok"].Points.Add(new DataPoint { IsEmpty = true });
         }
 
         public Chart GetChart()

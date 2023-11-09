@@ -108,28 +108,39 @@ namespace Reactor_Interface.Classes.Oscillograph
 
         private static List<GraphPoint> SmoothTokSerie(List<GraphPoint> TokSerie, int order, int windowSize)
         {
+            List<GraphPoint> SmoothedTokSeire = SavitzkyGolayFilter.Filter(TokSerie, windowSize, order);
             List<GraphPoint> smoothedTok = new List<GraphPoint>();
             List<GraphPoint> tok = new List<GraphPoint>();
             List<GraphPoint> tok1 = new List<GraphPoint>();
             bool isPeakPlato = false;
 
-            for (int i = 0; i < TokSerie.Count; i++)
+            for (int i = 0; i < SmoothedTokSeire.Count; i++)
             {
                 if (!isPeakPlato && smoothedTok.Count == 0)
-                    tok.Add(TokSerie[i]);
+                {
+                    if (SmoothedTokSeire[i].Y <= -20)
+                        tok.Add(new GraphPoint(SmoothedTokSeire[i].X, -20));
+                    else
+                        tok.Add(TokSerie[i]);
+                }
                 if (!isPeakPlato && smoothedTok.Count > 0)
-                    tok1.Add(TokSerie[i]);
+                {
+                    if (SmoothedTokSeire[i].Y <= -20)
+                        tok1.Add(new GraphPoint(SmoothedTokSeire[i].X, -20));
+                    else
+                        tok1.Add(TokSerie[i]);
+                }
 
                 if (isPeakPlato)
                     smoothedTok.Add(TokSerie[i]);
 
-                if (TokSerie[i].Y > 50 && !isPeakPlato)
+                if (SmoothedTokSeire[i].Y > 50 && !isPeakPlato)
                 {
                     isPeakPlato = true;
                     continue;
                 }
 
-                if (TokSerie[i].Y < 10 && isPeakPlato)
+                if (SmoothedTokSeire[i].Y < 10 && isPeakPlato)
                 {
                     isPeakPlato = false;
                     smoothedTok = SavitzkyGolayFilter.Filter(smoothedTok, windowSize, order);

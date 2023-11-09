@@ -42,8 +42,7 @@ namespace Reactor_Interface.Forms.Journal.SerieMenus
 
             isSaved = true;
 
-            if (_serie.SerieComments.Length > 1000)
-                SerieSystem.SetNewSerieComments(_serie, _serie.SerieComments.Substring(0, 1000));
+            SerieSystem.SetNewSerieComments(_serie, _serie.SerieComments);
 
             CommentsTextBox.Text = _serie.SerieComments;
         }
