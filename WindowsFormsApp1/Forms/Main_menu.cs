@@ -4,9 +4,11 @@ using Reactor_Interface.Classes.GoogleAPI;
 using Reactor_Interface.Classes.Message;
 using Reactor_Interface.Classes.Presets;
 using Reactor_Interface.Forms;
+using Reactor_Interface.Forms.Journal;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -50,13 +52,16 @@ namespace WindowsFormsApp1
 
         int[] MaxTimeForDiffrentTokModes = new int[]
         {
-            60, // 200 А
-            60, // 150 А
+            180, // 200 А
+            180, // 150 А
             180, // 100 А
             180, // 75 А
             180, // 50 А
             180, // 25 А  
         };
+
+
+        private int MaxTime = 60;
 
         string pressed_button = " ";
         public Main_menu()
@@ -170,6 +175,7 @@ namespace WindowsFormsApp1
             upload_ports();
             upload_speeds();
             upload_drives();
+            MaxTimeMenu.Text = $"Максимальное время: {MaxTime} с.";
         }
 
         private void upload_drives()
@@ -358,6 +364,8 @@ namespace WindowsFormsApp1
 
             if (!is_reactor_working && port != null)
             {
+                if (!ConfirmMessageBox.Show("Вы уверены, что хотите очистить график?"))
+                    return;
                 dataQueue = new ConcurrentQueue<string>();
                 start_stopwatch();
 
@@ -825,7 +833,7 @@ namespace WindowsFormsApp1
 
         private void settings_menu_btn_Click(object sender, EventArgs e)
         {
-
+            
         }
 
         public void ShowNewJounral(Jounral_menu newJournal)
@@ -868,17 +876,21 @@ namespace WindowsFormsApp1
             this.PresetToolTip.SetToolTip(this.presetsList, ToolTipText);
         }
 
-        private void tok_mode_list_SelectedItemChanged(object sender, EventArgs e)
+        public void SetMaxTime(int time)
         {
-            UpdatePresetsToolTip();
+            MaxTime = time;
+            time_bar.Maximum = MaxTime;
             int currentTime = time_bar.Value;
-            int tokModeIndex = tok_mode_list.SelectedIndex;
-            time_bar.Maximum = MaxTimeForDiffrentTokModes[tokModeIndex];
-            if (MaxTimeForDiffrentTokModes[tokModeIndex] < currentTime)
+            if (MaxTime < currentTime)
             {
-                time_bar.Value = MaxTimeForDiffrentTokModes[tokModeIndex];
+                time_bar.Value = MaxTime;
                 time_syntes_lable.Text = "Время синтеза: " + time_bar.Value.ToString() + " c.";
             }
+        }
+
+        private void tok_mode_list_SelectedItemChanged(object sender, EventArgs e)
+        {
+            UpdatePresetsToolTip();            
         }
 
         private void tigel_rdbtn_CheckedChanged(object sender, EventArgs e)
@@ -903,6 +915,53 @@ namespace WindowsFormsApp1
                 if (presetsList.Items[i].ToString() == ChosenPreset)
                 {
                     presetsList.SelectedIndex = i;
+                    return;
+                }
+            }
+        }
+
+        private void MaxTimeMenu_Click(object sender, EventArgs e)
+        {
+            string password = "ybuuth2720";
+            string inputPassword;
+
+
+            using (var inputMenu = new InputFormMenu("Пароль", "Введите пароль"))
+            {
+                if (inputMenu.ShowDialog() != DialogResult.OK)
+                    return;
+
+                inputPassword = inputMenu.OutputValue;
+            }
+
+            if(password != inputPassword)
+            {
+                ErrorMessage.Show("Неверный пароль");
+                return;
+            }
+
+
+            using(var inputMenu = new InputFormMenu("Максимальное время синтеза", "Введите новое макс. время"))
+            {
+                if (inputMenu.ShowDialog() != DialogResult.OK)
+                    return;
+
+                int NewTime;
+                if(Int32.TryParse(inputMenu.OutputValue, out NewTime))
+                {
+                    if(NewTime <= 0)
+                    {
+                        ErrorMessage.Show("Время должно быть положительным числом");
+                        return;
+                    }
+
+                    SetMaxTime(NewTime);
+
+                    SuccesMessage.Show("Время успешно обновлено");
+                }
+                else
+                {
+                    ErrorMessage.Show("Задайте положительное число");
                     return;
                 }
             }

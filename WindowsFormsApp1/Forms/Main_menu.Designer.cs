@@ -80,6 +80,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.PresetToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.MaxTimeMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.mode_settings_box.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cold_bar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fire_bar)).BeginInit();
@@ -366,7 +367,8 @@
             this.port_menu_btn,
             this.speed_menu_btn,
             this.IR_port_menu_btn,
-            this.google_drive_menu_btn});
+            this.google_drive_menu_btn,
+            this.MaxTimeMenu});
             this.settings_menu_btn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.settings_menu_btn.Name = "settings_menu_btn";
             this.settings_menu_btn.Size = new System.Drawing.Size(148, 36);
@@ -377,28 +379,28 @@
             // port_menu_btn
             // 
             this.port_menu_btn.Name = "port_menu_btn";
-            this.port_menu_btn.Size = new System.Drawing.Size(286, 40);
+            this.port_menu_btn.Size = new System.Drawing.Size(365, 40);
             this.port_menu_btn.Text = "Порт реактора:";
             this.port_menu_btn.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.port_menu_btn_DropDownItemClicked);
             // 
             // speed_menu_btn
             // 
             this.speed_menu_btn.Name = "speed_menu_btn";
-            this.speed_menu_btn.Size = new System.Drawing.Size(286, 40);
+            this.speed_menu_btn.Size = new System.Drawing.Size(365, 40);
             this.speed_menu_btn.Text = "Скорость: ";
             this.speed_menu_btn.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.speed_menu_btn_DropDownItemClicked);
             // 
             // IR_port_menu_btn
             // 
             this.IR_port_menu_btn.Name = "IR_port_menu_btn";
-            this.IR_port_menu_btn.Size = new System.Drawing.Size(286, 40);
+            this.IR_port_menu_btn.Size = new System.Drawing.Size(365, 40);
             this.IR_port_menu_btn.Text = "Порт IR:";
             this.IR_port_menu_btn.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.IR_port_menu_btn_DropDownItemClicked);
             // 
             // google_drive_menu_btn
             // 
             this.google_drive_menu_btn.Name = "google_drive_menu_btn";
-            this.google_drive_menu_btn.Size = new System.Drawing.Size(286, 40);
+            this.google_drive_menu_btn.Size = new System.Drawing.Size(365, 40);
             this.google_drive_menu_btn.Text = "Google Drive:";
             this.google_drive_menu_btn.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.google_drive_menu_btn_DropDownItemClicked);
             this.google_drive_menu_btn.Click += new System.EventHandler(this.google_drive_btn_DropDownItem);
@@ -722,6 +724,13 @@
             this.button2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.arrow_btn_down);
             this.button2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.arrow_btn_up);
             // 
+            // MaxTimeMenu
+            // 
+            this.MaxTimeMenu.Name = "MaxTimeMenu";
+            this.MaxTimeMenu.Size = new System.Drawing.Size(365, 40);
+            this.MaxTimeMenu.Text = "Максимальное время:";
+            this.MaxTimeMenu.Click += new System.EventHandler(this.MaxTimeMenu_Click);
+            // 
             // Main_menu
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -824,6 +833,7 @@
         private System.Windows.Forms.ToolTip PresetToolTip;
         private System.Windows.Forms.Button UpdatePresetListBtn;
         private System.Windows.Forms.Label ComandLabel;
+        private System.Windows.Forms.ToolStripMenuItem MaxTimeMenu;
     }
 }
 

@@ -93,15 +93,14 @@ namespace Reactor_Interface
 
         private void очиститьГрафикToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!ConfirmMessageBox.Show("Вы уверены, что хотите очистить график?"))
+                return;
             Clear_Graphic();
         }
 
         public void Clear_Graphic()
         {
             if (is_drawing)
-                return;
-
-            if (!ConfirmMessageBox.Show("Вы уверены, что хотите очистить график?"))
                 return;
 
             foreach (var series in Graph.Series)

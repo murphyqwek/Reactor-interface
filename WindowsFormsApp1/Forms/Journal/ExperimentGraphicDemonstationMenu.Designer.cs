@@ -95,7 +95,7 @@
             legend1.TableStyle = System.Windows.Forms.DataVisualization.Charting.LegendTableStyle.Wide;
             legend1.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Graphic.Legends.Add(legend1);
-            this.Graphic.Location = new System.Drawing.Point(0, 38);
+            this.Graphic.Location = new System.Drawing.Point(0, 40);
             this.Graphic.Name = "Graphic";
             series1.BorderWidth = 3;
             series1.ChartArea = "HiddenSeriesArea";
@@ -171,7 +171,7 @@
             this.Graphic.Series.Add(series7);
             this.Graphic.Series.Add(series8);
             this.Graphic.Series.Add(series9);
-            this.Graphic.Size = new System.Drawing.Size(1060, 411);
+            this.Graphic.Size = new System.Drawing.Size(1060, 409);
             this.Graphic.TabIndex = 0;
             this.Graphic.AxisViewChanged += new System.EventHandler<System.Windows.Forms.DataVisualization.Charting.ViewEventArgs>(this.Graphic_AxisViewChanged);
             // 
@@ -188,7 +188,7 @@
             this.SaveOSCGraphic});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1060, 38);
+            this.menuStrip1.Size = new System.Drawing.Size(1060, 40);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -205,7 +205,7 @@
             this.коэффToolStripMenuItem});
             this.DataStripMenu.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.DataStripMenu.Name = "DataStripMenu";
-            this.DataStripMenu.Size = new System.Drawing.Size(114, 34);
+            this.DataStripMenu.Size = new System.Drawing.Size(114, 36);
             this.DataStripMenu.Text = "Данные:";
             this.DataStripMenu.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.DataStripMenu_DropDownItemClicked);
             // 
